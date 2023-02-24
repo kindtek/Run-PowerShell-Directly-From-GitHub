@@ -10,3 +10,4 @@ Set-Location docker-to-wsl
 git submodule update --init
 Set-Location ../
 ./docker-wsl-install.ps1
+
