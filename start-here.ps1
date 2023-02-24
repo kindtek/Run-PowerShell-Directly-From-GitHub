@@ -10,7 +10,9 @@ $WebClient.DownloadFile("https://raw.githubusercontent.com/kindtek/docker-to-wsl
     # $user_name = kindtek
     # $repo_name = docker-to-wsl
     git clone 'https://github.com/kindtek/docker-to-wsl.git' --branch dev
-    git submodule update --init docker-to-wsl set-branch dev
+    Set-Location docker-to-wsl
+    git submodule update --init
+    Set-Location ../
     # Set-Location "$pwd_path/scripts/powershell-remote"
     # Start-Process -FilePath start-here.ps1
     Write-Output "pwd_path:$pwd_path"
