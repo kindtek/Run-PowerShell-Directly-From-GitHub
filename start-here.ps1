@@ -1,5 +1,4 @@
 $PSCommandPath | Split-Path -Parent
-$pwd_path = Split-Path -Path $PSCommandPath
 $ScriptFromGitHub1 = Invoke-WebRequest https://raw.githubusercontent.com/kindtek/docker-to-wsl/dev/scripts/docker-wsl-install.ps1 -OutFile "docker-wsl-install.ps1"
 Invoke-Expression $($ScriptFromGitHub1.Content)
 $WebClient = New-Object System.Net.WebClient
@@ -15,5 +14,4 @@ $WebClient.DownloadFile("https://raw.githubusercontent.com/kindtek/docker-to-wsl
     Set-Location ../
     # Set-Location "$pwd_path/scripts/powershell-remote"
     # Start-Process -FilePath start-here.ps1
-    Write-Output "pwd_path:$pwd_path"
 ./docker-wsl-install.ps1
