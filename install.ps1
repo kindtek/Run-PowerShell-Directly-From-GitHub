@@ -26,7 +26,6 @@ Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$downlo
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$repo_src_owner/$download3", "$add_wsl_windows_features/add-features.ps1")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$download3`r`nDestination: $add_wsl_windows_features/add-features.ps1`n`r" -ForegroundColor Magenta 
 
-Set-Location $repo_src_name
 # return to original working dir
 $file = "scripts/$download1"
 Write-Output $file
