@@ -14,8 +14,9 @@ Push-Location $repo_src_name
 $null = New-Item -Path scripts -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Push-Location scripts
 $null = New-Item -Path $add_wsl_windows_features -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location = $add_wsl_windows_features
-# "$pwd_path/windows-features-wsl-add/configure-windows-features.ps1"
+
+Pop-Location
+Pop-Location
 
 $WebClient = New-Object System.Net.WebClient
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download1", "$dir_local/$download1")
@@ -23,7 +24,7 @@ Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$downlo
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download2", "$dir_local/$download2")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download2`r`nDestination: $dir_local/$download2" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download3", "$dir_local/$download3")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download3`r`nDestination: $dir_local/$download3`n`r" -ForegroundColor Magenta 
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download3`r`nDestination: $dir_local/$add_wsl_windows_features/$download3`n`r" -ForegroundColor Magenta 
 
 Set-Location $repo_src_name
 # return to original working dir
