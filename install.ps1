@@ -12,6 +12,6 @@ git clone "https://github.com/$repo_src_owner/$repo_src_name.git" --branch $repo
 $null = New-Item -Path $repo_src_name -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Set-Location $repo_src_name
 # return to original working dir
-git submodule update --init
-&"$download1.ps1"
+git submodule update --force --recursive --init --remote
+&"../$download1.ps1"
 
