@@ -1,3 +1,5 @@
+if (!$PSScriptRoot) { $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent }
+
 $repo_src_owner = 'kindtek'
 $repo_src_name = 'docker-to-wsl'
 $repo_src_branch = 'dev'
@@ -8,9 +10,12 @@ $download2 = "get-latest-winget.ps1"
 $add_wsl_windows_features = "add-wsl-windows-features"
 $download3 = "$add_wsl_windows_features/$repo_src_name/add-features.ps1"
 
+# remove copy of an old repo in case this was not the first time the script was run - will be added again later during clone
+if (Test-Path -Path $repo_src_name){
+    Remove-Item $repo_src_name -Recurse -WhatIf -Confirm
+}
+
 $WebClient = New-Object System.Net.WebClient
-
-
 # make directory tree for incoming repo
 $null = New-Item -Path $repo_src_name -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Push-Location $repo_src_name
