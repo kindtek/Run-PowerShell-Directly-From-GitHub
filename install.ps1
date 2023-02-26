@@ -4,7 +4,7 @@ $repo_src_owner = 'kindtek'
 $repo_src_name = 'docker-to-wsl'
 $repo_src_branch = 'dev'
 $dir_host = "$repo_src_owner/$repo_src_name/$repo_src_branch/scripts"
-$dir_local = "$repo_src_name-temp/scripts"
+$dir_local = "$repo_src_name/scripts"
 $download1 = "docker-wsl-install.ps1"
 $download2 = "get-latest-winget.ps1"
 $add_wsl_windows_features = "add-wsl-windows-features"
@@ -19,8 +19,8 @@ if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
 $WebClient = New-Object System.Net.WebClient
 
 # make directory tree for incoming repo
-$null = New-Item -Path "$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location "$repo_src_name-temp"
+$null = New-Item -Path "$repo_src_name" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+Push-Location "$repo_src_name"
 $null = New-Item -Path scripts -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Push-Location scripts
 
