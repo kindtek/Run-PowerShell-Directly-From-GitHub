@@ -1,16 +1,15 @@
-# to set up your dev environment:
-# 1) open windows explorer and navigate to the directory you would like the docker-to-wsl repo to be cloned to
-# 2) right click, select open in terminal and then copy/pasta the contents of this file
-Invoke-WebRequest https://raw.githubusercontent.com/kindtek/docker-to-wsl/dev/scripts/install.ps1 -OutFile "install.ps1"
+$repo_src_owner = 'kindtek'
+$repo_src_name = 'docker-to-wsl'
+$repo_src_branch = 'dev'
+$repo = "$repo_src_owner/$repo_src_name/$repo_src_branch"
 $WebClient = New-Object System.Net.WebClient
-$WebClient.DownloadFile("https://raw.githubusercontent.com/kindtek/docker-to-wsl/dev/scripts/get-latest-winget.ps1", "get-latest-winget.ps1")
-# $user_name = kindtek
-# $repo_name = docker-to-wsl
-git clone 'https://github.com/kindtek/docker-to-wsl.git' --branch dev
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$repo/scripts/docker-wsl-install.ps1", "docker-wsl-install.ps1")
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$repo/scripts/get-latest-winget.ps1", "get-latest-winget.ps1")
+git clone "https://github.com/$repo_src_owner/$repo_src_name.git" --branch $repo_src_br
 # navigate to directory of repo
-Set-Location docker-to-wsl
+$null = New-Item -Path $repo_src_name -ItemType Directory -Force -ErrorAction SilentlyContinue 
+Set-Location $repo_src_name
 # return to original working dir
 git submodule update --init
-Set-Location ../
-./docker-wsl-install.ps1
+./../$repo_src_name.ps1
 
