@@ -15,7 +15,7 @@ $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download1"
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download1`r`nDestination: $dir_local/$download1`n`r`n`r" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download2", "$dir_local/$download2")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download2`r`nDestination: $dir_local/$download2`n`r`n`r" -ForegroundColor Magenta 
-git clone "Downloading https://github.com/$repo_src_owner/$repo_src_name.git" --branch $repo_src_branch
+git clone "https://github.com/$repo_src_owner/$repo_src_name.git" --branch $repo_src_branch
 # navigate to directory of repo
 Set-Location $repo_src_name
 # return to original working dir
