@@ -23,7 +23,7 @@ $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download1"
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download1`r`nDestination: $dir_local/$download1" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download2", "$dir_local/$download2")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download2`r`nDestination: $dir_local/$download2" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download3", "$dir_local/$download3")
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download3", "$dir_local/$add_wsl_windows_features/$download3")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download3`r`nDestination: $dir_local/$add_wsl_windows_features/$download3`n`r" -ForegroundColor Magenta 
 
 Set-Location $repo_src_name
