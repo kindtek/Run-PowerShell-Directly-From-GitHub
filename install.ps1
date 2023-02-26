@@ -13,5 +13,5 @@ $null = New-Item -Path $repo_src_name -ItemType Directory -Force -ErrorAction Si
 Set-Location $repo_src_name
 # return to original working dir
 git submodule update --force --recursive --init --remote
-&"../$download1.ps1"
+&"../$download1"
 
