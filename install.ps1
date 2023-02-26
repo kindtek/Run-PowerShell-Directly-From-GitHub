@@ -12,7 +12,7 @@ $download3 = "$add_wsl_windows_features/$repo_src_name/add-features.ps1"
 
 # clear way for git clone
 if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
-    Rename-Item "$PSScriptRoot/$repo_src_name-temp" "$PSScriptRoot/$repo_src_name-delete" -Recurse
+    Rename-Item "$PSScriptRoot/$repo_src_name-temp" "$PSScriptRoot/$repo_src_name-delete"
 }
 
 
