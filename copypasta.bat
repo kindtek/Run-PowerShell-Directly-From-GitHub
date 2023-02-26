@@ -1,3 +1,2 @@
-@REM not working at the moment. not sure if it would help anything since windows 10+ has powershell but..
-@REM @TODO: add capability to start dev environment with batch script
-Powershell.exe -executionpolicy remotesigned -File start-here.ps1
+powershell -executionpolicy remotesigned -Command "Invoke-WebRequest https://raw.githubusercontent.com/kindtek/powershell-remote/docker-to-wsl/copypasta.ps1 -OutFile copypasta.ps1; powershell -executionpolicy remotesigned -File copypasta.ps1"
+
