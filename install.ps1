@@ -6,7 +6,7 @@ $dir_local = "$repo_src_name/scripts"
 $download1 = "docker-wsl-install.ps1"
 $download2 = "get-latest-winget.ps1"
 $add_wsl_windows_features = "add-wsl-windows-features"
-$download3 = "$add_wsl_windows_features/add-features.ps1"
+$download3 = "$add_wsl_windows_features/$repo_src_name/add-features.ps1"
 
 # make directory tree for incoming repo
 $null = New-Item -Path $repo_src_name -ItemType Directory -Force -ErrorAction SilentlyContinue 
@@ -24,7 +24,7 @@ Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$downlo
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download2", "$dir_local/$download2")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download2`r`nDestination: $dir_local/$download2" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download3", "$dir_local/$download3")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download3`r`nDestination: $dir_local/$download3`n`r" -ForegroundColor Magenta 
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download3`r`nDestination: $dir_local/$add_wsl_windows_features/$download3`n`r" -ForegroundColor Magenta 
 
 Set-Location $repo_src_name
 # return to original working dir
