@@ -24,14 +24,14 @@ Push-Location "$repo_src_name-temp"
 $null = New-Item -Path scripts -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Push-Location scripts
 
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download1`r`nDestination: $download1" -ForegroundColor Magenta 
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download1`r`nDestination: $dir_local-temp/$download1" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download1", "$dir_local-temp/$download1")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download2`r`nDestination: $download2" -ForegroundColor Magenta 
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download2`r`nDestination: $dir_local-temp/$download2" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download2", "$dir_local-temp/$download2")
 
 $null = New-Item -Path $add_wsl_windows_features -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Push-Location $add_wsl_windows_features
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$download3`r`nDestination: $add_wsl_windows_features/add-features.ps1`n`r" -ForegroundColor Magenta 
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$download3`r`nDestination: $dir_local-temp/$add_wsl_windows_features/add-features.ps1`n`r" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$repo_src_owner/$download3", "$dir_local-temp/$add_wsl_windows_features/add-features.ps1")
 
 Pop-Location
