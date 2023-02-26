@@ -12,12 +12,9 @@ $download3 = "$add_wsl_windows_features/$repo_src_name/add-features.ps1"
 
 # clear way for git clone
 if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
-    Remove-Item "$PSScriptRoot/$repo_src_name-temp" -Recurse
+    Rename-Item "$PSScriptRoot/$repo_src_name-temp" "$PSScriptRoot/$repo_src_name-repo_src_name" -Recurse
 }
-# take out any trash from previous session
-if (Test-Path -Path "$PSScriptRoot/delete-$repo_src_name-delete") {
-    Remove-Item "$PSScriptRoot/delete-$repo_src_name-delete" -Recurse
-}
+
 
 $WebClient = New-Object System.Net.WebClient
 
@@ -44,8 +41,3 @@ Pop-Location
 $file = "scripts/$download1"
 Write-Output $file
 powershell -Command $file
-
-# take out trash
-if (Test-Path -Path "$PSScriptRoot/delete-$repo_src_name-delete") {
-    Remove-Item "$PSScriptRoot/delete-$repo_src_name-delete" -Recurse
-}
