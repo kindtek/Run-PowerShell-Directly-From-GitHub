@@ -9,12 +9,13 @@ $add_wsl_windows_features = "add-wsl-windows-features"
 $download3 = "$add_wsl_windows_features/add-features.ps1"
 
 # make directory tree for incoming repo
-$null = New-Item -Path $dir_local -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location $dir_local
-$null = New-Item -Path 'add-wsl-windows-features' -f -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location 'add-wsl-windows-features'
+$null = New-Item -Path $repo_src_name -ItemType Directory -Force -ErrorAction SilentlyContinue 
+Push-Location $repo_src_name
+$null = New-Item -Path scripts -ItemType Directory -Force -ErrorAction SilentlyContinue 
+Push-Location scripts
+$null = New-Item -Path $add_wsl_windows_features -ItemType Directory -Force -ErrorAction SilentlyContinue 
+Push-Location = $add_wsl_windows_features
 # "$pwd_path/windows-features-wsl-add/configure-windows-features.ps1"
-
 
 $WebClient = New-Object System.Net.WebClient
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download1", "$dir_local/$download1")
