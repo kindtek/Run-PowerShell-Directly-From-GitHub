@@ -19,8 +19,8 @@ if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
 $WebClient = New-Object System.Net.WebClient
 
 # make directory tree for incoming repo
-$null = New-Item -Path $repo_src_name -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location $repo_src_name
+$null = New-Item -Path "$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+Push-Location "$repo_src_name-temp"
 $null = New-Item -Path scripts -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Push-Location scripts
 
