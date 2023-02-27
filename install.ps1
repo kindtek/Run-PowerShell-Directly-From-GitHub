@@ -1,4 +1,6 @@
 if (!$PSScriptRoot) { $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent }
+# start window at the bottom
+Write-Output "$([char]27)[2J"
 
 $repo_src_owner = 'kindtek'
 $repo_src_name = 'docker-to-wsl'
