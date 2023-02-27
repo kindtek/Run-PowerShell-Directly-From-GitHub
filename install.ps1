@@ -4,7 +4,7 @@ Write-Output "$([char]27)[2J"
 
 $repo_src_owner = 'kindtek'
 $repo_src_name = 'docker-to-wsl'
-$repo_src_branch = 'dev'
+$repo_src_branch = 'main'
 $dir_host = "$repo_src_owner/$repo_src_name/$repo_src_branch/scripts"
 $dir_local = "$repo_src_name/scripts"
 $download1 = "docker-wsl-install.ps1"
