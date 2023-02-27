@@ -40,5 +40,4 @@ Pop-Location
 
 # return to original working dir
 $file = "scripts/$download1"
-Write-Output $file
 powershell -Command $file
