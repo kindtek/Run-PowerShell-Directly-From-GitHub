@@ -4,7 +4,7 @@ if (!$PSScriptRoot) { $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -P
 Write-Output "$([char]27)[2J"
 
 $repo_src_owner = 'kindtek'
-$repo_src_name = 'docker-to-wsl'
+$repo_src_name = 'devels-workshop'
 $repo_src_branch = 'main'
 $dir_host = "$repo_src_owner/$repo_src_name/$repo_src_branch/scripts"
 $dir_local = "$repo_src_name/scripts"
