@@ -11,8 +11,9 @@ $dir_local = "$repo_src_name/scripts"
 $download1 = "docker-wsl-install.ps1"
 $download2 = "get-latest-winget.ps1"
 $download3 = "wsl-import.bat"
+$download4 = "https://raw.githubusercontent.com/kindtek/choco/develop/src/chocolatey.resources/redirects/RefreshEnv.cmd"
 $add_wsl_windows_features = "add-wsl-windows-features"
-$download4 = "$add_wsl_windows_features/$repo_src_name/add-features.ps1"
+$download5 = "$add_wsl_windows_features/$repo_src_name/add-features.ps1"
 
 # clear way for git clone
 if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
@@ -34,9 +35,11 @@ Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$downlo
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download2", "$dir_local/$download2")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download3`r`nDestination: $dir_local/$download3" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download3", "$dir_local/$download3")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download4`r`nDestination: $repo_src_name/RefreshEnv.cmd" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download4", "$repo_src_name/RefreshEnv.cmd")
 Push-Location $add_wsl_windows_features
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$download4`r`nDestination: $dir_local/$add_wsl_windows_features/add-features.ps1`n`r" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$repo_src_owner/$download4", "$dir_local/$add_wsl_windows_features/add-features.ps1")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$download5`r`nDestination: $dir_local/$add_wsl_windows_features/add-features.ps1`n`r" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$repo_src_owner/$download5", "$dir_local/$add_wsl_windows_features/add-features.ps1")
 
 Pop-Location
 Pop-Location
