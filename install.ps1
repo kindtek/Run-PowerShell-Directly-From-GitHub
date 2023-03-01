@@ -35,8 +35,8 @@ Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$downlo
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download2", "$dir_local/$download2")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download3`r`nDestination: $dir_local/$download3" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download3", "$dir_local/$download3")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download4`r`nDestination: $dir_local/$download4" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download4", "$dir_local/RefreshEnv.cmd")
+Write-Host "`n`rDownloading: $download4`r`nDestination: $dir_local/$download4" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$download4", "$dir_local/RefreshEnv.cmd")
 Push-Location $devels_advocate
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$download5`r`nDestination: $dir_local/$devels_advocate/add-windows-features.ps1`n`r" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$repo_src_owner/$download5", "$dir_local/$devels_advocate/add-windows-features.ps1")
