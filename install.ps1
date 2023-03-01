@@ -27,10 +27,13 @@ $wsl_import = "wsl-import-docker-image.cmd"
 $refresh_env = "refresh-env.cmd"
 $add_windows_features = "add-windows-features.ps1"
 
-# clear way for git clone
-if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
-    Rename-Item "$PSScriptRoot/$repo_src_name-temp" "$PSScriptRoot/$repo_src_name-delete"
-}
+# # clear way for git clone
+# if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
+#     Rename-Item "$PSScriptRoot/$repo_src_name-temp" "$PSScriptRoot/$repo_src_name-delete"
+# }
+# if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
+#     Remove-Item "$PSScriptRoot/$repo_src_name-delete" -Force
+# }
 
 $WebClient = New-Object System.Net.WebClient
 
