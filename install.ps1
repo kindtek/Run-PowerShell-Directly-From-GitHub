@@ -47,8 +47,7 @@ $null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction 
 $null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Pop-Location
 # Pop-Location
-Write-Host "get child item:"
-Get-ChildItem
+
 
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
@@ -61,6 +60,10 @@ $WebClient.DownloadFile("$github_domain/$dir_host_choco/$refresh_env", "$local_c
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
 
+Write-Host "get child item:"
+Get-ChildItem
 # return to original working dir
 $file = "$local_dir_scripts/$install_everything"
+Write-Host $file
+
 powershell -Command $file
