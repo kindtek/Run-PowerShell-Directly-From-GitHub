@@ -38,8 +38,8 @@ $add_windows_features = "add-windows-features.ps1"
 $WebClient = New-Object System.Net.WebClient
 
 # simulate structure of incoming repo
-$null = New-Item -Path "$repo_src_name" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location "$repo_src_name"
+$null = New-Item -Path "$repo_src_owner" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+Push-Location "$repo_src_owner"
 $null = New-Item -Path "$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Push-Location "$repo_src_name-temp"
 $null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
