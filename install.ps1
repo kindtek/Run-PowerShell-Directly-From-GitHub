@@ -23,7 +23,7 @@ $local_devels_advocate = "$local_dir_scripts/$devels_advocate"
 $local_choco = "$local_dir_scripts/$choco"
 $install_everything = "install-everything.ps1"
 $get_latest_winget = "get-latest-winget.ps1"
-$wsl_import = "wsl-import.cmd"
+$wsl_import = "wsl-import-docker-image.cmd"
 $refresh_env = "refresh-env.cmd"
 $add_windows_features = "add-windows-features.ps1"
 
