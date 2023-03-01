@@ -40,8 +40,8 @@ $null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -Er
 
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
-Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$get_latest_winget`r`nDestination: scripts/$local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$get_latest_winget", "scripts/$local_devels_advocate/$get_latest_winget")
+Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/scripts/$get_latest_winget`r`nDestination: scripts/$local_devels_advocate/scripts/$get_latest_winget" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/scripts/$get_latest_winget", "scripts/$local_devels_advocate/scripts/$get_latest_winget")
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/scripts/$wsl_import" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_workshop_scripts/$wsl_import", "$local_devels_playground/scripts/$wsl_import")
 Write-Host "`n`rDownloading: $github_domain/$dir_host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
