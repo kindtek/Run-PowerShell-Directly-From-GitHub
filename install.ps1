@@ -10,7 +10,7 @@ $devels_advocate = "devels-advocate"
 
 $dir_host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
 $dir_host_devels_workshop_scripts = "$dir_host_devels_workshop/scripts"
-$dir_host_devels_advocate = "$repo_owner/$devels_advocate/$repo_src_name"
+$dir_host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
 $local_dir_scripts = "$repo_src_name/scripts"
 $local_devels_playground = "$repo_src_name/devels_playground"
 $local_devels_advocate = "$repo_src_name/$devels_advocate"
