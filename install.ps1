@@ -56,4 +56,3 @@ $WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_f
 # return to original working dir
 $file = "scripts/$install_everything"
 powershell -Command $file
-Remove-Item -Path "$PSScriptRoot/$repo_src_name-temp" -Force -WhatIf
