@@ -45,8 +45,8 @@ Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_playground/$wsl_imp
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_workshop_scripts/$wsl_import", "$local_devels_playground/scripts/$wsl_import")
 Write-Host "`n`rDownloading: $github_domain/$dir_host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_choco/$refresh_env", "$local_choco/$refresh_env")
-Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
+Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$add_windows_features`r`nDestination: scripts/$local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_features", "scripts/$local_devels_advocate/$add_windows_features")
 
 # return to original working dir
 $file = "scripts/$install_everything"
