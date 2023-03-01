@@ -3,6 +3,7 @@ if (!$PSScriptRoot) { $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -P
 # jump to bottom line without clearing scrollback
 Write-Output "$([char]27)[2J"
 
+$github_domain = "https://raw.githubusercontent.com"
 $repo_src_owner = 'kindtek'
 $repo_src_name = 'devels-workshop'
 $repo_src_branch = 'windows'
@@ -34,16 +35,16 @@ $null = New-Item -Path "$repo_src_name" -ItemType Directory -Force -ErrorAction 
 Push-Location "$repo_src_name"
 $null = New-Item -Path $devels_advocate -ItemType Directory -Force -ErrorAction SilentlyContinue 
 
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$wsl_import", "$local_devels_playground/$wsl_import")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_choco/$refresh_env", "$local_choco/$refresh_env")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$add_windows_features`r`nDestination: $local_devels_advocate/add-windows-features.ps1`n`r" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$add_windows_features", "$local_devels_advocate/add-windows-features.ps1")
+Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
+Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
+Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$dir_host_devels_workshop_scripts/$wsl_import", "$local_devels_playground/$wsl_import")
+Write-Host "`n`rDownloading: $github_domain/$dir_host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$dir_host_choco/$refresh_env", "$local_choco/$refresh_env")
+Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate_scripts/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate_scripts/$add_windows_features", "$local_devels_advocate/$add_windows_features")
 
 # return to original working dir
 $file = "scripts/$install_everything"
