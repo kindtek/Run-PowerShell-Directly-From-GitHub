@@ -33,7 +33,7 @@ $WebClient = New-Object System.Net.WebClient
 # simulate structure of incoming repo
 $null = New-Item -Path "$repo_src_name" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Push-Location "$repo_src_name"
-$null = New-Item -Path "$devels_advocate/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+$null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 $null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 
 
