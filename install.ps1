@@ -5,15 +5,20 @@ Write-Output "$([char]27)[2J"
 
 $repo_src_owner = 'kindtek'
 $repo_src_name = 'devels-workshop'
-$repo_src_branch = 'main'
-$dir_host = "$repo_src_owner/$repo_src_name/$repo_src_branch/scripts"
-$dir_local = "$repo_src_name/scripts"
-$download1 = "docker-wsl-install.ps1"
-$download2 = "get-latest-winget.ps1"
-$download3 = "wsl-import.bat"
-$download4 = "https://raw.githubusercontent.com/kindtek/choco/develop/src/chocolatey.resources/redirects/RefreshEnv.cmd"
+$repo_src_branch = 'windows'
+$dir_host = "$repo_src_owner/$repo_src_name/$repo_src_branch"
+$dir_host_scripts = "$dir_host/scripts"
+$local_dir_scripts = "$repo_src_name/scripts"
+$local_devels_playground = "$repo_src_name/devel_playground"
 $devels_advocate = "devels-advocate"
-$download5 = "$devels_advocate/$repo_src_name/add-windows-features.ps1"
+$local_devels_advocate = "$local_dir_scripts/$devels_advocate"
+$local_powerhell = "$local_dir_scripts/powerhell-remote"
+$local_choco = "$local_dir_scripts/choco"
+$install_everything = "scripts/install-everything.ps1"
+$get_latest_winget = "$devels_advocate/get-latest-winget.ps1"
+$wsl_import = "devels_playground/scripts/wsl-import.bat"
+$refresh_env = "choco/refresh-env/refresh-env.cmd"
+$add_windows_features = "$devels_advocate/$repo_src_name/add-windows-features.ps1"
 
 # clear way for git clone
 if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
@@ -29,21 +34,19 @@ $null = New-Item -Path scripts -ItemType Directory -Force -ErrorAction SilentlyC
 Push-Location scripts
 $null = New-Item -Path $devels_advocate -ItemType Directory -Force -ErrorAction SilentlyContinue 
 
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download1`r`nDestination: $dir_local/$download1" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download1", "$dir_local/$download1")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download2`r`nDestination: $dir_local/$download2" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download2", "$dir_local/$download2")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host/$download3`r`nDestination: $dir_local/$download3" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host/$download3", "$dir_local/$download3")
-Write-Host "`n`rDownloading: $download4`r`nDestination: $dir_local/$download4" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$download4", "$dir_local/RefreshEnv.cmd")
-Push-Location $devels_advocate
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$download5`r`nDestination: $dir_local/$devels_advocate/add-windows-features.ps1`n`r" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$repo_src_owner/$download5", "$dir_local/$devels_advocate/add-windows-features.ps1")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_scripts/$install_everything", "$local_dir_scripts/$install_everything")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_scripts/$get_latest_winget`r`nDestination: $local_dir_scripts/$get_latest_winget" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_scripts/$get_latest_winget", "$local_dir_scripts/$get_latest_winget")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_scripts/$wsl_import`r`nDestination: $local_dir_scripts/$wsl_import" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_scripts/$wsl_import", "$local_dir_scripts/$wsl_import")
+Write-Host "`n`rDownloading: $refresh_env`r`nDestination: $local_dir_scripts/$refresh_env" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$refresh_env", "$local_dir_scripts/$refresh_env")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$add_windows_features`r`nDestination: $local_dir_scripts/$devels_advocate/add-windows-features.ps1`n`r" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$repo_src_owner/$add_windows_features", "$local_dir_scripts/$devels_advocate/add-windows-features.ps1")
 
-Pop-Location
 Pop-Location
 
 # return to original working dir
-$file = "scripts/$download1"
+$file = "scripts/$install_everything"
 powershell -Command $file
