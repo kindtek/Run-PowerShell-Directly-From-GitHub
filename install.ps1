@@ -18,7 +18,7 @@ $dir_host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name
 $dir_host_choco = "$repo_src_owner/$choco/refresh-env"
 
 $local_dir_scripts = "$repo_src_name/scripts"
-$local_devels_playground = "$repo_src_name/$devels_playground"
+$local_devels_playground = "$repo_src_name/$devels_playground/scripts"
 $local_devels_advocate = "$local_dir_scripts/$devels_advocate"
 $local_choco = "$local_dir_scripts/$choco"
 $install_everything = "install-everything.ps1"
