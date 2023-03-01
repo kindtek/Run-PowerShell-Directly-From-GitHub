@@ -6,11 +6,14 @@ Write-Output "$([char]27)[2J"
 $repo_src_owner = 'kindtek'
 $repo_src_name = 'devels-workshop'
 $repo_src_branch = 'windows'
-$dir_host = "$repo_src_owner/$repo_src_name/$repo_src_branch"
-$dir_host_scripts = "$dir_host/scripts"
-$local_dir_scripts = "$repo_src_name/scripts"
-$local_devels_playground = "$repo_src_name/devel_playground"
 $devels_advocate = "devels-advocate"
+
+$dir_host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
+$dir_host_devels_workshop_scripts = "$dir_host_devels_workshop/scripts"
+$dir_host_devels_advocate = "$repo_owner/$devels_advocate/$repo_src_name"
+$dir_host_devels_advocate_scripts = "$dir_host_devels_advocate/scripts"
+$local_dir_scripts = "$repo_src_name/scripts"
+$local_devels_playground = "$repo_src_name/devels_playground"
 $local_devels_advocate = "$local_dir_scripts/$devels_advocate"
 $local_powerhell = "$local_dir_scripts/powerhell-remote"
 $local_choco = "$local_dir_scripts/choco"
@@ -28,16 +31,16 @@ $null = New-Item -Path "$repo_src_name" -ItemType Directory -Force -ErrorAction 
 Push-Location "$repo_src_name"
 $null = New-Item -Path $devels_advocate -ItemType Directory -Force -ErrorAction SilentlyContinue 
 
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_scripts/$install_everything", "$local_dir_scripts/$install_everything")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_scripts/$get_latest_winget`r`nDestination: $local_dir_scripts/$get_latest_winget" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_scripts/$get_latest_winget", "$local_dir_scripts/$get_latest_winget")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_scripts/$wsl_import`r`nDestination: $local_dir_scripts/$wsl_import" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_scripts/$wsl_import", "$local_dir_scripts/$wsl_import")
-Write-Host "`n`rDownloading: $dir_host_scripts/$refresh_env`r`nDestination: $local_dir_scripts/$refresh_env" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$dir_host_scripts/$refresh_env", "$local_dir_scripts/$refresh_env")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$repo_src_owner/$add_windows_features`r`nDestination: $local_dir_scripts/$devels_advocate/add-windows-features.ps1`n`r" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$repo_src_owner/$add_windows_features", "$local_dir_scripts/$devels_advocate/add-windows-features.ps1")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$wsl_import", "$local_devels_playground/$wsl_import")
+Write-Host "`n`rDownloading: $dir_host_devels_workshop_scripts/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$refresh_env", "$local_choco/$refresh_env")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$add_windows_features`r`nDestination: $local_devels_advocate/add-windows-features.ps1`n`r" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$add_windows_features", "$local_devels_advocate/add-windows-features.ps1")
 
 # return to original working dir
 $file = "scripts/$install_everything"
