@@ -61,10 +61,7 @@ $WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_f
 
 Pop-Location
 
-Write-Host "get child item:"
-Get-ChildItem
 # return to original working dir
 $file = "$local_dir_scripts/$install_everything"
-Write-Host $file
 
 powershell -Command $file
