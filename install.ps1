@@ -38,11 +38,11 @@ $add_windows_features = "add-windows-features.ps1"
 $WebClient = New-Object System.Net.WebClient
 
 # simulate structure of incoming repo
-$null = New-Item -Path "$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location "$repo_src_name-temp"
-$null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-$null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-$null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+$null = New-Item -Path "$PSScriptRoot/$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+Push-Location "$PSScriptRoot/$repo_src_name-temp"
+$null = New-Item -Path "$PSScriptRoot/$devels_playground/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+$null = New-Item -Path "$PSScriptRoot/scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+$null = New-Item -Path "$PSScriptRoot/scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 
 
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
