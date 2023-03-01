@@ -7,10 +7,15 @@ $repo_src_owner = 'kindtek'
 $repo_src_name = 'devels-workshop'
 $repo_src_branch = 'windows'
 $devels_advocate = "devels-advocate"
+$devels_playground = "devels-playground"
+$choco = "choco"
 
 $dir_host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
 $dir_host_devels_workshop_scripts = "$dir_host_devels_workshop/scripts"
 $dir_host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
+$dir_host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
+$dir_host_choco = "$repo_src_owner/$choco/refresh_env"
+
 $local_dir_scripts = "$repo_src_name/scripts"
 $local_devels_playground = "$repo_src_name/devels_playground"
 $local_devels_advocate = "$repo_src_name/$devels_advocate"
@@ -33,10 +38,10 @@ Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$wsl_import", "$local_devels_playground/$wsl_import")
-Write-Host "`n`rDownloading: $dir_host_devels_workshop_scripts/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$refresh_env", "$local_choco/$refresh_env")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_choco/$refresh_env", "$local_choco/$refresh_env")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$add_windows_features`r`nDestination: $local_devels_advocate/add-windows-features.ps1`n`r" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$add_windows_features", "$local_devels_advocate/add-windows-features.ps1")
 
