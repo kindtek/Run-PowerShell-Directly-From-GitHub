@@ -17,9 +17,9 @@ $local_devels_advocate = "$repo_src_name/$devels_advocate"
 $local_choco = "$local_dir_scripts/choco"
 $install_everything = "install-everything.ps1"
 $get_latest_winget = "get-latest-winget.ps1"
-$wsl_import = "devels_playground/scripts/wsl-import.bat"
-$refresh_env = "choco/refresh-env/refresh-env.cmd"
-$add_windows_features = "$devels_advocate/$repo_src_name/add-windows-features.ps1"
+$wsl_import = "wsl-import.bat"
+$refresh_env = "refresh-env.cmd"
+$add_windows_features = "add-windows-features.ps1"
 
 
 $WebClient = New-Object System.Net.WebClient
