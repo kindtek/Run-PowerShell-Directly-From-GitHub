@@ -46,7 +46,6 @@ $null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -
 $null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 $null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Pop-Location
-# Pop-Location
 
 
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
@@ -59,6 +58,8 @@ Write-Host "`n`rDownloading: $github_domain/$dir_host_choco/$refresh_env`r`nDest
 $WebClient.DownloadFile("$github_domain/$dir_host_choco/$refresh_env", "$local_choco/$refresh_env")
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
+
+Pop-Location
 
 Write-Host "get child item:"
 Get-ChildItem
