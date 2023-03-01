@@ -17,8 +17,8 @@ $dir_host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
 $dir_host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
 $dir_host_choco = "$repo_src_owner/$choco/refresh-env"
 
-$local_dir_scripts = "$repo_src_name/scripts"
-$local_devels_playground = "$repo_src_name/$devels_playground/scripts"
+$local_dir_scripts = "$repo_src_name-temp/scripts"
+$local_devels_playground = "$repo_src_name-temp/$devels_playground/scripts"
 $local_devels_advocate = "$local_dir_scripts/$devels_advocate"
 $local_choco = "$local_dir_scripts/$choco"
 $install_everything = "install-everything.ps1"
@@ -56,3 +56,4 @@ $WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_f
 # return to original working dir
 $file = "scripts/$install_everything"
 powershell -Command $file
+Remove-Item -Path "$PSScriptRoot/$repo_src_name-temp" -Force -WhatIf
