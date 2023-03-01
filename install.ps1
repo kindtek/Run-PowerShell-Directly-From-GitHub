@@ -11,11 +11,9 @@ $devels_advocate = "devels-advocate"
 $dir_host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
 $dir_host_devels_workshop_scripts = "$dir_host_devels_workshop/scripts"
 $dir_host_devels_advocate = "$repo_owner/$devels_advocate/$repo_src_name"
-$dir_host_devels_advocate_scripts = "$dir_host_devels_advocate/scripts"
 $local_dir_scripts = "$repo_src_name/scripts"
 $local_devels_playground = "$repo_src_name/devels_playground"
 $local_devels_advocate = "$local_dir_scripts/$devels_advocate"
-$local_powerhell = "$local_dir_scripts/powerhell-remote"
 $local_choco = "$local_dir_scripts/choco"
 $install_everything = "install-everything.ps1"
 $get_latest_winget = "$devels_advocate/get-latest-winget.ps1"
@@ -33,8 +31,8 @@ $null = New-Item -Path $devels_advocate -ItemType Directory -Force -ErrorAction 
 
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
-Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
-$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_advocate_scripts/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
+Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
+$WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
 Write-Host "`n`rDownloading: https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
 $WebClient.DownloadFile("https://raw.githubusercontent.com/$dir_host_devels_workshop_scripts/$wsl_import", "$local_devels_playground/$wsl_import")
 Write-Host "`n`rDownloading: $dir_host_devels_workshop_scripts/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
