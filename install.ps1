@@ -27,14 +27,6 @@ $wsl_import = "wsl-import-docker-image.cmd"
 $refresh_env = "refresh-env.cmd"
 $add_windows_features = "add-windows-features.ps1"
 
-# # clear way for git clone
-# if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
-#     Rename-Item "$PSScriptRoot/$repo_src_name-temp" "$PSScriptRoot/$repo_src_name-delete"
-# }
-# if (Test-Path -Path "$PSScriptRoot/$repo_src_name-temp") {
-#     Remove-Item "$PSScriptRoot/$repo_src_name-delete" -Force
-# }
-
 $WebClient = New-Object System.Net.WebClient
 
 # simulate structure of incoming repo
@@ -46,7 +38,6 @@ $null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -
 $null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 $null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 Pop-Location
-
 
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
