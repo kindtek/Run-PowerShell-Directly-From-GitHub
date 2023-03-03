@@ -15,7 +15,8 @@ $dir_host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
 $dir_host_devels_workshop_scripts = "$dir_host_devels_workshop/scripts"
 $dir_host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
 $dir_host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
-$dir_host_choco = "$repo_src_owner/$choco/refresh-env"
+$dir_host_choco = "$repo_src_owner/$choco/devels-workshop/src/chocolatey.resources/redirects"
+
 
 $local_dir_scripts = "$repo_src_owner/$repo_src_name-temp/scripts"
 $local_devels_playground = "$repo_src_owner/$repo_src_name-temp/$devels_playground/scripts"
@@ -24,7 +25,7 @@ $local_choco = "$local_dir_scripts/$choco"
 $install_everything = "install-everything.ps1"
 $get_latest_winget = "get-latest-winget.ps1"
 $wsl_import = "wsl-import-docker-image.cmd"
-$refresh_env = "refresh-env.cmd"
+$refresh_env = "RefreshEnv.cmd"
 $add_windows_features = "add-windows-features.ps1"
 
 $WebClient = New-Object System.Net.WebClient
