@@ -55,4 +55,4 @@ Pop-Location
 # return to original working dir
 $file = "$local_dir_scripts/$install_everything"
 
-pwsh -Command $file
+powershell.exe -Command $file
