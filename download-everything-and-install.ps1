@@ -21,7 +21,6 @@ $dir_host_choco = "$repo_src_owner/$choco/devels-workshop/src/chocolatey.resourc
 $local_dir_scripts = "$repo_src_owner/$repo_src_name-temp/scripts"
 $local_devels_playground = "$repo_src_owner/$repo_src_name-temp/$devels_playground/scripts"
 $local_devels_advocate = "$local_dir_scripts/$devels_advocate"
-$local_choco = "$local_dir_scripts/$choco"
 $install_everything = "install-everything.ps1"
 $get_latest_winget = "get-latest-winget.ps1"
 $wsl_import = "wsl-import-docker-image.cmd"
@@ -46,8 +45,8 @@ Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$get_lates
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_playground/$wsl_import", "$local_devels_playground/$wsl_import")
-Write-Host "`n`rDownloading: $github_domain/$dir_host_choco/$get_latest_choco`r`nDestination: $local_choco/$get_latest_choco" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_choco/$get_latest_choco", "$local_choco/$get_latest_choco")
+Write-Host "`n`rDownloading: $github_domain/$dir_host_choco/$get_latest_choco`r`nDestination: $local_devels_advocate/$get_latest_choco" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$dir_host_choco/$get_latest_choco", "$local_devels_advocate/$get_latest_choco")
 Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
 $WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
 
