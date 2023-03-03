@@ -11,11 +11,11 @@ $devels_advocate = "devels-advocate"
 $devels_playground = "devels-playground"
 $choco = "choco"
 
-$dir_host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
-$dir_host_devels_workshop_scripts = "$dir_host_devels_workshop/scripts"
-$dir_host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
-$dir_host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
-$dir_host_choco = "$repo_src_owner/$choco/devels-workshop/src/chocolatey.resources/redirects"
+$host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
+$host_devels_workshop_scripts = "$host_devels_workshop/scripts"
+$host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
+$host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
+$host_choco = "$repo_src_owner/$choco/devels-workshop/src/chocolatey.resources/redirects"
 
 
 $local_dir_scripts = "$repo_src_owner/$repo_src_name-temp/scripts"
@@ -44,18 +44,18 @@ $null = New-Item -Path "scripts/$choco/src/chocolatey.resources/redirects" -Item
 
 Pop-Location
 
-Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
-Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
-Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_devels_playground/$wsl_import", "$local_devels_playground/$wsl_import")
-Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$get_latest_choco`r`nDestination: $local_devels_advocate/$get_latest_choco" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$get_latest_choco", "$local_devels_advocate/$get_latest_choco")
-Write-Host "`n`rDownloading: $github_domain/$dir_host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_choco/$refresh_env", "$local_choco/$refresh_env")
-Write-Host "`n`rDownloading: $github_domain/$dir_host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$dir_host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
+Write-Host "`n`rDownloading: $github_domain/$host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
+Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
+Write-Host "`n`rDownloading: $github_domain/$host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$host_devels_playground/$wsl_import", "$local_devels_playground/$wsl_import")
+Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_choco`r`nDestination: $local_devels_advocate/$get_latest_choco" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_choco", "$local_devels_advocate/$get_latest_choco")
+Write-Host "`n`rDownloading: $github_domain/$host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$host_choco/$refresh_env", "$local_choco/$refresh_env")
+Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
+$WebClient.DownloadFile("$github_domain/$host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
 
 Pop-Location
 
