@@ -6,7 +6,7 @@ Write-Output "$([char]27)[2J"
 $github_domain = "https://raw.githubusercontent.com"
 $repo_src_owner = 'kindtek'
 $repo_src_name = 'devels-workshop'
-$repo_src_branch = 'windows'
+$repo_src_branch = 'main'
 $devels_advocate = "devels-advocate"
 $devels_playground = "devels-playground"
 $choco = "choco"
