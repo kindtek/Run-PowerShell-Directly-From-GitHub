@@ -63,4 +63,4 @@ Pop-Location
 $file = "$local_dir_scripts/$install_everything"
 
 Write-Host "Executing ./$file ..."
-powershell.exe -Command $file
+./$file
