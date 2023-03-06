@@ -62,4 +62,5 @@ Pop-Location
 # return to original working dir
 $file = "$local_dir_scripts/$install_everything"
 
+Write-Host "Executing ./$file ..."
 powershell.exe -Command $file
