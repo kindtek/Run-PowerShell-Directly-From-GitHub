@@ -3,7 +3,7 @@ $host.UI.RawUI.BackgroundColor = "Black"
 # powershell version compatibility for PSScriptRoot
 if (!$PSScriptRoot) { $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent }
 # jump to bottom line without clearing scrollback
-Write-Output "$([char]27)[2J"
+Write-Host "$([char]27)[2J"
 
 $github_domain = "https://raw.githubusercontent.com"
 $repo_src_owner = 'kindtek'
