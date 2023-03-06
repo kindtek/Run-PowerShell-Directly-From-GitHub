@@ -1,3 +1,5 @@
+$host.UI.RawUI.ForegroundColor = "White"
+$host.UI.RawUI.BackgroundColor = "Black"
 # powershell version compatibility for PSScriptRoot
 if (!$PSScriptRoot) { $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent }
 # jump to bottom line without clearing scrollback
@@ -61,8 +63,9 @@ Pop-Location
 
 # return to original working dir
 $file = "$local_dir_scripts/$install_everything"
-
-$confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue" -BackgroundColor "Magenta" -ForegroundColor "Yellow"
+$host.UI.RawUI.ForegroundColor = "Yello"
+$host.UI.RawUI.BackgroundColor = "Magenta"
+$confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue" 
 
 if ($confirmation -eq ""){
     Write-Host "`r`npowershell.exe -Command $file`r`n`r`n"
