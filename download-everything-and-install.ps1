@@ -62,5 +62,9 @@ Pop-Location
 # return to original working dir
 $file = "$local_dir_scripts/$install_everything"
 
-Write-Host "powershell.exe -Command $file ..."
-powershell.exe -Command $file
+$confirmation = Read-Host "`r`nRestarts are required for the environment to be fully installed. Save your work now.`r`n`r`n`tHit ENTER to continue" 
+
+if ($confirmation -eq ""){
+    Write-Host "powershell.exe -Command $file ..."
+    powershell.exe -Command $file
+}
