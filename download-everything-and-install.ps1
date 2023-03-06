@@ -67,8 +67,8 @@ do {
     $file = "$local_dir_scripts/$install_everything"
     $host.UI.RawUI.ForegroundColor = "Yello"
     $host.UI.RawUI.BackgroundColor = "Magenta"
-    $confirmation=''
-    if ($start_over -ine 'y'){
+    $confirmation = ''
+    if ($start_over -ine 'y') {
         $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file" 
     }
 
@@ -76,13 +76,22 @@ do {
     if ($confirmation -eq '') {
         powershell.exe -Command $file
         Write-Host "`r`n"
-        $start_over = Read-Host "`r`nWould you like to start over or open WSL? (y/[n]/wsl)" 
+        $start_over = Read-Host "`r`nWould you like to start over? (y/[n])" 
     }
 } while ($start_over -ieq 'y')
 
-if ($start_over -ieq 'wsl'){
-    Write-Host "Starting WSL ...`r`n`t NOTE: Type `"exit`" to exit"
-    wsl.exe
-}
+
+do  {
+    powershell.exe -Command $file
+    Write-Host "`r`n"
+    $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground" 
+    if ($start_over -ieq 'w'){
+        wsl
+    }
+    elseif ($start_over -ieq 'd') {
+        $launch_devp = "$local_devels_playground/$wsl_import"
+        &$launch_devp = "$local_devels_playground/$wsl_import"
+    }
+} while ($confirmation -ine '')
 
 Write-Host "`r`nGoodbye!`r`n"
