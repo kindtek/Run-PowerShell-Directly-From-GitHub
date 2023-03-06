@@ -62,7 +62,7 @@ Pop-Location
 # return to original working dir
 $file = "$local_dir_scripts/$install_everything"
 
-$confirmation = Read-Host "`r`nRestarts are required for the environment to be fully installed. Save your work now.`r`n`r`n`tHit ENTER to continue" 
+$confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue" -BackgroundColor "Magenta" -ForegroundColor "Yellow"
 
 if ($confirmation -eq ""){
     Write-Host "`r`npowershell.exe -Command $file`r`n`r`n"
