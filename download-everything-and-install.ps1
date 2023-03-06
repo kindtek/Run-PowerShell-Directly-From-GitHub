@@ -76,8 +76,12 @@ do {
     if ($confirmation -eq '') {
         powershell.exe -Command $file
         Write-Host "`r`n"
-        $start_over = Read-Host "`r`nWould you like to start over? (y/[n])" 
+        $start_over = Read-Host "`r`nWould you like to start over or open WSL? (y/[n]/wsl)" 
     }
 } while ($start_over -ieq 'y')
+
+if ($start_over -ieq 'wsl'){
+    wsl.exe
+}
 
 Write-Host "`r`nGoodbye!`r`n"
