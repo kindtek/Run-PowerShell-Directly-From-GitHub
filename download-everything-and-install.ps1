@@ -67,4 +67,7 @@ $confirmation = Read-Host "`r`nRestarts are required for the environment to be f
 if ($confirmation -eq ""){
     Write-Host "powershell.exe -Command $file ..."
     powershell.exe -Command $file
+    Write-Host "`r`n"
 }
+
+Write-Host "`r`nGoodbye!`r`n"
