@@ -81,6 +81,7 @@ do {
 } while ($start_over -ieq 'y')
 
 if ($start_over -ieq 'wsl'){
+    Write-Host "Starting WSL ...`r`n`t NOTE: Type `"exit`" to exit"
     wsl.exe
 }
 
