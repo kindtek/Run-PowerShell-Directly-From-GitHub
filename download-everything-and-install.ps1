@@ -65,7 +65,7 @@ Pop-Location
 $file = "$local_dir_scripts/$install_everything"
 $host.UI.RawUI.ForegroundColor = "Yello"
 $host.UI.RawUI.BackgroundColor = "Magenta"
-$confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file`r`n`r`n`t" 
+$confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file`r`n`t" 
 
 if ($confirmation -eq ""){
     powershell.exe -Command $file
