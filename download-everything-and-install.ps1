@@ -68,12 +68,12 @@ $host.UI.RawUI.BackgroundColor = "Magenta"
 $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file" 
 
 $start_over='n'
-while ($start_over -ine 'y') {
+do {
     if ($confirmation -eq ""){
         powershell.exe -Command $file
         Write-Host "`r`n"
         $start_over = Read-Host "`r`nWould you like to start over? (y/[n])" 
     }
-}
+} while ($start_over -ieq 'y')
 
 Write-Host "`r`nGoodbye!`r`n"
