@@ -34,42 +34,43 @@ $add_windows_features = "add-windows-features.ps1"
 
 $WebClient = New-Object System.Net.WebClient
 
-# simulate structure of incoming repo
-$null = New-Item -Path "$repo_src_owner" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location "$repo_src_owner"
-$null = New-Item -Path "$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-Push-Location "$repo_src_name-temp"
-$null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-$null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-$null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-$null = New-Item -Path "scripts/$choco/src/chocolatey.resources/redirects" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-
-Pop-Location
-
-Write-Host "`n`rDownloading: $github_domain/$host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
-Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
-Write-Host "`n`rDownloading: $github_domain/$host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$host_devels_playground/$wsl_import", "$local_devels_playground/$wsl_import")
-Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_choco`r`nDestination: $local_devels_advocate/$get_latest_choco" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_choco", "$local_devels_advocate/$get_latest_choco")
-Write-Host "`n`rDownloading: $github_domain/$host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$host_choco/$refresh_env", "$local_choco/$refresh_env")
-Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
-$WebClient.DownloadFile("$github_domain/$host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
-
-Pop-Location
-
-# return to original working dir
-$file = "$local_dir_scripts/$install_everything"
-$host.UI.RawUI.ForegroundColor = "Yello"
-$host.UI.RawUI.BackgroundColor = "Magenta"
-$confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file" 
-
-$start_over='n'
+$start_over = 'n'
 do {
-    if ($confirmation -eq ""){
+    # simulate structure of incoming repo
+    $null = New-Item -Path "$repo_src_owner" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+    Push-Location "$repo_src_owner"
+    $null = New-Item -Path "$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+    Push-Location "$repo_src_name-temp"
+    $null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+    $null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+    $null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+    $null = New-Item -Path "scripts/$choco/src/chocolatey.resources/redirects" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+
+    Pop-Location
+
+    Write-Host "`n`rDownloading: $github_domain/$host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
+    $WebClient.DownloadFile("$github_domain/$host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
+    Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
+    $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
+    Write-Host "`n`rDownloading: $github_domain/$host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
+    $WebClient.DownloadFile("$github_domain/$host_devels_playground/$wsl_import", "$local_devels_playground/$wsl_import")
+    Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_choco`r`nDestination: $local_devels_advocate/$get_latest_choco" -ForegroundColor Magenta 
+    $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_choco", "$local_devels_advocate/$get_latest_choco")
+    Write-Host "`n`rDownloading: $github_domain/$host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
+    $WebClient.DownloadFile("$github_domain/$host_choco/$refresh_env", "$local_choco/$refresh_env")
+    Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
+    $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
+
+    Pop-Location
+
+    # return to original working dir
+    $file = "$local_dir_scripts/$install_everything"
+    $host.UI.RawUI.ForegroundColor = "Yello"
+    $host.UI.RawUI.BackgroundColor = "Magenta"
+    $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file" 
+
+
+    if ($confirmation -eq "") {
         powershell.exe -Command $file
         Write-Host "`r`n"
         $start_over = Read-Host "`r`nWould you like to start over? (y/[n])" 
