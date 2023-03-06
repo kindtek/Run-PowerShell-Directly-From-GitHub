@@ -65,7 +65,7 @@ $file = "$local_dir_scripts/$install_everything"
 $confirmation = Read-Host "`r`nRestarts are required for the environment to be fully installed. Save your work now.`r`n`r`n`tHit ENTER to continue" 
 
 if ($confirmation -eq ""){
-    Write-Host "`r`npowershell.exe -Command $file"
+    Write-Host "`r`npowershell.exe -Command $file`r`n`r`n"
     powershell.exe -Command $file
     Write-Host "`r`n"
 }
