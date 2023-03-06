@@ -84,13 +84,18 @@ do {
 do  {
     powershell.exe -Command $file
     Write-Host "`r`n"
-    $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground" 
+    $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code" 
     if ($start_over -ieq 'w'){
         wsl
     }
     elseif ($start_over -ieq 'd') {
         $launch_devp = "$local_devels_playground/$wsl_import"
         &$launch_devp = "$local_devels_playground/$wsl_import"
+    }
+    elseif ($start_over -ieq 'v') {
+        Set-Location $repo_src_owner/$repo_src_name
+        $launch_devp = ". code"
+        &$launch_devp = ". code"
     }
 } while ($confirmation -ine '')
 
