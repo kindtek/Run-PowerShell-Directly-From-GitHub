@@ -84,10 +84,9 @@ do {
 while ($start_over -ine '') {
     powershell.exe -Command $file
     Write-Host "`r`n"
-    # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code" 
+    # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t
     $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground" 
-    if ($start_over -ieq 'w'){    $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code" 
-
+    if ($start_over -ieq 'w'){    
         wsl
     }
     elseif ($start_over -ieq 'd') {
@@ -96,9 +95,11 @@ while ($start_over -ine '') {
     }
     # elseif ($start_over -ieq 'v') {
     #     Set-Location $repo_src_owner/$repo_src_name
+    #     Write-Host "Attempting to open repository..."
     #     $launch_dplay = ". code"
     #     &$launch_dplay = ". code"
     # }
+    
 } 
 
 Write-Host "`r`nGoodbye!`r`n"
