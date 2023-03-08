@@ -81,7 +81,7 @@ do {
 } while ($start_over -ieq 'y')
 
 
-do  {
+while ($start_over -ine '') {
     powershell.exe -Command $file
     Write-Host "`r`n"
     # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code" 
@@ -99,6 +99,6 @@ do  {
     #     $launch_dplay = ". code"
     #     &$launch_dplay = ". code"
     # }
-} while ($start_over -ine '')
+} 
 
 Write-Host "`r`nGoodbye!`r`n"
