@@ -91,13 +91,13 @@ do  {
         wsl
     }
     elseif ($start_over -ieq 'd') {
-        $launch_devp = "$local_devels_playground/$wsl_import"
-        &$launch_devp = "$local_devels_playground/$wsl_import"
+        $launch_dplay = "$local_devels_playground/$wsl_import"
+        &$launch_dplay = "$local_devels_playground/$wsl_import"
     }
     # elseif ($start_over -ieq 'v') {
     #     Set-Location $repo_src_owner/$repo_src_name
-    #     $launch_devp = ". code"
-    #     &$launch_devp = ". code"
+    #     $launch_dplay = ". code"
+    #     &$launch_dplay = ". code"
     # }
 } while ($start_over -ine '')
 
