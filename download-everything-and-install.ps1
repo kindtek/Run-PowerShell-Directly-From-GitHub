@@ -68,39 +68,36 @@ do {
     $host.UI.RawUI.ForegroundColor = "Yello"
     $host.UI.RawUI.BackgroundColor = "Magenta"
     $confirmation = ''
-    if ($start_over -ine 'y') {
+    if ($start_over -ine 's') {
         $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file" 
     }
-
-
     if ($confirmation -eq '') {
         powershell.exe -Command $file
-        Write-Host "`r`n"
-        $start_over = Read-Host "`r`nWould you like to start over? (y/[n])" 
-    }
-} while ($start_over -ieq 'y')
+        Write-Host "`r`n`r`n"
 
-$start_over = 'q'
-while ($start_over -ine '') {
-    Write-Host "`r`n"
-    # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
-    $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n" 
-    if ($start_over -ieq 'w'){    
-        # wsl sh -c "cd /hel;exec $SHELL"
-        wsl
+        # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
+        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- [S]tart over" 
+        if ($start_over -ieq 'w') {    
+            # wsl sh -c "cd /hel;exec $SHELL"
+            wsl
+        }
+        elseif ($start_over -ieq 'd') {
+            $launch_dplay = "$local_devels_playground/$wsl_import"
+            &$launch_dplay = "$local_devels_playground/$wsl_import"
+        }
+        elseif ($start_over -ieq 's') {
+            Write-Host 'Restarting process ...'
+        }
+        # elseif ($start_over -ieq 'v') {
+        #     wsl sh -c "cd /hel;. code"
+        # }
+        else {
+            $start_over = ''
+            break
+        }
     }
-    elseif ($start_over -ieq 'd') {
-        $launch_dplay = "$local_devels_playground/$wsl_import"
-        &$launch_dplay = "$local_devels_playground/$wsl_import"
-    }
-    # elseif ($start_over -ieq 'v') {
-    #     wsl sh -c "cd /hel;. code"
-    # }
-    else {
-        $start_over = ''
-        break
-    }
-    
-} 
+} while ($start_over -ieq 's')
+
+
 
 Write-Host "`r`nGoodbye!`r`n"
