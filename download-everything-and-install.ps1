@@ -82,10 +82,9 @@ do {
 
 $start_over = 'q'
 while ($start_over -ine '') {
-    powershell.exe -Command $file
     Write-Host "`r`n"
     # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
-    $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground" 
+    $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n" 
     if ($start_over -ieq 'w'){    
         # wsl sh -c "cd /hel;exec $SHELL"
         wsl
