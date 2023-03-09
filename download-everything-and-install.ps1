@@ -80,7 +80,7 @@ do {
     }
 } while ($start_over -ieq 'y')
 
-
+$start_over = 'q'
 while ($start_over -ine '') {
     powershell.exe -Command $file
     Write-Host "`r`n"
