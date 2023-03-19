@@ -17,7 +17,7 @@ $host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
 $host_devels_workshop_scripts = "$host_devels_workshop/scripts"
 $host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
 $host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
-$host_choco = "$repo_src_owner/$choco/devels-work/src/chocolatey.resources/redirects"
+$host_choco = "$repo_src_owner/$choco/stable/src/chocolatey.resources/redirects"
 
 $local_dir_scripts = "$repo_src_owner/$repo_src_name-temp/scripts"
 $local_devels_playground = "$repo_src_owner/$repo_src_name-temp/$devels_playground/scripts"
