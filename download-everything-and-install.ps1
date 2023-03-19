@@ -7,17 +7,17 @@ Write-Host "$([char]27)[2J"
 
 $github_domain = "https://raw.githubusercontent.com"
 $repo_src_owner = 'kindtek'
-$repo_src_name = 'devels-workshop'
+$repo_src_name = 'devels-work'
 $repo_src_branch = 'main'
-$devels_advocate = "devels-advocate"
-$devels_playground = "devels-playground"
+$devels_advocate = "devels-adv"
+$devels_playground = "devels-play"
 $choco = "choco"
 
 $host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
 $host_devels_workshop_scripts = "$host_devels_workshop/scripts"
 $host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
 $host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
-$host_choco = "$repo_src_owner/$choco/devels-workshop/src/chocolatey.resources/redirects"
+$host_choco = "$repo_src_owner/$choco/devels-work/src/chocolatey.resources/redirects"
 
 
 $local_dir_scripts = "$repo_src_owner/$repo_src_name-temp/scripts"
