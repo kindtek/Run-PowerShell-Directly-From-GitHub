@@ -81,8 +81,8 @@ do {
             wsl
         }
         elseif ($start_over -ieq 'd') {
-            $launch_dplay = "$local_devels_playground/$wsl_import"
-            &$launch_dplay = "$local_devels_playground/$wsl_import"
+            $launch_dvlp = "$local_devels_playground/$wsl_import"
+            &$launch_dvlp = "$local_devels_playground/$wsl_import"
         }
         elseif ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
