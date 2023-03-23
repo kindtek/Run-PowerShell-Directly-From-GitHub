@@ -7,10 +7,10 @@ Write-Host "$([char]27)[2J"
 
 $github_domain = "https://raw.githubusercontent.com"
 $repo_src_owner = 'kindtek'
-$repo_src_name = 'devels-work'
+$repo_src_name = 'dvl-works'
 $repo_src_branch = 'main'
-$devels_advocate = "devels-adv"
-$devels_playground = "devels-play"
+$devels_advocate = "dvl-adv"
+$devels_playground = "dvl-playg"
 $choco = "choco"
 
 $host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
