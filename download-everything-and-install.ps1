@@ -10,7 +10,7 @@ $repo_src_owner = 'kindtek'
 $repo_src_name = 'devels-workshop'
 $repo_src_branch = 'main'
 $devels_advocate = "dvl-adv"
-$devels_playground = "dvl-playg"
+$devels_playground = "devels-playground"
 $choco = "choco"
 
 $host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
