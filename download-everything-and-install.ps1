@@ -84,8 +84,8 @@ do {
             wsl
         }
         elseif ($start_over -ieq 'd') {
-            $launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/$wsl_import $img_subset"
-            &$launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/$wsl_import $img_subset"
+            $launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/scripts/$wsl_import $img_subset"
+            &$launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/scripts/$wsl_import $img_subset"
         }
         elseif ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
