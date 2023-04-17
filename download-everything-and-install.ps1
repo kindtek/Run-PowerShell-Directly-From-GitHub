@@ -65,7 +65,7 @@ do {
 
     # return to original working dir
     $file = "$local_dir_scripts/$install_everything"
-    $host.UI.RawUI.ForegroundColor = "Yello"
+    $host.UI.RawUI.ForegroundColor = "Yellow"
     $host.UI.RawUI.BackgroundColor = "Magenta"
     $confirmation = ''
     if ($start_over -ine 's') {
