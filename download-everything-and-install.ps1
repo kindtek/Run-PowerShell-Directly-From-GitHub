@@ -69,10 +69,10 @@ do {
     $host.UI.RawUI.BackgroundColor = "Magenta"
     $confirmation = ''
     if ($start_over -ine 's') {
-        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args[0]" 
+        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
     }
     if ($confirmation -eq '') {
-        powershell.exe -Command $file $args[0]
+        powershell.exe -Command $file $args
         Write-Host "`r`n`r`n"
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
