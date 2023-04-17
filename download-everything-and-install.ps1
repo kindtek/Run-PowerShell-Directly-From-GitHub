@@ -1,5 +1,6 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
+$img_subset = $args[0]
 # powershell version compatibility for PSScriptRoot
 if (!$PSScriptRoot) { $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent }
 # jump to bottom line without clearing scrollback
@@ -70,10 +71,10 @@ do {
     $confirmation = ''
     if ($start_over -ine 's') {
         # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
-        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`t" 
+        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tUse CTRL + C at any time to cancel`r`n`r`n`t" 
     }
     if ($confirmation -eq '') {
-        powershell.exe -Command $file $args
+        powershell.exe -Command $file $img_subset
         Write-Host "`r`n`r`n"
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
@@ -83,8 +84,8 @@ do {
             wsl
         }
         elseif ($start_over -ieq 'd') {
-            $launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/$wsl_import $args"
-            &$launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/$wsl_import $args"
+            $launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/$wsl_import $img_subset"
+            &$launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/$wsl_import $img_subset"
         }
         elseif ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
