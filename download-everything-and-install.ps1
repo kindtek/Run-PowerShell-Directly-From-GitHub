@@ -48,17 +48,17 @@ do {
 
     Pop-Location
 
-    Write-Host "`n`rDownloading: $github_domain/$host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
+    # Write-Host "`n`rDownloading: $github_domain/$host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
     $WebClient.DownloadFile("$github_domain/$host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
-    Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
+    # Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
     $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
-    Write-Host "`n`rDownloading: $github_domain/$host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
+    # Write-Host "`n`rDownloading: $github_domain/$host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
     $WebClient.DownloadFile("$github_domain/$host_devels_playground/$wsl_import", "$local_devels_playground/$wsl_import")
-    Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_choco`r`nDestination: $local_devels_advocate/$get_latest_choco" -ForegroundColor Magenta 
+    # Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_choco`r`nDestination: $local_devels_advocate/$get_latest_choco" -ForegroundColor Magenta 
     $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_choco", "$local_devels_advocate/$get_latest_choco")
-    Write-Host "`n`rDownloading: $github_domain/$host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
+    # Write-Host "`n`rDownloading: $github_domain/$host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
     $WebClient.DownloadFile("$github_domain/$host_choco/$refresh_env", "$local_choco/$refresh_env")
-    Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
+    # Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
     $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
 
     Pop-Location
@@ -69,7 +69,8 @@ do {
     $host.UI.RawUI.BackgroundColor = "Magenta"
     $confirmation = ''
     if ($start_over -ine 's') {
-        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
+        # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
+        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`t" 
     }
     if ($confirmation -eq '') {
         powershell.exe -Command $file $args
@@ -82,7 +83,7 @@ do {
             wsl
         }
         elseif ($start_over -ieq 'd') {
-            $launch_dvlp = "$local_devels_playground/$wsl_import $args"
+            $launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/$wsl_import $args"
             &$launch_dvlp = "$local_devels_playground/$wsl_import $args"
         }
         elseif ($start_over -ieq 's') {
