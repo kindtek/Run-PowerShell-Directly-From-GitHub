@@ -42,9 +42,9 @@ do {
     $null = New-Item -Path "$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
     Push-Location "$repo_src_name-temp"
     $null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-    $null = New-Item -Path "$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-    $null = New-Item -Path "$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-    $null = New-Item -Path "$choco/src/chocolatey.resources/redirects" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+    $null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+    $null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
+    $null = New-Item -Path "scripts/$choco/src/chocolatey.resources/redirects" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 
     Pop-Location
 
