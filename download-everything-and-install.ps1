@@ -74,7 +74,7 @@ do {
         $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tUse CTRL + C at any time to cancel`r`n`r`n`t" 
     }
     if ($confirmation -eq '') {
-        powershell.exe -Command $file $img_subset
+        powershell.exe -Command $file
         Write-Host "`r`n`r`n"
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
@@ -84,8 +84,9 @@ do {
             wsl
         }
         elseif ($start_over -ieq 'd') {
-            $launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/scripts/$wsl_import $img_subset"
-            &$launch_dvlp = "$repo_src_owner/$repo_src_name/dvlp/scripts/$wsl_import $img_subset"
+            Write-Host "`r`npowershell.exe -Command `"$repo_src_owner/$repo_src_name/dvlp/scripts/$wsl_import $img_subset`"`r`n"
+            powershell.exe -Command "$repo_src_owner/$repo_src_name/dvlp/scripts/$wsl_import" $img_subset
+            
         }
         elseif ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
