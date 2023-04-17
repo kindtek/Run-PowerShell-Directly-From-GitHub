@@ -10,12 +10,13 @@ $repo_src_owner = 'kindtek'
 $repo_src_name = 'devels-workshop'
 $repo_src_branch = 'main'
 $devels_advocate = "dvl-adv"
+$devels_advocate_branch = "dvl-works"
 $devels_playground = "devels-playground"
 $choco = "choco"
 
 $host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
 $host_devels_workshop_scripts = "$host_devels_workshop/scripts"
-$host_devels_advocate = "$repo_src_owner/$devels_advocate/$repo_src_name"
+$host_devels_advocate = "$repo_src_owner/$devels_advocate/$devels_advocate_branch"
 $host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
 $host_choco = "$repo_src_owner/$choco/stable/src/chocolatey.resources/redirects"
 
@@ -68,10 +69,10 @@ do {
     $host.UI.RawUI.BackgroundColor = "Magenta"
     $confirmation = ''
     if ($start_over -ine 's') {
-        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file" 
+        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args[0]" 
     }
     if ($confirmation -eq '') {
-        powershell.exe -Command $file
+        powershell.exe -Command $file $args[0]
         Write-Host "`r`n`r`n"
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
