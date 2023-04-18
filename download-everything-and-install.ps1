@@ -49,7 +49,7 @@ function install_repo {
 
     Push-Location $repo_git_name
     
-    ( git submodule update --remote --verbose --progress -- dvlp dvl-adv powerhell ) -Or ( ( git submodule update --init --remote  --verbose --progress -- dvlp dvl-adv powerhell > $null ) -And ( $new_install = $true ) ) 
+    ( git submodule update --remote --verbose --progress -- dvlp dvl-adv powerhell ) -Or ( ( git submodule update --init --remote --verbose --progress -- dvlp dvl-adv powerhell > $null ) -And ( $new_install = $true ) ) 
 
     return $new_install
 }
@@ -111,7 +111,7 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
-        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue"
+        $confirmation = Read-Host "`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue"
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
 
