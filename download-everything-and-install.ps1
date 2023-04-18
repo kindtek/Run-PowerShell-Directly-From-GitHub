@@ -45,7 +45,7 @@ function install_repo {
     Set-Location $git_parent_path
     $new_install = $false
 
-    ( git -C $repo_git_name pull origin --verbose --progress ) -Or ( git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --verbose --progress -- $repo_git_name > $null ) 
+    ( git -C $repo_git_name pull origin --progress ) -Or ( git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --verbose --progress -- $repo_git_name > $null ) 
 
     Push-Location $repo_git_name
     
