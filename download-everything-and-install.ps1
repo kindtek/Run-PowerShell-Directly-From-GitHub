@@ -152,8 +152,8 @@ do {
             }
         }
 
-        Write-Host "`r`nThese programs will be installed or updated:" 
-        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`t" 
+        Write-Host "`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n" -ForegroundColor Magenta
         
         Start-Sleep 5
 
