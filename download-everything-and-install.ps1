@@ -1,24 +1,35 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 $img_subset = $args[0]
+Write-Host "$([char]27)[2J"
 
-
+# source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
+# Self-elevate the script if required
+if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+    if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
+        $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
+        Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle "Maximized" -ArgumentList $CommandLine
+        Exit
+    }
+}
 function install_winget {
+    param (
+        $git_path
+    )
     Write-Host "`r`nThese programs will be installed or updated:" 
     Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n" 
 
     $software_name = "WinGet"
     if (!(Test-Path -Path "$git_path/.winget-installed" -PathType Leaf)) {
-        Push-Location $git_scripts_path
+        $file = "$HOME/repos/kindtek/get-latest-winget.ps1"
+        Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
+        powershell.exe -executionpolicy remotesigned -File $file
         # install winget and use winget to install everything else
-        $winget = "dvl-adv/get-latest-winget.ps1"
         Write-Host "Installing $software_name ...`r`n" 
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
         # Get-Process | Where-Object { $_.HasExited }
-        &$winget = Invoke-Expression -command "dvl-adv/get-latest-winget.ps1" 
         Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_path/.winget-installed"
-        Pop-Location
     }
     else {
         Write-Host "$software_name already installed`r`n"   
@@ -100,17 +111,6 @@ function run_devels_playground {
     catch {}
 }
 
-Write-Host "$([char]27)[2J"
-
-# source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
-# Self-elevate the script if required
-if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-    if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
-        $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
-        Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle "Maximized" -ArgumentList $CommandLine
-        Exit
-    }
-}
 # jump to bottom line without clearing scrollback
 $start_over = 'n'
 do {
@@ -133,7 +133,7 @@ do {
     }
     if ($confirmation -eq '') {
 
-        install_winget
+        install_winget $git_path
 
         install_repo $parent_path $git_path $repo_src_owner $repo_src_name $repo_git_name $repo_src_branch  
 
