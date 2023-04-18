@@ -35,6 +35,7 @@ function install_repo {
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
+        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_parent_path/.github-installed"
         $new_install = $true
     }
     else {
@@ -49,8 +50,6 @@ function install_repo {
     Push-Location $repo_git_name
     
     ( git submodule update --remote --verbose --progress -- dvlp dvl-adv powerhell ) -Or ( ( git submodule update --init --remote  --verbose --progress -- dvlp dvl-adv powerhell > $null ) -And ( $new_install = $true ) ) 
-
-    Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_parent_path/.github-installed"
 
     return $new_install
 }
