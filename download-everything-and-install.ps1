@@ -112,6 +112,8 @@ do {
 
         # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
         $confirmation = Read-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue"
+        Write-Host "$([char]27)[2J"
+        Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue"
 
     }
     if ($confirmation -eq '') {   
@@ -119,13 +121,13 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed" 
         Write-Host "    -- use CTRL + C or close this window to cancel anytime --"
         Start-Sleep 3
-        Write-Host "                        3"
+        Write-Host "                            3"
         Start-Sleep 1
-        Write-Host "                        2"
+        Write-Host "                            2"
         Start-Sleep 1
-        Write-Host "                        1"  
+        Write-Host "                            1"  
         Start-Sleep 1
-        Write-Host "                        0"  
+        Write-Host "                            0"  
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
         # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
