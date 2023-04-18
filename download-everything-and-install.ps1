@@ -65,7 +65,7 @@ function install_repo {
 
     Push-Location $repo_git_name
     
-    ( git submodule update --force --recursive --init -And $new_install = $true ) -Or ( git pull dvlp )
+    ( ( git submodule update --force --recursive --init ) -And ( $new_install = $true ) ) -Or ( git pull dvlp )
 
     return $new_install
     # if git is not recognized try to limp along with the manually downloaded files
