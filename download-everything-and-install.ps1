@@ -16,7 +16,6 @@ function install_winget {
     param (
         $git_path
     )
-    Write-Host "testing path $git_path for .winget-installed"
     $software_name = "WinGet"
     if (!(Test-Path -Path "$git_path/.winget-installed" -PathType Leaf)) {
         $file = "$HOME/repos/kindtek/get-latest-winget.ps1"
@@ -41,7 +40,6 @@ function install_repo {
     Write-Host "Now installing:`r`n`t- GitHub`r`n`t- devels-workshop repository`r`n`t- Chocolatey`r`n" 
 
     $software_name = "Github CLI"
-    Write-Host "testing path $git_path for .github-installed"
     if (!(Test-Path -Path "$git_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ...`r`n"
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
