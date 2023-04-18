@@ -1,92 +1,156 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 $img_subset = $args[0]
-# powershell version compatibility for PSScriptRoot
-if (!$PSScriptRoot) { $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent }
-# jump to bottom line without clearing scrollback
+
+
+function install_winget {
+    Write-Host "`r`nThese programs will be installed or updated:" 
+    Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n" 
+
+    $software_name = "WinGet"
+    if (!(Test-Path -Path "$git_path/.winget-installed" -PathType Leaf)) {
+        Push-Location $git_scripts_path
+        # install winget and use winget to install everything else
+        $winget = "dvl-adv/get-latest-winget.ps1"
+        Write-Host "Installing $software_name ...`r`n" 
+        # $p = Get-Process -Name "PackageManagement"
+        # Stop-Process -InputObject $p
+        # Get-Process | Where-Object { $_.HasExited }
+        &$winget = Invoke-Expression -command "dvl-adv/get-latest-winget.ps1" 
+        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_path/.winget-installed"
+        Pop-Location
+    }
+    else {
+        Write-Host "$software_name already installed`r`n"   
+    }
+}
+
+function install_repo {
+    param (
+        $parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_git_name, $repo_src_branch 
+    )
+    Write-Host "Now installing:`r`n`t- GitHub`r`n`t- devels-workshop repository`r`n`t- Chocolatey`r`n" 
+
+    $software_name = "Github CLI"
+    if (!(Test-Path -Path "$git_path/.github-installed" -PathType Leaf)) {
+        Write-Host "Installing $software_name ...`r`n"
+        winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
+        winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
+        winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
+        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
+        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_path/.github-installed"
+        $new_install = $true
+    }
+    else {
+        Write-Host "$software_name already installed`r`n" 
+    }
+
+    # refresh environment variables using script in choco temp download location
+    # powershell.exe "$git_path/choco/src/chocolatey.resources/redirects/RefreshEnv.cmd" -Wait -WindowStyle "Hidden"
+    # Write-Host "parent path: $parent_path"
+    Set-Location $parent_path
+    $new_install = $false
+
+    git clone "https://github.com/$repo_src_owner/$repo_src_name"  --branch $repo_src_branch $repo_git_name -Or git pull $repo_git_name
+
+    Push-Location $repo_git_name
+    
+    ( git submodule update --force --recursive --init -And $new_install = $true ) -Or ( git pull dvlp )
+
+    return $new_install
+    # if git is not recognized try to limp along with the manually downloaded files
+    # }
+    # catch {}
+}
+
+function run_devels_playground {
+    param (
+        $git_path, $img_subset
+    )
+    try {
+        $software_name = "Devel`'s Playground"
+        if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+            # @TODO: add cdir and python to install with same behavior as other installs above
+            # not eloquent at all but good for now
+
+            # ... even tho cdir does not appear to be working on windows
+            # $cmd_command = pip install cdir
+            # Start-Process -FilePath PowerShell.exe -NoNewWindow -ArgumentList $cmd_command
+    
+            # @TODO: maybe start in new window
+            # $start_devs_playground = Read-Host "`r`nStart Devel's Playground ([y]/n)"
+            # if ($start_devs_playground -ine 'n' -And $start_devs_playground -ine 'no') { 
+            Write-Host "`r`nNOTE:`tDocker Desktop is required to be running for the Devel's Playground to work.`r`n`r`n`tDo NOT quit Docker Desktop until you are done running it.`r`n" 
+            Write-Host "`r`n`r`nAttempting to start wsl import tool ..."
+            # // commenting out background building process because this is NOT quite ready.
+            # // would like to run in separate window and then use these new images in devel's playground 
+            # // if they are more up to date than the hub - which could be a difficult process
+            # $cmd_command = "$git_path/devels_playground/docker-images-build-in-background.ps1"
+            # &$cmd_command = cmd /c start powershell.exe -Command "$git_path/devels_playground/docker-images-build-in-background.ps1" -WindowStyle "Maximized"
+
+            Write-Host "Launching $software_name ...`r`n" 
+            # Write-Host "&$devs_playground $global:img_subset"
+            # Write-Host "$([char]27)[2J"
+            Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_subset`r`n"
+            powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" $img_subset
+            # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_subset"
+            # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
+        }
+    }
+    catch {}
+}
+
 Write-Host "$([char]27)[2J"
 
-$github_domain = "https://raw.githubusercontent.com"
-$repo_src_owner = 'kindtek'
-$repo_src_name = 'devels-workshop'
-$repo_src_branch = 'main'
-$devels_advocate = "dvl-adv"
-$devels_advocate_branch = "dvl-works"
-$devels_playground = "devels-playground"
-$choco = "choco"
-
-$host_devels_workshop = "$repo_src_owner/$repo_src_name/$repo_src_branch"
-$host_devels_workshop_scripts = "$host_devels_workshop/scripts"
-$host_devels_advocate = "$repo_src_owner/$devels_advocate/$devels_advocate_branch"
-$host_devels_playground = "$repo_src_owner/$devels_playground/$repo_src_name/scripts"
-$host_choco = "$repo_src_owner/$choco/stable/src/chocolatey.resources/redirects"
-
-$local_dir_scripts = "$repo_src_owner/$repo_src_name-temp/scripts"
-$local_devels_playground = "$repo_src_owner/$repo_src_name-temp/$devels_playground/scripts"
-$local_devels_advocate = "$local_dir_scripts/$devels_advocate"
-$local_choco = "$local_dir_scripts/$choco/src/chocolatey.resources/redirects"
-$install_everything = "install-everything.ps1"
-$get_latest_winget = "get-latest-winget.ps1"
-$get_latest_choco = "get-latest-choco.ps1"
-$wsl_import = "wsl-docker-import.cmd"
-$refresh_env = "RefreshEnv.cmd"
-$get_latest_choco = "get-latest-choco.ps1"
-$add_windows_features = "add-windows-features.ps1"
-
-$WebClient = New-Object System.Net.WebClient
-
+# source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
+# Self-elevate the script if required
+if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+    if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
+        $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
+        Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle "Maximized" -ArgumentList $CommandLine
+        Exit
+    }
+}
+# jump to bottom line without clearing scrollback
 $start_over = 'n'
 do {
-    # simulate structure of incoming repo
-    $null = New-Item -Path "$repo_src_owner" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-    Push-Location "$repo_src_owner"
-    $null = New-Item -Path "$repo_src_name-temp" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-    Push-Location "$repo_src_name-temp"
-    $null = New-Item -Path "$devels_playground/scripts" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-    $null = New-Item -Path "scripts/$choco" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-    $null = New-Item -Path "scripts/$devels_advocate" -ItemType Directory -Force -ErrorAction SilentlyContinue 
-    $null = New-Item -Path "scripts/$choco/src/chocolatey.resources/redirects" -ItemType Directory -Force -ErrorAction SilentlyContinue 
 
-    Pop-Location
-
-    # Write-Host "`n`rDownloading: $github_domain/$host_devels_workshop_scripts/$install_everything`r`nDestination: $local_dir_scripts/$install_everything" -ForegroundColor Magenta 
-    $WebClient.DownloadFile("$github_domain/$host_devels_workshop_scripts/$install_everything", "$local_dir_scripts/$install_everything")
-    # Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_winget`r`nDestination: $local_devels_advocate/$get_latest_winget" -ForegroundColor Magenta 
-    $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_winget", "$local_devels_advocate/$get_latest_winget")
-    # Write-Host "`n`rDownloading: $github_domain/$host_devels_playground/$wsl_import`r`nDestination: $local_devels_playground/$wsl_import" -ForegroundColor Magenta 
-    $WebClient.DownloadFile("$github_domain/$host_devels_playground/$wsl_import", "$local_devels_playground/$wsl_import")
-    # Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$get_latest_choco`r`nDestination: $local_devels_advocate/$get_latest_choco" -ForegroundColor Magenta 
-    $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$get_latest_choco", "$local_devels_advocate/$get_latest_choco")
-    # Write-Host "`n`rDownloading: $github_domain/$host_choco/$refresh_env`r`nDestination: $local_choco/$refresh_env" -ForegroundColor Magenta 
-    $WebClient.DownloadFile("$github_domain/$host_choco/$refresh_env", "$local_choco/$refresh_env")
-    # Write-Host "`n`rDownloading: $github_domain/$host_devels_advocate/$add_windows_features`r`nDestination: $local_devels_advocate/$add_windows_features`n`r" -ForegroundColor Magenta 
-    $WebClient.DownloadFile("$github_domain/$host_devels_advocate/$add_windows_features", "$local_devels_advocate/$add_windows_features")
-
-    Pop-Location
-
-    # return to original working dir
-    $file = "$local_dir_scripts/$install_everything"
     $host.UI.RawUI.ForegroundColor = "Yellow"
     $host.UI.RawUI.BackgroundColor = "Magenta"
+    $repo_src_owner = 'kindtek'
+    $repo_src_name = 'devels-workshop'
+    $repo_src_branch = 'main'
+    $repo_git_name = 'dvlw'
+    $parent_path = "$HOME/repos/$repos_src_owner"
+    $git_path = "$parent_path/$repo_git_name"
+    $img_subset = $args[0]
+
     $confirmation = ''
     if ($start_over -ine 's') {
         # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
         $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tUse CTRL + C at any time to cancel`r`n`r`n`t" 
+ 
     }
     if ($confirmation -eq '') {
-        powershell.exe -Command $file
+
+        winget_install
+
+        install_repo $parent_path $git_path $repo_src_owner $repo_src_name $repo_git_name $repo_src_branch  
+
+        powershell.exe -Command $git_path/scripts/install-everything.ps1
+
+        run_devels_playground $git_path $args[0]
+
         Write-Host "`r`n`r`n"
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
-        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- [S]tart over`r`n`t  (exit) " 
+        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- [S]tart over`r`n`t  (exit) `r`n`t" 
         if ($start_over -ieq 'w') {    
             # wsl sh -c "cd /hel;exec $SHELL"
             wsl
         }
         elseif ($start_over -ieq 'd') {
-            Write-Host "`r`npowershell.exe -Command `"$repo_src_owner/$repo_src_name/dvlp/scripts/$wsl_import $img_subset`"`r`n"
-            powershell.exe -Command "$repo_src_owner/$repo_src_name/dvlp/scripts/$wsl_import" $img_subset
-            
+            run_devels_playground $git_path $img_subset
         }
         elseif ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
