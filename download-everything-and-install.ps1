@@ -117,11 +117,6 @@ do {
 
     }
     if ($confirmation -eq '') {      
-        Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... `r`n"  
-        Write-Host "`r`nThese programs will be installed or updated:" 
-        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`nUse CTRL + C or close window at any time to cancel`r`n`r`n`t" 
-        New-Item -ItemType Directory -Force -Path $git_parent_path
-        
         # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
         # Self-elevate the script if required
         if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
@@ -131,6 +126,13 @@ do {
                 Exit
             }
         }
+
+        Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... "  
+        New-Item -ItemType Directory -Force -Path $git_parent_path
+        Write-Host "`r`nThese programs will be installed or updated:" 
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`nUse CTRL + C or close window at any time to cancel`r`n`r`n`t" 
+        
+       
 
         install_winget $git_parent_path
 
