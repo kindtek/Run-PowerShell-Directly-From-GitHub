@@ -151,7 +151,7 @@ do {
             }
         }
 
-        Write-Host "`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
+        Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
         Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n" -ForegroundColor Magenta
         
         Start-Sleep 5
@@ -165,8 +165,11 @@ do {
 
         powershell.exe -Command "$git_path/scripts/install-everything.ps1"
 
-        run_devels_playground $git_path $args[0]
+        $host.UI.RawUI.ForegroundColor = "Black"
+        $host.UI.RawUI.BackgroundColor = "DarkRed"
 
+        run_devels_playground $git_path $args[0]
+        
         Write-Host "`r`n`r`n"
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
