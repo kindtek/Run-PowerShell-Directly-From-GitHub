@@ -7,7 +7,7 @@ function install_winget {
         $git_path
     )
     $software_name = "WinGet"
-    if (!(Test-Path -Path "$git_path/.winget-installed" -PathType Leaf)) {
+    if (!(Test-Path -Path "$git_path/../.winget-installed" -PathType Leaf)) {
         $file = "$HOME/repos/kindtek/get-latest-winget.ps1"
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
         powershell.exe -executionpolicy remotesigned -File $file
@@ -16,7 +16,7 @@ function install_winget {
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
         # Get-Process | Where-Object { $_.HasExited }
-        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_path/.winget-installed"
+        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_path/../.winget-installed"
     }
     else {
         Write-Host "$software_name already installed`r`n"   
