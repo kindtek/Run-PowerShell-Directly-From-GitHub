@@ -17,9 +17,6 @@ function install_winget {
         $git_path
     )
     Write-Host "testing path $git_path for .winget-installed"
-    Write-Host "`r`nThese programs will be installed or updated:" 
-    Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n" 
-
     $software_name = "WinGet"
     if (!(Test-Path -Path "$git_path/.winget-installed" -PathType Leaf)) {
         $file = "$HOME/repos/kindtek/get-latest-winget.ps1"
@@ -134,6 +131,10 @@ do {
  
     }
     if ($confirmation -eq '') {
+
+        Write-Host "`r`nThese programs will be installed or updated:" 
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n`t- Chocolatey`r`n`t- devels-workshop/-playground repos" 
+
 
         install_winget $git_path
 
