@@ -48,7 +48,7 @@ function install_repo {
 
     Push-Location $repo_git_name
     
-    ( ( git submodule update --init -- dvlp dvl-adv > $null ) -And ( $new_install = $true ) ) -Or ( git pull dvlp dvl-adv )
+    ( git pull dvlp dvl-adv ) -Or ( ( git submodule update --init -- dvlp dvl-adv > $null ) -And ( $new_install = $true ) ) 
 
     return $new_install
 }
