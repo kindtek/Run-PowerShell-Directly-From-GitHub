@@ -121,6 +121,14 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed" 
         Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
         Start-Sleep 3
+        Write-Host ""
+        Start-Sleep 1
+        Write-Host ""
+        Start-Sleep 1
+        Write-Host ""
+        Start-Sleep 1
+        Write-Host ""
+        Start-Sleep 1
         Write-Host "`t`t`t`t3"
         Start-Sleep 1
         Write-Host "`t`t`t`t2"
