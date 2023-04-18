@@ -123,7 +123,7 @@ do {
     if ($confirmation -eq '') {
 
         Write-Host "`r`nThese programs will be installed or updated:" 
-        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n`t- Chocolatey`r`n`t- devels-workshop/-playground repos`r`n`r`n" 
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n`t- Chocolatey`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n" 
 
 
         install_winget $git_path
