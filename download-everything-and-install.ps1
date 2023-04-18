@@ -7,6 +7,7 @@ function install_winget {
         $git_parent_path
     )
     $software_name = "WinGet"
+    New-Item -ItemType Directory -Force -Path $git_parent_path
     if (!(Test-Path -Path "$git_parent_path/.winget-installed" -PathType Leaf)) {
         $file = "$git_parent_path/get-latest-winget.ps1"
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
