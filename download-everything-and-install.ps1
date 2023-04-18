@@ -1,7 +1,6 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 $img_subset = $args[0]
-Write-Host "$([char]27)[2J"
 
 # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
 # Self-elevate the script if required
@@ -104,8 +103,7 @@ function run_devels_playground {
 $start_over = 'n'
 do {
 
-    $host.UI.RawUI.ForegroundColor = "Yellow"
-    $host.UI.RawUI.BackgroundColor = "Magenta"
+
     $repo_src_owner = 'kindtek'
     $repo_src_name = 'devels-workshop'
     $repo_src_branch = 'main'
@@ -116,16 +114,19 @@ do {
 
     $confirmation = ''
     if ($start_over -ine 's') {
+        Write-Host "$([char]27)[2J"
+        $host.UI.RawUI.ForegroundColor = "Yellow"
+        $host.UI.RawUI.BackgroundColor = "Magenta"
+
         # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
-        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tUse CTRL + C at any time to cancel`r`n`r`n`t" 
- 
+        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`t"
+
     }
     if ($confirmation -eq '') {
 
         Write-Host "`r`nThese programs will be installed or updated:" 
-        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n" 
-
-
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`r`n`r`nUse CTRL + C or close window at any time to cancel`r`n`r`n`t" 
+ 
         install_winget $git_path
 
         install_repo $parent_path $git_path $repo_src_owner $repo_src_name $repo_git_name $repo_src_branch  
