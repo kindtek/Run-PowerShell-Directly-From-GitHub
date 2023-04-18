@@ -16,6 +16,7 @@ function install_winget {
     param (
         $git_path
     )
+    Write-Host "testing path $git_path for .winget-installed"
     Write-Host "`r`nThese programs will be installed or updated:" 
     Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n" 
 
@@ -43,6 +44,7 @@ function install_repo {
     Write-Host "Now installing:`r`n`t- GitHub`r`n`t- devels-workshop repository`r`n`t- Chocolatey`r`n" 
 
     $software_name = "Github CLI"
+    Write-Host "testing path $git_path for .github-installed"
     if (!(Test-Path -Path "$git_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ...`r`n"
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
