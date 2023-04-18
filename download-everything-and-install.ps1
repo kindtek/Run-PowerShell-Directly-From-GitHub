@@ -62,7 +62,7 @@ function install_repo {
     Set-Location $parent_path
     $new_install = $false
 
-    git clone "https://github.com/$repo_src_owner/$repo_src_name"  --branch $repo_src_branch $repo_git_name -Or git pull $repo_git_name
+    ( git clone "https://github.com/$repo_src_owner/$repo_src_name"  --branch $repo_src_branch $repo_git_name ) -Or ( git pull $repo_git_name )
 
     Push-Location $repo_git_name
     
@@ -121,7 +121,7 @@ do {
     $repo_src_name = 'devels-workshop'
     $repo_src_branch = 'main'
     $repo_git_name = 'dvlw'
-    $parent_path = "$HOME/repos/$repos_src_owner"
+    $parent_path = "$HOME/repos/$repo_src_owner"
     $git_path = "$parent_path/$repo_git_name"
     $img_subset = $args[0]
 
