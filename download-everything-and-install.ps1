@@ -118,7 +118,7 @@ do {
     }
     if ($confirmation -eq '') {        
         Write-Host "`r`nThese programs will be installed or updated:" 
-        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`r`n`r`nUse CTRL + C or close window at any time to cancel`r`n`r`n`t" 
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`nUse CTRL + C or close window at any time to cancel`r`n`r`n`t" 
         Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... `r`n"
         New-Item -ItemType Directory -Force -Path $git_parent_path
         
