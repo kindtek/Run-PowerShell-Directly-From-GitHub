@@ -133,7 +133,7 @@ do {
     }
     if ($confirmation -eq '') {
 
-        winget_install
+        install_winget
 
         install_repo $parent_path $git_path $repo_src_owner $repo_src_name $repo_git_name $repo_src_branch  
 
