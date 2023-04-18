@@ -37,8 +37,6 @@ function install_repo {
     param (
         $parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_git_name, $repo_src_branch 
     )
-    Write-Host "Now installing:`r`n`t- GitHub`r`n`t- devels-workshop repository`r`n`t- Chocolatey`r`n" 
-
     $software_name = "Github CLI"
     if (!(Test-Path -Path "$git_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ...`r`n"
@@ -53,22 +51,16 @@ function install_repo {
         Write-Host "$software_name already installed`r`n" 
     }
 
-    # refresh environment variables using script in choco temp download location
-    # powershell.exe "$git_path/choco/src/chocolatey.resources/redirects/RefreshEnv.cmd" -Wait -WindowStyle "Hidden"
-    # Write-Host "parent path: $parent_path"
     Set-Location $parent_path
     $new_install = $false
 
-    ( git clone "https://github.com/$repo_src_owner/$repo_src_name"  --branch $repo_src_branch $repo_git_name ) -Or ( git pull $repo_git_name )
+    ( git clone "https://github.com/$repo_src_owner/$repo_src_name"  --branch $repo_src_branch $repo_git_name > $null ) -Or ( git pull $repo_git_name )
 
     Push-Location $repo_git_name
     
-    ( ( git submodule update --force --recursive --init ) -And ( $new_install = $true ) ) -Or ( git pull dvlp )
+    ( ( git submodule update --force --recursive --init > $null ) -And ( $new_install = $true ) ) -Or ( git pull dvlp )
 
     return $new_install
-    # if git is not recognized try to limp along with the manually downloaded files
-    # }
-    # catch {}
 }
 
 function run_devels_playground {
