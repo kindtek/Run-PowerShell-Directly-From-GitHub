@@ -13,14 +13,14 @@ function install_winget {
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
         powershell.exe -executionpolicy remotesigned -File $file
         # install winget and use winget to install everything else
-        Write-Host "Installing $software_name ...`r`n" 
+        Write-Host "Installing $software_name ..." 
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
         # Get-Process | Where-Object { $_.HasExited }
-        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_parent_path/.winget-installed"
+        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.winget-installed"
     }
     else {
-        Write-Host "$software_name already installed`r`n"   
+        Write-Host "$software_name already installed"   
     }
 }
 
@@ -30,16 +30,16 @@ function install_repo {
     )
     $software_name = "Github CLI"
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
-        Write-Host "Installing $software_name ...`r`n"
+        Write-Host "Installing $software_name ..."
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
-        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_parent_path/.github-installed"
+        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"
         $new_install = $true
     }
     else {
-        Write-Host "$software_name already installed`r`n" 
+        Write-Host "$software_name already installed" 
     }
 
     Set-Location $git_parent_path
@@ -146,7 +146,7 @@ do {
         
         Start-Sleep 5
 
-        Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... "  
+        # Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... "  
         New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
 
         install_winget $git_parent_path
