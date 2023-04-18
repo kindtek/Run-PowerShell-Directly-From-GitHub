@@ -117,13 +117,15 @@ do {
     if ($confirmation -eq '') {   
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "DarkRed" 
-        Start-Sleep 1
+        Write-Host "    -- use CTRL + C or close this window to cancel anytime --"
+        Start-Sleep 3
         Write-Host 3
         Start-Sleep 1
         Write-Host 2
         Start-Sleep 1
         Write-Host 1  
         Start-Sleep 1
+        Write-Host 0  
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
         # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
@@ -137,7 +139,7 @@ do {
         }
 
         Write-Host "`r`nThese programs will be installed or updated:" 
-        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`nUse CTRL + C or close window at any time to cancel`r`n`r`n`t" 
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`t" 
         
         Start-Sleep 5
 
