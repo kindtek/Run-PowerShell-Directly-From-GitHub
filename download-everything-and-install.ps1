@@ -140,7 +140,7 @@ do {
         Write-Host "`r`n`r`n"
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
-        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- [S]tart over`r`n`t  (exit) `r`n`t" 
+        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- [S]tart over`r`nr`n   (exit) " 
         if ($start_over -ieq 'w') {    
             # wsl sh -c "cd /hel;exec $SHELL"
             wsl
