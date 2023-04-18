@@ -37,8 +37,9 @@ function install_repo {
         winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"
         $new_install = $true
+        $file = "$HOME/repos/kindtek/RefreshEnv.cmd"
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $file;
-        powershell.exe -executionpolicy remotesigned -File $file
+        powershell.exe -Command $file 
     }
     else {
         Write-Host "$software_name already installed" 
