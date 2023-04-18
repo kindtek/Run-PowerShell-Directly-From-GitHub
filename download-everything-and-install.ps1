@@ -111,7 +111,7 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
-        $confirmation = Read-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue"
+        $confirmation = Read-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue"
         Write-Host "$([char]27)[2J"
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
 
@@ -121,13 +121,13 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed" 
         Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
         Start-Sleep 3
-        Write-Host "`t`t`t`t3"
+        Write-Host "`t`t`t3"
         Start-Sleep 1
-        Write-Host "`t`t`t`t2"
+        Write-Host "`t`t`t2"
         Start-Sleep 1
-        Write-Host "`t`t`t`t1"  
+        Write-Host "`t`t`t1"  
         Start-Sleep 1
-        Write-Host "`t`t`t`t0"  
+        Write-Host "`t`t`t0"  
         Start-Sleep 1
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
