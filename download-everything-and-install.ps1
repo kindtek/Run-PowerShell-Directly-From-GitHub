@@ -108,10 +108,10 @@ do {
     if ($start_over -ine 's') {
         Write-Host "$([char]27)[2J"
         $host.UI.RawUI.ForegroundColor = "Yellow"
-        $host.UI.RawUI.BackgroundColor = "Magenta"
+        $host.UI.RawUI.BackgroundColor = "Red"
 
         # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
-        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`t"
+        $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue"
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
 
