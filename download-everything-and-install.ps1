@@ -31,10 +31,10 @@ function install_repo {
     $software_name = "Github CLI"
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..."
-        winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
-        winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
-        winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
-        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
+        winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
+        winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
+        winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements
+        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements
         Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"
         $new_install = $true
         $file = "$HOME/repos/kindtek/RefreshEnv.cmd"
