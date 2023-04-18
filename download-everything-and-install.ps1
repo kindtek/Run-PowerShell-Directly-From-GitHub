@@ -58,7 +58,7 @@ function install_repo {
 
     Push-Location $repo_git_name
     
-    ( ( git submodule update --init -- dvlp choco  > $null ) -And ( $new_install = $true ) ) -Or ( git pull dvlp )
+    ( ( git submodule update --init -- dvlp dvl-adv > $null ) -And ( $new_install = $true ) ) -Or ( git pull dvlp dvl-adv )
 
     return $new_install
 }
@@ -130,7 +130,7 @@ do {
 
         install_repo $parent_path $git_path $repo_src_owner $repo_src_name $repo_git_name $repo_src_branch  
 
-        powershell.exe -Command $git_path/scripts/install-everything.ps1
+        powershell.exe -Command "$git_path/scripts/install-everything.ps1"
 
         run_devels_playground $git_path $args[0]
 
