@@ -4,11 +4,11 @@ $img_subset = $args[0]
 
 function install_winget {
     param (
-        $git_path
+        $git_parent_path
     )
     $software_name = "WinGet"
-    if (!(Test-Path -Path "$git_path/../.winget-installed" -PathType Leaf)) {
-        $file = "$HOME/repos/kindtek/get-latest-winget.ps1"
+    if (!(Test-Path -Path "$git_parent_path/.winget-installed" -PathType Leaf)) {
+        $file = "$git_parent_path/get-latest-winget.ps1"
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
         powershell.exe -executionpolicy remotesigned -File $file
         # install winget and use winget to install everything else
@@ -16,7 +16,7 @@ function install_winget {
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
         # Get-Process | Where-Object { $_.HasExited }
-        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_path/../.winget-installed"
+        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_parent_path/.winget-installed"
     }
     else {
         Write-Host "$software_name already installed`r`n"   
@@ -25,23 +25,22 @@ function install_winget {
 
 function install_repo {
     param (
-        $parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_git_name, $repo_src_branch 
+        $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_git_name, $repo_src_branch 
     )
     $software_name = "Github CLI"
-    if (!(Test-Path -Path "$git_path/.github-installed" -PathType Leaf)) {
+    if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ...`r`n"
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
         winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements --disable-interactivity
-        Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_path/.github-installed"
         $new_install = $true
     }
     else {
         Write-Host "$software_name already installed`r`n" 
     }
 
-    Set-Location $parent_path
+    Set-Location $git_parent_path
     $new_install = $false
 
     ( git pull -- $repo_git_name --verbose --progress ) -Or ( git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --verbose --progress -- $repo_git_name > $null ) 
@@ -49,6 +48,8 @@ function install_repo {
     Push-Location $repo_git_name
     
     ( git pull -- dvlp dvl-adv powerhell ) -Or ( ( git submodule update --init --remote -- dvlp dvl-adv powerhell > $null ) -And ( $new_install = $true ) ) 
+
+    Write-Host "$software_name installed`r`n`r`n" | Out-File -FilePath "$git_parent_path/.github-installed"
 
     return $new_install
 }
@@ -99,8 +100,8 @@ do {
     $repo_src_name = 'devels-workshop'
     $repo_src_branch = 'main'
     $repo_git_name = 'dvlw'
-    $parent_path = "$HOME/repos/$repo_src_owner"
-    $git_path = "$parent_path/$repo_git_name"
+    $git_parent_path = "$HOME/repos/$repo_src_owner"
+    $git_path = "$git_parent_path/$repo_git_name"
     $img_subset = $args[0]
 
     $confirmation = ''
@@ -129,9 +130,9 @@ do {
             }
         }
 
-        install_winget $git_path
+        install_winget $git_parent_path
 
-        install_repo $parent_path $git_path $repo_src_owner $repo_src_name $repo_git_name $repo_src_branch  
+        install_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_git_name $repo_src_branch  
 
         powershell.exe -Command "$git_path/scripts/install-everything.ps1"
 
