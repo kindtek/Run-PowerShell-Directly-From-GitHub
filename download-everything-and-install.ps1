@@ -147,7 +147,7 @@ do {
         Start-Sleep 5
 
         Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... "  
-        New-Item -ItemType Directory -Force -Path $git_parent_path
+        New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
 
         install_winget $git_parent_path
 
