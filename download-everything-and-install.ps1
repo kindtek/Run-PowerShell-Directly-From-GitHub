@@ -7,7 +7,6 @@ function install_winget {
         $git_parent_path
     )
     $software_name = "WinGet"
-    New-Item -ItemType Directory -Force -Path $git_parent_path
     Write-Host "`r`n"
     if (!(Test-Path -Path "$git_parent_path/.winget-installed" -PathType Leaf)) {
         $file = "$git_parent_path/get-latest-winget.ps1"
@@ -121,6 +120,8 @@ do {
     if ($confirmation -eq '') {        
         Write-Host "`r`nThese programs will be installed or updated:" 
         Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- Visual Studio Code`r`n`t- Docker Desktop`r`n`t- Windows Terminal`r`n`t- Python 3.10`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n`r`n`r`n`r`nUse CTRL + C or close window at any time to cancel`r`n`r`n`t" 
+        Write-Host "Creating path $HOME\repos if it does not exist ... `r`n"
+        New-Item -ItemType Directory -Force -Path $git_parent_path
         
         # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
         # Self-elevate the script if required
