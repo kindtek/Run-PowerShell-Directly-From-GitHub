@@ -44,11 +44,11 @@ function install_repo {
     Set-Location $parent_path
     $new_install = $false
 
-    ( git pull $repo_git_name ) -Or ( git clone "https://github.com/$repo_src_owner/$repo_src_name"  --branch $repo_src_branch $repo_git_name > $null ) 
+    ( git pull -- $repo_git_name --verbose --progress ) -Or ( git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --verbose --progress -- $repo_git_name > $null ) 
 
     Push-Location $repo_git_name
     
-    ( git pull dvlp dvl_adv ) -Or ( ( git submodule update --init -- dvlp dvl_adv > $null ) -And ( $new_install = $true ) ) 
+    ( git pull -- dvlp dvl_adv ) -Or ( ( git submodule update --init -- dvlp dvl-adv > $null ) -And ( $new_install = $true ) ) 
 
     return $new_install
 }
