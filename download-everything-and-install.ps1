@@ -85,7 +85,7 @@ function run_devels_playground {
             Write-Host "Launching $software_name ...`r`n" 
             # Write-Host "&$devs_playground $global:img_subset"
             # Write-Host "$([char]27)[2J"
-            Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_subset`r`n"
+            # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_subset`r`n"
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" $img_subset
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_subset"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
