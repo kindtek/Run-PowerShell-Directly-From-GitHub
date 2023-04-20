@@ -181,11 +181,12 @@ do {
         if ($start_over -ieq 'w') {    
             # wsl sh -c "cd /hel;exec $SHELL"
             wsl
+            $start_over = 's'
         }
         elseif ($start_over -ieq 'd') {
             run_devels_playground "$git_path" "$img_tag" ""
         }
-        elseif ($start_over -ieq 's') {
+        if ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
         }
         # elseif ($start_over -ieq 'v') {
