@@ -172,7 +172,7 @@ do {
         # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
         run_devels_playground "$git_path" "default" "nointeract" "default"
         # instsall distro requested in arg
-        run_devels_playground "$git_path" "$img_tag" "nointeract" "default"
+        run_devels_playground "$git_path" "$img_tag" "nointeract" 
         
         Write-Host "`r`n`r`n"
 
