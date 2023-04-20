@@ -85,7 +85,7 @@ function run_devels_playground {
             Write-Host "Launching $software_name ...`r`n" 
             # Write-Host "&$devs_playground $global:img_tag"
             # Write-Host "$([char]27)[2J"
-            # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_tag`r`n"
+            Write-Host "powershell.exe -Command \"$git_path/dvlp/scripts/wsl-docker-import.cmd\" \"$img_tag\" \"$non_interactive\" \"$default_distro\""
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
@@ -163,8 +163,10 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
-        run_devels_playground "$git_path" "" "nointeract" "default"
+        Write-Host "run_devels_playground \"$git_path\" \" \" \"nointeract\" \"default\""
+        run_devels_playground "$git_path" " " "nointeract" "default"
         # instsall distro requested in arg
+        Write-Host "run_devels_playground \"$git_path\" \"$img_tag\" \"nointeract\" \"default\""
         run_devels_playground "$git_path" "$img_tag" "nointeract" "default"
         
         Write-Host "`r`n`r`n"
