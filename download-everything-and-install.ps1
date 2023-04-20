@@ -148,7 +148,7 @@ do {
         Start-Sleep 1
         Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
         Start-Sleep 1
-        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n" -ForegroundColor Magenta
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
         
         # Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... "  
         New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
