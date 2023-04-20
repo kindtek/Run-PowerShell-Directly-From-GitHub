@@ -129,21 +129,8 @@ do {
         Write-Host ""
         Start-Sleep 1
         Write-Host ""
-        Start-Sleep 1
-        Write-Host ""
-        Start-Sleep 1
-        Write-Host ""
-        Start-Sleep 1
-        Write-Host "`t`t`t`t3"
-        Start-Sleep 1
-        Write-Host "`t`t`t`t2"
-        Start-Sleep 1
-        Write-Host "`t`t`t`t1"  
-        Start-Sleep 1
-        Write-Host "`t`t`t`t0"  
-        Start-Sleep 1
-        $host.UI.RawUI.ForegroundColor = "White"
-        $host.UI.RawUI.BackgroundColor = "Black"
+
+
         # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
         # Self-elevate the script if required
         if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
@@ -153,12 +140,16 @@ do {
                 Exit
             }
         }
-
+        $host.UI.RawUI.ForegroundColor = "White"
+        $host.UI.RawUI.BackgroundColor = "Black"
+        Write-Host ""
+        Start-Sleep 1
+        Write-Host ""
+        Start-Sleep 1
         Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
+        Start-Sleep 1
         Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo`r`n" -ForegroundColor Magenta
         
-        Start-Sleep 5
-
         # Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... "  
         New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
 
