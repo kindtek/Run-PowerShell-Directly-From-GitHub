@@ -1,6 +1,6 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
-$img_subset = $args[0]
+$img_tag = $args[0]
 
 function install_winget {
     param (
@@ -59,7 +59,7 @@ function install_repo {
 
 function run_devels_playground {
     param (
-        $git_path, $img_subset
+        $git_path, $img_tag
     )
     try {
         $software_name = "Devel`'s Playground"
@@ -83,11 +83,11 @@ function run_devels_playground {
             # &$cmd_command = cmd /c start powershell.exe -Command "$git_path/devels_playground/docker-images-build-in-background.ps1" -WindowStyle "Maximized"
 
             Write-Host "Launching $software_name ...`r`n" 
-            # Write-Host "&$devs_playground $global:img_subset"
+            # Write-Host "&$devs_playground $global:img_tag"
             # Write-Host "$([char]27)[2J"
-            # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_subset`r`n"
-            powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" $img_subset
-            # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_subset"
+            # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_tag`r`n"
+            powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" $img_tag
+            # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
         }
     }
@@ -105,7 +105,7 @@ do {
     $repo_git_name = 'dvlw'
     $git_parent_path = "$HOME/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_git_name"
-    $img_subset = $args[0]
+    $img_tag = $args[0]
 
     $confirmation = ''
     
@@ -162,7 +162,10 @@ do {
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
-        run_devels_playground $git_path $args[0]
+        # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
+        run_devels_playground $git_path "" "non-interactive" default
+        # instsall distro requested in arg
+        run_devels_playground $git_path "$img_tag" "non-interactive" default
         
         Write-Host "`r`n`r`n"
 
@@ -173,7 +176,7 @@ do {
             wsl
         }
         elseif ($start_over -ieq 'd') {
-            run_devels_playground $git_path $img_subset
+            run_devels_playground $git_path $img_tag
         }
         elseif ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
