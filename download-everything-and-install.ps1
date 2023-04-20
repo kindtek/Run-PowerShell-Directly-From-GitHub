@@ -64,10 +64,10 @@ function run_devels_playground {
     try {
         $software_name = "devel`'s playground"
         if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-            Start-Sleep 10
             Write-Host "`r`nNOTE:`tDocker Desktop is required to be running for the devel's playground to work.`r`n`r`n`tDo NOT quit Docker Desktop until you are done running it.`r`n" 
-            Start-Sleep 3
+            Start-Sleep 10
             Write-Host "`r`n`r`nAttempting to start wsl import tool ..."
+            Start-Sleep 3
             # @TODO: add cdir and python to install with same behavior as other installs above
             # not eloquent at all but good for now
 
