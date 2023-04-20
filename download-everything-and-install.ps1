@@ -96,7 +96,7 @@ function run_devels_playground {
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
-            Write-Host "$software_name installed successfully" | Out-File -FilePath "$git_parent_path/.dvlp-installed"
+            Write-Host "$software_name installed successfully" | Out-File -FilePath "$git_path/.dvlp-installed"
         }
     }
     catch {}
