@@ -163,9 +163,9 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
-        run_devels_playground $git_path "" "non-interactive" "default"
+        run_devels_playground "$git_path" "" "non-interactive" "default"
         # instsall distro requested in arg
-        run_devels_playground $git_path "$img_tag" "non-interactive" "default"
+        run_devels_playground "$git_path" "$img_tag" "non-interactive" "default"
         
         Write-Host "`r`n`r`n"
 
@@ -176,7 +176,7 @@ do {
             wsl
         }
         elseif ($start_over -ieq 'd') {
-            run_devels_playground $git_path $img_tag
+            run_devels_playground "$git_path" "$img_tag" ""
         }
         elseif ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
