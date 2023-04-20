@@ -62,8 +62,12 @@ function run_devels_playground {
         $git_path, $img_tag, $non_interactive, $default_distro
     )
     try {
-        $software_name = "Devel`'s Playground"
+        $software_name = "devel`'s playground"
         if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+            Start-Sleep 10
+            Write-Host "`r`nNOTE:`tDocker Desktop is required to be running for the devel's playground to work.`r`n`r`n`tDo NOT quit Docker Desktop until you are done running it.`r`n" 
+            Start-Sleep 3
+            Write-Host "`r`n`r`nAttempting to start wsl import tool ..."
             # @TODO: add cdir and python to install with same behavior as other installs above
             # not eloquent at all but good for now
 
@@ -72,10 +76,9 @@ function run_devels_playground {
             # Start-Process -FilePath PowerShell.exe -NoNewWindow -ArgumentList $cmd_command
     
             # @TODO: maybe start in new window
-            # $start_devs_playground = Read-Host "`r`nStart Devel's Playground ([y]/n)"
+            # $start_devs_playground = Read-Host "`r`nstart devel's playground ([y]/n)"
             # if ($start_devs_playground -ine 'n' -And $start_devs_playground -ine 'no') { 
-            Write-Host "`r`nNOTE:`tDocker Desktop is required to be running for the Devel's Playground to work.`r`n`r`n`tDo NOT quit Docker Desktop until you are done running it.`r`n" 
-            Write-Host "`r`n`r`nAttempting to start wsl import tool ..."
+
             # // commenting out background building process because this is NOT quite ready.
             # // would like to run in separate window and then use these new images in devel's playground 
             # // if they are more up to date than the hub - which could be a difficult process
