@@ -90,6 +90,9 @@ function run_devels_playground {
             # Write-Host "$([char]27)[2J"
             # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
             $img_name_tag = $img_name_tag.replace("\s+",'')
+            write-host name_tag $img_name_tag
+            write-host non_interact $non_interactive
+            write-host default_distro $default_distro
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
@@ -184,7 +187,7 @@ do {
             $start_over = 's'
         }
         elseif ($start_over -ieq 'd') {
-            run_devels_playground "$git_path" "$img_name_tag" ""
+            run_devels_playground "$git_path" "$img_name_tag"
         }
         if ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
