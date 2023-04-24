@@ -131,7 +131,7 @@ do {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
 
     }
-    if (($confirmation -eq '') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {   
+    if ($confirmation -eq '') {   
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "DarkRed" 
         Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
