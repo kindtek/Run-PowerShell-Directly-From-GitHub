@@ -170,9 +170,9 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
-        run_devels_playground "$git_path" "default" "nointeract" "default"
+        run_devels_playground "$git_path" "" "" "default"
         # instsall distro requested in arg
-        run_devels_playground "$git_path" "$img_name_tag" "nointeract" 
+        run_devels_playground "$git_path" "$img_name_tag" "kindtek-kali-bare" 
         
         Write-Host "`r`n`r`n"
 
