@@ -89,7 +89,7 @@ function run_devels_playground {
             # Write-Host "&$devs_playground $global:img_name_tag"
             # Write-Host "$([char]27)[2J"
             # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
-            $img_name_tag = $img_name_tag.replace("\s+",'')
+            $img_name_tag = $img_name_tag.replace("\s+", '')
             write-host name_tag $img_name_tag
             write-host non_interact $non_interactive
             write-host default_distro $default_distro
@@ -173,7 +173,7 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
-        run_devels_playground "$git_path" "default" "default" "default"
+        run_devels_playground "$git_path" "default" "official-ubuntu-latest" "default"
         # instsall distro requested in arg
         run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" 
         
