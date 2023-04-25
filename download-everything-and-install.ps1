@@ -178,7 +178,10 @@ do {
             # install distro requested in arg
             run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag"
         }
-        run_devels_playground "$git_path" "$img_name_tag"
+        else {
+            run_devels_playground "$git_path" "$img_name_tag" ""
+        }
+        
         
         Write-Host "`r`n`r`n"
 
