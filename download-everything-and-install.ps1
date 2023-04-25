@@ -63,7 +63,7 @@ function run_devels_playground {
     )
     try {
         $software_name = "devel`'s playground"
-        if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+        # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
             Write-Host "`r`nNOTE:`tDocker Desktop is required to be running for the devel's playground to work.`r`n`r`n`tDo NOT quit Docker Desktop until you are done running it.`r`n" 
             Start-Sleep 10
             Write-Host "`r`n`r`nAttempting to start wsl import tool ..."
@@ -97,7 +97,7 @@ function run_devels_playground {
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
             Write-Host "$software_name installed successfully" | Out-File -FilePath "$git_path/.dvlp-installed"
-        }
+        # }
     }
     catch {}
 }
@@ -172,9 +172,11 @@ do {
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
-        # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
-        # run_devels_playground "$git_path" "default" "official-ubuntu-latest" "default"
-        # instsall distro requested in arg
+        if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+            # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
+            run_devels_playground "$git_path" "default" "official-ubuntu-latest" "default"
+            # install distro requested in arg
+        }
         run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" 
         
         Write-Host "`r`n`r`n"
