@@ -48,11 +48,11 @@ function install_repo {
     Set-Location $git_parent_path
     $new_install = $false
 
-    ( git -C $repo_git_name pull origin --progress ) -Or ( ( git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_git_name > $null ) -And ( $new_install = $true ) ) 
+    ( git -C $repo_git_name pull origin --progress ) -Or ( ( git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --filter=blob:limit=13k --progress -- $repo_git_name > $null ) -And ( $new_install = $true ) ) 
 
     Push-Location $repo_git_name
     
-    ( git submodule update --remote --progress -- dvlp dvl-adv powerhell ) -Or ( ( git submodule update --init --remote --progress -- dvlp dvl-adv powerhell > $null ) -And ( $new_install = $true ) ) 
+    ( git submodule update --remote --filter=blob:limit=13k --progress -- dvlp dvl-adv powerhell ) -Or ( ( git submodule update --init --remote --filter=blob:limit=13k --progress -- dvlp dvl-adv powerhell > $null ) -And ( $new_install = $true ) ) 
 
     return $new_install
 }
