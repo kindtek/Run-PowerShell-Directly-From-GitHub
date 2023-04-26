@@ -52,7 +52,7 @@ function install_repo {
 
     Push-Location $repo_git_name
     
-    ( git submodule update --remote --filter=blob:limit=13k --progress -- dvlp dvl-adv powerhell ) -Or ( ( git submodule update --init --remote --filter=blob:limit=13k --progress -- dvlp dvl-adv powerhell > $null ) -And ( $new_install = $true ) ) 
+    ( git submodule update --remote --progress -- dvlp dvl-adv powerhell ) -Or ( ( git submodule update --init --remote --filter=blob:limit=13k --progress -- dvlp dvl-adv powerhell > $null ) -And ( $new_install = $true ) ) 
 
     return $new_install
 }
