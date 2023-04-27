@@ -181,12 +181,10 @@ do {
         else {
             run_devels_playground "$git_path" "$img_name_tag" ""
         }
-        
-        
         Write-Host "`r`n`r`n"
 
-        # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t"
-        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- [S]tart over`r`n`r`n    (exit)" 
+        # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
+        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- import [D]ocker image to WSL`r`n`t- build/install a Linux [K]ernel`r`n`r`n- [S]tart over`r`n`r`n    (exit)" 
         if ($start_over -ieq 'w') {    
             # wsl sh -c "cd /hel;exec $SHELL"
             wsl
@@ -194,6 +192,10 @@ do {
         }
         elseif ($start_over -ieq 'd') {
             run_devels_playground "$git_path" "$img_name_tag"
+        }
+        if ($start_over -ieq 'k') {
+            # todo: look into grabbing wsl distro from script .. probably will need to wait to convert batch to powershell
+            # wsl -d 
         }
         if ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
