@@ -194,8 +194,7 @@ do {
             run_devels_playground "$git_path" "$img_name_tag"
         }
         if ($start_over -ieq 'k') {
-            # todo: look into grabbing wsl distro from script .. probably will need to wait to convert batch to powershell
-            # wsl -d 
+            wsl.exe --cd /hal/dvlw/dvlp/docker/kali exec ./make-kernel.sh $USERNAME basic
         }
         if ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
