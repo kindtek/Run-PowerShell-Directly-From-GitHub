@@ -188,7 +188,7 @@ do {
         Write-Host "`r`n`r`n"
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- import [D]ocker image to WSL`r`n`t- build/install a Linux [K]ernel`r`n`r`n- [S]tart over`r`n`r`n    (exit)" 
+        $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- import [D]ocker image to WSL`r`n`t- setup [K]indtek Linux environment`r`n`r`n- [S]tart over`r`n`r`n    (exit)" 
         if ($start_over -ieq 'w') {    
             # wsl sh -c "cd /hel;exec $SHELL"
             wsl
@@ -198,7 +198,7 @@ do {
             run_devels_playground "$git_path" "$img_name_tag"
         }
         if ($start_over -ieq 'k') {
-            wsl.exe --cd /hal/dvlw/dvlp/docker/kali exec ./make-kernel.sh $USERNAME basic
+            wsl.exe --cd /hal exec ./setup.sh $USERNAME
         }
         if ($start_over -ieq 's') {
             Write-Host 'Restarting process ...'
