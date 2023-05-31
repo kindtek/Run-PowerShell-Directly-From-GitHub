@@ -179,7 +179,7 @@ do {
 
         if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
             # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
-            run_devels_playground "$git_path" "default" "official-ubuntu-latest"
+            # run_devels_playground "$git_path" "default" "official-ubuntu-latest"
             # install distro requested in arg
             run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag"
         }
