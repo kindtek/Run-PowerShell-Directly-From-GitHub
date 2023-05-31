@@ -201,7 +201,7 @@ do {
             $dvlp_options = 'u'
         }
         if ($dvlp_options -ieq 's') {
-            wsl.exe --cd /hal exec ./setup.sh $USERNAME
+            wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
             $dvlp_options = 'u'
         }
         if ($dvlp_options -ieq 'u') {
