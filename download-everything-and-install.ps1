@@ -189,7 +189,7 @@ do {
         Write-Host "`r`n`r`n"
 
         # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-        Write-Host "`r`nChoose from the following:`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment`r`n`r`n    (exit)`r`n"
+        Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment`r`n`r`n    (exit)`r`n"
         $dvlp_options = Read-Host
         if ($dvlp_options -ieq 'l') {    
             # wsl sh -c "cd /hel;exec $SHELL"
