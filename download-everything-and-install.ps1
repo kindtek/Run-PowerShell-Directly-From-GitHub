@@ -125,7 +125,7 @@ do {
     $confirmation = ''
     
 
-    if (($start_over -ine 'u') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
+    if (($dvlp_options -ine 'u') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
         Write-Host "$([char]27)[2J"
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "DarkRed"
@@ -216,7 +216,7 @@ do {
             break
         }
     }
-} while ($start_over -ieq 'u')
+} while ($dvlp_options -ieq 'u')
 
 
 Write-Host "`r`nGoodbye!`r`n"
