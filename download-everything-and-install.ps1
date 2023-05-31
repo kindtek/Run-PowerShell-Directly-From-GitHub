@@ -190,7 +190,7 @@ do {
 
         # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
         Write-Host "`r`nChoose from the following:`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment`r`n`r`n    (exit)`r`n"
-        $start_over = Read-Host "" -NoNewLine
+        $start_over = Read-Host
         if ($start_over -ieq 'l') {    
             # wsl sh -c "cd /hel;exec $SHELL"
             wsl
