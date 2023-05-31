@@ -108,7 +108,7 @@ function run_devels_playground {
 }
 
 # jump to bottom line without clearing scrollback
-$start_over = 'n'
+$dvlp_options = 'n'
 do {
 
 
@@ -125,7 +125,7 @@ do {
     $confirmation = ''
     
 
-    if (($start_over -ine 's') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
+    if (($start_over -ine 'u') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
         Write-Host "$([char]27)[2J"
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "DarkRed"
@@ -188,34 +188,35 @@ do {
         }
         Write-Host "`r`n`r`n"
 
-        # $start_over = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
+        # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
         Write-Host "`r`nChoose from the following:`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment`r`n`r`n    (exit)`r`n"
-        $start_over = Read-Host
-        if ($start_over -ieq 'l') {    
+        $dvlp_options = Read-Host
+        if ($dvlp_options -ieq 'l') {    
             # wsl sh -c "cd /hel;exec $SHELL"
             wsl
-            $start_over = 's'
+            $dvlp_options = 'u'
         }
-        elseif ($start_over -ieq 'i') {
+        elseif ($dvlp_options -ieq 'i') {
             run_devels_playground "$git_path" "$img_name_tag"
-            $start_over = 's'
+            $dvlp_options = 'u'
         }
-        if ($start_over -ieq 's') {
+        if ($dvlp_options -ieq 's') {
             wsl.exe --cd /hal exec ./setup.sh $USERNAME
-            $start_over = 's'
+            $dvlp_options = 'u'
         }
-        if ($start_over -ieq 'u') {
+        if ($dvlp_options -ieq 'u') {
             Write-Host 'checking for new updates ...'
+            $dvlp_options = 'u'
         }
-        # elseif ($start_over -ieq 'v') {
+        # elseif ($dvlp_options -ieq 'v') {
         #     wsl sh -c "cd /hel;. code"
         # }
         else {
-            $start_over = ''
+            $dvlp_options = ''
             break
         }
     }
-} while ($start_over -ieq 's')
+} while ($start_over -ieq 'u')
 
 
 Write-Host "`r`nGoodbye!`r`n"
