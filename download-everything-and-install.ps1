@@ -45,6 +45,7 @@ function install_repo {
         Write-Host "$software_name already installed" 
     }
 
+    Write-Host "checking if github repos need to be updated ..." 
     Set-Location $git_parent_path
     $new_install = $false
 
