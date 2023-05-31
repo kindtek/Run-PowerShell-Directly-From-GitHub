@@ -193,7 +193,7 @@ do {
         $dvlp_options = Read-Host
         if ($dvlp_options -ieq 'l') {    
             # wsl sh -c "cd /hel;exec $SHELL"
-            wsl
+            wsl.exe --cd /hal
             $dvlp_options = 'u'
         }
         elseif ($dvlp_options -ieq 'i') {
