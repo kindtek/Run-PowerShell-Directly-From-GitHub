@@ -40,8 +40,8 @@ function install_repo {
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
+            winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
+            Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
     
     }
     else {
@@ -111,7 +111,6 @@ function run_devels_playground {
     catch {}
 }
 
-# jump to bottom line without clearing scrollback
 $dvlp_options = 'n'
 do {
 
@@ -183,34 +182,59 @@ do {
 
         if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
             # make sure failsafe official-kali-rolling-latest distro is installed so changes can be easily reverted
-            # run_devels_playground "$git_path" "default" "official-kali-rolling-latest"
+            run_devels_playground "$git_path" "default" "official-kali-rolling-latest"
             # install distro requested in arg
             run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag"
         }
         else {
             run_devels_playground "$git_path" "$img_name_tag" ""
         }
+:main_menu
         Write-Host "`r`n`r`n"
+        if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -ne "" ) {
+            $rollback_option = "`r`n`t- [r]ollback WSL distro to `r`n$global:ORIG_DEFAULT_WSL_DISTRO"
+        }
+        else {
+            $rollback_option=""
+        }
+        $wsl_restart_path = "$HOME/wsl-restart.ps1"
+        if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue -Force ) {
+            $restart_option = "`r`n`t- [R]estart WSL"
+        }
+        else {
+            $restart_option = ""
+        }
 
         # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-        Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment`r`n`r`n    (exit)`r`n"
+        Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment$rollback_option$restart_option`r`n`r`n    (exit)`r`n"
         $dvlp_options = Read-Host
         if ($dvlp_options -ieq 'l') {    
             # wsl sh -c "cd /hel;exec $SHELL"
             wsl.exe --cd /hal
-            $dvlp_options = 'u'
+            break main_menu
         }
         elseif ($dvlp_options -ieq 'i') {
             run_devels_playground "$git_path" "$img_name_tag"
-            $dvlp_options = 'u'
+            break main_menu
         }
         if ($dvlp_options -ieq 's') {
             wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
-            $dvlp_options = 'u'
+            break main_menu
         }
         if ($dvlp_options -ieq 'u') {
             Write-Host 'checking for new updates ...'
             $dvlp_options = 'u'
+        }
+        if ($dvlp_options -eq 'r') {
+            $target_distro = $global:ORIG_DEFAULT_WSL_DISTRO
+            $global:ORIG_DEFAULT_WSL_DISTRO = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(Default\)' }
+            $global:ORIG_DEFAULT_WSL_DISTRO = $global:ORIG_DEFAULT_WSL_DISTRO -replace '^(.*)(\s\(Default\))$', '$1'
+            wsl.exe -s $target_distro
+            break main_menu
+        }
+        if ($dvlp_options -eq 'R') {
+            ./"$wsl_restart_path"
+            break main_menu
         }
         # elseif ($dvlp_options -ieq 'v') {
         #     wsl sh -c "cd /hel;. code"
