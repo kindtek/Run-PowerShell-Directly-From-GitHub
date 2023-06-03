@@ -29,6 +29,9 @@ function install_repo {
         $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_git_name, $repo_src_branch 
     )
     $software_name = "Github CLI"
+    $refresh_envs = "$HOME/repos/kindtek/RefreshEnv.cmd"
+    Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $file;
+        
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..."
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
@@ -36,15 +39,14 @@ function install_repo {
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
         winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
         Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
-        new-item -path alias:git -value 'C:\Program Files\Git\bin\git.exe'
         $new_install = $true
-        $file = "$HOME/repos/kindtek/RefreshEnv.cmd"
-        Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $file;
-        powershell.exe -Command $file 
     }
     else {
         Write-Host "$software_name already installed" 
     }
+    # allow git to be used in same window immediately after installation
+    new-item -path alias:git -value 'C:\Program Files\Git\bin\git.exe'
+    powershell.exe -Command $refresh_envs
 
     Write-Host "checking if github repos need to be updated ..." 
     Set-Location $git_parent_path
