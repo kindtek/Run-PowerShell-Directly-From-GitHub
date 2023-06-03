@@ -30,7 +30,7 @@ function install_repo {
     )
     $software_name = "Github CLI"
     $refresh_envs = "$HOME/repos/kindtek/RefreshEnv.cmd"
-    Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $file;
+    Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd"
         
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..."
@@ -39,7 +39,6 @@ function install_repo {
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
         winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
         Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
-        $new_install = $true
     }
     else {
         Write-Host "$software_name already installed" 
@@ -49,7 +48,6 @@ function install_repo {
     powershell.exe -Command $refresh_envs | Out-Null
     Write-Host "checking if github repos need to be updated ..." 
     Set-Location $git_parent_path
-    $new_install = $false
     git -C $repo_git_name pull origin --progress -Or `
     git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_git_name -And `
     $new_install = $true 
