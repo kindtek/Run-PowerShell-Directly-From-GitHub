@@ -40,8 +40,8 @@ function install_repo {
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-            winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-            Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
+        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
+        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
     
     }
     else {
