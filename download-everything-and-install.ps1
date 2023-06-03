@@ -44,7 +44,7 @@ function install_repo {
         Write-Host "$software_name already installed" 
     }
     # allow git to be used in same window immediately after installation
-    New-Item -path alias:git -value 'C:\Program Files\Git\bin\git.exe' | Out-Null
+    New-Item -path alias:git -value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null
     powershell.exe -Command $refresh_envs | Out-Null
     Write-Host "checking if github repos need to be updated ..." 
     Set-Location $git_parent_path
