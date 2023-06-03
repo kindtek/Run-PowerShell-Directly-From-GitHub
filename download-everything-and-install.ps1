@@ -45,23 +45,16 @@ function install_repo {
         Write-Host "$software_name already installed" 
     }
     # allow git to be used in same window immediately after installation
-    new-item -path alias:git -value 'C:\Program Files\Git\bin\git.exe'
-    powershell.exe -Command $refresh_envs
-
+    New-Item -path alias:git -value 'C:\Program Files\Git\bin\git.exe' | Out-Null
+    powershell.exe -Command $refresh_envs | Out-Null
     Write-Host "checking if github repos need to be updated ..." 
     Set-Location $git_parent_path
     $new_install = $false
-
     git -C $repo_git_name pull origin --progress -Or git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_git_name -And $new_install = $true 
-
     Push-Location $repo_git_name
-    
-     git submodule update --remote --progress -- dvlp dvl-adv powerhell -Or git submodule update --init --remote --progress -- dvlp dvl-adv powerhell  -And $new_install = $true 
-
+    git submodule update --remote --progress -- dvlp dvl-adv powerhell -Or git submodule update --init --remote --progress -- dvlp dvl-adv powerhell -And $new_install = $true 
     Set-Location dvlp
-
-    git submodule update --init --progress -- mnt kernels -Or git submodule update --init --progress -- mnt kernels 
-
+    git submodule update --init --progress -- mnt kernels -Or git submodule update --init --progress -- mnt kernels
     return $new_install
 }
 
