@@ -52,7 +52,7 @@ function install_repo {
     powershell.exe -Command $refresh_envs | Out-Null
     Write-Host "checking if github repos need to be updated ..." 
     Set-Location $git_parent_path
-    ((git -C $repo_git_name pull origin --progress) -Or `
+    ((git -C $repo_git_name pull --progress) -Or `
     (git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_git_name) -And `
     ($new_install = $true)) 
     Push-Location $repo_git_name
