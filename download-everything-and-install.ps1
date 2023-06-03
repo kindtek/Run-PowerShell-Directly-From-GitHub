@@ -33,9 +33,10 @@ function install_repo {
         Write-Host "Installing $software_name ..."
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
-        winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements
-        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements
-        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"
+        winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements -And
+        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements -And
+        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed" -And
+        new-item -path alias:git -value 'C:\Program Files\Git\bin\git.exe'
         $new_install = $true
         $file = "$HOME/repos/kindtek/RefreshEnv.cmd"
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $file;
