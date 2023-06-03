@@ -40,8 +40,9 @@ function install_repo {
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
+            winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
+            Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
+    
     }
     else {
         Write-Host "$software_name already installed" 
@@ -181,8 +182,8 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-            # make sure failsafe official-ubuntu-latest distro is installed so changes can be easily reverted
-            # run_devels_playground "$git_path" "default" "official-ubuntu-latest"
+            # make sure failsafe official-kali-rolling-latest distro is installed so changes can be easily reverted
+            # run_devels_playground "$git_path" "default" "official-kali-rolling-latest"
             # install distro requested in arg
             run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag"
         }
