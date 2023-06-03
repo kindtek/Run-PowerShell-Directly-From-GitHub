@@ -237,7 +237,7 @@ do {
                 else {
                     $dvlp_options = ''
                 }
-            } while ($dvlp_options -ne 'u' )
+            } while ($dvlp_options -ne 'u' -And $dvlp_options -ne '')
     }
 } while ($dvlp_options -ieq 'u')
 
