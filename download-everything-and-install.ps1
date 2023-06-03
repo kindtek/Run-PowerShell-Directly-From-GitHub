@@ -29,7 +29,7 @@ function install_repo {
         $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
     )
     $software_name = "Github CLI"
-    $refresh_envs = "$HOME/repos/kindtek/RefreshEnv.cmd"
+    $refresh_envs = "$env:USERPROFILE/repos/kindtek/RefreshEnv.cmd"
     $global:progress_flag = 'silentlyContinue'
     $orig_progress_flag = $progress_flag 
     $progress_flag = 'SilentlyContinue'
@@ -119,7 +119,7 @@ do {
     $repo_src_name = 'devels-workshop'
     $repo_src_branch = 'main'
     $repo_dir_name = 'dvlw'
-    $git_parent_path = "$HOME/repos/$repo_src_owner"
+    $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
     $img_name = 'devels-playground'
     $img_tag = $args[0]
@@ -168,7 +168,7 @@ do {
         Start-Sleep 1
         Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
         
-        # Write-Host "Creating path $HOME\repos\kindtek if it does not exist ... "  
+        # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
         New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
 
         install_winget $git_parent_path
@@ -191,52 +191,52 @@ do {
             run_devels_playground "$git_path" "$img_name_tag" ""
         }
         do {
-                Write-Host "`r`n`r`n"
-                if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -ne "" ) {
-                    $rollback_option = "`r`n`t- [r]ollback WSL distro to `r`n$global:ORIG_DEFAULT_WSL_DISTRO"
-                }
-                else {
-                    $rollback_option=""
-                }
-                $wsl_restart_path = "$env:HOME/wsl-restart.ps1"
-                if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
-                    $restart_option = "`r`n`t- [R]estart WSL"
-                }
-                else {
-                    $restart_option = ""
-                }
+            Write-Host "`r`n`r`n"
+            if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -ne "" ) {
+                $rollback_option = "`r`n`t- [r]ollback WSL distro to `r`n$global:ORIG_DEFAULT_WSL_DISTRO"
+            }
+            else {
+                $rollback_option = ""
+            }
+            $wsl_restart_path = "$env:HOME/wsl-restart.ps1"
+            if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                $restart_option = "`r`n`t- [R]estart WSL"
+            }
+            else {
+                $restart_option = ""
+            }
 
-                # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment$rollback_option$restart_option`r`n`r`n    (exit)`r`n"
-                $dvlp_options = Read-Host
-                if ($dvlp_options -ieq 'l') {    
-                    # wsl sh -c "cd /hel;exec $SHELL"
-                    wsl.exe --cd /hal
-                }
-                elseif ($dvlp_options -ieq 'i') {
-                    run_devels_playground "$git_path" "$img_name_tag"
-                }
-                elseif ($dvlp_options -ieq 's') {
-                    wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
-                }
-                elseif ($dvlp_options -ieq 'u') {
-                    Write-Host 'checking for new updates ...'
-                }
-                elseif ($dvlp_options -eq 'r') {
-                    $target_distro = $global:ORIG_DEFAULT_WSL_DISTRO
-                    $global:ORIG_DEFAULT_WSL_DISTRO = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(Default\)' }
-                    $global:ORIG_DEFAULT_WSL_DISTRO = $global:ORIG_DEFAULT_WSL_DISTRO -replace '^(.*)(\s\(Default\))$', '$1'
-                    wsl.exe -s $target_distro
-                }
-                elseif ($dvlp_options -eq 'R') {
-                    ./"$wsl_restart_path"
+            # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
+            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment$rollback_option$restart_option`r`n`r`n    (exit)`r`n"
+            $dvlp_options = Read-Host
+            if ($dvlp_options -ieq 'l') {    
+                # wsl sh -c "cd /hel;exec $SHELL"
+                wsl.exe --cd /hal
+            }
+            elseif ($dvlp_options -ieq 'i') {
+                run_devels_playground "$git_path" "$img_name_tag"
+            }
+            elseif ($dvlp_options -ieq 's') {
+                wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
+            }
+            elseif ($dvlp_options -ieq 'u') {
+                Write-Host 'checking for new updates ...'
+            }
+            elseif ($dvlp_options -eq 'r') {
+                $target_distro = $global:ORIG_DEFAULT_WSL_DISTRO
+                $global:ORIG_DEFAULT_WSL_DISTRO = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(Default\)' }
+                $global:ORIG_DEFAULT_WSL_DISTRO = $global:ORIG_DEFAULT_WSL_DISTRO -replace '^(.*)(\s\(Default\))$', '$1'
+                wsl.exe -s $target_distro
+            }
+            elseif ($dvlp_options -eq 'R') {
+                ./"$wsl_restart_path"
                 # elseif ($dvlp_options -ieq 'v') {
                 #     wsl sh -c "cd /hel;. code"
-                }
-                else {
-                    $dvlp_options = ''
-                }
-            } while ($dvlp_options -ne 'u' -And $dvlp_options -ne '')
+            }
+            else {
+                $dvlp_options = ''
+            }
+        } while ($dvlp_options -ne 'u' -And $dvlp_options -ne '')
     }
 } while ($dvlp_options -ieq 'u')
 
