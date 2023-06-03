@@ -26,7 +26,7 @@ function install_winget {
 
 function install_repo {
     param (
-        $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_git_name, $repo_src_branch 
+        $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
     )
     $software_name = "Github CLI"
     $refresh_envs = "$HOME/repos/kindtek/RefreshEnv.cmd"
@@ -52,10 +52,10 @@ function install_repo {
     powershell.exe -Command $refresh_envs | Out-Null
     Write-Host "checking if github repos need to be updated ..." 
     Set-Location $git_parent_path
-    ((git -C $repo_git_name pull --progress) -Or `
-    (git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_git_name) -And `
+    ((git -C $repo_dir_name pull --progress) -Or `
+    (git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_dir_name) -And `
     ($new_install = $true)) 
-    Push-Location $repo_git_name
+    Push-Location $repo_dir_name
     ((git submodule update --remote --progress -- dvlp dvl-adv powerhell) -Or `
     (git submodule update --init --remote --progress -- dvlp dvl-adv powerhell) -And `
     ($new_install = $true)) 
@@ -118,9 +118,9 @@ do {
     $repo_src_owner = 'kindtek'
     $repo_src_name = 'devels-workshop'
     $repo_src_branch = 'main'
-    $repo_git_name = 'dvlw'
+    $repo_dir_name = 'dvlw'
     $git_parent_path = "$HOME/repos/$repo_src_owner"
-    $git_path = "$git_parent_path/$repo_git_name"
+    $git_path = "$git_parent_path/$repo_dir_name"
     $img_name = 'devels-playground'
     $img_tag = $args[0]
     $img_name_tag = "$img_name`:$img_tag"
@@ -173,7 +173,7 @@ do {
 
         install_winget $git_parent_path
 
-        install_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_git_name $repo_src_branch  
+        install_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
 
         powershell.exe -Command "$git_path/scripts/install-everything.ps1"
 
