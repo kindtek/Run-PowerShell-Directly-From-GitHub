@@ -33,9 +33,9 @@ function install_repo {
         Write-Host "Installing $software_name ..."
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
-        winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements -And
-        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements -And
-        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed" -And
+        winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
+        winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
+        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
         new-item -path alias:git -value 'C:\Program Files\Git\bin\git.exe'
         $new_install = $true
         $file = "$HOME/repos/kindtek/RefreshEnv.cmd"
