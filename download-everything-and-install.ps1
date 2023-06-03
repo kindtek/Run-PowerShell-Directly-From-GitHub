@@ -217,19 +217,19 @@ do {
                 elseif ($dvlp_options -ieq 'i') {
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
-                if ($dvlp_options -ieq 's') {
+                elseif ($dvlp_options -ieq 's') {
                     wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
                 }
-                if ($dvlp_options -ieq 'u') {
+                elseif ($dvlp_options -ieq 'u') {
                     Write-Host 'checking for new updates ...'
                 }
-                if ($dvlp_options -eq 'r') {
+                elseif ($dvlp_options -eq 'r') {
                     $target_distro = $global:ORIG_DEFAULT_WSL_DISTRO
                     $global:ORIG_DEFAULT_WSL_DISTRO = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(Default\)' }
                     $global:ORIG_DEFAULT_WSL_DISTRO = $global:ORIG_DEFAULT_WSL_DISTRO -replace '^(.*)(\s\(Default\))$', '$1'
                     wsl.exe -s $target_distro
                 }
-                if ($dvlp_options -eq 'R') {
+                elseif ($dvlp_options -eq 'R') {
                     ./"$wsl_restart_path"
                 # elseif ($dvlp_options -ieq 'v') {
                 #     wsl sh -c "cd /hel;. code"
