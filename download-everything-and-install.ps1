@@ -199,7 +199,7 @@ do {
                 else {
                     $rollback_option=""
                 }
-                $wsl_restart_path = "$HOME/wsl-restart.ps1"
+                $wsl_restart_path = "$env:HOME/wsl-restart.ps1"
                 if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                     $restart_option = "`r`n`t- [R]estart WSL"
                 }
