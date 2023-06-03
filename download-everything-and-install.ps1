@@ -30,8 +30,11 @@ function install_repo {
     )
     $software_name = "Github CLI"
     $refresh_envs = "$HOME/repos/kindtek/RefreshEnv.cmd"
+    $global:progress_flag = 'silentlyContinue'
+    $orig_progress_flag = $progress_flag 
+    $progress_flag = 'SilentlyContinue'
     Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" | Out-Null
-        
+    $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..."
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
