@@ -229,7 +229,7 @@ do {
                 wsl.exe -s $target_distro
             }
             elseif ($dvlp_options -ceq 'R') {
-                ./"$wsl_restart_path"
+                powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                 # elseif ($dvlp_options -ieq 'v') {
                 #     wsl sh -c "cd /hel;. code"
             }
