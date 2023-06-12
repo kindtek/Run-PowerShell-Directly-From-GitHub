@@ -222,13 +222,13 @@ do {
             elseif ($dvlp_options -ieq 'u') {
                 Write-Host 'checking for new updates ...'
             }
-            elseif ($dvlp_options -eq 'r') {
+            elseif ($dvlp_options -ceq 'r' -and  "$global:ORIG_DEFAULT_WSL_DISTRO" -ne "") {
                 $target_distro = $global:ORIG_DEFAULT_WSL_DISTRO
                 $global:ORIG_DEFAULT_WSL_DISTRO = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(Default\)' }
                 $global:ORIG_DEFAULT_WSL_DISTRO = $global:ORIG_DEFAULT_WSL_DISTRO -replace '^(.*)(\s\(Default\))$', '$1'
                 wsl.exe -s $target_distro
             }
-            elseif ($dvlp_options -eq 'R') {
+            elseif ($dvlp_options -ceq 'R') {
                 ./"$wsl_restart_path"
                 # elseif ($dvlp_options -ieq 'v') {
                 #     wsl sh -c "cd /hel;. code"
