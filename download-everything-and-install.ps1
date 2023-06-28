@@ -192,6 +192,7 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+            require_docker_online
             # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
             # $git_path, $img_name_tag, $non_interactive, $default_distro
             run_devels_playground "$git_path" "kalilinux" "kali-rolling:latest" "default"
@@ -224,6 +225,7 @@ do {
                 wsl.exe --cd /hal
             }
             elseif ($dvlp_options -ieq 'd') {
+                require_docker_online
                 run_devels_playground "$git_path" "$img_name_tag"
             }
             elseif ($dvlp_options -ieq 'k' -or $dvlp_options -ieq 'kw' -or $dvlp_options -ieq 'kl') {
