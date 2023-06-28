@@ -100,6 +100,10 @@ function run_devels_playground {
         # &$cmd_command = cmd /c start powershell.exe -Command "$git_path/devels_playground/docker-images-build-in-background.ps1" -WindowStyle "Maximized"
 
         Write-Host "Launching $software_name ...`r`n" 
+        $docker_daemon_online = docker search scratch --limit 1 --format helloworld
+        if ($docker_daemon_online -ne 'helloworld') {
+            return -1
+        }
         # Write-Host "&$devs_playground $global:img_name_tag"
         # Write-Host "$([char]27)[2J"
         # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
