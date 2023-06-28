@@ -234,8 +234,8 @@ do {
             
 
             }
-            elseif ($dvlp_options -ieq 'u' -and  ($wsl_distro_undo_option -ne "")) {
-                wsl.exe -s $wsl_distro_undo_option
+            elseif ($dvlp_options -ieq 'u' -and  ($global:ORIG_DEFAULT_WSL_DISTRO -ne "")) {
+                wsl.exe -s $global:ORIG_DEFAULT_WSL_DISTRO
             }
             elseif ($dvlp_options -ieq 'r') {
                 powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
