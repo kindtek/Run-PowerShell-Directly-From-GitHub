@@ -239,7 +239,7 @@ do {
             }
             elseif ($dvlp_options -ieq 'u' -and  ($global:ORIG_DEFAULT_WSL_DISTRO -ne "")) {
                 echo "wsl.exe -s $global:ORIG_DEFAULT_WSL_DISTRO"
-                wsl.exe -s $global:ORIG_DEFAULT_WSL_DISTRO
+                wsl.exe -s "$global:ORIG_DEFAULT_WSL_DISTRO"
             }
             elseif ($dvlp_options -ieq 'r') {
                 powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
