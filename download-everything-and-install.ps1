@@ -243,7 +243,9 @@ do {
             }
             elseif ($dvlp_options -ieq 'u' -and  ($global:ORIG_DEFAULT_WSL_DISTRO -ne "")) {
                 # wsl.exe --set-default kalilinux-kali-rolling-latest
+                Set-PSDebug -Trace 1
                 wsl.exe --set-default `"$global:ORIG_DEFAULT_WSL_DISTRO`"
+                Set-PSDebug -Trace 0
             }
             elseif ($dvlp_options -ieq 'r') {
                 powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
