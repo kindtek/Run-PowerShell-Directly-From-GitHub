@@ -243,13 +243,14 @@ do {
                 elseif ($dvlp_options -ieq 'kw' ) {
                      Write-Host 'checking for new updates ...'
                 }
-            
-
             }
-            elseif ($dvlp_options -ieq 'u' -and  ($global:ORIG_DEFAULT_WSL_DISTRO -ne "")) {
-                # wsl.exe --set-default kalilinux-kali-rolling-latest
-                wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
-                powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+            elseif ($dvlp_options -ieq 'u') {
+                if  ($global:ORIG_DEFAULT_WSL_DISTRO -ne ""){
+                    # wsl.exe --set-default kalilinux-kali-rolling-latest
+                    Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
+                    wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
+                    powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                }
             }
             elseif ($dvlp_options -ieq 'r') {
                 powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
