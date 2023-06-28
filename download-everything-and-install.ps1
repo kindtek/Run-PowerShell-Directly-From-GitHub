@@ -1,5 +1,6 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
+$env:WSL_UTF8=1
 $img_tag = $args[0]
 
 function get_default_wsl_distro {
@@ -244,7 +245,7 @@ do {
             elseif ($dvlp_options -ieq 'u' -and  ($global:ORIG_DEFAULT_WSL_DISTRO -ne "")) {
                 # wsl.exe --set-default kalilinux-kali-rolling-latest
                 Set-PSDebug -Trace 2
-                echo $global:ORIG_DEFAULT_WSL_DISTRO
+                echo wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
                 wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
                 Set-PSDebug -Trace 0
             }
