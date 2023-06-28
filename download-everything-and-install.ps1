@@ -2,6 +2,11 @@ $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 $img_tag = $args[0]
 
+function get_default_wsl_distro {
+    $default_wsl_distro = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
+    $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
+    return $default_wsl_distro
+}
 function install_winget {
     param (
         $git_parent_path
@@ -192,12 +197,10 @@ do {
         }
         do {
             Write-Host "`r`n`r`n"
-            if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -ne "" ) {
-                $rollback_option = "`r`n`t- [r]ollback WSL distro to `r`n$global:ORIG_DEFAULT_WSL_DISTRO"
+            if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -eq "" ) {
+                $global:ORIG_DEFAULT_WSL_DISTRO = get_default_wsl_distro
             }
-            else {
-                $rollback_option = ""
-            }
+            $wsl_distro_rollback_option = "`r`n`t- [r]ollback WSL distro to `r`n$global:ORIG_DEFAULT_WSL_DISTRO"
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                 $restart_option = "`r`n`t- [R]estart WSL"
@@ -207,7 +210,7 @@ do {
             }
 
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment$rollback_option$restart_option`r`n`r`n    (exit)`r`n"
+            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment$wsl_distro_rollback_option$restart_option`r`n`r`n    (exit)`r`n"
             $dvlp_options = Read-Host
             if ($dvlp_options -ieq 'l') {    
                 # wsl sh -c "cd /hel;exec $SHELL"
@@ -222,11 +225,8 @@ do {
             elseif ($dvlp_options -ieq 'u') {
                 Write-Host 'checking for new updates ...'
             }
-            elseif ($dvlp_options -ceq 'r' -and  "$global:ORIG_DEFAULT_WSL_DISTRO" -ne "") {
-                $target_distro = $global:ORIG_DEFAULT_WSL_DISTRO
-                $global:ORIG_DEFAULT_WSL_DISTRO = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(Default\)' }
-                $global:ORIG_DEFAULT_WSL_DISTRO = $global:ORIG_DEFAULT_WSL_DISTRO -replace '^(.*)(\s\(Default\))$', '$1'
-                wsl.exe -s $target_distro
+            elseif ($dvlp_options -ceq 'r' -and  ($wsl_distro_rollback_option -ne "")) {
+                wsl.exe -s $wsl_distro_rollback_option
             }
             elseif ($dvlp_options -ceq 'R') {
                 powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
