@@ -202,7 +202,6 @@ do {
                 $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
 
             }
-            $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                 $restart_option = "`r`n`t- [r]estart WSL"
@@ -239,6 +238,7 @@ do {
 
             }
             elseif ($dvlp_options -ieq 'u' -and  ($global:ORIG_DEFAULT_WSL_DISTRO -ne "")) {
+                echo "wsl.exe -s $global:ORIG_DEFAULT_WSL_DISTRO"
                 wsl.exe -s $global:ORIG_DEFAULT_WSL_DISTRO
             }
             elseif ($dvlp_options -ieq 'r') {
