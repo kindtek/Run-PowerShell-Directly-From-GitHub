@@ -204,10 +204,10 @@ do {
             Write-Host "`r`n`r`n"
             $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
             if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -eq "" ) {
-                $global:ORIG_DEFAULT_WSL_DISTRO = $global:DEFAULT_WSL_DISTRO
+                $global:ORIG_DEFAULT_WSL_DISTRO = $failsafe_wsl_distro
+                $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $global:ORIG_DEFAULT_WSL_DISTRO)"
             } elseif ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
                 $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
-
             }
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
