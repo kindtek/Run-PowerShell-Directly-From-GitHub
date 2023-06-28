@@ -2,6 +2,7 @@ $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 $env:WSL_UTF8=1
 $img_tag = $args[0]
+$failsafe_wsl_distro = 'kalilinux-kali-rolling-latest'
 
 function get_default_wsl_distro {
     $default_wsl_distro = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
@@ -247,10 +248,8 @@ do {
             }
             elseif ($dvlp_options -ieq 'u' -and  ($global:ORIG_DEFAULT_WSL_DISTRO -ne "")) {
                 # wsl.exe --set-default kalilinux-kali-rolling-latest
-                Set-PSDebug -Trace 2
-                echo wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
                 wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
-                Set-PSDebug -Trace 0
+                powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
             }
             elseif ($dvlp_options -ieq 'r') {
                 powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
