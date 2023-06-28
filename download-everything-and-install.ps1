@@ -195,8 +195,12 @@ do {
 
         do {
             Write-Host "`r`n`r`n"
+            $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
             if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -eq "" ) {
-                $global:ORIG_DEFAULT_WSL_DISTRO = get_default_wsl_distro
+                $global:ORIG_DEFAULT_WSL_DISTRO = $global:DEFAULT_WSL_DISTRO
+            } elseif ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
+                $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
+
             }
             $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -208,7 +212,7 @@ do {
             }
 
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [w]sl start`r`n`t- [d]ocker image import`r`n`t- [k]indtek environment setup$wsl_distro_undo_option$restart_option`r`n`r`n    (exit)`r`n"
+            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [w]sl start ($global:DEFAULT_WSL_DISTRO)`r`n`t- [d]ocker image import`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n    (exit)`r`n"
             $dvlp_options = Read-Host
             if ($dvlp_options -ieq 'w') {    
                 # wsl sh -c "cd /hel;exec $SHELL"
