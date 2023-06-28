@@ -205,7 +205,7 @@ do {
             $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
-                $restart_option = "`r`n`t- [R]estart WSL"
+                $restart_option = "`r`n`t- [r]estart WSL"
             }
             else {
                 $restart_option = ""
