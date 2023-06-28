@@ -200,7 +200,7 @@ do {
             if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -eq "" ) {
                 $global:ORIG_DEFAULT_WSL_DISTRO = get_default_wsl_distro
             }
-            $wsl_distro_rollback_option = "`r`n`t- [r]ollback WSL distro to `r`n$global:ORIG_DEFAULT_WSL_DISTRO"
+            $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to `r`n$global:ORIG_DEFAULT_WSL_DISTRO)"
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                 $restart_option = "`r`n`t- [R]estart WSL"
@@ -210,26 +210,43 @@ do {
             }
 
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [l]aunch default WSL distro`r`n`t- [i]mport Docker image as WSL distro`r`n`t- [s]etup Kindtek LINUX environment`r`n`t- [u]pdate Kindtek WINDOWS environment$wsl_distro_rollback_option$restart_option`r`n`r`n    (exit)`r`n"
+            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [w]sl start`r`n`t- [d]ocker image import`r`n`t- [k]indtek environment setup$wsl_distro_undo_option$restart_option`r`n`r`n    (exit)`r`n"
             $dvlp_options = Read-Host
-            if ($dvlp_options -ieq 'l') {    
+            if ($dvlp_options -ieq 'w') {    
                 # wsl sh -c "cd /hel;exec $SHELL"
                 wsl.exe --cd /hal
             }
-            elseif ($dvlp_options -ieq 'i') {
+            elseif ($dvlp_options -ieq 'd') {
                 run_devels_playground "$git_path" "$img_name_tag"
             }
-            elseif ($dvlp_options -ieq 's') {
-                wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
+            elseif ($dvlp_options -ieq 'k' -or $dvlp_options -ieq 'kw' -or $dvlp_options -ieq 'kl') {
+                if ($dvlp_options -ieq 'k'){
+                    Write-Host "`r`n`t[l]inux or [w]indows"
+                    $dvlp_kindtek_options = Read-Host
+                    if ($dvlp_kindtek_options -ieq 'l' -or $dvlp_kindtek_options -ieq 'w') {
+                        $dvlp_options = $dvlp_options + $dvlp_kindtek_options
+                    }
+                }
+                if ($dvlp_options -ieq 'kl' ){
+                    wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
+                }
+                elseif ($dvlp_options -ieq 'kw' ) {
+                     Write-Host 'checking for new updates ...'
+                     $dvlp_options = 'u'
+                }
+            
+
             }
-            elseif ($dvlp_options -ieq 'u') {
-                Write-Host 'checking for new updates ...'
+            elseif ($dvlp_options -ieq 'u' -and  ($wsl_distro_undo_option -ne "")) {
+                wsl.exe -s $wsl_distro_undo_option
             }
-            elseif ($dvlp_options -ceq 'r' -and  ($wsl_distro_rollback_option -ne "")) {
-                wsl.exe -s $wsl_distro_rollback_option
-            }
-            elseif ($dvlp_options -ceq 'R') {
+            elseif ($dvlp_options -ieq 'r') {
                 powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                # elseif ($dvlp_options -ieq 'v') {
+                #     wsl sh -c "cd /hel;. code"
+            }
+            elseif ($dvlp_options -ceq 'R!') {
+                reboot_prompt
                 # elseif ($dvlp_options -ieq 'v') {
                 #     wsl sh -c "cd /hel;. code"
             }
