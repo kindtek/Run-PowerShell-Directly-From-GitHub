@@ -77,6 +77,7 @@ function run_devels_playground {
     param (
         $git_path, $img_name_tag, $non_interactive, $default_distro
     )
+    $docker_daemon_online = docker search scratch --limit 1 --format helloworld | Out-Null
     try {
         $software_name = "docker import tool"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
@@ -99,8 +100,8 @@ function run_devels_playground {
         # $cmd_command = "$git_path/devels_playground/docker-images-build-in-background.ps1"
         # &$cmd_command = cmd /c start powershell.exe -Command "$git_path/devels_playground/docker-images-build-in-background.ps1" -WindowStyle "Maximized"
 
-        Write-Host "Attempting to run $software_name ...`r`n" 
-        $docker_daemon_online = docker search scratch --limit 1 --format helloworld
+        Write-Host "trying to start $software_name ...`r`n" 
+        $docker_daemon_online = docker search scratch --limit 1 --format helloworld | Out-Null
         if ($docker_daemon_online -eq 'helloworld') {
             # Write-Host "&$devs_playground $global:img_name_tag"
             # Write-Host "$([char]27)[2J"
@@ -112,7 +113,9 @@ function run_devels_playground {
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
-            Write-Host "$software_name ran successfully" | Out-File -FilePath "$git_path/.dvlp-installed"
+        } else {
+            Write-Host "failed to connect to docker daemon.  make sure docker desktop is running and has been given time to start"
+            Write-Host "common fixes: `r`n`t- restart WSL`r`n`t- change your default distro (ie: wsl -s kalilinux-kali-rolling-latest )"
         }
         
         # }
