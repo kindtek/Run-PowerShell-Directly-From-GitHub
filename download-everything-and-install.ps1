@@ -78,10 +78,9 @@ function run_devels_playground {
         $git_path, $img_name_tag, $non_interactive, $default_distro
     )
     try {
-        $software_name = "devel`'s playground"
+        $software_name = "docker import tool"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-        Write-Host "`r`n`tNOTE:`tDocker Desktop must be running`r`n" 
-        Write-Host "`r`n`r`nAttempting to start wsl import tool ..."
+        Write-Host "`r`n`tNOTE:`tDocker Desktop must be running at all times during import process`r`n" 
         Start-Sleep 3
         # @TODO: add cdir and python to install with same behavior as other installs above
         # not eloquent at all but good for now
@@ -100,16 +99,16 @@ function run_devels_playground {
         # $cmd_command = "$git_path/devels_playground/docker-images-build-in-background.ps1"
         # &$cmd_command = cmd /c start powershell.exe -Command "$git_path/devels_playground/docker-images-build-in-background.ps1" -WindowStyle "Maximized"
 
-        Write-Host "Launching $software_name ...`r`n" 
+        Write-Host "Attempting to run $software_name ...`r`n" 
         $docker_daemon_online = docker search scratch --limit 1 --format helloworld
         if ($docker_daemon_online -eq 'helloworld') {
             # Write-Host "&$devs_playground $global:img_name_tag"
             # Write-Host "$([char]27)[2J"
             # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
             $img_name_tag = $img_name_tag.replace("\s+", '')
-            write-host `$img_name_tag $img_name_tag
-            write-host `$non_interactive $non_interactive
-            write-host `$default_distro $default_distro
+            # write-host `$img_name_tag $img_name_tag
+            # write-host `$non_interactive $non_interactive
+            # write-host `$default_distro $default_distro
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
