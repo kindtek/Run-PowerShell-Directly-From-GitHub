@@ -223,7 +223,7 @@ do {
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
             Write-Host "`r`nChoose from the following:`r`n`r`n`t- [c]li`r`n`t- [d]ocker image install`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
             $dvlp_options = Read-Host
-            if ($dvlp_options -ieq 'c') {    
+            if ($dvlp_options -like 'c**') {    
                 Write-Host "`r`n`t[l]inux or [w]indows"
                 $dvlp_cli_options = Read-Host
                 if ($dvlp_cli_options -ieq 'l' -or $dvlp_cli_options -ieq 'w') {
@@ -247,7 +247,7 @@ do {
                 require_docker_online
                 run_devels_playground "$git_path" "$img_name_tag"
             }
-            elseif ($dvlp_options -ieq 'k' -or $dvlp_options -ieq 'kw' -or $dvlp_options -ieq 'kl') {
+            elseif ($dvlp_options -like 'k*') {
                 if ($dvlp_options -ieq 'k'){
                     Write-Host "`r`n`t[l]inux or [w]indows"
                     $dvlp_kindtek_options = Read-Host
