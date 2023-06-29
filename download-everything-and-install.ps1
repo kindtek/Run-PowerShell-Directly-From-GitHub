@@ -81,7 +81,7 @@ function run_devels_playground {
     try {
         $software_name = "docker import tool"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-        Write-Host "`r`n`tNOTE:`tDocker Desktop must be running at all times during import process`r`n" 
+        Write-Host "`r`nNOTE:`tDocker Desktop must be running at all times during import process`r`n" 
         Start-Sleep 3
         # @TODO: add cdir and python to install with same behavior as other installs above
         # not eloquent at all but good for now
@@ -114,8 +114,9 @@ function run_devels_playground {
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
         } else {
-            Write-Host "failed to connect to docker daemon.  make sure docker desktop is running and has been given time to start"
-            Write-Host "common fixes: `r`n`t- restart WSL`r`n`t- change your default distro (ie: wsl -s kalilinux-kali-rolling-latest )"
+            $docker_daemon_online = docker search scratch --limit 1 --format helloworld
+            Write-Host "`r`nmake sure docker desktop is running"
+            Write-Host "still not working? try: `r`n`t- restart WSL`r`n`t- change your default distro (ie: wsl -s kalilinux-kali-rolling-latest )"
         }
         
         # }
