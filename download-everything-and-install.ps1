@@ -221,11 +221,27 @@ do {
             }
 
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [w]sl start ($global:DEFAULT_WSL_DISTRO)`r`n`t- [d]ocker image import`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n    (exit)`r`n"
+            Write-Host "`r`n`tChoose from the following:`r`n`r`n`t- [c]li`r`n`t- [d]ocker image install`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n    (exit)`r`n"
             $dvlp_options = Read-Host
-            if ($dvlp_options -ieq 'w') {    
-                # wsl sh -c "cd /hel;exec $SHELL"
-                wsl.exe --cd /hal
+            if ($dvlp_options -ieq 'c') {    
+                Write-Host "`r`n`t[l]inux or [w]indows"
+                $dvlp_cli_options = Read-Host
+                if ($dvlp_cli_options -ieq 'l' -or $dvlp_cli_options -ieq 'w') {
+                    $dvlp_options = $dvlp_options + $dvlp_cli_options
+                }
+                if ($dvlp_options -ieq 'cl' ) {
+                    wsl.exe --cd /hal
+                }
+                elseif ($dvlp_options -ieq 'cdl' ) {
+                    wsl.exe --cd /hal --exec cdir
+                }
+                elseif ($dvlp_options -ieq 'cw' ) {
+                    Start-Process powershell.exe
+                }
+                elseif ($dvlp_options -ieq 'cdw' ) {
+                    # one day might get the windows version working
+                    Start-Process powershell.exe
+                }
             }
             elseif ($dvlp_options -ieq 'd') {
                 require_docker_online
