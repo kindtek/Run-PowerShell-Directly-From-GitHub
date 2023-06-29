@@ -224,8 +224,10 @@ do {
             Write-Host "`r`nChoose from the following:`r`n`r`n`t- [c]li`r`n`t- [d]ocker image install`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
             $dvlp_options = Read-Host
             if ($dvlp_options -like 'c**') {    
-                Write-Host "`r`n`t[l]inux or [w]indows"
-                $dvlp_cli_options = Read-Host
+                if ($dvlp_options -ieq 'c') {
+                    Write-Host "`r`n`t[l]inux or [w]indows"
+                    $dvlp_cli_options = Read-Host
+                }
                 if ($dvlp_cli_options -ieq 'l' -or $dvlp_cli_options -ieq 'w') {
                     $dvlp_options = $dvlp_options + $dvlp_cli_options
                 }
