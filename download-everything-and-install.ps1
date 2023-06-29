@@ -81,7 +81,7 @@ function run_devels_playground {
     try {
         $software_name = "docker import tool"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-        Write-Host "`r`nNOTE:`tDocker Desktop must be running at all times during import process`r`n" 
+        Write-Host "`r`nIMPORTANT:`tkeep docker desktop running or the import will fail`r`n" 
         Start-Sleep 3
         # @TODO: add cdir and python to install with same behavior as other installs above
         # not eloquent at all but good for now
@@ -100,9 +100,10 @@ function run_devels_playground {
         # $cmd_command = "$git_path/devels_playground/docker-images-build-in-background.ps1"
         # &$cmd_command = cmd /c start powershell.exe -Command "$git_path/devels_playground/docker-images-build-in-background.ps1" -WindowStyle "Maximized"
 
-        Write-Host "trying to start $software_name ...`r`n" 
+        Write-Host "establishing a connection with docker desktop ...`r`n" 
         $docker_daemon_online = docker search scratch --limit 1 --format helloworld
         if ($docker_daemon_online -eq 'helloworld') {
+            Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $global:img_name_tag"
             # Write-Host "$([char]27)[2J"
             # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
