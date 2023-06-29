@@ -238,11 +238,11 @@ do {
                     wsl.exe --cd /hal --exec cdir
                 }
                 elseif ($dvlp_options -ieq 'cw' ) {
-                    Start-Process powershell.exe
+                    powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
                 }
                 elseif ($dvlp_options -ieq 'cdw' ) {
-                    # one day might get the windows version working
-                    Start-Process powershell.exe
+                    # one day might get the windows cdir working
+                    Start-Process powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
                 }
             }
             elseif ($dvlp_options -ieq 'd') {
