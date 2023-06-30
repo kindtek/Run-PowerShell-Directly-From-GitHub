@@ -198,7 +198,7 @@ do {
             require_docker_online
             # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
             # $git_path, $img_name_tag, $non_interactive, $default_distro
-            run_devels_playground "$git_path" "kalilinux" "kali-rolling:latest" "default"
+            run_devels_playground "$git_path" 
             # install distro requested in arg
             run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" 
         }
