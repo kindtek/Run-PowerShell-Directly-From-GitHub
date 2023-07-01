@@ -416,6 +416,8 @@ function install_everything {
     Write-Host "`r`nGoodbye!`r`n"
 }
 
-if (![string]::IsNullOrEmpty($args[0])) {
+if ([string]::IsNullOrEmpty($args[0])) {
+    write-host $args[0]
+} else {
     install_everything $args[0]
 }
