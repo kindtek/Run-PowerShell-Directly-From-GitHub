@@ -211,6 +211,8 @@ do {
                 $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $global:ORIG_DEFAULT_WSL_DISTRO)"
             } elseif ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
                 $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
+            } else {
+                $wsl_distro_undo_option = ''
             }
             $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
