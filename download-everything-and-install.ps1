@@ -417,7 +417,7 @@ function install_everything {
 }
 
 $img_tag = $args[0]
-if ($img_tag -ne '') {
+If ([string]::IsNullOrEmpty($img_tag)) {
     write-host "`$img_tag: '$img_tag'"
     start-sleep 5
     install_everything $args[0]
