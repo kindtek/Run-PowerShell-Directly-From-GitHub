@@ -230,7 +230,11 @@ do {
                 try {
                     wsl -s $failsafe_wsl_distro
                 } catch {
-                    run_devels_playground "$git_path" "default"
+                    try {
+                        run_devels_playground "$git_path" "default"
+                    } catch {
+                        Write-Host "error setting $failsafe_wsl_distro as default wsl distro"
+                    }
                 }
             }
             if ($dvlp_options -like 'c**') {    
