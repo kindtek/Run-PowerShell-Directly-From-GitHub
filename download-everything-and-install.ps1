@@ -237,7 +237,7 @@ do {
                     }
                 }
             }
-            if ($dvlp_options -like 'c**') {    
+            elseif ($dvlp_options -like 'c**') {    
                 if ($dvlp_options -ieq 'c') {
                     Write-Host "`r`n`t[l]inux or [w]indows"
                     $dvlp_cli_options = Read-Host
