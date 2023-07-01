@@ -222,16 +222,7 @@ function install_everything {
             Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
     
         }
-        if ($confirmation -eq '') {   
-            $host.UI.RawUI.ForegroundColor = "Black"
-            $host.UI.RawUI.BackgroundColor = "DarkRed" 
-            Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
-            Start-Sleep 3
-            Write-Host ""
-            Start-Sleep 1
-            Write-Host ""
-    
-    
+        if ($confirmation -eq '') {  
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
             # Self-elevate the script if required
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
@@ -242,9 +233,11 @@ function install_everything {
                 }
             }
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-
-                $host.UI.RawUI.ForegroundColor = "White"
-                $host.UI.RawUI.BackgroundColor = "Black"
+                Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
+                Start-Sleep 3
+                Write-Host ""
+                Start-Sleep 1
+                Write-Host ""
                 Write-Host ""
                 Start-Sleep 1
                 Write-Host ""
@@ -263,11 +256,9 @@ function install_everything {
                 run_installer
             }
             else {
-                Start-Process powershell -ArgumentList ". $git_path/powerhell/download-everything-and-install.ps1;-command &{install_winget $git_parent_path; install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch;. $git_path/scripts/install-everything.ps1;run_installer;exit;}" -Wait 
+                Start-Process powershell -ArgumentList ". $git_path/powerhell/download-everything-and-install.ps1;-command &{install_winget $git_parent_path; install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch;. $git_path/scripts/install-everything.ps1;run_installer;exit;}" 
             }
-    
-            $host.UI.RawUI.ForegroundColor = "Black"
-            $host.UI.RawUI.BackgroundColor = "DarkRed"
+
     
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
