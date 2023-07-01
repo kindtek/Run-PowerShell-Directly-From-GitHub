@@ -259,7 +259,11 @@ function install_everything {
             install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
     
             . $git_path/scripts/install-everything.ps1
-            run_installer
+            if (Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf){
+                Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;run_installer;exit;}" -Wait 
+            } else {
+                run_installer
+            }
     
             $host.UI.RawUI.ForegroundColor = "Black"
             $host.UI.RawUI.BackgroundColor = "DarkRed"
