@@ -369,6 +369,9 @@ function install_everything {
                     powershell ${function:require_docker_online} 
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
+                elseif ($dvlp_options -ieq 'd!'){
+                    run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                }
                 elseif ($dvlp_options -like 'k*') {
                     if ($dvlp_options -ieq 'k') {
                         Write-Host "`r`n`t[l]inux or [w]indows"
