@@ -416,9 +416,9 @@ function install_everything {
     Write-Host "`r`nGoodbye!`r`n"
 }
 
-if ($args[0] -ne "") {
-    $img_tag = $args[0]
-    write-host "`$img_tag: $img_tag"
+$img_tag = $args[0]
+if ($img_tag -ne '') {
+    write-host "`$img_tag: '$img_tag'"
     start-sleep 5
     install_everything $args[0]
 }
