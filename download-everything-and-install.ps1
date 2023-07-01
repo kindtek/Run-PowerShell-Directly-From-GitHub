@@ -197,8 +197,6 @@ function install_everything {
     $host.UI.RawUI.BackgroundColor = "Black"
     $dvlp_options = 'n'
     do {
-    
-        Set-PSDebug -Trace 2;
         $repo_src_owner = 'kindtek'
         $repo_src_name = 'devels-workshop'
         $repo_src_branch = 'main'
@@ -207,11 +205,7 @@ function install_everything {
         $git_path = "$git_parent_path/$repo_dir_name"
         $img_name = 'devels-playground'
         $img_name_tag = "$img_name`:$img_tag"
-        Set-PSDebug -Trace 0;
-
-
         $confirmation = ''
-        
     
         if (($dvlp_options -ine 'kw') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
             Write-Host "$([char]27)[2J"
