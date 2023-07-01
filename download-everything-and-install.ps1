@@ -1,5 +1,3 @@
-$host.UI.RawUI.ForegroundColor = "White"
-$host.UI.RawUI.BackgroundColor = "Black"
 $env:WSL_UTF8 = 1
 $img_tag = $args[0]
 $global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
@@ -189,99 +187,120 @@ function run_devels_playground {
     }
     catch {}
 }
-
-$dvlp_options = 'n'
-do {
-
-
-    $repo_src_owner = 'kindtek'
-    $repo_src_name = 'devels-workshop'
-    $repo_src_branch = 'main'
-    $repo_dir_name = 'dvlw'
-    $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
-    $git_path = "$git_parent_path/$repo_dir_name"
-    $img_name = 'devels-playground'
-    $img_tag = $args[0]
-    $img_name_tag = "$img_name`:$img_tag"
-
-    $confirmation = ''
+function install_everything {  
+    param (
+        $img_tag
+    )
+    $host.UI.RawUI.ForegroundColor = "White"
+    $host.UI.RawUI.BackgroundColor = "Black"
+    $dvlp_options = 'n'
+    do {
     
-
-    if (($dvlp_options -ine 'kw') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
-        Write-Host "$([char]27)[2J"
-        $host.UI.RawUI.ForegroundColor = "Black"
-        $host.UI.RawUI.BackgroundColor = "DarkRed"
-
-        # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
-        $confirmation = Read-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue`r`n"
-        Write-Host "$([char]27)[2J"
-        Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
-
-    }
-    if ($confirmation -eq '') {   
-        $host.UI.RawUI.ForegroundColor = "Black"
-        $host.UI.RawUI.BackgroundColor = "DarkRed" 
-        Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
-        Start-Sleep 3
-        Write-Host ""
-        Start-Sleep 1
-        Write-Host ""
-
-
-        # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
-        # Self-elevate the script if required
-        if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-            if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
-                $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
-                Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle "Maximized" -ArgumentList $CommandLine
-                Exit
-            }
-        }
-        $host.UI.RawUI.ForegroundColor = "White"
-        $host.UI.RawUI.BackgroundColor = "Black"
-        Write-Host ""
-        Start-Sleep 1
-        Write-Host ""
-        Start-Sleep 1
-        Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
-        Start-Sleep 1
-        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
+    
+        $repo_src_owner = 'kindtek'
+        $repo_src_name = 'devels-workshop'
+        $repo_src_branch = 'main'
+        $repo_dir_name = 'dvlw'
+        $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
+        $git_path = "$git_parent_path/$repo_dir_name"
+        $img_name = 'devels-playground'
+        $img_tag = $args[0]
+        $img_name_tag = "$img_name`:$img_tag"
+    
+        $confirmation = ''
         
-        # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
-        New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
-
-        install_winget $git_parent_path
-
-        install_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
-
-        . $git_path/scripts/install-everything.ps1
-        run_installer
-
-        $host.UI.RawUI.ForegroundColor = "Black"
-        $host.UI.RawUI.BackgroundColor = "DarkRed"
-
-        if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-            powershell ${function:require_docker_online} 
-            # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
-            # $git_path, $img_name_tag, $non_interactive, $default_distro
-            try {
-                run_devels_playground "$git_path" "default"
+    
+        if (($dvlp_options -ine 'kw') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
+            Write-Host "$([char]27)[2J"
+            $host.UI.RawUI.ForegroundColor = "Black"
+            $host.UI.RawUI.BackgroundColor = "DarkRed"
+    
+            # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
+            $confirmation = Read-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`tHit ENTER to continue`r`n"
+            Write-Host "$([char]27)[2J"
+            Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
+    
+        }
+        if ($confirmation -eq '') {   
+            $host.UI.RawUI.ForegroundColor = "Black"
+            $host.UI.RawUI.BackgroundColor = "DarkRed" 
+            Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
+            Start-Sleep 3
+            Write-Host ""
+            Start-Sleep 1
+            Write-Host ""
+    
+    
+            # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
+            # Self-elevate the script if required
+            if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+                if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
+                    $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
+                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle "Maximized" -ArgumentList $CommandLine
+                    Exit
+                }
             }
-            catch {
-                Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
-            }
-            # install distro requested in arg
-            try {
-                $old_wsl_default_distro = get_default_wsl_distro
-                run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
-                $new_wsl_default_distro = get_default_wsl_distro
-                if ( is_docker_desktop_online -eq $false ) {
-                    Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
-                    Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
+            $host.UI.RawUI.ForegroundColor = "White"
+            $host.UI.RawUI.BackgroundColor = "Black"
+            Write-Host ""
+            Start-Sleep 1
+            Write-Host ""
+            Start-Sleep 1
+            Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
+            Start-Sleep 1
+            Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
+            
+            # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
+            New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
+    
+            install_winget $git_parent_path
+    
+            install_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
+    
+            . $git_path/scripts/install-everything.ps1
+            run_installer
+    
+            $host.UI.RawUI.ForegroundColor = "Black"
+            $host.UI.RawUI.BackgroundColor = "DarkRed"
+    
+            if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+                powershell ${function:require_docker_online} 
+                # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
+                # $git_path, $img_name_tag, $non_interactive, $default_distro
+                try {
+                    run_devels_playground "$git_path" "default"
+                }
+                catch {
+                    Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                }
+                # install distro requested in arg
+                try {
+                    $old_wsl_default_distro = get_default_wsl_distro
+                    run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                    $new_wsl_default_distro = get_default_wsl_distro
+                    if ( is_docker_desktop_online -eq $false ) {
+                        Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
+                        Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
+                        try {
+                            wsl -s $old_wsl_default_distro
+                            wsl_docker_restart
+                            require_docker_online
+                        }
+                        catch {
+                            try {
+                                revert_default_wsl_distro
+                            }
+                            catch {
+                                Write-Host "error setting failsafe as default wsl distro"
+                            }
+                        }
+                    }
+                }
+                catch {
+                    Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
-                        wsl -s $old_wsl_default_distro
-                        wsl_docker_restart
-                        require_docker_online
+                        wsl -s $FAILSAFE_WSL_DISTRO
+                        powershell ${function:require_docker_online} 
                     }
                     catch {
                         try {
@@ -292,123 +311,112 @@ do {
                         }
                     }
                 }
+                 
             }
-            catch {
-                Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
-                try {
-                    wsl -s $FAILSAFE_WSL_DISTRO
-                    powershell ${function:require_docker_online} 
+    
+            do {
+                $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
+                $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
+                if ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
+                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
                 }
-                catch {
+                else {
+                    $wsl_distro_undo_option = ''
+                }
+                # if (get_default_wsl_distro -eq $FAILSAFE_WSL_DISTRO){
+                #     $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
+                # }
+                $restart_option = "`r`n`t- [r]estart"
+                # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
+                Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`r`n`t- [c]ommand line`r`n`t- [d]ocker devel`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
+                $dvlp_options = Read-Host
+                if ($dvlp_options -ieq 'f') {
                     try {
-                        revert_default_wsl_distro
+                        wsl -s $FAILSAFE_WSL_DISTRO
+                        powershell ${function:require_docker_online} 
                     }
                     catch {
-                        Write-Host "error setting failsafe as default wsl distro"
+                        try {
+                            run_devels_playground "$git_path" "default"
+                        }
+                        catch {
+                            Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                        }
                     }
                 }
-            }
-             
-        }
-
-        do {
-            $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
-            $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
-            if ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
-                $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
-            }
-            else {
-                $wsl_distro_undo_option = ''
-            }
-            # if (get_default_wsl_distro -eq $FAILSAFE_WSL_DISTRO){
-            #     $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
-            # }
-            $restart_option = "`r`n`t- [r]estart"
-            # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-            Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`r`n`t- [c]ommand line`r`n`t- [d]ocker devel`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
-            $dvlp_options = Read-Host
-            if ($dvlp_options -ieq 'f') {
-                try {
-                    wsl -s $FAILSAFE_WSL_DISTRO
+                elseif ($dvlp_options -like 'c**') {    
+                    if ($dvlp_options -ieq 'c') {
+                        Write-Host "`r`n`t[l]inux or [w]indows"
+                        $dvlp_cli_options = Read-Host
+                    }
+                    if ($dvlp_cli_options -ieq 'l' -or $dvlp_cli_options -ieq 'w') {
+                        $dvlp_options = $dvlp_options + $dvlp_cli_options
+                    }
+                    if ($dvlp_options -ieq 'cl' ) {
+                        wsl.exe --cd /hal
+                    }
+                    elseif ($dvlp_options -ieq 'cdl' ) {
+                        wsl.exe --cd /hal --exec cdir
+                    }
+                    elseif ($dvlp_options -ieq 'cw' ) {
+                        powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
+                    }
+                    elseif ($dvlp_options -ieq 'cdw' ) {
+                        # one day might get the windows cdir working
+                        Start-Process powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
+                    }
+                }
+                elseif ($dvlp_options -ieq 'd') {
                     powershell ${function:require_docker_online} 
+                    run_devels_playground "$git_path" "$img_name_tag"
                 }
-                catch {
-                    try {
-                        run_devels_playground "$git_path" "default"
+                elseif ($dvlp_options -like 'k*') {
+                    if ($dvlp_options -ieq 'k') {
+                        Write-Host "`r`n`t[l]inux or [w]indows"
+                        $dvlp_kindtek_options = Read-Host
+                        if ($dvlp_kindtek_options -ieq 'l' -or $dvlp_kindtek_options -ieq 'w') {
+                            $dvlp_options = $dvlp_options + $dvlp_kindtek_options
+                        }
                     }
-                    catch {
-                        Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                    if ($dvlp_options -ieq 'kl' ) {
+                        wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
                     }
-                }
-            }
-            elseif ($dvlp_options -like 'c**') {    
-                if ($dvlp_options -ieq 'c') {
-                    Write-Host "`r`n`t[l]inux or [w]indows"
-                    $dvlp_cli_options = Read-Host
-                }
-                if ($dvlp_cli_options -ieq 'l' -or $dvlp_cli_options -ieq 'w') {
-                    $dvlp_options = $dvlp_options + $dvlp_cli_options
-                }
-                if ($dvlp_options -ieq 'cl' ) {
-                    wsl.exe --cd /hal
-                }
-                elseif ($dvlp_options -ieq 'cdl' ) {
-                    wsl.exe --cd /hal --exec cdir
-                }
-                elseif ($dvlp_options -ieq 'cw' ) {
-                    powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
-                }
-                elseif ($dvlp_options -ieq 'cdw' ) {
-                    # one day might get the windows cdir working
-                    Start-Process powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
-                }
-            }
-            elseif ($dvlp_options -ieq 'd') {
-                powershell ${function:require_docker_online} 
-                run_devels_playground "$git_path" "$img_name_tag"
-            }
-            elseif ($dvlp_options -like 'k*') {
-                if ($dvlp_options -ieq 'k') {
-                    Write-Host "`r`n`t[l]inux or [w]indows"
-                    $dvlp_kindtek_options = Read-Host
-                    if ($dvlp_kindtek_options -ieq 'l' -or $dvlp_kindtek_options -ieq 'w') {
-                        $dvlp_options = $dvlp_options + $dvlp_kindtek_options
+                    elseif ($dvlp_options -ieq 'kw' ) {
+                        Write-Host 'checking for new updates ...'
                     }
                 }
-                if ($dvlp_options -ieq 'kl' ) {
-                    wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
+                elseif ($dvlp_options -ieq 'u') {
+                    if ($global:ORIG_DEFAULT_WSL_DISTRO -ne "") {
+                        # wsl.exe --set-default kalilinux-kali-rolling-latest
+                        Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
+                        wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
+                        wsl_docker_restart
+                    }
                 }
-                elseif ($dvlp_options -ieq 'kw' ) {
-                    Write-Host 'checking for new updates ...'
-                }
-            }
-            elseif ($dvlp_options -ieq 'u') {
-                if ($global:ORIG_DEFAULT_WSL_DISTRO -ne "") {
-                    # wsl.exe --set-default kalilinux-kali-rolling-latest
-                    Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
-                    wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
+                elseif ($dvlp_options -ceq 'r') {
                     wsl_docker_restart
                 }
-            }
-            elseif ($dvlp_options -ceq 'r') {
-                wsl_docker_restart
-            }
-            elseif ($dvlp_options -ceq 'R') {
-                if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
-                    powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                elseif ($dvlp_options -ceq 'R') {
+                    if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                        powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                    }
                 }
-            }
-            elseif ($dvlp_options -ceq 'R!') {
-                reboot_prompt
-                # elseif ($dvlp_options -ieq 'v') {
-                #     wsl sh -c "cd /hel;. code"
-            }
-            else {
-                $dvlp_options = ''
-            }
-        } while ($dvlp_options -ne 'kw' -And $dvlp_options -ne '')
-    }
-} while ($dvlp_options -ieq 'kw')
+                elseif ($dvlp_options -ceq 'R!') {
+                    reboot_prompt
+                    # elseif ($dvlp_options -ieq 'v') {
+                    #     wsl sh -c "cd /hel;. code"
+                }
+                else {
+                    $dvlp_options = ''
+                }
+            } while ($dvlp_options -ne 'kw' -And $dvlp_options -ne '')
+        }
+    } while ($dvlp_options -ieq 'kw')
+    
+    
+    Write-Host "`r`nGoodbye!`r`n"
+}
 
-
-Write-Host "`r`nGoodbye!`r`n"
+if ($img_tag -ne ""){
+    install_everything $img_tag
+}
