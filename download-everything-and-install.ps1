@@ -387,7 +387,7 @@ do {
                     # wsl.exe --set-default kalilinux-kali-rolling-latest
                     Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
                     wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
-                    powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                    wsl_docker_restart
                 }
             }
             elseif ($dvlp_options -ceq 'r') {
