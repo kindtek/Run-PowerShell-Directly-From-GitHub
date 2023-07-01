@@ -241,7 +241,7 @@ function install_everything {
                     Exit
                 }
             }
-            if (Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf) {
+            if (-Not (Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
 
                 $host.UI.RawUI.ForegroundColor = "White"
                 $host.UI.RawUI.BackgroundColor = "Black"
