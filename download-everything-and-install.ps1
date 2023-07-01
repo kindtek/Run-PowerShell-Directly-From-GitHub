@@ -418,6 +418,7 @@ function install_everything {
 }
 
 if ([string]::IsNullOrEmpty($args[0])) {
+    Import-Module $git_path/scripts/install-everything.ps1
     # write-host '$args[0] is empty'
     # write-host $args[0]
 } else {
