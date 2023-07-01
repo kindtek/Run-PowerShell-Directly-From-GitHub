@@ -323,17 +323,19 @@ do {
             else {
                 $wsl_distro_undo_option = ''
             }
-            $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
-            $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
-            if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
-                $restart_option = "`r`n`t- [r]estart WSL"
+            if (get_default_wsl_distro -eq $FAILSAFE_WSL_DISTRO){
+                $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
             }
-            else {
-                $restart_option = ""
+            
+            $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
+            $restart_option = "`r`n`t- [r]estart docker"
+            if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                $restart_option = $restart_option + "`r`n`t- [R]estart WSL"
             }
 
+
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-            Write-Host "`r`nChoose from the following:`r`n`r`n`t- [c]li`r`n`t- [d]ocker image install`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
+            Write-Host "`r`nChoose from the following:`r`n`r`n`t- [c]ommand line`r`n`t- [d]ocker image import`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
             $dvlp_options = Read-Host
             if ($dvlp_options -ieq 'f') {
                 try {
@@ -398,10 +400,11 @@ do {
                     powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                 }
             }
-            elseif ($dvlp_options -ieq 'r') {
+            elseif ($dvlp_options -ceq 'r') {
                 powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
-                # elseif ($dvlp_options -ieq 'v') {
-                #     wsl sh -c "cd /hel;. code"
+            }
+            elseif ($dvlp_options -ceq 'R') {
+                wsl_docker_restart
             }
             elseif ($dvlp_options -ceq 'R!') {
                 reboot_prompt
