@@ -77,7 +77,6 @@ function run_devels_playground {
     param (
         $git_path, $img_name_tag, $non_interactive, $default_distro
     )
-    $docker_daemon_online = docker search scratch --limit 1 --format helloworld | Out-Null
     try {
         $software_name = "docker import tool"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
@@ -101,8 +100,7 @@ function run_devels_playground {
         # &$cmd_command = cmd /c start powershell.exe -Command "$git_path/devels_playground/docker-images-build-in-background.ps1" -WindowStyle "Maximized"
 
         Write-Host "establishing a connection with docker desktop ...`r`n" 
-        $docker_daemon_online = docker search scratch --limit 1 --format helloworld
-        if ($docker_daemon_online -eq 'helloworld') {
+        if (is_docker_desktop_online -eq $true) {
             Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $global:img_name_tag"
             # Write-Host "$([char]27)[2J"
