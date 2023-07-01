@@ -417,9 +417,9 @@ function install_everything {
 }
 
 if ([string]::IsNullOrEmpty($args[0])) {
-    write-host '$args[0] is empty'
-    write-host $args[0]
+    # write-host '$args[0] is empty'
+    # write-host $args[0]
 } else {
-    write-host "$args[0] is not empty"
+    # write-host "$args[0] is not empty"
     install_everything $args[0]
 }
