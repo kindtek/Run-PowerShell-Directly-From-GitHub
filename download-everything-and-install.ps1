@@ -200,7 +200,7 @@ do {
             # $git_path, $img_name_tag, $non_interactive, $default_distro
             run_devels_playground "$git_path" "default"
             # install distro requested in arg
-            run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" 
+            run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default" 
         }
 
         do {
@@ -226,6 +226,13 @@ do {
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
             Write-Host "`r`nChoose from the following:`r`n`r`n`t- [c]li`r`n`t- [d]ocker image install`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
             $dvlp_options = Read-Host
+            if ($dvl_options -ieq 'f') {
+                try {
+                    wsl -s $failsafe_wsl_distro
+                } catch {
+                    run_devels_playground "$git_path" "default"
+                }
+            }
             if ($dvlp_options -like 'c**') {    
                 if ($dvlp_options -ieq 'c') {
                     Write-Host "`r`n`t[l]inux or [w]indows"
