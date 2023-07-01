@@ -66,7 +66,7 @@ function set_default_wsl_distro {
                 }
             }
             wsl_docker_restart
-            require_docker_online
+            powershell ${function:require_docker_online} 
             return $false
         } else {
             return $true
@@ -261,7 +261,7 @@ do {
         $host.UI.RawUI.BackgroundColor = "DarkRed"
 
         if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-            require_docker_online
+            powershell ${function:require_docker_online} 
             # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
             # $git_path, $img_name_tag, $non_interactive, $default_distro
             try {
@@ -297,7 +297,7 @@ do {
                 Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                 try {
                     wsl -s $FAILSAFE_WSL_DISTRO
-                    require_docker_online
+                    powershell ${function:require_docker_online} 
                 }
                 catch {
                     try {
@@ -330,7 +330,7 @@ do {
             if ($dvlp_options -ieq 'f') {
                 try {
                     wsl -s $FAILSAFE_WSL_DISTRO
-                    require_docker_online
+                    powershell ${function:require_docker_online} 
                 }
                 catch {
                     try {
@@ -364,7 +364,7 @@ do {
                 }
             }
             elseif ($dvlp_options -ieq 'd') {
-                require_docker_online
+                powershell ${function:require_docker_online} 
                 run_devels_playground "$git_path" "$img_name_tag"
             }
             elseif ($dvlp_options -like 'k*') {
