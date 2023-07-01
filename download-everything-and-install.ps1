@@ -81,7 +81,7 @@ function run_devels_playground {
     try {
         $software_name = "docker import tool"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-        Write-Host "`r`nIMPORTANT:`tkeep docker desktop running or the import will fail`r`n" 
+        Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
         Start-Sleep 3
         # @TODO: add cdir and python to install with same behavior as other installs above
         # not eloquent at all but good for now
