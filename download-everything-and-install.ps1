@@ -63,7 +63,7 @@ function set_default_wsl_distro {
                 }
             }
             wsl_docker_restart
-            powershell ${function:require_docker_online} 
+            Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
             return $false
         } else {
             return $true
@@ -263,7 +263,7 @@ function install_everything {
             $host.UI.RawUI.BackgroundColor = "DarkRed"
     
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-                powershell ${function:require_docker_online} 
+                Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
                 try {
@@ -299,7 +299,7 @@ function install_everything {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        powershell ${function:require_docker_online} 
+                        Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
                     }
                     catch {
                         try {
@@ -332,7 +332,7 @@ function install_everything {
                 if ($dvlp_options -ieq 'f') {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        powershell ${function:require_docker_online} 
+                        Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
                     }
                     catch {
                         try {
@@ -366,7 +366,7 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_options -ieq 'd') {
-                    powershell ${function:require_docker_online} 
+                    Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
                 elseif ($dvlp_options -ieq 'd!'){
