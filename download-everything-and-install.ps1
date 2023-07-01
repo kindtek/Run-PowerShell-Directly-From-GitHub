@@ -20,14 +20,14 @@ function install_winget {
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
         powershell.exe -executionpolicy remotesigned -File $file
         # install winget and use winget to install everything else
-        Write-Host "Installing $software_name ..." 
+        Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
         # Get-Process | Where-Object { $_.HasExited }
-        Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.winget-installed"
+        Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.winget-installed"
     }
     else {
-        Write-Host "$software_name already installed"   
+        Write-Host "$software_name already installed" -ForegroundColor DarkCyan
     }
 }
 
@@ -43,22 +43,22 @@ function install_repo {
     Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" | Out-Null
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
-        Write-Host "Installing $software_name ..."
+        Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
         winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
             winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-            Write-Host "$software_name installed" | Out-File -FilePath "$git_parent_path/.github-installed"; `
+            Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.github-installed"; `
     
     }
     else {
-        Write-Host "$software_name already installed" 
+        Write-Host "$software_name already installed" -ForegroundColor DarkCyan
     }
     # allow git to be used in same window immediately after installation
-    Write-Host "making sure git command works"
+    Write-Host "making sure git command works" -ForegroundColor DarkCyan
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     powershell.exe -Command $refresh_envs | Out-Null
-    Write-Host "checking if github repos need to be updated ..." 
+    Write-Host "checking if github repos need to be updated ..." -ForegroundColor DarkCyan
     Set-Location $git_parent_path
     ((git -C $repo_dir_name pull --progress) -Or `
     (git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_dir_name) -And `
