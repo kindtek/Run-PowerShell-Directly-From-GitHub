@@ -1,5 +1,4 @@
 $env:WSL_UTF8 = 1
-$img_tag = $args[0]
 $global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
 
 
@@ -417,6 +416,8 @@ function install_everything {
     Write-Host "`r`nGoodbye!`r`n"
 }
 
-if ($img_tag -ne ""){
-    install_everything $img_tag
+if ($args[0] -ne "") {
+    write-host '$args[0]: ' + $args[0]
+    start-sleep 5
+    install_everything $args[0]
 }
