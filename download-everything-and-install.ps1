@@ -257,6 +257,8 @@ function install_everything {
             install_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
     
             Import-Module $git_path/scripts/install-everything.ps1
+            is_docker_backend_online
+            is_docker_desktop_online
             run_installer
     
             $host.UI.RawUI.ForegroundColor = "Black"
