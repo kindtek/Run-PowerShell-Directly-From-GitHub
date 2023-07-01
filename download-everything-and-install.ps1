@@ -207,7 +207,7 @@ function install_everything {
         $git_path = "$git_parent_path/$repo_dir_name"
         $img_name = 'devels-playground'
         $img_name_tag = "$img_name`:$img_tag"
-    
+
         $confirmation = ''
         
     
@@ -221,6 +221,9 @@ function install_everything {
             Write-Host "$([char]27)[2J"
             Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
     
+        }
+        else {
+            . $git_path/scripts/install-everything.ps1
         }
         if ($confirmation -eq '') {  
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
@@ -421,7 +424,6 @@ function install_everything {
 }
 
 if ([string]::IsNullOrEmpty($args[0])) {
-    . $git_path/scripts/install-everything.ps1
     # write-host '$args[0] is empty'
     # write-host $args[0]
 }
