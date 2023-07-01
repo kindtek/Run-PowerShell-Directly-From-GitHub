@@ -22,9 +22,10 @@ function revert_default_wsl_distro {
             return $false
         }
     }
-    if ( (get_default_wsl_distro) -eq $FAILSAFE_WSL_DISTRO ){
+    if ( (get_default_wsl_distro) -eq $FAILSAFE_WSL_DISTRO ) {
         return $true
-    } else {
+    }
+    else {
         return $false
     }
 }
@@ -63,9 +64,10 @@ function set_default_wsl_distro {
                 }
             }
             wsl_docker_restart
-            Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
+            Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" 
             return $false
-        } else {
+        }
+        else {
             return $true
         }
     }
@@ -254,7 +256,7 @@ function install_everything {
     
             install_winget $git_parent_path
     
-            install_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
+            install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
     
             Import-Module $git_path/scripts/install-everything.ps1
             run_installer
@@ -263,7 +265,7 @@ function install_everything {
             $host.UI.RawUI.BackgroundColor = "DarkRed"
     
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-                Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
+                Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" 
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
                 try {
@@ -299,7 +301,7 @@ function install_everything {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
+                        Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" 
                     }
                     catch {
                         try {
@@ -332,7 +334,7 @@ function install_everything {
                 if ($dvlp_options -ieq 'f') {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
+                        Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" 
                     }
                     catch {
                         try {
@@ -366,10 +368,10 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_options -ieq 'd') {
-                    Start-Process powershell -ArgumentList "-command &{require_docker_online}" 
+                    Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" 
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
-                elseif ($dvlp_options -ieq 'd!'){
+                elseif ($dvlp_options -ieq 'd!') {
                     run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
                 elseif ($dvlp_options -like 'k*') {
@@ -423,7 +425,8 @@ if ([string]::IsNullOrEmpty($args[0])) {
     Import-Module $git_path/scripts/install-everything.ps1
     # write-host '$args[0] is empty'
     # write-host $args[0]
-} else {
+}
+else {
     # write-host "$args[0] is not empty"
     install_everything $args[0]
 }
