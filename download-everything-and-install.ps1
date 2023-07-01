@@ -113,7 +113,7 @@ function run_devels_playground {
             # write-host `$default_distro $default_distro
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
-            # Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
+            Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
         } else {
             Write-Host "`r`nmake sure docker desktop is running"
             Write-Host "still not working? try: `r`n`t- restart WSL`r`n`t- change your default distro (ie: wsl -s kalilinux-kali-rolling-latest )"
