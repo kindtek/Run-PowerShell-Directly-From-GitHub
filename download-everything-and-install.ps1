@@ -1,8 +1,8 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
-$env:WSL_UTF8=1
+$env:WSL_UTF8 = 1
 $img_tag = $args[0]
-$failsafe_wsl_distro = 'kalilinux-kali-rolling-latest'
+$global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
 
 function get_default_wsl_distro {
     $default_wsl_distro = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
@@ -114,7 +114,8 @@ function run_devels_playground {
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
-        } else {
+        }
+        else {
             Write-Host "`r`nmake sure docker desktop is running"
             Write-Host "still not working? try: `r`n`t- restart WSL`r`n`t- change your default distro (ie: wsl -s kalilinux-kali-rolling-latest )"
         }
@@ -198,20 +199,44 @@ do {
             require_docker_online
             # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
             # $git_path, $img_name_tag, $non_interactive, $default_distro
-            run_devels_playground "$git_path" "default"
+            try {
+                run_devels_playground "$git_path" "default"
+            }
+            catch {
+                Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+            }
             # install distro requested in arg
-            run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default" 
+            try {
+                run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
+            }
+            catch {
+                Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
+                try {
+                    wsl -s $FAILSAFE_WSL_DISTRO
+                }
+                catch {
+                    try {
+                        run_devels_playground "$git_path" "default"
+                    }
+                    catch {
+                        Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                    }
+                }
+            }
+             
         }
 
         do {
             Write-Host "`r`n`r`n"
             $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
             if ( "$global:ORIG_DEFAULT_WSL_DISTRO" -eq "" ) {
-                $global:ORIG_DEFAULT_WSL_DISTRO = $failsafe_wsl_distro
+                $global:ORIG_DEFAULT_WSL_DISTRO = $FAILSAFE_WSL_DISTRO
                 $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $global:ORIG_DEFAULT_WSL_DISTRO)"
-            } elseif ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
+            }
+            elseif ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
                 $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
-            } else {
+            }
+            else {
                 $wsl_distro_undo_option = ''
             }
             $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
@@ -228,12 +253,14 @@ do {
             $dvlp_options = Read-Host
             if ($dvlp_options -ieq 'f') {
                 try {
-                    wsl -s $failsafe_wsl_distro
-                } catch {
+                    wsl -s $FAILSAFE_WSL_DISTRO
+                }
+                catch {
                     try {
                         run_devels_playground "$git_path" "default"
-                    } catch {
-                        Write-Host "error setting $failsafe_wsl_distro as default wsl distro"
+                    }
+                    catch {
+                        Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
                     }
                 }
             }
@@ -264,22 +291,22 @@ do {
                 run_devels_playground "$git_path" "$img_name_tag"
             }
             elseif ($dvlp_options -like 'k*') {
-                if ($dvlp_options -ieq 'k'){
+                if ($dvlp_options -ieq 'k') {
                     Write-Host "`r`n`t[l]inux or [w]indows"
                     $dvlp_kindtek_options = Read-Host
                     if ($dvlp_kindtek_options -ieq 'l' -or $dvlp_kindtek_options -ieq 'w') {
                         $dvlp_options = $dvlp_options + $dvlp_kindtek_options
                     }
                 }
-                if ($dvlp_options -ieq 'kl' ){
+                if ($dvlp_options -ieq 'kl' ) {
                     wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
                 }
                 elseif ($dvlp_options -ieq 'kw' ) {
-                     Write-Host 'checking for new updates ...'
+                    Write-Host 'checking for new updates ...'
                 }
             }
             elseif ($dvlp_options -ieq 'u') {
-                if  ($global:ORIG_DEFAULT_WSL_DISTRO -ne ""){
+                if ($global:ORIG_DEFAULT_WSL_DISTRO -ne "") {
                     # wsl.exe --set-default kalilinux-kali-rolling-latest
                     Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
                     wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
