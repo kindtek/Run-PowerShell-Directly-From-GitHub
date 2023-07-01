@@ -395,14 +395,17 @@ function install_everything {
                         Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
                         wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
                         wsl_docker_restart
+                        Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_options -ceq 'r') {
                     wsl_docker_restart
+                    Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                 }
                 elseif ($dvlp_options -ceq 'R') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                        Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_options -ceq 'R!') {
