@@ -241,28 +241,29 @@ function install_everything {
                     Exit
                 }
             }
-            $host.UI.RawUI.ForegroundColor = "White"
-            $host.UI.RawUI.BackgroundColor = "Black"
-            Write-Host ""
-            Start-Sleep 1
-            Write-Host ""
-            Start-Sleep 1
-            Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
-            Start-Sleep 1
-            Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
-            
-            # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
-            New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
-    
-            install_winget $git_parent_path
-    
-            install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
-    
-            . $git_path/scripts/install-everything.ps1
-            if (Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf){
-                Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;run_installer;exit;}" -Wait 
-            } else {
+            if (Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf) {
+
+                $host.UI.RawUI.ForegroundColor = "White"
+                $host.UI.RawUI.BackgroundColor = "Black"
+                Write-Host ""
+                Start-Sleep 1
+                Write-Host ""
+                Start-Sleep 1
+                Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
+                Start-Sleep 1
+                Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
+                
+                # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
+                New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
+        
+                install_winget $git_parent_path
+        
+                install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
+                . $git_path/scripts/install-everything.ps1
                 run_installer
+            }
+            else {
+                Start-Process powershell -ArgumentList "-command &{install_winget $git_parent_path; install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch;. $git_path/scripts/install-everything.ps1;run_installer;exit;}" -Wait 
             }
     
             $host.UI.RawUI.ForegroundColor = "Black"
