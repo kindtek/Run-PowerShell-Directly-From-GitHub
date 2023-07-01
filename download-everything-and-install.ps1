@@ -9,6 +9,72 @@ function get_default_wsl_distro {
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
     return $default_wsl_distro
 }
+
+function revert_default_wsl_distro {
+    $FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
+    try {
+        wsl -s $FAILSAFE_WSL_DISTRO
+    }
+    catch {
+        try {
+            run_devels_playground "$git_path" "default"
+        }
+        catch {
+            Write-Host "error reverting to $FAILSAFE_WSL_DISTRO as default wsl distro"
+            return $false
+        }
+    }
+    if ( (get_default_wsl_distro) -eq $FAILSAFE_WSL_DISTRO ){
+        return $true
+    } else {
+        return $false
+    }
+}
+function set_default_wsl_distro {
+    param (
+        $new_wsl_default_distro
+    )
+    try {
+        $git_path = "$env:USERPROFILE/repos/kindtek/dvlw"
+        $old_wsl_default_distro = get_default_wsl_distro
+        try {
+            wsl -s $new_wsl_default_distro
+        }
+        catch {
+            try {
+                run_devels_playground "$git_path" "default"
+            }
+            catch {
+                Write-Host "error setting $new_wsl_default_distro as default wsl distro"
+            }
+        }
+        # handle failed installations
+        if ( (get_default_wsl_distro) -ne $new_wsl_default_distro -Or (is_docker_desktop_online) -eq $false ) {
+            Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
+            Start-Sleep 3
+            Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
+            try {
+                wsl -s $old_wsl_default_distro
+            }
+            catch {
+                try {
+                    run_devels_playground "$git_path" "default"
+                }
+                catch {
+                    Write-Host "error setting $old_wsl_default_distro as default wsl distro"
+                }
+            }
+            wsl_docker_restart
+            require_docker_online
+            return $false
+        } else {
+            return $true
+        }
+    }
+    catch {
+        return $false
+    }
+}
 function install_winget {
     param (
         $git_parent_path
@@ -205,21 +271,23 @@ do {
             }
             # install distro requested in arg
             try {
+                $old_wsl_default_distro = get_default_wsl_distro
                 run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
-                if ( is_docker_desktop_online -eq $false ){
-                    Write-Host "docker desktop failed to start"
-                    Write-Host "reverting to $FAILSAFE_WSL_DISTRO as default wsl distro ..."
+                $new_wsl_default_distro = get_default_wsl_distro
+                if ( is_docker_desktop_online -eq $false ) {
+                    Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
+                    Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                     try {
-                        wsl -s $FAILSAFE_WSL_DISTRO
+                        wsl -s $old_wsl_default_distro
                         wsl_docker_restart
                         require_docker_online
                     }
                     catch {
                         try {
-                            run_devels_playground "$git_path" "default"
+                            revert_default_wsl_distro
                         }
                         catch {
-                            Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                            Write-Host "error setting failsafe as default wsl distro"
                         }
                     }
                 }
@@ -232,10 +300,10 @@ do {
                 }
                 catch {
                     try {
-                        run_devels_playground "$git_path" "default"
+                        revert_default_wsl_distro
                     }
                     catch {
-                        Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                        Write-Host "error setting failsafe as default wsl distro"
                     }
                 }
             }
