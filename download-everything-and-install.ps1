@@ -142,6 +142,7 @@ function run_devels_playground {
         $git_path, $img_name_tag, $non_interactive, $default_distro
     )
     try {
+        Import-Module $git_path/scripts/install-everything.ps1
         $software_name = "docker import tool"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
