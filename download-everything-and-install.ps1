@@ -416,9 +416,6 @@ function install_everything {
     Write-Host "`r`nGoodbye!`r`n"
 }
 
-$img_tag = $args[0]
-if (![string]::IsNullOrEmpty($img_tag)) {
-    write-host "`$img_tag: '$img_tag'"
-    start-sleep 5
+if (![string]::IsNullOrEmpty($args[0])) {
     install_everything $args[0]
 }
