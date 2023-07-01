@@ -64,7 +64,7 @@ function set_default_wsl_distro {
                 }
             }
             wsl_docker_restart
-            Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" -Wait 
+            Start-Process powershell -ArgumentList "-noexit", "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online}" -Wait 
             return $false
         }
         else {
@@ -258,14 +258,14 @@ function install_everything {
     
             install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
     
-            Import-Module $git_path/scripts/install-everything.ps1
+            . $git_path/scripts/install-everything.ps1
             run_installer
     
             $host.UI.RawUI.ForegroundColor = "Black"
             $host.UI.RawUI.BackgroundColor = "DarkRed"
     
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-                Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" -Wait
+                Start-Process powershell -ArgumentList "-noexit", "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online}" -Wait
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
                 try {
@@ -301,7 +301,7 @@ function install_everything {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" -Wait 
+                        Start-Process powershell -ArgumentList "-noexit", "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online}" -Wait 
                     }
                     catch {
                         try {
@@ -334,7 +334,7 @@ function install_everything {
                 if ($dvlp_options -ieq 'f') {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" -Wait 
+                        Start-Process powershell -ArgumentList "-noexit", "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online}" -Wait 
                     }
                     catch {
                         try {
@@ -368,7 +368,7 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_options -ieq 'd') {
-                    Start-Process powershell -ArgumentList "-noexit", "-command &{require_docker_online}" -Wait 
+                    Start-Process powershell -ArgumentList "-noexit", "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online}" -Wait 
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
                 elseif ($dvlp_options -ieq 'd!') {
