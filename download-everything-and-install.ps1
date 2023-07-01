@@ -64,7 +64,7 @@ function set_default_wsl_distro {
                 }
             }
             wsl_docker_restart
-            Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
+            Start-Process powershell -LoadUserProfile -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
             return $false
         }
         else {
@@ -256,12 +256,12 @@ function install_everything {
                 run_installer
             }
             else {
-                Start-Process powershell -ArgumentList "-noexit", "-command &{. $git_path/powerhell/download-everything-and-install.ps1;install_winget $git_parent_path; install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch;. $git_path/scripts/install-everything.ps1;run_installer;}" -Wait
+                Start-Process powershell -LoadUserProfile -ArgumentList "-noexit", "-command &{. $git_path/powerhell/download-everything-and-install.ps1;install_winget $git_parent_path; install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch;. $git_path/scripts/install-everything.ps1;run_installer;}" -Wait
             }
 
     
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-                Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
+                Start-Process powershell -LoadUserProfile -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
                 try {
@@ -297,7 +297,7 @@ function install_everything {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
+                        Start-Process powershell -LoadUserProfile -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
                     }
                     catch {
                         try {
@@ -330,7 +330,7 @@ function install_everything {
                 if ($dvlp_options -ieq 'f') {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
+                        Start-Process powershell -LoadUserProfile -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
                     }
                     catch {
                         try {
@@ -360,11 +360,11 @@ function install_everything {
                     }
                     elseif ($dvlp_options -ieq 'cdw' ) {
                         # one day might get the windows cdir working
-                        Start-Process powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
+                        Start-Process powershell.exe -LoadUserProfile -noexit -command Set-Location -literalPath $env:USERPROFILE
                     }
                 }
                 elseif ($dvlp_options -ieq 'd') {
-                    Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
+                    Start-Process powershell -LoadUserProfile -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
                 elseif ($dvlp_options -ieq 'd!') {
@@ -391,17 +391,17 @@ function install_everything {
                         Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
                         wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
                         wsl_docker_restart
-                        Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
+                        Start-Process powershell -LoadUserProfile -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_options -ceq 'r') {
                     wsl_docker_restart
-                    Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
+                    Start-Process powershell -LoadUserProfile -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                 }
                 elseif ($dvlp_options -ceq 'R') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
-                        Start-Process powershell -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
+                        Start-Process powershell -LoadUserProfile -ArgumentList "-command &{. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_options -ceq 'R!') {
