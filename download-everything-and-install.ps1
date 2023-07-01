@@ -312,7 +312,7 @@ do {
         }
 
         do {
-            Write-Host "`r`n`r`n"
+            $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
             if ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
                 $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
@@ -325,7 +325,7 @@ do {
             # }
             $restart_option = "`r`n`t- [r]estart"
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-            Write-Host "`r`nChoose from the following:`r`n`r`n`t- [c]ommand line`r`n`t- [d]ocker devel`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
+            Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`r`n`t- [c]ommand line`r`n`t- [d]ocker devel`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
             $dvlp_options = Read-Host
             if ($dvlp_options -ieq 'f') {
                 try {
@@ -394,7 +394,6 @@ do {
                 wsl_docker_restart
             }
             elseif ($dvlp_options -ceq 'R') {
-                $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                     powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                 }
