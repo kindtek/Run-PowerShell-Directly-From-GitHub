@@ -204,7 +204,6 @@ function install_everything {
         $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
         $git_path = "$git_parent_path/$repo_dir_name"
         $img_name = 'devels-playground'
-        $img_tag = $args[0]
         $img_name_tag = "$img_name`:$img_tag"
     
         $confirmation = ''
