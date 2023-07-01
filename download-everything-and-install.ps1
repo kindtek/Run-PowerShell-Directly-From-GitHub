@@ -401,10 +401,10 @@ do {
                 }
             }
             elseif ($dvlp_options -ceq 'r') {
-                powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                wsl_docker_restart
             }
             elseif ($dvlp_options -ceq 'R') {
-                wsl_docker_restart
+                powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
             }
             elseif ($dvlp_options -ceq 'R!') {
                 reboot_prompt
