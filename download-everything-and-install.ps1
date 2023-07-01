@@ -208,6 +208,21 @@ do {
             # install distro requested in arg
             try {
                 run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                if ( is_docker_desktop_online -eq $false ){
+                    Write-Host "docker desktop failed to start"
+                    Write-Host "reverting to $FAILSAFE_WSL_DISTRO as default wsl distro ..."
+                    try {
+                        wsl -s $FAILSAFE_WSL_DISTRO
+                    }
+                    catch {
+                        try {
+                            run_devels_playground "$git_path" "default"
+                        }
+                        catch {
+                            Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                        }
+                    }
+                }
             }
             catch {
                 Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
