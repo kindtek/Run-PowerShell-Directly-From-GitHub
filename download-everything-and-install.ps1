@@ -4,6 +4,7 @@ $env:WSL_UTF8 = 1
 $img_tag = $args[0]
 $global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
 
+
 function get_default_wsl_distro {
     $default_wsl_distro = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
@@ -323,19 +324,12 @@ do {
             else {
                 $wsl_distro_undo_option = ''
             }
-            if (get_default_wsl_distro -eq $FAILSAFE_WSL_DISTRO){
-                $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
-            }
-            
-            $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
-            $restart_option = "`r`n`t- [r]estart docker"
-            if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
-                $restart_option = $restart_option + "`r`n`t- [R]estart WSL"
-            }
-
-
+            # if (get_default_wsl_distro -eq $FAILSAFE_WSL_DISTRO){
+            #     $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
+            # }
+            $restart_option = "`r`n`t- [r]estart"
             # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-            Write-Host "`r`nChoose from the following:`r`n`r`n`t- [c]ommand line`r`n`t- [d]ocker image import`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
+            Write-Host "`r`nChoose from the following:`r`n`r`n`t- [c]ommand line`r`n`t- [d]ocker devel`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
             $dvlp_options = Read-Host
             if ($dvlp_options -ieq 'f') {
                 try {
@@ -404,7 +398,10 @@ do {
                 wsl_docker_restart
             }
             elseif ($dvlp_options -ceq 'R') {
-                powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
+                if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                    powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                }
             }
             elseif ($dvlp_options -ceq 'R!') {
                 reboot_prompt
