@@ -211,6 +211,7 @@ do {
                     Write-Host "reverting to $FAILSAFE_WSL_DISTRO as default wsl distro ..."
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
+                        require_docker_online
                     }
                     catch {
                         try {
@@ -226,6 +227,7 @@ do {
                 Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                 try {
                     wsl -s $FAILSAFE_WSL_DISTRO
+                    require_docker_online
                 }
                 catch {
                     try {
@@ -267,6 +269,7 @@ do {
             if ($dvlp_options -ieq 'f') {
                 try {
                     wsl -s $FAILSAFE_WSL_DISTRO
+                    require_docker_online
                 }
                 catch {
                     try {
