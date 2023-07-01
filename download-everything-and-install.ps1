@@ -263,7 +263,7 @@ function install_everything {
                 run_installer
             }
             else {
-                Start-Process powershell -ArgumentList "-command &{install_winget $git_parent_path; install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch;. $git_path/scripts/install-everything.ps1;run_installer;exit;}" -Wait 
+                Start-Process powershell -ArgumentList ". $git_path/powerhell/download-everything-and-install.ps1;-command &{install_winget $git_parent_path; install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch;. $git_path/scripts/install-everything.ps1;run_installer;exit;}" -Wait 
             }
     
             $host.UI.RawUI.ForegroundColor = "Black"
