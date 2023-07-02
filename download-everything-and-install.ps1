@@ -200,7 +200,7 @@ function install_everything {
     )
     $host.UI.RawUI.ForegroundColor = "White"
     $host.UI.RawUI.BackgroundColor = "Black"
-    $dvlp_options = 'n'
+    $dvlp_choice = 'n'
     do {
         $repo_src_owner = 'kindtek'
         $repo_src_name = 'devels-workshop'
@@ -212,7 +212,7 @@ function install_everything {
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
     
-        if (($dvlp_options -ine 'kw') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
+        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
             Write-Host "$([char]27)[2J"
             $host.UI.RawUI.ForegroundColor = "Black"
             $host.UI.RawUI.BackgroundColor = "DarkRed"
@@ -330,13 +330,13 @@ function install_everything {
                 #     $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
                 # }
                 $restart_option = "`r`n`t- [r]estart"
-                # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
+                # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
+                $dvlp_options = "`r`n`r`n`r`nChoose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
-                $dvlp_options = Read-Host
-                if ($dvlp_options -ieq 'f') {
+                $dvlp_choice = Read-Host $dvlp_options
+                if ($dvlp_choice -ieq 'f') {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
                         Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
@@ -350,51 +350,51 @@ function install_everything {
                         }
                     }
                 }
-                elseif ($dvlp_options -like 'c**') {    
-                    if ($dvlp_options -ieq 'c') {
+                elseif ($dvlp_choice -like 'c**') {    
+                    if ($dvlp_choice -ieq 'c') {
                         Write-Host "`r`n`t[l]inux or [w]indows"
                         $dvlp_cli_options = Read-Host
                     }
                     if ($dvlp_cli_options -ieq 'l' -or $dvlp_cli_options -ieq 'w') {
-                        $dvlp_options = $dvlp_options + $dvlp_cli_options
+                        $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
-                    if ($dvlp_options -ieq 'cl' ) {
+                    if ($dvlp_choice -ieq 'cl' ) {
                         wsl.exe --cd /hal
                     }
-                    elseif ($dvlp_options -ieq 'cdl' ) {
+                    elseif ($dvlp_choice -ieq 'cdl' ) {
                         wsl.exe --cd /hal --exec cdir
                     }
-                    elseif ($dvlp_options -ieq 'cw' ) {
+                    elseif ($dvlp_choice -ieq 'cw' ) {
                         powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
                     }
-                    elseif ($dvlp_options -ieq 'cdw' ) {
+                    elseif ($dvlp_choice -ieq 'cdw' ) {
                         # one day might get the windows cdir working
                         Start-Process powershell.exe -LoadUserProfile -noexit -command Set-Location -literalPath $env:USERPROFILE
                     }
                 }
-                elseif ($dvlp_options -ieq 'd') {
+                elseif ($dvlp_choice -ieq 'd') {
                     Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
-                elseif ($dvlp_options -ieq 'd!') {
+                elseif ($dvlp_choice -ieq 'd!') {
                     run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
-                elseif ($dvlp_options -like 'k*') {
-                    if ($dvlp_options -ieq 'k') {
+                elseif ($dvlp_choice -like 'k*') {
+                    if ($dvlp_choice -ieq 'k') {
                         Write-Host "`r`n`t[l]inux or [w]indows"
                         $dvlp_kindtek_options = Read-Host
                         if ($dvlp_kindtek_options -ieq 'l' -or $dvlp_kindtek_options -ieq 'w') {
-                            $dvlp_options = $dvlp_options + $dvlp_kindtek_options
+                            $dvlp_choice = $dvlp_choice + $dvlp_kindtek_options
                         }
                     }
-                    if ($dvlp_options -ieq 'kl' ) {
+                    if ($dvlp_choice -ieq 'kl' ) {
                         wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
                     }
-                    elseif ($dvlp_options -ieq 'kw' ) {
+                    elseif ($dvlp_choice -ieq 'kw' ) {
                         Write-Host 'checking for new updates ...'
                     }
                 }
-                elseif ($dvlp_options -ieq 'u') {
+                elseif ($dvlp_choice -ieq 'u') {
                     if ($global:ORIG_DEFAULT_WSL_DISTRO -ne "") {
                         # wsl.exe --set-default kalilinux-kali-rolling-latest
                         Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
@@ -404,28 +404,28 @@ function install_everything {
                         Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
-                elseif ($dvlp_options -ceq 'r') {
+                elseif ($dvlp_choice -ceq 'r') {
                     # wsl_docker_restart
                     wsl_docker_restart_new_win
                     Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                 }
-                elseif ($dvlp_options -ceq 'R') {
+                elseif ($dvlp_choice -ceq 'R') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                         Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
-                elseif ($dvlp_options -ceq 'R!') {
+                elseif ($dvlp_choice -ceq 'R!') {
                     reboot_prompt
-                    # elseif ($dvlp_options -ieq 'v') {
+                    # elseif ($dvlp_choice -ieq 'v') {
                     #     wsl sh -c "cd /hel;. code"
                 }
                 else {
-                    $dvlp_options = ''
+                    $dvlp_choice = ''
                 }
-            } while ($dvlp_options -ne 'kw' -And $dvlp_options -ne '')
+            } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne '')
         }
-    } while ($dvlp_options -ieq 'kw')
+    } while ($dvlp_choice -ieq 'kw')
     
     
     Write-Host "`r`nGoodbye!`r`n"
