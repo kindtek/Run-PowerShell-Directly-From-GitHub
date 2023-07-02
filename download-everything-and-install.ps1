@@ -324,7 +324,7 @@ function install_everything {
                 # }
                 $restart_option = "`r`n`t- [r]estart"
                 # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                Write-Host "`r`n`r`n`r`nChoose from the following:`r`n- [d]ocker devel`r`n`t$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
+                Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
                 $dvlp_options = Read-Host
                 if ($dvlp_options -ieq 'f') {
                     try {
