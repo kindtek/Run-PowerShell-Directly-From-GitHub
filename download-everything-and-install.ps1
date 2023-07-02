@@ -314,6 +314,11 @@ function install_everything {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
                 if (("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") -and (!([string]::IsNullOrEmpty($global:ORIG_DEFAULT_WSL_DISTRO)))) {
+                if ([string]::IsNullOrEmpty($global:ORIG_DEFAULT_WSL_DISTRO)) {
+                    $global:ORIG_DEFAULT_WSL_DISTRO = $FAILSAFE_WSL_DISTRO
+                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $global:ORIG_DEFAULT_WSL_DISTRO)"
+                }
+                elseif ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
                     $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
                 }
                 else {
