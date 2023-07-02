@@ -178,9 +178,7 @@ function run_devels_playground {
             # write-host `$default_distro $default_distro
             $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
             $current_process_object = Get-Process -id $current_process
-            $current_process_handle = $current_process_object.MainWindowHandle
-            $current_process_pointer = [System.IntPtr]$current_process_object
-            $current_process_pointer_handle = $current_process_pointer.MainWindowHandle
+            Set-ForegroundWindow $current_process_object.MainWindowHandle
             Set-ForegroundWindow (Get-Process PowerShell).MainWindowHandle
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
@@ -334,10 +332,7 @@ function install_everything {
                 Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
                 $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 $current_process_object = Get-Process -id $current_process
-                $current_process_handle = $current_process_object.MainWindowHandle
-                $current_process_pointer = [System.IntPtr]$current_process_object
-                $current_process_pointer_handle = $current_process_pointer.MainWindowHandle
-                Set-ForegroundWindow (Get-Process PowerShell).MainWindowHandle
+                Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_options = Read-Host
                 if ($dvlp_options -ieq 'f') {
                     try {
