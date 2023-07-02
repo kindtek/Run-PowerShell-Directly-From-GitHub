@@ -65,7 +65,7 @@ function set_default_wsl_distro {
             }
             # wsl_docker_restart
             wsl_docker_restart_new_win
-            Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
+            Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
             return $false
         }
         else {
@@ -263,7 +263,7 @@ function install_everything {
                 Start-Process powershell -LoadUserProfile -WindowStyle Hidden -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/download-everything-and-install.ps1;. $git_path/scripts/install-everything.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-                Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
+                Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
                 try {
@@ -300,7 +300,7 @@ function install_everything {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
+                        Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
                     }
                     catch {
                         try {
@@ -339,7 +339,7 @@ function install_everything {
                 if ($dvlp_options -ieq 'f') {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
+                        Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
                     }
                     catch {
                         try {
@@ -373,7 +373,7 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_options -ieq 'd') {
-                    Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
+                    Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
                 elseif ($dvlp_options -ieq 'd!') {
@@ -401,18 +401,18 @@ function install_everything {
                         wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
-                        Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
+                        Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_options -ceq 'r') {
                     # wsl_docker_restart
                     wsl_docker_restart_new_win
-                    Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
+                    Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                 }
                 elseif ($dvlp_options -ceq 'R') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
-                        Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
+                        Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_options -ceq 'R!') {
