@@ -236,7 +236,7 @@ function install_everything {
                 }
             }
             # args must not empty and dvlp must not installed
-            if (!([string]::IsNullOrEmpty($args)) -And !(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+            if (!([string]::IsNullOrEmpty($args)) -Or !(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
