@@ -265,7 +265,8 @@ function install_everything {
             else {
                 Start-Process powershell -LoadUserProfile -WindowStyle Hidden -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/devel-spawn.ps1;. $git_path/scripts/devel-tools.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
-            if (!([string]::IsNullOrEmpty($args[0])) -And !(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+            # args not null and dvlp not installed
+            if (!([string]::IsNullOrEmpty($args)) -And !(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
