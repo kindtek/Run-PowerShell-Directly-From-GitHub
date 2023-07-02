@@ -176,10 +176,10 @@ function run_devels_playground {
             # write-host `$img_name_tag $img_name_tag
             # write-host `$non_interactive $non_interactive
             # write-host `$default_distro $default_distro
-            $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
-            $current_process_object = Get-Process -id $current_process
-            Set-ForegroundWindow $current_process_object.MainWindowHandle
-            Set-ForegroundWindow ($current_process_object).MainWindowHandle
+            # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
+            # $current_process_object = Get-Process -id $current_process
+            # Set-ForegroundWindow $current_process_object.MainWindowHandle
+            # Set-ForegroundWindow ($current_process_object).MainWindowHandle
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
@@ -330,9 +330,9 @@ function install_everything {
                 $restart_option = "`r`n`t- [r]estart"
                 # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
                 Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
-                $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
-                $current_process_object = Get-Process -id $current_process
-                Set-ForegroundWindow $current_process_object.MainWindowHandle
+                # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
+                # $current_process_object = Get-Process -id $current_process
+                # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_options = Read-Host
                 if ($dvlp_options -ieq 'f') {
                     try {
