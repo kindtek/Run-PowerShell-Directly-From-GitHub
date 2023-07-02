@@ -179,7 +179,7 @@ function run_devels_playground {
             $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
             $current_process_object = Get-Process -id $current_process
             Set-ForegroundWindow $current_process_object.MainWindowHandle
-            Set-ForegroundWindow (Get-Process PowerShell).MainWindowHandle
+            Set-ForegroundWindow ($current_process_object).MainWindowHandle
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
