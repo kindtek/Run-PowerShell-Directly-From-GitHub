@@ -313,7 +313,7 @@ function install_everything {
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
-                if ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
+                if ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO" -and "$global:ORIG_DEFAULT_WSL_DISTRO" -ne "") {
                     $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
                 }
                 else {
@@ -324,7 +324,7 @@ function install_everything {
                 # }
                 $restart_option = "`r`n`t- [r]estart"
                 # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`r`n`t- [c]ommand line`r`n`t- [d]ocker devel`r`n`t- [k]indtek setup$wsl_distro_undo_option$restart_option`r`n`r`n`r`n(exit)"
+                Write-Host "`r`n`r`n`r`nChoose from the following:`r`n- [d]ocker devel`r`n`t$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
                 $dvlp_options = Read-Host
                 if ($dvlp_options -ieq 'f') {
                     try {
