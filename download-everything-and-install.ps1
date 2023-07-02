@@ -193,10 +193,6 @@ function install_everything {
     param (
         $img_tag
     )
-    $WindowState = '[DllImport("user32.dll")] public static extern bool ShowWindow(int handle, int state);'
-    add-type -name win -member $WindowState -namespace native
-    [native.win]::ShowWindow(([System.Diagnostics.Process]::GetCurrentProcess() | Get-Process).MainWindowHandle, 0)    
-    SetForegroundWindow(this.Handle)
     $host.UI.RawUI.ForegroundColor = "White"
     $host.UI.RawUI.BackgroundColor = "Black"
     $dvlp_options = 'n'
@@ -261,7 +257,7 @@ function install_everything {
             else {
                 Start-Process powershell -LoadUserProfile -WindowStyle Minimized -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/download-everything-and-install.ps1;. $git_path/scripts/install-everything.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
-            SetForegroundWindow(this.Handle)
+
     
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
