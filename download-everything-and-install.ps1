@@ -313,7 +313,7 @@ function install_everything {
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
-                if ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO" -and "$global:ORIG_DEFAULT_WSL_DISTRO" -ne "") {
+                if (("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") -and ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "")) {
                     $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
                 }
                 else {
