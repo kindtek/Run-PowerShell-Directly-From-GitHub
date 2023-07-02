@@ -435,7 +435,7 @@ function install_everything {
 
 if ([string]::IsNullOrEmpty($args[0])) {
     if ($PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1"){
-        then install_everything
+        install_everything
     } else {
         # include above functions
     }
