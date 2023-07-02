@@ -177,7 +177,7 @@ function run_devels_playground {
             # write-host `$non_interactive $non_interactive
             # write-host `$default_distro $default_distro
             $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
-            $current_process_object = Get-Process $current_process
+            $current_process_object = Get-Process -id $current_process
             $current_process_handle = $current_process_object.MainWindowHandle
             $current_process_pointer = [System.IntPtr]$current_process_object
             $current_process_pointer_handle = $current_process_pointer.MainWindowHandle
@@ -333,7 +333,7 @@ function install_everything {
                 # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
                 Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
                 $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
-                $current_process_object = Get-Process $current_process
+                $current_process_object = Get-Process -id $current_process
                 $current_process_handle = $current_process_object.MainWindowHandle
                 $current_process_pointer = [System.IntPtr]$current_process_object
                 $current_process_pointer_handle = $current_process_pointer.MainWindowHandle
