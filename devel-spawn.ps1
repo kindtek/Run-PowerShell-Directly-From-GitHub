@@ -225,9 +225,6 @@ function install_everything {
             Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
     
         }
-        else {
-            . $git_path/scripts/devel-tools.ps1
-        }
         if ($confirmation -eq '') {  
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
             # Self-elevate the script if required
@@ -238,7 +235,8 @@ function install_everything {
                     Exit
                 }
             }
-            if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+            # args must not empty and dvlp must not installed
+            if (!([string]::IsNullOrEmpty($args)) -And !(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
@@ -261,17 +259,14 @@ function install_everything {
                 install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
                 . $git_path/scripts/devel-tools.ps1
                 run_installer
-            }
-            else {
-                Start-Process powershell -LoadUserProfile -WindowStyle Hidden -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/devel-spawn.ps1;. $git_path/scripts/devel-tools.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
-            }
-            # args not null and dvlp not installed
-            if (!([string]::IsNullOrEmpty($args)) -And !(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
                 try {
-                    run_devels_playground "$git_path" "default"
+                    if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)){
+                        run_devels_playground "$git_path" "default"
+                    }
+                    
                 }
                 catch {
                     Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -281,7 +276,7 @@ function install_everything {
                     $old_wsl_default_distro = get_default_wsl_distro
                     run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
                     $new_wsl_default_distro = get_default_wsl_distro
-                    if ( is_docker_desktop_online -eq $false ) {
+                    if ( require_docker_online -eq $false ) {
                         Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                         Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                         try {
@@ -305,16 +300,22 @@ function install_everything {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
                         Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait 
+                        require_docker_online
                     }
                     catch {
                         try {
                             revert_default_wsl_distro
+                            require_docker_online
                         }
                         catch {
                             Write-Host "error setting failsafe as default wsl distro"
                         }
                     }
                 }
+            }
+            else {
+                . $git_path/scripts/devel-tools.ps1
+                Start-Process powershell -LoadUserProfile -WindowStyle Hidden -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/devel-spawn.ps1;. $git_path/scripts/devel-tools.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
     
             do {
