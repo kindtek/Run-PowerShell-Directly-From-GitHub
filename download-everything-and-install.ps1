@@ -193,6 +193,10 @@ function install_everything {
     param (
         $img_tag
     )
+    $WindowState = '[DllImport("user32.dll")] public static extern bool ShowWindow(int handle, int state);'
+    add-type -name win -member $WindowState -namespace native
+    [native.win]::ShowWindow(([System.Diagnostics.Process]::GetCurrentProcess() | Get-Process).MainWindowHandle, 0)    
+    SetForegroundWindow(this.Handle)
     $host.UI.RawUI.ForegroundColor = "White"
     $host.UI.RawUI.BackgroundColor = "Black"
     $dvlp_options = 'n'
