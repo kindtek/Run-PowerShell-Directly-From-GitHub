@@ -307,7 +307,6 @@ function install_everything {
                         }
                     }
                 }
-                 
             }
     
             do {
