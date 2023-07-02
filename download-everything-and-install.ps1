@@ -176,6 +176,7 @@ function run_devels_playground {
             # write-host `$img_name_tag $img_name_tag
             # write-host `$non_interactive $non_interactive
             # write-host `$default_distro $default_distro
+            Set-ForegroundWindow (Get-Process PowerShell).MainWindowHandle
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
             Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
@@ -258,7 +259,7 @@ function install_everything {
                 Start-Process powershell -LoadUserProfile -WindowStyle Minimized -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/download-everything-and-install.ps1;. $git_path/scripts/install-everything.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
 
-    
+            Set-ForegroundWindow (Get-Process PowerShell).MainWindowHandle
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
@@ -328,6 +329,7 @@ function install_everything {
                 $restart_option = "`r`n`t- [r]estart"
                 # $dvlp_options = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
                 Write-Host "`r`n`r`n`r`nChoose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
+                Set-ForegroundWindow (Get-Process PowerShell).MainWindowHandle
                 $dvlp_options = Read-Host
                 if ($dvlp_options -ieq 'f') {
                     try {
