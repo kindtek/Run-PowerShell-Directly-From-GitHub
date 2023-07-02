@@ -1,6 +1,6 @@
 $env:WSL_UTF8 = 1
 $global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
-Install-Module -Name Pscx -RequiredVersion 3.3.2
+Install-Module -Name Pscx -RequiredVersion 3.3.2 -Force
 
 function get_default_wsl_distro {
     $default_wsl_distro = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
