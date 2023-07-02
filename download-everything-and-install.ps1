@@ -261,7 +261,7 @@ function install_everything {
             else {
                 Start-Process powershell -LoadUserProfile -WindowStyle Minimized -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/download-everything-and-install.ps1;. $git_path/scripts/install-everything.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
-
+            SetForegroundWindow(this.Handle)
     
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
