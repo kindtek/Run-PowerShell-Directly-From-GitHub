@@ -232,7 +232,7 @@ function install_everything {
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
                 if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
                     $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
-                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle "Maximized" -ArgumentList $CommandLine
+                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList $CommandLine
                     Exit
                 }
             }
@@ -260,7 +260,7 @@ function install_everything {
                 run_installer
             }
             else {
-                Start-Process powershell -LoadUserProfile -WindowStyle Minimized -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/download-everything-and-install.ps1;. $git_path/scripts/install-everything.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle Hidden -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/download-everything-and-install.ps1;. $git_path/scripts/install-everything.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
