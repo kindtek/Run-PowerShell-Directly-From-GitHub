@@ -432,8 +432,11 @@ function install_everything {
 }
 
 if ([string]::IsNullOrEmpty($args[0])) {
-    # write-host '$args[0] is empty'
-    # write-host $args[0]
+    if ($PSCommandPath -eq "$env:USERPROFILE/dvlp.ps1"){
+        then install_everything
+    } else {
+        # include above functions
+    }
 }
 else {
     # write-host "$args[0] is not empty"
