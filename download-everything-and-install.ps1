@@ -63,7 +63,8 @@ function set_default_wsl_distro {
                     Write-Host "error setting $old_wsl_default_distro as default wsl distro"
                 }
             }
-            wsl_docker_restart
+            # wsl_docker_restart
+            wsl_docker_restart_new_win
             Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait 
             return $false
         }
@@ -281,7 +282,8 @@ function install_everything {
                         Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                         try {
                             wsl -s $old_wsl_default_distro
-                            wsl_docker_restart
+                            wsl_docker_restart_new_win
+                            # wsl_docker_restart
                             require_docker_online
                         }
                         catch {
@@ -397,12 +399,14 @@ function install_everything {
                         # wsl.exe --set-default kalilinux-kali-rolling-latest
                         Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
                         wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
-                        wsl_docker_restart
+                        # wsl_docker_restart
+                        wsl_docker_restart_new_win
                         Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_options -ceq 'r') {
-                    wsl_docker_restart
+                    # wsl_docker_restart
+                    wsl_docker_restart_new_win
                     Start-Process powershell -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
                 }
                 elseif ($dvlp_options -ceq 'R') {
