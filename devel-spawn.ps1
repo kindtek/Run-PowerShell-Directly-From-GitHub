@@ -248,6 +248,7 @@ function install_everything {
                 Start-Sleep 1
                 Write-Host ""
                 Start-Sleep 1
+                $host.UI.RawUI.BackgroundColor = "Black"
                 Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
                 Start-Sleep 1
                 Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
