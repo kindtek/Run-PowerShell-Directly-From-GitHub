@@ -146,7 +146,7 @@ function run_devels_playground {
     )
     try {
         . $git_path/scripts/devel-tools.ps1
-        $software_name = "docker import tool"
+        $software_name = "docker devel"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
         Start-Sleep 3
@@ -183,7 +183,9 @@ function run_devels_playground {
             # Set-ForegroundWindow ($current_process_object).MainWindowHandle
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
-            Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
+            if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+                Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
+            }
         }
         else {
             Write-Host "`r`nmake sure docker desktop is running"
