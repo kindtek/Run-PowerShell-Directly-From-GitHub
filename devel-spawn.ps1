@@ -260,7 +260,7 @@ function install_everything {
                 run_installer
             }
             else {
-                Start-Process powershell -LoadUserProfile -WindowStyle Hidden -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/download-everything-and-install.ps1;. $git_path/scripts/install-everything.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle Hidden -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/devel-spawn.ps1;. $git_path/scripts/install-everything.ps1;install_winget $git_parent_path; install_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/install-everything.ps1;require_docker_online;exit;}" -Wait
