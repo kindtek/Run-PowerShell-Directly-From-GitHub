@@ -276,7 +276,7 @@ function install_everything {
                 }
             }
             # args must not empty or dvlp must not installed
-            if (!([string]::IsNullOrEmpty($args)) -Or !(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
+            if (!([string]::IsNullOrEmpty($args[0])) -Or !(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
