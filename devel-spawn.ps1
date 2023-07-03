@@ -145,7 +145,7 @@ function install_git {
         $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
     )
     $software_name = "Github CLI"
-    $refresh_envs = "$env:USERPROFILE/repos/kindtek/RefreshEnv.cmd"
+    $refresh_envs = "$global:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
     $global:progress_flag = 'silentlyContinue'
     $orig_progress_flag = $progress_flag 
     $progress_flag = 'SilentlyContinue'
@@ -471,13 +471,15 @@ if ([string]::IsNullOrEmpty($args[0])) {
         install_everything
     } else {
         # include above functions and devel-tools
-        . $env:USERPROFILE/repos/kindtek/dvlw/scripts/devel-tools.ps1 source
+        . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
+        set_dvlp_globals
     }
 }
 else {
     if ($args[0] -eq "source"){
         # include above functions and devel-tools
-        . $env:USERPROFILE/repos/kindtek/dvlw/scripts/devel-tools.ps1 source;
+        . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
+        set_dvlp_globals
     } else {
         # write-host "$args[0] is not empty"
         install_everything $args[0]
