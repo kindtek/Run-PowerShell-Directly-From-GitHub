@@ -148,26 +148,8 @@ function run_devels_playground {
         . $git_path/scripts/devel-tools.ps1
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-        Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
-        Start-Sleep 3
-        # @TODO: add cdir and python to install with same behavior as other installs above
-        # not eloquent at all but good for now
-
-        # ... even tho cdir does not appear to be working on windows
-        # $cmd_command = pip install cdir
-        # Start-Process -FilePath PowerShell.exe -NoNewWindow -ArgumentList $cmd_command
-    
-        # @TODO: maybe start in new window
-        # $start_devs_playground = Read-Host "`r`nstart devel's playground ([y]/n)"
-        # if ($start_devs_playground -ine 'n' -And $start_devs_playground -ine 'no') { 
-
-        # // commenting out background building process because this is NOT quite ready.
-        # // would like to run in separate window and then use these new images in devel's playground 
-        # // if they are more up to date than the hub - which could be a difficult process
-        # $cmd_command = "$git_path/devels_playground/docker-images-build-in-background.ps1"
-        # &$cmd_command = cmd /c start powershell.exe -Command "$git_path/devels_playground/docker-images-build-in-background.ps1" -WindowStyle "Maximized"
-
         Write-Host "establishing a connection with docker desktop ...`r`n" 
+        Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
         if (is_docker_desktop_online -eq $true) {
             Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $global:img_name_tag"
@@ -382,6 +364,7 @@ function install_everything {
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
+                    Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait 
                     run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
                 elseif ($dvlp_choice -like 'k*') {
