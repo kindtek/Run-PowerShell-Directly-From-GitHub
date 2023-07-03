@@ -16,57 +16,57 @@ function set_dvlp_globals {
     $repo_dir_name4 = 'dvl-adv'
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
-    if (([string]::IsNullOrEmpty($DEBUG_MODE)) -And ([string]::IsNullOrEmpty($global:KINDTEK_DEBUG_MODE))) {
-        Set-Variable -Name KINDTEK_DEBUG_MODE -Value 0 -Option Constant -Scope Global -Force
-        Set-Variable -Name BG_WIN_STYLE -Value hidden -Option Constant -Scope Global -Force
-    } elseif (([string]::IsNullOrEmpty($global:KINDTEK_DEBUG_MODE)) -And !([string]::IsNullOrEmpty($DEBUG_MODE))){
-        Set-Variable -Name KINDTEK_DEBUG_MODE -Value 1 -Option Constant -Scope Global -Force
-        Set-Variable -Name BG_WIN_STYLE -Value minimized -Option Constant -Scope Global -Force
+    if (([string]::IsNullOrEmpty($DEBUG_MODE)) -And ([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE))) {
+        Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 0 -Options Constant -Force
+        Set-Item -Path env:BG_WIN_STYLE -Value hidden -Options Constant -Force
+    } elseif (([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE)) -And !([string]::IsNullOrEmpty($DEBUG_MODE))){
+        Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 1 -Options Constant -Force
+        Set-Item -Path env:BG_WIN_STYLE -Value minimized -Options Constant -Force
     }
 
-    if ($global:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
+    if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
-            Set-Variable -Name KINDTEK_WIN_GIT_OWNER -Value $repo_src_owner -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_GIT_OWNER -Value  $repo_src_owner -Options Constant -Force
         }
         catch {}
         try { 
-            Set-Variable -Name KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Options Constant -Force
         }
         catch {}
         try {
-            Set-Variable -Name KINDTEK_WIN_DVLW_PATH -Value $git_path -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_DVLW_PATH -Value $git_path -Options Constant -Force
         }
         catch {}
         try { 
-            Set-Variable -Name KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Options Constant -Force
         }
         catch {}
         try {
-            Set-Variable -Name KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Options Constant -Force
         }
         catch {}
         try {
-            Set-Variable -Name KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Options Constant -Force
         }
         catch {}
         try {
-            Set-Variable -Name KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Options Constant -Force
         }
         catch {}
         try {
-            Set-Variable -Name KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Options Constant -Force
         }
         catch {}
         try {
-            Set-Variable -Name KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Options Constant -Force
         }
         catch {}
         try {
-            Set-Variable -Name KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Options Constant -Force
         }
         catch {}
         try {
-            Set-Variable -Name KINDTEK_WIN_DVLADV_PATH -Value "$git_path/$repo_dir_name4" -Option Constant -Scope Global -Force
+            Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$git_path/$repo_dir_name4" -Options Constant -Force
         }
         catch {}
     }
@@ -85,7 +85,7 @@ function revert_default_wsl_distro {
     }
     catch {
         try {
-            run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
+            run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
         }
         catch {
             Write-Host "error reverting to $FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -110,7 +110,7 @@ function set_default_wsl_distro {
         }
         catch {
             try {
-                run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
+                run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
             }
             catch {
                 Write-Host "error setting $new_wsl_default_distro as default wsl distro"
@@ -126,7 +126,7 @@ function set_default_wsl_distro {
             }
             catch {
                 try {
-                    run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
+                    run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
                 }
                 catch {
                     Write-Host "error setting $old_wsl_default_distro as default wsl distro"
@@ -148,8 +148,8 @@ function set_default_wsl_distro {
 function install_winget {
     $software_name = "WinGet"
     Write-Host "`r`n"
-    if (!(Test-Path -Path "$global:KINDTEK_WIN_GIT_PATH/.winget-installed" -PathType Leaf)) {
-        $file = "$global:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
+    if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.winget-installed" -PathType Leaf)) {
+        $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
         Start-Process powershell -WindowStyle $global:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
@@ -157,7 +157,7 @@ function install_winget {
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
         # Get-Process | Where-Object { $_.HasExited }
-        Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$global:KINDTEK_WIN_GIT_PATH/.winget-installed"
+        Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.winget-installed"
     }
     else {
         Write-Host "$software_name already installed" -ForegroundColor DarkCyan
@@ -169,7 +169,7 @@ function install_git {
         $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
     )
     $software_name = "Github CLI"
-    $refresh_envs = "$global:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
+    $refresh_envs = "$env:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
     $global:progress_flag = 'silentlyContinue'
     $orig_progress_flag = $progress_flag 
     $progress_flag = 'SilentlyContinue'
@@ -261,11 +261,11 @@ function install_everything {
     $dvlp_choice = 'n'
     do {
         set_dvlp_globals 1 | Out-Null
-        $img_name = $global:KINDTEK_WIN_DVLP_NAME
+        $img_name = $env:KINDTEK_WIN_DVLP_NAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
     
-        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
+        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
             Write-Host "$([char]27)[2J"
             $host.UI.RawUI.ForegroundColor = "Black"
             $host.UI.RawUI.BackgroundColor = "DarkRed"
@@ -288,7 +288,7 @@ function install_everything {
                 }
             }
             # args must not empty or dvlp must not installed
-            if (!([string]::IsNullOrEmpty($args[0])) -Or !(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
+            if (!([string]::IsNullOrEmpty($args[0])) -Or !(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
@@ -304,20 +304,20 @@ function install_everything {
                 Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
                 
                 # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
-                New-Item -ItemType Directory -Force -Path $global:KINDTEK_WIN_GIT_PATH | Out-Null
+                New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
         
-                install_winget $global:KINDTEK_WIN_GIT_PATH
+                install_winget $env:KINDTEK_WIN_GIT_PATH
                 $host.UI.RawUI.ForegroundColor = "DarkGray"
-                install_git $global:KINDTEK_WIN_GIT_PATH $global:KINDTEK_WIN_DVLW_PATH $global:KINDTEK_WIN_GIT_OWNER $global:KINDTEK_WIN_DVLW_FULLNAME $global:KINDTEK_WIN_DVLW_NAME $global:KINDTEK_WIN_DVLW_BRANCH
-                . $global:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
+                install_git $env:KINDTEK_WIN_GIT_PATH $env:KINDTEK_WIN_DVLW_PATH $env:KINDTEK_WIN_GIT_OWNER $env:KINDTEK_WIN_DVLW_FULLNAME $env:KINDTEK_WIN_DVLW_NAME $env:KINDTEK_WIN_DVLW_BRANCH
+                . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
                 run_installer
                 $host.UI.RawUI.ForegroundColor = "White"
                 require_docker_online_new_win
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
-                # $global:KINDTEK_WIN_DVLW_PATH, $img_name_tag, $non_interactive, $default_distro
+                # $env:KINDTEK_WIN_DVLW_PATH, $img_name_tag, $non_interactive, $default_distro
                 try {
-                    if (!(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
-                        run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
+                    if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
+                        run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
                     }
                     
                 }
@@ -327,7 +327,7 @@ function install_everything {
                 # install distro requested in arg
                 try {
                     $old_wsl_default_distro = get_default_wsl_distro
-                    run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                    run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "$img_name_tag" "kindtek-$img_name_tag" "default"
                     $new_wsl_default_distro = get_default_wsl_distro
                     require_docker_online_new_win
                     if ( is_docker_desktop_online -eq $false ) {
@@ -369,7 +369,7 @@ function install_everything {
             }
             else {
                 . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle $global:BG_WIN_STYLE -ArgumentList "-command &{. $global:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $global:KINDTEK_WIN_GIT_PATH; sync_repo '$global:KINDTEK_WIN_GIT_PATH' '$global:KINDTEK_WIN_DVLW_PATH' '$global:KINDTEK_WIN_GIT_OWNER' '$global:KINDTEK_WIN_DVLW_FULLNAME' '$global:KINDTEK_WIN_DVLW_NAME' '$$global:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle $global:BG_WIN_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo '$env:KINDTEK_WIN_GIT_PATH' '$env:KINDTEK_WIN_DVLW_PATH' '$env:KINDTEK_WIN_GIT_OWNER' '$env:KINDTEK_WIN_DVLW_FULLNAME' '$env:KINDTEK_WIN_DVLW_NAME' '$$env:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
             }
     
             do {
@@ -402,7 +402,7 @@ function install_everything {
                     }
                     catch {
                         try {
-                            run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
+                            run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
                         }
                         catch {
                             Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -433,11 +433,11 @@ function install_everything {
                 }
                 elseif ($dvlp_choice -ieq 'd') {
                     require_docker_online_new_win
-                    run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "$img_name_tag"
+                    run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "$img_name_tag"
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online_new_win
-                    run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                    run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
                 elseif ($dvlp_choice -like 'k*') {
                     if ($dvlp_choice -ieq 'k') {
@@ -498,14 +498,14 @@ if ([string]::IsNullOrEmpty($args[0])) {
     else {
         # include above functions and devel-tools
         set_dvlp_globals 1 | Out-Null
-        . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
+        . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
 }
 else {
     if ($args[0] -eq "source") {
         # include above functions and devel-tools
         set_dvlp_globals 1 | Out-Null
-        . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
+        . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
     else {
         # write-host "$args[0] is not empty"
