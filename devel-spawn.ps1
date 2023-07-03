@@ -133,7 +133,6 @@ function sync_repo {
     Write-Host "making sure git command works" -ForegroundColor DarkCyan
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     Write-Host "synchronizing kindtek github repos ..." -ForegroundColor DarkCyan
-    write-host "git path: $git_parent_path"
     Push-Location $git_parent_path
     ((git -C $repo_dir_name pull --progress) -Or `
     (git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_dir_name) -And `
