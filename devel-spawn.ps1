@@ -85,7 +85,7 @@ function install_winget {
     if (!(Test-Path -Path "$git_parent_path/.winget-installed" -PathType Leaf)) {
         $file = "$git_parent_path/get-latest-winget.ps1"
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        powershell.exe -executionpolicy remotesigned -File $file
+        Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
         # install winget and use winget to install everything else
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         # $p = Get-Process -Name "PackageManagement"
@@ -98,7 +98,7 @@ function install_winget {
     }
 }
 
-function install_repo {
+function install_git {
     param (
         $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
     )
@@ -111,22 +111,28 @@ function install_repo {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
-        winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements
-        winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-            winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements; `
-            Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.github-installed"; `
+        Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
+        Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.github-installed"; `
     
     }
     else {
         Write-Host "$software_name already installed" -ForegroundColor DarkCyan
     }
     # allow git to be used in same window immediately after installation
+   powershell.exe -Command $refresh_envs | Out-Null
+    ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
+    Start-Process powershell -LoadUserProfile -WindowStyle hidden -ArgumentList "-command &{. $git_path/scripts/devel-tools.ps1;sync_repo $git_parent_path;exit;}" -Wait
+    return $new_install
+}
+
+function sync_repo {
+    param (
+        $git_parent_path
+    )
     Write-Host "making sure git command works" -ForegroundColor DarkCyan
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    powershell.exe -Command $refresh_envs | Out-Null
     Write-Host "synchronizing kindtek github repos ..." -ForegroundColor DarkCyan
-    Set-Location $git_parent_path
+    Push-Location $git_parent_path
     ((git -C $repo_dir_name pull --progress) -Or `
     (git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_dir_name) -And `
     ($new_install = $true)) 
@@ -137,7 +143,7 @@ function install_repo {
     Set-Location dvlp
     ((git submodule update --init --progress -- mnt kernels) -Or `
     (git submodule update --init --progress -- mnt kernels))
-    return $new_install
+    Pop-Location
 }
 
 function run_devels_playground {
