@@ -18,59 +18,75 @@ function set_dvlp_envs {
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
             if ([string]::IsNullOrEmpty($DEBUG_MODE)) {
+                [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)
                 Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 0 -Options Constant -Force
+                [System.Environment]::SetEnvironmentVariable('BG_WIN_STYLE', 'hidden', [System.EnvironmentVariableTarget]::Machine)
                 Set-Item -Path env:BG_WIN_STYLE -Value hidden -Options Constant -Force
             }
             elseif (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
+                [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1', [System.EnvironmentVariableTarget]::Machine)
                 Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 1 -Options Constant -Force
+                [System.Environment]::SetEnvironmentVariable('BG_WIN_STYLE', 'minimized', [System.EnvironmentVariableTarget]::Machine)
                 Set-Item -Path env:BG_WIN_STYLE -Value minimized -Options Constant -Force
             }
         } catch {}
         try {
-                Set-Item -Path env:FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Options Constant -Force
+            [System.Environment]::SetEnvironmentVariable('FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
+            Set-Item -Path env:FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Options Constant -Force
         } catch {}
         try {
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', "$repo_src_owner", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_GIT_OWNER -Value  $repo_src_owner -Options Constant -Force
         }
         catch {}
         try { 
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_PATH', "$git_parent_path", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Options Constant -Force
         }
         catch {}
         try {
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_PATH', "$git_path", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_DVLW_PATH -Value $git_path -Options Constant -Force
         }
         catch {}
-        try { 
+        try {
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_FULLNAME', "$repo_src_name", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Options Constant -Force
         }
         catch {}
         try {
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_NAME', "$repo_dir_name", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Options Constant -Force
         }
         catch {}
-        try {
+        try {            
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_BRANCH', "$repo_src_branch", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Options Constant -Force
         }
         catch {}
         try {
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_PATH', "$git_path/$repo_dir_name2", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Options Constant -Force
         }
         catch {}
-        try {
+        try {            
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_FULLNAME', "$repo_src_name2", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Options Constant -Force
         }
         catch {}
         try {
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_NAME', "$repo_dir_name2", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Options Constant -Force
         }
         catch {}
         try {
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_PATH', "$git_path/$repo_dir_name3", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Options Constant -Force
         }
         catch {}
         try {
-            Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$git_path/$repo_dir_name4" -Options Constant -Force
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_PATH', "$repo_dir_name2", [System.EnvironmentVariableTarget]::Machine)
+            Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Options Constant -Force
         }
         catch {}
     }
