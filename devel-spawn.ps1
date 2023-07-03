@@ -436,7 +436,8 @@ if ([string]::IsNullOrEmpty($args[0])) {
         install_everything
     } else {
         # include above functions and devel-tools
-        . $env:USERPROFILE/repos/kindtek/dvlw/powerhell/devel-tools.ps1 source;
+        . $env:USERPROFILE/repos/kindtek/dvlw/powerhell/devel-tools.ps1 source
+    }
 }
 else {
     if ($args[0] -eq "source"){
