@@ -172,6 +172,7 @@ function install_git {
     param (
         $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
     )
+    set_dvlp_envs
     $software_name = "Github CLI"
     $refresh_envs = "$env:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
     $global:progress_flag = 'silentlyContinue'
