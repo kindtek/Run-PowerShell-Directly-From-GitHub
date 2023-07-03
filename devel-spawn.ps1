@@ -1,6 +1,4 @@
-$env:WSL_UTF8 = 1
-$global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
-# Install-Module -Name Pscx -RequiredVersion 3.3.2 -Force -AllowClobber
+$env:WSL_UTF8 = 1# Install-Module -Name Pscx -RequiredVersion 3.3.2 -Force -AllowClobber
 
 function set_dvlp_globals {
     param (
@@ -16,15 +14,22 @@ function set_dvlp_globals {
     $repo_dir_name4 = 'dvl-adv'
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
-    if (([string]::IsNullOrEmpty($DEBUG_MODE)) -And ([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE))) {
-        Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 0 -Options Constant -Force
-        Set-Item -Path env:BG_WIN_STYLE -Value hidden -Options Constant -Force
-    } elseif (([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE)) -And !([string]::IsNullOrEmpty($DEBUG_MODE))){
-        Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 1 -Options Constant -Force
-        Set-Item -Path env:BG_WIN_STYLE -Value minimized -Options Constant -Force
-    }
+    Set-Item -Path env:FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Options Constant -Force
 
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
+        try {
+            if ([string]::IsNullOrEmpty($DEBUG_MODE)) {
+                Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 0 -Options Constant -Force
+                Set-Item -Path env:BG_WIN_STYLE -Value hidden -Options Constant -Force
+            }
+            elseif (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
+                Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 1 -Options Constant -Force
+                Set-Item -Path env:BG_WIN_STYLE -Value minimized -Options Constant -Force
+            }
+        } catch {}
+        try {
+                Set-Item -Path env:FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Options Constant -Force
+        } catch {}
         try {
             Set-Item -Path env:KINDTEK_WIN_GIT_OWNER -Value  $repo_src_owner -Options Constant -Force
         }
@@ -152,7 +157,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        Start-Process powershell -WindowStyle $global:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
+        Start-Process powershell -WindowStyle $env:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -177,7 +182,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        Start-Process powershell -WindowStyle $global:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
+        Start-Process powershell -WindowStyle $env:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.github-installed"; `
     
     }
@@ -188,7 +193,7 @@ function install_git {
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     # sync_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch 
-    Start-Process powershell -LoadUserProfile -WindowStyle $global:BG_WIN_STYLE -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:BG_WIN_STYLE -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
     return $new_install
 }
 
@@ -226,7 +231,7 @@ function run_devels_playground {
         require_docker_online_new_win
         if (is_docker_desktop_online -eq $true) {
             Write-Host "now connected to docker desktop ...`r`n"
-            # Write-Host "&$devs_playground $global:img_name_tag"
+            # Write-Host "&$devs_playground $env:img_name_tag"
             # Write-Host "$([char]27)[2J"
             # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
             $img_name_tag = $img_name_tag.replace("\s+", '')
@@ -238,7 +243,7 @@ function run_devels_playground {
             # Set-ForegroundWindow $current_process_object.MainWindowHandle
             # Set-ForegroundWindow ($current_process_object).MainWindowHandle
             powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
-            # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $global:img_tag"
+            # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
             if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
                 Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
             }
@@ -369,18 +374,18 @@ function install_everything {
             }
             else {
                 . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle $global:BG_WIN_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo '$env:KINDTEK_WIN_GIT_PATH' '$env:KINDTEK_WIN_DVLW_PATH' '$env:KINDTEK_WIN_GIT_OWNER' '$env:KINDTEK_WIN_DVLW_FULLNAME' '$env:KINDTEK_WIN_DVLW_NAME' '$$env:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle $env:BG_WIN_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo '$env:KINDTEK_WIN_GIT_PATH' '$env:KINDTEK_WIN_DVLW_PATH' '$env:KINDTEK_WIN_GIT_OWNER' '$env:KINDTEK_WIN_DVLW_FULLNAME' '$env:KINDTEK_WIN_DVLW_NAME' '$$env:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
             }
     
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
-                $global:DEFAULT_WSL_DISTRO = get_default_wsl_distro
-                if ([string]::IsNullOrEmpty($global:ORIG_DEFAULT_WSL_DISTRO)) {
-                    $global:ORIG_DEFAULT_WSL_DISTRO = $FAILSAFE_WSL_DISTRO
-                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $global:ORIG_DEFAULT_WSL_DISTRO)"
+                $env:DEFAULT_WSL_DISTRO = get_default_wsl_distro
+                if ([string]::IsNullOrEmpty($env:ORIG_DEFAULT_WSL_DISTRO)) {
+                    $env:ORIG_DEFAULT_WSL_DISTRO = $FAILSAFE_WSL_DISTRO
+                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $env:ORIG_DEFAULT_WSL_DISTRO)"
                 }
-                elseif ("$global:ORIG_DEFAULT_WSL_DISTRO" -ne "$global:DEFAULT_WSL_DISTRO") {
-                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $global:ORIG_DEFAULT_WSL_DISTRO)"
+                elseif ("$env:ORIG_DEFAULT_WSL_DISTRO" -ne "$env:DEFAULT_WSL_DISTRO") {
+                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $env:ORIG_DEFAULT_WSL_DISTRO)"
                 }
                 else {
                     $wsl_distro_undo_option = ''
@@ -455,10 +460,10 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_choice -ieq 'u') {
-                    if ($global:ORIG_DEFAULT_WSL_DISTRO -ne "") {
+                    if ($env:ORIG_DEFAULT_WSL_DISTRO -ne "") {
                         # wsl.exe --set-default kalilinux-kali-rolling-latest
-                        Write-Host "`r`n`r`nsetting $global:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
-                        wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
+                        Write-Host "`r`n`r`nsetting $env:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
+                        wsl.exe --set-default $env:ORIG_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
                         require_docker_online_new_win
@@ -497,14 +502,12 @@ if ([string]::IsNullOrEmpty($args[0])) {
     }
     else {
         # include above functions and devel-tools
-        set_dvlp_globals 1 | Out-Null
         . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
 }
 else {
     if ($args[0] -eq "source") {
         # include above functions and devel-tools
-        set_dvlp_globals 1 | Out-Null
         . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
     else {
