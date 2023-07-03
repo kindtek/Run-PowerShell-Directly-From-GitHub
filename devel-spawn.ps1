@@ -121,8 +121,8 @@ function install_git {
     # allow git to be used in same window immediately after installation
    powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    sync_repo $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
-    Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo $git_parent_path;exit;}" -Wait
+    sync_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch 
+    # Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
     return $new_install
 }
 
