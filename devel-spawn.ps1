@@ -12,40 +12,42 @@ function set_dvlp_globals {
     $repo_dir_name3 = 'powerhell'
     $repo_dir_name4 = 'dvl-adv'
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
-    $git_path = "$git_parent_path/$repo_dir_name"
-    try {
-        Set-Variable -Name KINDTEK_WIN_GIT_OWNER -Value $repo_src_owner -Option Constant -Scope Global -Force
-    } catch {}
-    try { 
-        Set-Variable -Name KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Option Constant -Scope Global -Force
-    } catch {}
-    try {
-        Set-Variable -Name KINDTEK_WIN_DVLW_PATH -Value $git_path -Option Constant -Scope Global -Force
-    } catch {}
-    try { 
-        Set-Variable -Name KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Option Constant -Scope Global -Force
-    } catch {}
-    try {
-        Set-Variable -Name KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Option Constant -Scope Global -Force
-    } catch {}
-    try {
-        Set-Variable -Name KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Option Constant -Scope Global -Force
-    } catch {}
-    try {
-        Set-Variable -Name KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Option Constant -Scope Global -Force
-    } catch {}
-    try {
-        Set-Variable -Name KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Option Constant -Scope Global -Force
-    } catch {}
-    try {
-        Set-Variable -Name KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Option Constant -Scope Global -Force
-    } catch {}
-    try {
-        Set-Variable -Name KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Option Constant -Scope Global -Force
-    } catch {}
-    try {
-        Set-Variable -Name KINDTEK_WIN_DVLADV_PATH -Value "$git_path/$repo_dir_name4" -Option Constant -Scope Global -Force
-    } catch {}
+        $git_path = "$git_parent_path/$repo_dir_name"
+    if ($global:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
+        try {
+            Set-Variable -Name KINDTEK_WIN_GIT_OWNER -Value $repo_src_owner -Option Constant -Scope Global -Force
+        } catch {}
+        try { 
+            Set-Variable -Name KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Option Constant -Scope Global -Force
+        } catch {}
+        try {
+            Set-Variable -Name KINDTEK_WIN_DVLW_PATH -Value $git_path -Option Constant -Scope Global -Force
+        } catch {}
+        try { 
+            Set-Variable -Name KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Option Constant -Scope Global -Force
+        } catch {}
+        try {
+            Set-Variable -Name KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Option Constant -Scope Global -Force
+        } catch {}
+        try {
+            Set-Variable -Name KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Option Constant -Scope Global -Force
+        } catch {}
+        try {
+            Set-Variable -Name KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Option Constant -Scope Global -Force
+        } catch {}
+        try {
+            Set-Variable -Name KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Option Constant -Scope Global -Force
+        } catch {}
+        try {
+            Set-Variable -Name KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Option Constant -Scope Global -Force
+        } catch {}
+        try {
+            Set-Variable -Name KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Option Constant -Scope Global -Force
+        } catch {}
+        try {
+            Set-Variable -Name KINDTEK_WIN_DVLADV_PATH -Value "$git_path/$repo_dir_name4" -Option Constant -Scope Global -Force
+        } catch {}
+    }
 }
 
 function get_default_wsl_distro {
