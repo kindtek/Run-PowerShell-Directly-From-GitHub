@@ -244,7 +244,7 @@ function install_everything {
         
                 install_winget $git_parent_path
         
-                install_repo $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
+                install_git $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
                 . $git_path/scripts/devel-tools.ps1
                 run_installer
                 Start-Process powershell -WindowStyle hidden -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait
