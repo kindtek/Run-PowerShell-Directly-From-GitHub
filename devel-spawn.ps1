@@ -250,6 +250,7 @@ function install_everything {
                 install_git $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
                 . $env:USERPROFILE/dvlp.ps1 source
                 run_installer
+                $host.UI.RawUI.ForegroundColor = "White"
                 Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
