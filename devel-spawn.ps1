@@ -437,13 +437,13 @@ if ([string]::IsNullOrEmpty($args[0])) {
         install_everything
     } else {
         # include above functions and devel-tools
-        . $env:USERPROFILE/repos/kindtek/dvlw/powerhell/devel-tools.ps1 source
+        . $env:USERPROFILE/repos/kindtek/dvlw/scripts/devel-tools.ps1 source
     }
 }
 else {
     if ($args[0] -eq "source"){
         # include above functions and devel-tools
-        . $env:USERPROFILE/repos/kindtek/dvlw/powerhell/devel-tools.ps1 source;
+        . $env:USERPROFILE/repos/kindtek/dvlw/scripts/devel-tools.ps1 source;
     } else {
         # write-host "$args[0] is not empty"
         install_everything $args[0]
