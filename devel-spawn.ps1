@@ -435,12 +435,13 @@ if ([string]::IsNullOrEmpty($args[0])) {
     if ($PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1"){
         install_everything
     } else {
-        # include above functions
-    }
+        # include above functions and devel-tools
+        . $env:USERPROFILE/dvlw/powerhell/devel-tools.ps1 source;    }
 }
 else {
     if ($args[0] -eq "source"){
-        # include above functions
+        # include above functions and devel-tools
+        . $env:USERPROFILE/dvlw/powerhell/devel-tools.ps1 source;
     } else {
         # write-host "$args[0] is not empty"
         install_everything $args[0]
