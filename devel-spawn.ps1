@@ -14,7 +14,6 @@ function set_dvlp_globals {
     $repo_dir_name4 = 'dvl-adv'
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
-    Set-Item -Path env:FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Options Constant -Force
 
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
