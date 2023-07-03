@@ -248,7 +248,7 @@ function install_everything {
                 install_winget $git_parent_path
         
                 install_git $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
-                . $env:USERPROFILE/dvlp.ps1 source
+                . $git_path/scripts/devel-tools.ps1 source
                 run_installer
                 $host.UI.RawUI.ForegroundColor = "White"
                 Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait
