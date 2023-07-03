@@ -212,6 +212,7 @@ function run_devels_playground {
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
         Write-Host "establishing a connection with docker desktop ...`r`n" 
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
+        require_docker_online_new_win
         if (is_docker_desktop_online -eq $true) {
             Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $global:img_name_tag"
