@@ -2,6 +2,31 @@ $env:WSL_UTF8 = 1
 $global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
 # Install-Module -Name Pscx -RequiredVersion 3.3.2 -Force -AllowClobber
 
+function set_dvlp_globals {
+    $repo_src_owner = 'kindtek'
+    $repo_src_name = 'devels-workshop'
+    $repo_src_name2 = 'devels-playground'
+    $repo_src_branch = 'main'
+    $repo_dir_name = 'dvlw'
+    $repo_dir_name2 = 'dvlp'
+    $repo_dir_name3 = 'powerhell'
+    $repo_dir_name4 = 'dvl-adv'
+    $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
+    $git_path = "$git_parent_path/$repo_dir_name"
+    Set-Variable -Name KINDTEK_WIN_GIT_OWNER -Value $repo_src_owner -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_DVLW_PATH -Value $git_path -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Option Constant -Scope Global -Force
+    Set-Variable -Name KINDTEK_WIN_DVLADV_PATH -Value "$git_path/$repo_dir_name4" -Option Constant -Scope Global -Force
+      
+}
+
 function get_default_wsl_distro {
     $default_wsl_distro = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
@@ -15,7 +40,7 @@ function revert_default_wsl_distro {
     }
     catch {
         try {
-            run_devels_playground "$git_path" "default"
+            run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
         }
         catch {
             Write-Host "error reverting to $FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -34,14 +59,13 @@ function set_default_wsl_distro {
         $new_wsl_default_distro
     )
     try {
-        $git_path = "$env:USERPROFILE/repos/kindtek/dvlw"
         $old_wsl_default_distro = get_default_wsl_distro
         try {
             wsl -s $new_wsl_default_distro
         }
         catch {
             try {
-                run_devels_playground "$git_path" "default"
+                run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
             }
             catch {
                 Write-Host "error setting $new_wsl_default_distro as default wsl distro"
@@ -57,7 +81,7 @@ function set_default_wsl_distro {
             }
             catch {
                 try {
-                    run_devels_playground "$git_path" "default"
+                    run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
                 }
                 catch {
                     Write-Host "error setting $old_wsl_default_distro as default wsl distro"
@@ -77,13 +101,10 @@ function set_default_wsl_distro {
     }
 }
 function install_winget {
-    param (
-        $git_parent_path
-    )
     $software_name = "WinGet"
     Write-Host "`r`n"
-    if (!(Test-Path -Path "$git_parent_path/.winget-installed" -PathType Leaf)) {
-        $file = "$git_parent_path/get-latest-winget.ps1"
+    if (!(Test-Path -Path "$global:KINDTEK_WIN_GIT_PATH/.winget-installed" -PathType Leaf)) {
+        $file = "$global:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
         Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
@@ -91,7 +112,7 @@ function install_winget {
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
         # Get-Process | Where-Object { $_.HasExited }
-        Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.winget-installed"
+        Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$global:KINDTEK_WIN_GIT_PATH/.winget-installed"
     }
     else {
         Write-Host "$software_name already installed" -ForegroundColor DarkCyan
@@ -194,17 +215,12 @@ function install_everything {
     $host.UI.RawUI.BackgroundColor = "Black"
     $dvlp_choice = 'n'
     do {
-        $repo_src_owner = 'kindtek'
-        $repo_src_name = 'devels-workshop'
-        $repo_src_branch = 'main'
-        $repo_dir_name = 'dvlw'
-        $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
-        $git_path = "$git_parent_path/$repo_dir_name"
-        $img_name = 'devels-playground'
+        set_dvlp_globals
+        $img_name = $global:KINDTEK_WIN_DVLP_NAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
     
-        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf))) {
+        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
             Write-Host "$([char]27)[2J"
             $host.UI.RawUI.ForegroundColor = "Black"
             $host.UI.RawUI.BackgroundColor = "DarkRed"
@@ -227,7 +243,7 @@ function install_everything {
                 }
             }
             # args must not empty or dvlp must not installed
-            if (!([string]::IsNullOrEmpty($args)) -Or !(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+            if (!([string]::IsNullOrEmpty($args)) -Or !(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
@@ -243,20 +259,20 @@ function install_everything {
                 Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
                 
                 # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
-                New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
+                New-Item -ItemType Directory -Force -Path $global:KINDTEK_WIN_GIT_PATH | Out-Null
         
-                install_winget $git_parent_path
+                install_winget $global:KINDTEK_WIN_GIT_PATH
                 $host.UI.RawUI.ForegroundColor = "DarkGray"
-                install_git $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch
-                . $git_path/scripts/devel-tools.ps1 source
+                install_git $global:KINDTEK_WIN_GIT_PATH $global:KINDTEK_WIN_DVLW_PATH $global:KINDTEK_WIN_GIT_OWNER $global:KINDTEK_WIN_DVLW_FULLNAME $global:KINDTEK_WIN_DVLW_NAME $global:KINDTEK_WIN_DVLW_BRANCH
+                . $global:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
                 run_installer
                 $host.UI.RawUI.ForegroundColor = "White"
                 require_docker_online_new_win
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
-                # $git_path, $img_name_tag, $non_interactive, $default_distro
+                # $global:KINDTEK_WIN_DVLW_PATH, $img_name_tag, $non_interactive, $default_distro
                 try {
-                    if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)){
-                        run_devels_playground "$git_path" "default"
+                    if (!(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)){
+                        run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
                     }
                     
                 }
@@ -266,7 +282,7 @@ function install_everything {
                 # install distro requested in arg
                 try {
                     $old_wsl_default_distro = get_default_wsl_distro
-                    run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                    run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "$img_name_tag" "kindtek-$img_name_tag" "default"
                     $new_wsl_default_distro = get_default_wsl_distro
                     require_docker_online_new_win
                     if ( is_docker_desktop_online -eq $false ) {
@@ -308,7 +324,7 @@ function install_everything {
             }
             else {
                 . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $git_path/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $git_parent_path; sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $global:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $global:KINDTEK_WIN_GIT_PATH; sync_repo '$global:KINDTEK_WIN_GIT_PATH' '$global:KINDTEK_WIN_DVLW_PATH' '$global:KINDTEK_WIN_GIT_OWNER' '$global:KINDTEK_WIN_DVLW_FULLNAME' '$global:KINDTEK_WIN_DVLW_NAME' '$$global:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
             }
     
             do {
@@ -341,7 +357,7 @@ function install_everything {
                     }
                     catch {
                         try {
-                            run_devels_playground "$git_path" "default"
+                            run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
                         }
                         catch {
                             Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -372,11 +388,11 @@ function install_everything {
                 }
                 elseif ($dvlp_choice -ieq 'd') {
                     require_docker_online_new_win
-                    run_devels_playground "$git_path" "$img_name_tag"
+                    run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "$img_name_tag"
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online_new_win
-                    run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                    run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
                 elseif ($dvlp_choice -like 'k*') {
                     if ($dvlp_choice -ieq 'k') {
