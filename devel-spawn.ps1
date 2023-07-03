@@ -65,7 +65,7 @@ function set_default_wsl_distro {
             }
             # wsl_docker_restart
             wsl_docker_restart_new_win
-            Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait 
+            require_docker_online_new_win
             return $false
         }
         else {
@@ -251,7 +251,7 @@ function install_everything {
                 . $git_path/scripts/devel-tools.ps1 source
                 run_installer
                 $host.UI.RawUI.ForegroundColor = "White"
-                Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait
+                require_docker_online_new_win
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
                 try {
@@ -268,18 +268,20 @@ function install_everything {
                     $old_wsl_default_distro = get_default_wsl_distro
                     run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
                     $new_wsl_default_distro = get_default_wsl_distro
-                    if ( require_docker_online -eq $false ) {
+                    require_docker_online_new_win
+                    if ( is_docker_desktop_online -eq $false ) {
                         Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                         Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                         try {
                             wsl -s $old_wsl_default_distro
                             wsl_docker_restart_new_win
                             # wsl_docker_restart
-                            require_docker_online
+                            require_docker_online_new_win
                         }
                         catch {
                             try {
                                 revert_default_wsl_distro
+                                require_docker_online_new_win
                             }
                             catch {
                                 Write-Host "error setting failsafe as default wsl distro"
@@ -291,13 +293,12 @@ function install_everything {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait 
-                        require_docker_online
+                        require_docker_online_new_win
                     }
                     catch {
                         try {
                             revert_default_wsl_distro
-                            require_docker_online
+                            require_docker_online_new_win
                         }
                         catch {
                             Write-Host "error setting failsafe as default wsl distro"
@@ -336,7 +337,7 @@ function install_everything {
                 if ($dvlp_choice -ieq 'f') {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait 
+                        require_docker_online_new_win
                     }
                     catch {
                         try {
@@ -370,11 +371,11 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd') {
-                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait 
+                    require_docker_online_new_win
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
-                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait 
+                    require_docker_online_new_win
                     run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
                 elseif ($dvlp_choice -like 'k*') {
@@ -399,18 +400,18 @@ function install_everything {
                         wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
-                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait
+                        require_docker_online_new_win
                     }
                 }
                 elseif ($dvlp_choice -ceq 'r') {
                     # wsl_docker_restart
                     wsl_docker_restart_new_win
-                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait
+                    require_docker_online_new_win
                 }
                 elseif ($dvlp_choice -ceq 'R') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
-                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;require_docker_online;exit;}" -Wait
+                        require_docker_online_new_win
                     }
                 }
                 elseif ($dvlp_choice -ceq 'R!') {
