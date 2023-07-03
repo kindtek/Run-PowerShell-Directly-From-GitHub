@@ -332,6 +332,13 @@ function install_everything {
                 install_git $env:KINDTEK_WIN_GIT_PATH $env:KINDTEK_WIN_DVLW_PATH $env:KINDTEK_WIN_GIT_OWNER $env:KINDTEK_WIN_DVLW_FULLNAME $env:KINDTEK_WIN_DVLW_NAME $env:KINDTEK_WIN_DVLW_BRANCH
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
                 run_installer
+                $profilePath = Join-Path $env:USERPROFILE 'Documents\PowerShell\Microsoft.PowerShell_profile.ps1'
+                $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
+                New-Item -Path $profilePath -ItemType File -Force
+                New-Item -Path $vmpPath -ItemType File -Force
+                Add-Content $profilePath "./kindtek.Set-VMP.ps1;Clear-Content 'kindtek.Set-VMP.ps1';./$env:USERPROFILE/dvlp"
+                Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
+
                 $host.UI.RawUI.ForegroundColor = "White"
                 require_docker_online_new_win
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
