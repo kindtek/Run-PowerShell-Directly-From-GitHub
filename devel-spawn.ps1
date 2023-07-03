@@ -501,12 +501,14 @@ if ([string]::IsNullOrEmpty($args[0])) {
     }
     else {
         # include above functions and devel-tools
+        set_dvlp_globals 1 | Out-Null
         . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
 }
 else {
     if ($args[0] -eq "source") {
         # include above functions and devel-tools
+        set_dvlp_globals 1 | Out-Null
         . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
     else {
