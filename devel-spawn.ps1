@@ -485,15 +485,15 @@ if ([string]::IsNullOrEmpty($args[0])) {
     }
     else {
         # include above functions and devel-tools
-        . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
         set_dvlp_globals | Out-Null
+        . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
 }
 else {
     if ($args[0] -eq "source") {
         # include above functions and devel-tools
-        . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
         set_dvlp_globals | Out-Null
+        . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
     else {
         # write-host "$args[0] is not empty"
