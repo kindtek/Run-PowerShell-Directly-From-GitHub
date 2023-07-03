@@ -12,41 +12,52 @@ function set_dvlp_globals {
     $repo_dir_name3 = 'powerhell'
     $repo_dir_name4 = 'dvl-adv'
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
-        $git_path = "$git_parent_path/$repo_dir_name"
+    $git_path = "$git_parent_path/$repo_dir_name"
     if ($global:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
             Set-Variable -Name KINDTEK_WIN_GIT_OWNER -Value $repo_src_owner -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try { 
             Set-Variable -Name KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try {
             Set-Variable -Name KINDTEK_WIN_DVLW_PATH -Value $git_path -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try { 
             Set-Variable -Name KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try {
             Set-Variable -Name KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try {
             Set-Variable -Name KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try {
             Set-Variable -Name KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try {
             Set-Variable -Name KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try {
             Set-Variable -Name KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try {
             Set-Variable -Name KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
         try {
             Set-Variable -Name KINDTEK_WIN_DVLADV_PATH -Value "$git_path/$repo_dir_name4" -Option Constant -Scope Global -Force
-        } catch {}
+        }
+        catch {}
     }
 }
 
@@ -163,7 +174,7 @@ function install_git {
         Write-Host "$software_name already installed" -ForegroundColor DarkCyan
     }
     # allow git to be used in same window immediately after installation
-   powershell.exe -Command $refresh_envs | Out-Null
+    powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     # sync_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch 
     Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
@@ -293,7 +304,7 @@ function install_everything {
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $global:KINDTEK_WIN_DVLW_PATH, $img_name_tag, $non_interactive, $default_distro
                 try {
-                    if (!(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)){
+                    if (!(Test-Path -Path "$global:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                         run_devels_playground "$global:KINDTEK_WIN_DVLW_PATH" "default"
                     }
                     
@@ -469,20 +480,22 @@ function install_everything {
 }
 
 if ([string]::IsNullOrEmpty($args[0])) {
-    if ($PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1"){
+    if ($PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
         install_everything
-    } else {
+    }
+    else {
         # include above functions and devel-tools
         . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
         set_dvlp_globals | Out-Null
     }
 }
 else {
-    if ($args[0] -eq "source"){
+    if ($args[0] -eq "source") {
         # include above functions and devel-tools
         . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
         set_dvlp_globals | Out-Null
-    } else {
+    }
+    else {
         # write-host "$args[0] is not empty"
         install_everything $args[0]
     }
