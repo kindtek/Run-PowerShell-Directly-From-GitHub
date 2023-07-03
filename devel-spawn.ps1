@@ -65,7 +65,7 @@ function set_default_wsl_distro {
             }
             # wsl_docker_restart
             wsl_docker_restart_new_win
-            Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait 
+            Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait 
             return $false
         }
         else {
@@ -121,8 +121,8 @@ function install_git {
     # allow git to be used in same window immediately after installation
    powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    write-host "    Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList `"-command &{. $git_path/scripts/devel-tools.ps1;sync_repo $git_parent_path;exit;}`" -Wait"
-    Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $git_path/scripts/devel-tools.ps1;sync_repo $git_parent_path;exit;}" -Wait
+    write-host "    Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList `"-command &{. $env:USERPROFILE/dvlp.ps1;sync_repo $git_parent_path;exit;}`" -Wait"
+    Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1;sync_repo $git_parent_path;exit;}" -Wait
     return $new_install
 }
 
@@ -152,7 +152,7 @@ function run_devels_playground {
         $git_path, $img_name_tag, $non_interactive, $default_distro
     )
     try {
-        . $git_path/scripts/devel-tools.ps1
+        . $env:USERPROFILE/dvlp.ps1
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
         Write-Host "establishing a connection with docker desktop ...`r`n" 
@@ -246,9 +246,9 @@ function install_everything {
                 install_winget $git_parent_path
         
                 install_git $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
-                . $git_path/scripts/devel-tools.ps1
+                . $env:USERPROFILE/dvlp.ps1
                 run_installer
-                Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait
+                Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $git_path, $img_name_tag, $non_interactive, $default_distro
                 try {
@@ -288,7 +288,7 @@ function install_everything {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait 
+                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait 
                         require_docker_online
                     }
                     catch {
@@ -303,8 +303,8 @@ function install_everything {
                 }
             }
             else {
-                . $git_path/scripts/devel-tools.ps1
-                Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/devel-spawn.ps1;. $git_path/scripts/devel-tools.ps1;install_winget $git_parent_path; sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
+                . $env:USERPROFILE/dvlp.ps1
+                Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1;install_winget $git_parent_path; sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
     
             do {
@@ -333,7 +333,7 @@ function install_everything {
                 if ($dvlp_choice -ieq 'f') {
                     try {
                         wsl -s $FAILSAFE_WSL_DISTRO
-                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait 
+                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait 
                     }
                     catch {
                         try {
@@ -367,11 +367,11 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd') {
-                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait 
+                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait 
                     run_devels_playground "$git_path" "$img_name_tag"
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
-                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait 
+                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait 
                     run_devels_playground "$git_path" "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
                 elseif ($dvlp_choice -like 'k*') {
@@ -396,18 +396,18 @@ function install_everything {
                         wsl.exe --set-default $global:ORIG_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
-                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait
+                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_choice -ceq 'r') {
                     # wsl_docker_restart
                     wsl_docker_restart_new_win
-                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait
+                    Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait
                 }
                 elseif ($dvlp_choice -ceq 'R') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
-                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait
+                        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $env:USERPROFILE/dvlp.ps1;require_docker_online;exit;}" -Wait
                     }
                 }
                 elseif ($dvlp_choice -ceq 'R!') {
