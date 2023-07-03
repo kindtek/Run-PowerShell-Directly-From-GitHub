@@ -246,8 +246,8 @@ function install_everything {
                 New-Item -ItemType Directory -Force -Path $git_parent_path | Out-Null
         
                 install_winget $git_parent_path
-        
-                install_git $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
+                $host.UI.RawUI.ForegroundColor = "DarkGray"
+                install_git $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch
                 . $git_path/scripts/devel-tools.ps1 source
                 run_installer
                 $host.UI.RawUI.ForegroundColor = "White"
