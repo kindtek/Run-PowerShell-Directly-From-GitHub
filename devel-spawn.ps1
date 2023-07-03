@@ -3,7 +3,7 @@ $global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
 # Install-Module -Name Pscx -RequiredVersion 3.3.2 -Force -AllowClobber
 
 function set_dvlp_globals {
-    parame (
+    param (
         $DEBUG_MODE
     )
     $repo_src_owner = 'kindtek'
