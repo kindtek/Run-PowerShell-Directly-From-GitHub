@@ -235,7 +235,7 @@ function install_everything {
     $host.UI.RawUI.BackgroundColor = "Black"
     $dvlp_choice = 'n'
     do {
-        set_dvlp_globals
+        set_dvlp_globals | Out-Null
         $img_name = $global:KINDTEK_WIN_DVLP_NAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
@@ -472,14 +472,14 @@ if ([string]::IsNullOrEmpty($args[0])) {
     } else {
         # include above functions and devel-tools
         . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
-        set_dvlp_globals
+        set_dvlp_globals | Out-Null
     }
 }
 else {
     if ($args[0] -eq "source"){
         # include above functions and devel-tools
         . $global:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
-        set_dvlp_globals
+        set_dvlp_globals | Out-Null
     } else {
         # write-host "$args[0] is not empty"
         install_everything $args[0]
