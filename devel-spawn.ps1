@@ -3,6 +3,9 @@ $global:FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
 # Install-Module -Name Pscx -RequiredVersion 3.3.2 -Force -AllowClobber
 
 function set_dvlp_globals {
+    parame (
+        $DEBUG_MODE
+    )
     $repo_src_owner = 'kindtek'
     $repo_src_name = 'devels-workshop'
     $repo_src_name2 = 'devels-playground'
@@ -13,6 +16,14 @@ function set_dvlp_globals {
     $repo_dir_name4 = 'dvl-adv'
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
+    if (([string]::IsNullOrEmpty($DEBUG_MODE)) -And ([string]::IsNullOrEmpty($global:KINDTEK_DEBUG_MODE))) {
+        Set-Variable -Name KINDTEK_DEBUG_MODE -Value 0 -Option Constant -Scope Global -Force
+        Set-Variable -Name BG_WIN_STYLE -Value hidden -Option Constant -Scope Global -Force
+    } elseif (([string]::IsNullOrEmpty($global:KINDTEK_DEBUG_MODE)) -And !([string]::IsNullOrEmpty($DEBUG_MODE))){
+        Set-Variable -Name KINDTEK_DEBUG_MODE -Value 1 -Option Constant -Scope Global -Force
+        Set-Variable -Name BG_WIN_STYLE -Value minimized -Option Constant -Scope Global -Force
+    }
+
     if ($global:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
             Set-Variable -Name KINDTEK_WIN_GIT_OWNER -Value $repo_src_owner -Option Constant -Scope Global -Force
@@ -141,7 +152,7 @@ function install_winget {
         $file = "$global:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
+        Start-Process powershell -WindowStyle $global:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -166,7 +177,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
+        Start-Process powershell -WindowStyle $global:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.github-installed"; `
     
     }
@@ -177,7 +188,7 @@ function install_git {
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     # sync_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch 
-    Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $global:BG_WIN_STYLE -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
     return $new_install
 }
 
@@ -358,7 +369,7 @@ function install_everything {
             }
             else {
                 . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{. $global:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $global:KINDTEK_WIN_GIT_PATH; sync_repo '$global:KINDTEK_WIN_GIT_PATH' '$global:KINDTEK_WIN_DVLW_PATH' '$global:KINDTEK_WIN_GIT_OWNER' '$global:KINDTEK_WIN_DVLW_FULLNAME' '$global:KINDTEK_WIN_DVLW_NAME' '$$global:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle $global:BG_WIN_STYLE -ArgumentList "-command &{. $global:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $global:KINDTEK_WIN_GIT_PATH; sync_repo '$global:KINDTEK_WIN_GIT_PATH' '$global:KINDTEK_WIN_DVLW_PATH' '$global:KINDTEK_WIN_GIT_OWNER' '$global:KINDTEK_WIN_DVLW_FULLNAME' '$global:KINDTEK_WIN_DVLW_NAME' '$$global:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
             }
     
             do {
