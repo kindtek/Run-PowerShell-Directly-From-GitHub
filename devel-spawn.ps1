@@ -244,7 +244,7 @@ function install_everything {
         
                 install_winget $git_parent_path
         
-                install_git $git_parent_path $git_path $repo_src_ownr $repo_src_name $repo_dir_name $repo_src_branch  
+                install_git $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch  
                 . $git_path/scripts/devel-tools.ps1
                 run_installer
                 Start-Process powershell -WindowStyle minimized -LoadUserProfile -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/scripts/devel-tools.ps1;require_docker_online;exit;}" -Wait
@@ -303,7 +303,7 @@ function install_everything {
             }
             else {
                 . $git_path/scripts/devel-tools.ps1
-                Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/devel-spawn.ps1;. $git_path/scripts/devel-tools.ps1;install_winget $git_parent_path; sync_repo '$git_parent_path' '$git_path' '$repo_src_ownr' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle minimized -ArgumentList "-command &{Set-Location -literalPath $env:USERPROFILE;. $git_path/powerhell/devel-spawn.ps1;. $git_path/scripts/devel-tools.ps1;install_winget $git_parent_path; sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch';run_installer;}"
             }
     
             do {
