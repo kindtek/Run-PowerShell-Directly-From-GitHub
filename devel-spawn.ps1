@@ -22,7 +22,6 @@ function set_dvlp_envs {
     $repo_dir_name4 = 'dvl-adv'
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
-    echo "setting globals"
     start-sleep 3
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         write-host "setting global environment variables ..."
@@ -197,9 +196,6 @@ function install_winget {
 }
 
 function install_git {
-    param (
-        $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
-    )
     set_dvlp_envs
     $software_name = "Github CLI"
     $refresh_envs = "$env:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
@@ -208,10 +204,10 @@ function install_git {
     $progress_flag = 'SilentlyContinue'
     Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" | Out-Null
     $progress_flag = $orig_progress_flag
-    if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
+    if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
-        Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.github-installed"; `
+        Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
     
     }
     else {
@@ -220,29 +216,36 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    # sync_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch 
-    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo;exit;}" -Wait
     return $new_install
 }
 
 function sync_repo {
-    param (
-        $git_parent_path, $git_path, $repo_src_owner, $repo_src_name, $repo_dir_name, $repo_src_branch 
-    )
-    Write-Host "making sure git command works" -ForegroundColor DarkCyan
+    Write-Host "testing git command ..." -ForegroundColor DarkCyan
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     Write-Host "synchronizing kindtek github repos ..." -ForegroundColor DarkCyan
-    Push-Location $git_parent_path
-    ((git -C $repo_dir_name pull --progress) -Or `
-    (git clone "https://github.com/$repo_src_owner/$repo_src_name" --branch $repo_src_branch --progress -- $repo_dir_name) -And `
-    ($new_install = $true)) 
-    Push-Location $repo_dir_name
-    ((git submodule update --remote --progress -- dvlp dvl-adv powerhell) -Or `
-    (git submodule update --init --remote --progress -- dvlp dvl-adv powerhell) -And `
-    ($new_install = $true)) 
-    Set-Location dvlp
-    ((git submodule update --init --progress -- mnt kernels) -Or `
-    (git submodule update --init --progress -- mnt kernels))
+    Push-Location $env:KINDTEK_WIN_GIT_PATH
+    try {
+        git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
+    } catch {
+        git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
+        $new_install = $true
+    }
+    Push-Location $env:KINDTEK_WIN_DVLW_NAME
+    try {
+        git submodule update --remote --progress -- dvlp dvl-adv powerhell
+    } catch {
+        git submodule update --init --remote --progress -- dvlp dvl-adv powerhell
+        $new_install = $true
+    }
+    Push-Location $env:KINDTEK_WIN_DVLP_NAME
+    try {
+        git submodule update --progress -- mnt kernels
+    } catch {
+        git submodule update --init --progress -- mnt kernels
+    }
+    Pop-Location
+    Pop-Location
     Pop-Location
 }
 
@@ -253,7 +256,7 @@ function run_devels_playground {
     try {
         . $env:USERPROFILE/dvlp.ps1 source
         $software_name = "docker devel"
-        # if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
+        # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
         Write-Host "establishing a connection with docker desktop ...`r`n" 
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
         require_docker_online_new_win
@@ -261,7 +264,7 @@ function run_devels_playground {
             Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $env:img_name_tag"
             # Write-Host "$([char]27)[2J"
-            # Write-Host "`r`npowershell.exe -Command `"$git_path/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
+            # Write-Host "`r`npowershell.exe -Command `"$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
             $img_name_tag = $img_name_tag.replace("\s+", '')
             # write-host `$img_name_tag $img_name_tag
             # write-host `$non_interactive $non_interactive
@@ -270,10 +273,10 @@ function run_devels_playground {
             # $current_process_object = Get-Process -id $current_process
             # Set-ForegroundWindow $current_process_object.MainWindowHandle
             # Set-ForegroundWindow ($current_process_object).MainWindowHandle
-            powershell.exe -Command "$git_path/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
-            # &$devs_playground = "$git_path/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
-            if (!(Test-Path -Path "$git_path/.dvlp-installed" -PathType Leaf)) {
-                Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
+            powershell.exe -Command "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
+            # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
+            if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
+                Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed"
             }
         }
         else {
@@ -341,7 +344,7 @@ function install_everything {
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 $host.UI.RawUI.ForegroundColor = "DarkGray"
-                install_git $env:KINDTEK_WIN_GIT_PATH $env:KINDTEK_WIN_DVLW_PATH $env:KINDTEK_WIN_GIT_OWNER $env:KINDTEK_WIN_DVLW_FULLNAME $env:KINDTEK_WIN_DVLW_NAME $env:KINDTEK_WIN_DVLW_BRANCH
+                install_git
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
                 run_installer
 
@@ -368,7 +371,7 @@ function install_everything {
                         New-Item -Path $vmpPath -ItemType File -Force
                         Add-Content $profilePath "./kindtek.Set-VMP.ps1;Clear-Content 'kindtek.Set-VMP.ps1';./$env:USERPROFILE/dvlp"
                         Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
-                        Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
+                        Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed"
                     }
                 }
                 catch {}
@@ -417,7 +420,7 @@ function install_everything {
             }
             else {
                 . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo '$env:KINDTEK_WIN_GIT_PATH' '$env:KINDTEK_WIN_DVLW_PATH' '$env:KINDTEK_WIN_GIT_OWNER' '$env:KINDTEK_WIN_DVLW_FULLNAME' '$env:KINDTEK_WIN_DVLW_NAME' '$env:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo;run_installer;}"
             }
     
             do {
@@ -560,4 +563,6 @@ else {
         # write-host "$args[0] is not empty"
         install_everything $args[0]
     }
+}
+}
 }
