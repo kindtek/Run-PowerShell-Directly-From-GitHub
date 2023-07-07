@@ -32,8 +32,8 @@ function set_dvlp_envs {
         }
         catch {}
         try {
-            [System.Environment]::SetEnvironmentVariable('FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
-            Set-Item -Path env:FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Options Constant -Force
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
+            Set-Item -Path env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Options Constant -Force
         }
         catch {}
         try {
@@ -101,20 +101,20 @@ function get_default_wsl_distro {
 }
 
 function revert_default_wsl_distro {
-    $FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
+    $KINDTEK_FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
     try {
-        wsl -s $FAILSAFE_WSL_DISTRO
+        wsl -s $KINDTEK_FAILSAFE_WSL_DISTRO
     }
     catch {
         try {
             run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
         }
         catch {
-            Write-Host "error reverting to $FAILSAFE_WSL_DISTRO as default wsl distro"
+            Write-Host "error reverting to $KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
             return $false
         }
     }
-    if ( (get_default_wsl_distro) -eq $FAILSAFE_WSL_DISTRO ) {
+    if ( (get_default_wsl_distro) -eq $KINDTEK_FAILSAFE_WSL_DISTRO ) {
         return $true
     }
     else {
@@ -346,7 +346,7 @@ function install_everything {
                     
                 }
                 catch {
-                    Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                    Write-Host "error setting $KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
                 }
 
                 # install hypervm on next open
@@ -391,7 +391,7 @@ function install_everything {
                 catch {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
-                        wsl -s $FAILSAFE_WSL_DISTRO
+                        wsl -s $KINDTEK_FAILSAFE_WSL_DISTRO
                         require_docker_online_new_win
                     }
                     catch {
@@ -414,7 +414,7 @@ function install_everything {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $env:DEFAULT_WSL_DISTRO = get_default_wsl_distro
                 if ([string]::IsNullOrEmpty($env:ORIG_DEFAULT_WSL_DISTRO)) {
-                    $env:ORIG_DEFAULT_WSL_DISTRO = $FAILSAFE_WSL_DISTRO
+                    $env:ORIG_DEFAULT_WSL_DISTRO = $KINDTEK_FAILSAFE_WSL_DISTRO
                     $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $env:ORIG_DEFAULT_WSL_DISTRO)"
                 }
                 elseif ("$env:ORIG_DEFAULT_WSL_DISTRO" -ne "$env:DEFAULT_WSL_DISTRO") {
@@ -423,7 +423,7 @@ function install_everything {
                 else {
                     $wsl_distro_undo_option = ''
                 }
-                # if (get_default_wsl_distro -eq $FAILSAFE_WSL_DISTRO){
+                # if (get_default_wsl_distro -eq $KINDTEK_FAILSAFE_WSL_DISTRO){
                 #     $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
                 # }
                 $restart_option = "`r`n`t- [r]estart"
@@ -435,7 +435,7 @@ function install_everything {
                 $dvlp_choice = Read-Host $dvlp_options
                 if ($dvlp_choice -ieq 'f') {
                     try {
-                        wsl -s $FAILSAFE_WSL_DISTRO
+                        wsl -s $KINDTEK_FAILSAFE_WSL_DISTRO
                         require_docker_online_new_win
                     }
                     catch {
@@ -443,7 +443,7 @@ function install_everything {
                             run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
                         }
                         catch {
-                            Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
+                            Write-Host "error setting $KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
                         }
                     }
                 }
