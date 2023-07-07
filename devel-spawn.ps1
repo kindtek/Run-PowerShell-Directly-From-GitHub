@@ -9,6 +9,8 @@ try {
 
         $new_path_local = [string][System.Environment]::GetEnvironmentVariable('path')+=";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
         $new_path_machine = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)+=";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
+        echo "machine path:$new_path_machine"
+    echo "local path:$new_path_local"
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_local)
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_machine, [System.EnvironmentVariableTarget]::Machine)
     
