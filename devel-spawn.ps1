@@ -352,6 +352,20 @@ function install_everything {
                 catch {
                     Write-Host "error setting $FAILSAFE_WSL_DISTRO as default wsl distro"
                 }
+
+                # install hypervm on next open
+                try {
+                    if (!(Test-Path "env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed" -PathType Leaf)) {
+                        $profilePath = Join-Path $env:USERPROFILE 'Documents\PowerShell\Microsoft.PowerShell_profile.ps1'
+                        $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
+                        New-Item -Path $profilePath -ItemType File -Force
+                        New-Item -Path $vmpPath -ItemType File -Force
+                        Add-Content $profilePath "./kindtek.Set-VMP.ps1;Clear-Content 'kindtek.Set-VMP.ps1';./$env:USERPROFILE/dvlp"
+                        Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
+                        Write-Host "$software_name installed`r`n" | Out-File -FilePath "$git_path/.dvlp-installed"
+                    }
+                }
+                catch {}
                 # install distro requested in arg
                 try {
                     $old_wsl_default_distro = get_default_wsl_distro
