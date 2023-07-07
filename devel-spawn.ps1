@@ -57,7 +57,7 @@ function set_dvlp_envs {
     }
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
-            [System.Environment]::SetEnvironmentVariable('$env:KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
+            Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('$env:KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
             # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
         }
         catch {}
@@ -110,7 +110,8 @@ function set_dvlp_envs {
             Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_FULLNAME', "$repo_src_name3", [System.EnvironmentVariableTarget]::Machine)
             # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
         }
-        catch {}try {
+        catch {}
+        try {
             Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_NAME', "$repo_dir_name3", [System.EnvironmentVariableTarget]::Machine)
             # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
         }
