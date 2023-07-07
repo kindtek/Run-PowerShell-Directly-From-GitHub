@@ -21,8 +21,10 @@ function set_dvlp_envs {
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
     start-sleep 3
-    if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
+    if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         write-host "setting global environment variables ..."
+    }
+    if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
             if ([string]::IsNullOrEmpty($DEBUG_MODE)) {
                 [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)
@@ -36,8 +38,9 @@ function set_dvlp_envs {
                 [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized', [System.EnvironmentVariableTarget]::Machine)
                 # Set-Item -Path env:KINDTEK_NEW_PROC_STYLE -Value minimized -Force
             }
-        }
-        catch {}
+        } catch {}
+    }
+    if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
             [System.Environment]::SetEnvironmentVariable('$env:KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
             # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
