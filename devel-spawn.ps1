@@ -12,8 +12,8 @@ try {
         $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
         echo "machine path:$machine_paths"
         echo "local path:$local_paths"
-        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $local_paths)
-        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $machine_paths, [System.EnvironmentVariableTarget]::Machine)
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command [System.Environment]::SetEnvironmentVariable('path', $local_paths)"
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command [System.Environment]::SetEnvironmentVariable('path', $machine_paths, [System.EnvironmentVariableTarget]::Machine)"
     
 }
 
