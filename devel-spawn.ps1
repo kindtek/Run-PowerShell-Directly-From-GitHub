@@ -460,7 +460,7 @@ function install_everything {
                     Exit
                 }
             }
-            # args must not empty or dvlp must not installed
+            # args must not empty and if they are must not equal 'source' ... OR dvlp must not installed
             if ((!([string]::IsNullOrEmpty($args[0])) -and ($args[0] -ne 'source')) -Or !(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
@@ -679,31 +679,6 @@ function install_everything {
     Write-Host "`r`nGoodbye!`r`n"
 }
 
-if ([string]::IsNullOrEmpty($args[0])) {
-    if ($PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
-        install_everything
-    }
-    else {
-        # include above functions and devel-tools
-        # set_dvlp_envs_new_win 1 
-        # start-sleep 3
-        # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
-    }
-}
-else {
-    if ($args[0] -eq "source") {
-        # include above functions and devel-tools
-        # set_dvlp_envs_new_win 1 
-        # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
-    }
-    else {
-        # write-host "$args[0] is not empty"
-        install_everything $args[0]
-    }
-}
-
-
-
 function dvlp_spawn {
     try {
         set_dvlp_envs_new_win 1 
@@ -729,3 +704,26 @@ function dvlp_spawn {
 }
 
 dvlp_spawn
+
+if ([string]::IsNullOrEmpty($args[0])) {
+    if ($PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
+        install_everything
+    }
+    else {
+        # include above functions and devel-tools
+        # set_dvlp_envs_new_win 1 
+        # start-sleep 3
+        # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
+    }
+}
+else {
+    if ($args[0] -eq "source") {
+        # include above functions and devel-tools
+        # set_dvlp_envs_new_win 1 
+        # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
+    }
+    else {
+        # write-host "$args[0] is not empty"
+        install_everything $args[0]
+    }
+}
