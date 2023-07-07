@@ -20,20 +20,22 @@ function set_dvlp_envs {
             if ([string]::IsNullOrEmpty($DEBUG_MODE)) {
                 [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)
                 Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 0 -Options Constant -Force
-                [System.Environment]::SetEnvironmentVariable('BG_WIN_STYLE', 'hidden', [System.EnvironmentVariableTarget]::Machine)
-                Set-Item -Path env:BG_WIN_STYLE -Value hidden -Options Constant -Force
+                [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'hidden', [System.EnvironmentVariableTarget]::Machine)
+                Set-Item -Path env:KINDTEK_NEW_PROC_STYLE -Value hidden -Options Constant -Force
             }
             elseif (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
                 [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1', [System.EnvironmentVariableTarget]::Machine)
                 Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 1 -Options Constant -Force
-                [System.Environment]::SetEnvironmentVariable('BG_WIN_STYLE', 'minimized', [System.EnvironmentVariableTarget]::Machine)
-                Set-Item -Path env:BG_WIN_STYLE -Value minimized -Options Constant -Force
+                [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized', [System.EnvironmentVariableTarget]::Machine)
+                Set-Item -Path env:KINDTEK_NEW_PROC_STYLE -Value minimized -Options Constant -Force
             }
-        } catch {}
+        }
+        catch {}
         try {
             [System.Environment]::SetEnvironmentVariable('FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
             Set-Item -Path env:FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Options Constant -Force
-        } catch {}
+        }
+        catch {}
         try {
             [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', "$repo_src_owner", [System.EnvironmentVariableTarget]::Machine)
             Set-Item -Path env:KINDTEK_WIN_GIT_OWNER -Value  $repo_src_owner -Options Constant -Force
@@ -172,7 +174,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        Start-Process powershell -WindowStyle $env:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
+        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -198,7 +200,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$git_parent_path/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        Start-Process powershell -WindowStyle $env:BG_WIN_STYLE -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
+        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$git_parent_path/.github-installed"; `
     
     }
@@ -209,7 +211,7 @@ function install_git {
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     # sync_repo $git_parent_path $git_path $repo_src_owner $repo_src_name $repo_dir_name $repo_src_branch 
-    Start-Process powershell -LoadUserProfile -WindowStyle $env:BG_WIN_STYLE -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo '$git_parent_path' '$git_path' '$repo_src_owner' '$repo_src_name' '$repo_dir_name' '$repo_src_branch' ;exit;}" -Wait
     return $new_install
 }
 
@@ -332,12 +334,6 @@ function install_everything {
                 install_git $env:KINDTEK_WIN_GIT_PATH $env:KINDTEK_WIN_DVLW_PATH $env:KINDTEK_WIN_GIT_OWNER $env:KINDTEK_WIN_DVLW_FULLNAME $env:KINDTEK_WIN_DVLW_NAME $env:KINDTEK_WIN_DVLW_BRANCH
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
                 run_installer
-                $profilePath = Join-Path $env:USERPROFILE 'Documents\PowerShell\Microsoft.PowerShell_profile.ps1'
-                $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
-                New-Item -Path $profilePath -ItemType File -Force
-                New-Item -Path $vmpPath -ItemType File -Force
-                Add-Content $profilePath "./kindtek.Set-VMP.ps1;Clear-Content 'kindtek.Set-VMP.ps1';./$env:USERPROFILE/dvlp"
-                Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
 
                 $host.UI.RawUI.ForegroundColor = "White"
                 require_docker_online_new_win
@@ -411,7 +407,7 @@ function install_everything {
             }
             else {
                 . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle $env:BG_WIN_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo '$env:KINDTEK_WIN_GIT_PATH' '$env:KINDTEK_WIN_DVLW_PATH' '$env:KINDTEK_WIN_GIT_OWNER' '$env:KINDTEK_WIN_DVLW_FULLNAME' '$env:KINDTEK_WIN_DVLW_NAME' '$$env:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo '$env:KINDTEK_WIN_GIT_PATH' '$env:KINDTEK_WIN_DVLW_PATH' '$env:KINDTEK_WIN_GIT_OWNER' '$env:KINDTEK_WIN_DVLW_FULLNAME' '$env:KINDTEK_WIN_DVLW_NAME' '$$env:KINDTEK_WIN_DVLW_BRANCH';run_installer;}"
             }
     
             do {
