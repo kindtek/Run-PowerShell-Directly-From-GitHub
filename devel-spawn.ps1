@@ -1,37 +1,3 @@
-
-try {
-    echo 'test_tools'
-    # test_dvlp
-    test_tools
-
-} catch {
-    echo 'test_tools2'
-        $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
-        $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
-        $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
-        $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
-        
-        $set_local_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$local_paths")
-        $set_machine_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$machine_paths", [System.EnvironmentVariableTarget]::Machine)
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_local_path_command"
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_machine_path_command"
-    
-}
-
-function test_dvlp {
-    return $true
-}
-function unset_dvlp_envs {
-    if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
-        $dvlp_owner = 'kindtek'
-    }
-    get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
-        $unset_command = [string][System.Environment]::SetEnvironmentVariable([string]$_.name, $null, [System.EnvironmentVariableTarget]::Machine)
-        Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-noexit",  "-Command $unset_command"
-        echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-noexit",  "-Command $unset_command"
-    }
-}
-
 function set_dvlp_envs_new_win {
     Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
 }
@@ -231,6 +197,42 @@ function set_dvlp_envs {
     catch {}
 
 }
+
+try {
+    set_dvlp_envs_new_win 1 
+    echo 'test_tools'
+    # test_dvlp
+    test_tools
+
+} catch {
+        set_dvlp_envs 1
+    echo 'test_tools2'
+        $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
+        $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+        $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
+        $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+        
+        $set_local_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$local_paths")
+        $set_machine_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$machine_paths", [System.EnvironmentVariableTarget]::Machine)
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_local_path_command"
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_machine_path_command"
+    
+}
+
+function test_dvlp {
+    return $true
+}
+function unset_dvlp_envs {
+    if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
+        $dvlp_owner = 'kindtek'
+    }
+    get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
+        $unset_command = [string][System.Environment]::SetEnvironmentVariable([string]$_.name, $null, [System.EnvironmentVariableTarget]::Machine)
+        Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-noexit",  "-Command $unset_command"
+        echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-noexit",  "-Command $unset_command"
+    }
+}
+
 
 function get_default_wsl_distro {
     $default_wsl_distro = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
@@ -701,15 +703,15 @@ if ([string]::IsNullOrEmpty($args[0])) {
     }
     else {
         # include above functions and devel-tools
-        set_dvlp_envs_new_win 1 
-        start-sleep 3
+        # set_dvlp_envs_new_win 1 
+        # start-sleep 3
         # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
     }
 }
 else {
     if ($args[0] -eq "source") {
         # include above functions and devel-tools
-        set_dvlp_envs_new_win 1 
+        # set_dvlp_envs_new_win 1 
         # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
     }
     else {
