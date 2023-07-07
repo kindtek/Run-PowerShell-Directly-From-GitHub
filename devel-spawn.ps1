@@ -1,6 +1,6 @@
 
 try {
-    if (!(test_tools)){
+    if (!(test_dvlp)){
         $new_path_local = [string][System.Environment]::GetEnvironmentVariable('path')+="$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
         $new_path_machine = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)+="$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_local)
@@ -8,7 +8,7 @@ try {
     }
 } catch {}
 
-function test_tools {
+function test_dvlp {
     return $true
 }
 function unset_dvlp_envs {
