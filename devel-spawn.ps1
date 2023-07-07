@@ -212,7 +212,6 @@ catch {
     $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
     $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
     $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
-        
     $set_local_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$local_paths")
     $set_machine_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$machine_paths", [System.EnvironmentVariableTarget]::Machine)
     Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_local_path_command"
