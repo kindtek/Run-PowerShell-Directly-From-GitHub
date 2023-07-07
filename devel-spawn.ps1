@@ -304,25 +304,33 @@ function sync_repo {
     }
     Push-Location $env:KINDTEK_WIN_DVLW_NAME
     try {
-        git submodule update --remote --progress -- dvlp dvl-adv powerhell
+        git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
         write-host "$env:KINDTEK_WIN_DVLP_NAME pulled"
+        git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLADV_NAME
+        write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled"
+        git submodule update --remote --progress -- $env:KINDTEK_WIN_POWERHELL_NAME
+        write-host "$env:KINDTEK_WIN_POWERHELL_NAME pulled"
     }
     catch {
-        git submodule update --init --remote --progress -- dvlp dvl-adv powerhell
-        write-host "$env:KINDTEK_WIN_DVLP_NAME initialized"
+        git submodule update --init --init --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
+        write-host "$env:KINDTEK_WIN_DVLP_NAME pulled"
+        git submodule update --init --remote --progress -- $env:KINDTEK_WIN_DVLADV_NAME
+        write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled"
+        git submodule update --init --remote --progress -- $env:KINDTEK_WIN_POWERHELL_NAME
+        write-host "$env:KINDTEK_WIN_POWERHELL_NAME pulled"
     }
     Push-Location $env:KINDTEK_WIN_DVLP_NAME
     try {
-        git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_KERNELS_NAME
-        write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled"
-        git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_MNT_NAME
+        git submodule update --remote --progress -- $env:KINDTEK_WIN_MNT_NAME
         write-host "$env:KINDTEK_WIN_MNT_NAME pulled"
+        git submodule update --remote --progress -- $env:KINDTEK_WIN_KERNELS_NAME
+        write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled"
     }
     catch {
-        git submodule update --init --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_KERNELS_NAME
-        write-host "$env:KINDTEK_WIN_KERNELS_NAME initialized"
-        git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_MNT_NAME
-        write-host "$env:KINDTEK_WIN_MNT_NAME initialized"    
+        git submodule update --init --remote --progress -- $env:KINDTEK_WIN_MNT_NAME
+        write-host "$env:KINDTEK_WIN_MNT_NAME pulled"
+        git submodule update --init --remote --progress -- $env:KINDTEK_WIN_KERNELS_NAME
+        write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled"
     }
     Pop-Location
     Pop-Location
