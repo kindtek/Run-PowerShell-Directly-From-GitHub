@@ -389,7 +389,7 @@ function run_devels_playground {
             Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $env:img_name_tag"
             # Write-Host "$([char]27)[2J"
-            # Write-Host "`r`npowershell.exe -Command `"$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
+            # Write-Host "`r`npowershell.exe -Command `"$env:"$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
             $img_name_tag = $img_name_tag.replace("\s+", '')
             # write-host `$img_name_tag $img_name_tag
             # write-host `$non_interactive $non_interactive
@@ -674,14 +674,14 @@ if ([string]::IsNullOrEmpty($args[0])) {
         # include above functions and devel-tools
         set_dvlp_envs_new_win 1 
         start-sleep 3
-        . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
+        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
     }
 }
 else {
     if ($args[0] -eq "source") {
         # include above functions and devel-tools
         set_dvlp_envs_new_win 1 
-        . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
+        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
     }
     else {
         # write-host "$args[0] is not empty"
