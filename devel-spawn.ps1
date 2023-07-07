@@ -6,13 +6,14 @@ try {
 
 } catch {
     echo 'test_dvlp2'
-
-        $new_path_local = [string][System.Environment]::GetEnvironmentVariable('path')+=";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
-        $new_path_machine = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)+=";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
-        echo "machine path:$new_path_machine"
-    echo "local path:$new_path_local"
-        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_local)
-        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_machine, [System.EnvironmentVariableTarget]::Machine)
+        $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
+        $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
+        $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
+        $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
+        echo "machine path:$machine_paths"
+        echo "local path:$local_paths"
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $local_paths)
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $machine_paths, [System.EnvironmentVariableTarget]::Machine)
     
 }
 
