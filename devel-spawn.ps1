@@ -1,6 +1,8 @@
 function set_dvlp_envs_new_win {
     if ([string]::IsNullOrEmpty($env:KINDTEK_NEW_PROC_STYLE)) {
         $new_proc_style = [System.Diagnostics.ProcessWindowStyle]::Minimized
+    } else {
+        $new_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
     Start-Process powershell -LoadUserProfile -WindowStyle $new_proc_style -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
 }
