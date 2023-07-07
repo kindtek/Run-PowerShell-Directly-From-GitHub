@@ -37,6 +37,7 @@ function set_dvlp_envs {
                 # Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 1 -Force
                 [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized', [System.EnvironmentVariableTarget]::Machine)
                 # Set-Item -Path env:KINDTEK_NEW_PROC_STYLE -Value minimized -Force
+                Write-Output "debug = true"
             }
         } catch {}
     }
