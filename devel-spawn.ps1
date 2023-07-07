@@ -70,7 +70,7 @@ function set_dvlp_envs {
           
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)       
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
- # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
+        # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
     }
     catch {}
     try {
@@ -87,7 +87,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', "$repo_src_owner", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_GIT_OWNER -Value  $repo_src_owner -Force
+        # Set-Item -Path env:KINDTEK_WIN_GIT_OWNER -Value  $repo_src_owner -Force
     }
     catch {}
     try { 
@@ -95,7 +95,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_PATH', "$git_parent_path", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Force
+        # Set-Item -Path env:KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Force
     }
     catch {}
     try {
@@ -103,7 +103,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_PATH', "$git_path", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLW_PATH -Value $git_path -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLW_PATH -Value $git_path -Force
     }
     catch {}
     try {
@@ -111,7 +111,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_FULLNAME', "$repo_src_name", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Force
     }
     catch {}
     try {
@@ -119,7 +119,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_NAME', "$repo_dir_name", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Force
     }
     catch {}
     try {            
@@ -127,7 +127,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_BRANCH', "$repo_src_branch", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Force
     }
     catch {}
     try {
@@ -135,7 +135,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_PATH', "$git_path/$repo_dir_nam2", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Force
     }
     catch {}
     try {            
@@ -143,7 +143,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_FULLNAME', "$repo_src_name2", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Force
     }
     catch {}
     try {
@@ -151,7 +151,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_NAME', "$repo_dir_name2", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Force
     }
     catch {}
     try {
@@ -159,7 +159,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_FULLNAME', "$repo_src_name3", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
+        # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
     }
     catch {}
     try {
@@ -167,7 +167,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_NAME', "$repo_dir_name3", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
+        # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
     }
     catch {}
     try {
@@ -175,7 +175,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_PATH', "$git_path/$repo_dir_name3", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
+        # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
     }
     catch {}
     try {
@@ -183,7 +183,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', "$repo_src_name4", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
@@ -191,7 +191,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_NAME', "$repo_dir_name4", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
@@ -199,7 +199,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_PATH', "$git_path/$repo_dir_name4", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
@@ -207,7 +207,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_FULLNAME', "$repo_src_name5", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
@@ -215,7 +215,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_NAME', "$repo_dir_name5", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
@@ -223,7 +223,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_PATH', "$git_path/$repo_dir_name5", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
@@ -231,7 +231,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', "$repo_src_name6", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
@@ -239,7 +239,7 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
         $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_NAME', "$repo_dir_name6", [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-# Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
+        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
@@ -257,6 +257,36 @@ function set_dvlp_envs {
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
     }
     catch {}
+    while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_WSL_DISTRO) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_NAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_FULLNAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_BRANCH) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_PATH) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_NAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_FULLNAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_PATH) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_NAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_FULLNAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_PATH) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_NAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_FULLNAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_PATH) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_NAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_FULLNAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_PATH) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_NAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_FULLNAME) `
+            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_PATH) ) {
+            echo 'waiting for environment variables to update'
+            start-sleep 5
+
+    }
 
 }
 
