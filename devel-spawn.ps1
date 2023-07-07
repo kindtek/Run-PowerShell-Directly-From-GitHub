@@ -325,7 +325,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{;sync_repo;exit;}" -Wait
     return $new_install
 }
 
@@ -392,7 +392,7 @@ function run_devels_playground {
         $git_path, $img_name_tag, $non_interactive, $default_distro
     )
     try {
-        . $env:USERPROFILE/dvlp.ps1 source
+        
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
         Write-Host "establishing a connection with docker desktop ...`r`n" 
@@ -556,8 +556,8 @@ function install_everything {
                 }
             }
             else {
-                . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo;run_installer;}"
+                
+                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo;run_installer;}"
             }
     
             do {
