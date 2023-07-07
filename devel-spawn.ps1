@@ -1,6 +1,6 @@
 function set_dvlp_envs_new_win {
     if ([string]::IsNullOrEmpty($env:KINDTEK_NEW_PROC_STYLE)) {
-        $new_proc_style = 'minimized'
+        $new_proc_style = [System.Diagnostics.ProcessWindowStyle]::Minimized
     }
     Start-Process powershell -LoadUserProfile -WindowStyle $new_proc_style -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
 }
@@ -38,9 +38,9 @@ function set_dvlp_envs {
                 $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)"
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
                 # Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 0 -Force
-                $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'hidden')"
+                $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', [System.Diagnostics.ProcessWindowStyle]::Hidden)"
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-                $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'hidden', [System.EnvironmentVariableTarget]::Machine)"
+                $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', [System.Diagnostics.ProcessWindowStyle]::Hidden, [System.EnvironmentVariableTarget]::Machine)"
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
                 $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', ' ')"
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
@@ -54,9 +54,9 @@ function set_dvlp_envs {
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str_dbg"
                 $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1', [System.EnvironmentVariableTarget]::Machine)"
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-                $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized')"
+                $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', [System.Diagnostics.ProcessWindowStyle]::Minimized)"
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-                $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized', [System.EnvironmentVariableTarget]::Machine)"
+                $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', [System.Diagnostics.ProcessWindowStyle]::Minimized, [System.EnvironmentVariableTarget]::Machine)"
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
                 $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', '-noexit')"
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
