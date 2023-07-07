@@ -757,10 +757,10 @@ function dvlp_spawn {
         $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
         $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
         $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
-        $set_local_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$local_paths")
-        $set_machine_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$machine_paths", [System.EnvironmentVariableTarget]::Machine)
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_local_path_command" -wait
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_machine_path_command" -wait
+        $cmd_str_local = [string][System.Environment]::SetEnvironmentVariable('path', "$local_paths")
+        $cmd_str_machine = [string][System.Environment]::SetEnvironmentVariable('path', "$machine_paths", [System.EnvironmentVariableTarget]::Machine)
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str_local" -wait
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str_machine" -wait
         
     }
 }
