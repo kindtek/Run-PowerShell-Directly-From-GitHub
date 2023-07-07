@@ -2,6 +2,7 @@
 try {
     echo 'test_dvlp1'
     test_dvlp
+    test_tools
 
 } catch {
     echo 'test_dvlp2'
