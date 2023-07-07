@@ -47,7 +47,8 @@ function set_dvlp_envs {
             }
             elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -or !([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE))) {
                 Set-PSDebug -Trace 2;
-                Start-Process -FilePath powershell.exe -ArgumentList "-Command [string][System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1')"
+                $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1')
+                Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
                 $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1', [System.EnvironmentVariableTarget]::Machine)
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
                 $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized')
