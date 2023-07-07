@@ -24,7 +24,7 @@ function set_dvlp_envs {
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         write-host "setting global environment variables ..."
     }
-    if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
+    if ([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) -or $env:KINDTEK_DEBUG_MODE -ne $DEBUG_MODE) {
         try {
             if ([string]::IsNullOrEmpty($DEBUG_MODE)) {
                 [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)
@@ -200,7 +200,6 @@ function install_winget {
 }
 
 function install_git {
-    set_dvlp_envs
     $software_name = "Github CLI"
     $refresh_envs = "$env:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
     $global:progress_flag = 'silentlyContinue'
@@ -300,7 +299,6 @@ function install_everything {
     $host.UI.RawUI.BackgroundColor = "Black"
     $dvlp_choice = 'n'
     do {
-        set_dvlp_envs 1 | Out-Null
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
