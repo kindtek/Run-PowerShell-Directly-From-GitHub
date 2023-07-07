@@ -198,7 +198,7 @@ function set_dvlp_envs {
 
 }
 
-function test_dvlp {
+function test_dvlp_spawn {
     return $true
 }
 function unset_dvlp_envs {
@@ -707,15 +707,15 @@ else {
 function dvlp_spawn {
     try {
         set_dvlp_envs_new_win 1 
-        echo 'test_tools'
-        # test_dvlp
-        test_tools
+        echo 'test_dvlp_tools'
+        # test_dvlp_spawn
+        test_dvlp_tools
         
     
     }
     catch {
         set_dvlp_envs 1
-        echo 'test_tools2'
+        echo 'test_dvlp_tools2'
         $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
         $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
         $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
