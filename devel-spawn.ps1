@@ -1,3 +1,16 @@
+
+try {
+    if (!(test_tools)){
+        $new_path_local = [string][System.Environment]::GetEnvironmentVariable('path')+="$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
+        $new_path_machine = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)+="$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_local)
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_machine, [System.EnvironmentVariableTarget]::Machine)
+    }
+} catch {}
+
+function test_tools {
+    return $true
+}
 function unset_dvlp_envs {
     if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
         $dvlp_owner = 'kindtek'
@@ -66,6 +79,13 @@ function set_dvlp_envs {
     try {
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest')            
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
+        # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
+    }
+    catch {}
+    try {
+        Start-Process -FilePath powershell.exe -ArgumentList -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEVEL_TOOLS', "'$git_parent_path/scripts/devel-tools.ps1 source'")            
+        Start-Process -FilePath powershell.exe -ArgumentList -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEVEL_TOOLS', "'$git_parent_path/scripts/devel-tools.ps1 source'", [System.EnvironmentVariableTarget]::Machine)            
+        echo Start-Process -FilePath powershell.exe -ArgumentList -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEVEL_TOOLS', "'$git_parent_path/scripts/devel-tools.ps1 source'", [System.EnvironmentVariableTarget]::Machine)            
         # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
     }
     catch {}
