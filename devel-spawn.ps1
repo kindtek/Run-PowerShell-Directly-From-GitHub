@@ -545,8 +545,7 @@ if ([string]::IsNullOrEmpty($args[0])) {
     }
     else {
         # include above functions and devel-tools
-        set_dvlp_envs 1 | Out-Null
-        echo "including devel-tools"
+        set_dvlp_envs 1 
         start-sleep 3
         . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
@@ -554,9 +553,7 @@ if ([string]::IsNullOrEmpty($args[0])) {
 else {
     if ($args[0] -eq "source") {
         # include above functions and devel-tools
-        set_dvlp_envs 1 | Out-Null
-        echo "including devel-tools"
-        start-sleep 3
+        set_dvlp_envs 1 
         . $env:KINDTEK_WIN_GIT_PATH/dvlw/scripts/devel-tools.ps1 source
     }
     else {
