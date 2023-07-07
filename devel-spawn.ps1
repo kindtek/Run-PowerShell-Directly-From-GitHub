@@ -54,9 +54,9 @@ function set_dvlp_envs {
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
                 $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized', [System.EnvironmentVariableTarget]::Machine)
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-                $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', ' ')
+                $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', '-noexit')
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
-                $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', ' ', [System.EnvironmentVariableTarget]::Machine)
+                $cmd_str = [string][System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', '-noexit', [System.EnvironmentVariableTarget]::Machine)
                 Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str"
                 Write-Output "debug = true"
             }
