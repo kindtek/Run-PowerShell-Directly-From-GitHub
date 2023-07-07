@@ -311,7 +311,8 @@ function sync_repo {
         git submodule update --init --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_KERNELS_NAME
         write-host "$env:KINDTEK_WIN_KERNELS_NAME initialized"
         git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_MNT_NAME
-        write-host "$env:KINDTEK_WIN_MNT_NAME initialized"    }
+        write-host "$env:KINDTEK_WIN_MNT_NAME initialized"    
+    }
     Pop-Location
     Pop-Location
     Pop-Location
