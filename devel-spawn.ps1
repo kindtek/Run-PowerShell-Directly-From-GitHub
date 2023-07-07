@@ -1,5 +1,5 @@
 function unset_dvlp_envs {
-    if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)){
+    if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
         $dvlp_owner = 'kindtek'
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
@@ -46,7 +46,8 @@ function set_dvlp_envs {
                 # Set-Item -Path env:KINDTEK_NEW_PROC_STYLE -Value minimized -Force
                 Write-Output "debug = true"
             }
-        } catch {}
+        }
+        catch {}
     }
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         try {
@@ -160,7 +161,8 @@ function set_dvlp_envs {
         catch {}
         try {
             [System.Environment]::SetEnvironmentVariable('WSL_UTF8', "1", [System.EnvironmentVariableTarget]::Machine)
-        } catch {}
+        }
+        catch {}
     }
 }
 
@@ -289,7 +291,8 @@ function sync_repo {
     try {
         git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
         write-host "$env:KINDTEK_WIN_DVLW_NAME pulled"
-    } catch {
+    }
+    catch {
         git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
         write-host "$env:KINDTEK_WIN_DVLW_NAME cloned"
     }
@@ -297,7 +300,8 @@ function sync_repo {
     try {
         git submodule update --remote --progress -- dvlp dvl-adv powerhell
         write-host "$env:KINDTEK_WIN_DVLP_NAME pulled"
-    } catch {
+    }
+    catch {
         git submodule update --init --remote --progress -- dvlp dvl-adv powerhell
         write-host "$env:KINDTEK_WIN_DVLP_NAME initialized"
     }
@@ -307,7 +311,8 @@ function sync_repo {
         write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled"
         git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_MNT_NAME
         write-host "$env:KINDTEK_WIN_MNT_NAME pulled"
-    } catch {
+    }
+    catch {
         git submodule update --init --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_KERNELS_NAME
         write-host "$env:KINDTEK_WIN_KERNELS_NAME initialized"
         git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_MNT_NAME
