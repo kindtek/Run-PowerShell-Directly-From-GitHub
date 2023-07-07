@@ -1,7 +1,8 @@
 function set_dvlp_envs_new_win {
     if ([string]::IsNullOrEmpty($env:KINDTEK_NEW_PROC_STYLE)) {
         $new_proc_style = [System.Diagnostics.ProcessWindowStyle]::Minimized
-    } else {
+    }
+    else {
         $new_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
     Start-Process powershell -LoadUserProfile -WindowStyle $new_proc_style -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
@@ -525,7 +526,7 @@ function unset_dvlp_envs {
 
 
 function get_default_wsl_distro {
-    $default_wsl_distro = wsl --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
+    $default_wsl_distro = wsl.exe --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
     return $default_wsl_distro
 }
@@ -533,7 +534,7 @@ function get_default_wsl_distro {
 function revert_default_wsl_distro {
     $env:KINDTEK_FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
     try {
-        wsl -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
+        wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
     }
     catch {
         try {
@@ -558,7 +559,7 @@ function set_default_wsl_distro {
     try {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
-            wsl -s $new_wsl_default_distro
+            wsl.exe -s $new_wsl_default_distro
         }
         catch {
             try {
@@ -574,7 +575,7 @@ function set_default_wsl_distro {
             Start-Sleep 3
             Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
             try {
-                wsl -s $old_wsl_default_distro
+                wsl.exe -s $old_wsl_default_distro
             }
             catch {
                 try {
@@ -730,7 +731,7 @@ function run_devels_playground {
         }
         else {
             Write-Host "`r`nmake sure docker desktop is running"
-            Write-Host "still not working? try: `r`n`t- restart WSL`r`n`t- change your default distro (ie: wsl -s kalilinux-kali-rolling-latest )"
+            Write-Host "still not working? try: `r`n`t- restart WSL`r`n`t- change your default distro (ie: wsl.exe -s kalilinux-kali-rolling-latest )"
         }
         
         # }
@@ -833,7 +834,7 @@ function install_everything {
                         Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                         Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                         try {
-                            wsl -s $old_wsl_default_distro
+                            wsl.exe -s $old_wsl_default_distro
                             wsl_docker_restart_new_win
                             # wsl_docker_restart
                             require_docker_online_new_win
@@ -852,7 +853,7 @@ function install_everything {
                 catch {
                     Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
                     try {
-                        wsl -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
+                        wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
                         require_docker_online_new_win
                     }
                     catch {
@@ -896,7 +897,7 @@ function install_everything {
                 $dvlp_choice = Read-Host $dvlp_options
                 if ($dvlp_choice -ieq 'f') {
                     try {
-                        wsl -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
+                        wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
                         require_docker_online_new_win
                     }
                     catch {
@@ -1003,11 +1004,11 @@ function dvlp_spawn {
         set_dvlp_envs_new_win 1 
         echo 'test_dvlp_tools2'
         $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
-        $local_paths += ";$env:SYSTEMROOT\System32\WindowsPowerShell\v1.0\;$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+        $local_paths += ";$env:SYSTEMROOT\System32\WindowsPowerShell\v1.0\;"
         # $local_paths += "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
         $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
         # $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
-        $machine_paths += ";$env:SYSTEMROOT\System32\WindowsPowerShell\v1.0\;$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+        $machine_paths += ";$env:SYSTEMROOT\System32\WindowsPowerShell\v1.0\;"
         $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
         $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str_local" -wait
