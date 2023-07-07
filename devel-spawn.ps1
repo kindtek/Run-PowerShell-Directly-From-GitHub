@@ -3,7 +3,7 @@ function unset_dvlp_envs {
         $dvlp_owner = 'kindtek'
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
-        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable([string]$_.name, $null, [System.EnvironmentVariableTarget]::Machine) 
+        Start-Process -FilePath powershell.exe -ArgumentList -Command [System.Environment]::SetEnvironmentVariable([string]$_.name, $null, [System.EnvironmentVariableTarget]::Machine) 
     }
 }
 
