@@ -10,7 +10,7 @@ function unset_dvlp_envs {
 }
 
 function set_dvlp_envs_new_win {
-    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList"-noexit", "-Command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
 }
 function set_dvlp_envs {
     param (
@@ -41,134 +41,163 @@ function set_dvlp_envs {
         try {
             if ([string]::IsNullOrEmpty($DEBUG_MODE)) {
                 Set-PSDebug -Trace 0;
+                Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0')
                 Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)
                 # Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 0 -Force
+                Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'hidden')
                 Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'hidden', [System.EnvironmentVariableTarget]::Machine)
+                Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', ' ')
+                Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', ' ', [System.EnvironmentVariableTarget]::Machine)
                 # Set-Item -Path env:KINDTEK_NEW_PROC_STYLE -Value hidden -Force
             }
-            elseif (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
+            elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -or !([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE))) {
                 Set-PSDebug -Trace 2;
+                Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1')
                 Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1', [System.EnvironmentVariableTarget]::Machine)
-                # Set-Item -Path env:KINDTEK_DEBUG_MODE -Value 1 -Force
+                Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized')
                 Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', 'minimized', [System.EnvironmentVariableTarget]::Machine)
-                # Set-Item -Path env:KINDTEK_NEW_PROC_STYLE -Value minimized -Force
+                Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', '-noexit')
+                Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', '-noexit', [System.EnvironmentVariableTarget]::Machine)
                 Write-Output "debug = true"
             }
         }
         catch {}
     }
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest')            
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)            
         # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', "$repo_src_owner")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', "$repo_src_owner", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_GIT_OWNER -Value  $repo_src_owner -Force
     }
     catch {}
     try { 
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_PATH', "$git_parent_path")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_PATH', "$git_parent_path", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_PATH', "$git_path")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_PATH', "$git_path", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLW_PATH -Value $git_path -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_FULLNAME', "$repo_src_name")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_FULLNAME', "$repo_src_name", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_NAME', "$repo_dir_name")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_NAME', "$repo_dir_name", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Force
     }
     catch {}
     try {            
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_BRANCH', "$repo_src_branch")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_BRANCH', "$repo_src_branch", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_PATH', "$git_path/$repo_dir_nam2")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_PATH', "$git_path/$repo_dir_nam2", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLP_PATH -Value "$git_path/$repo_dir_name2" -Force
     }
     catch {}
     try {            
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_FULLNAME', "$repo_src_name2")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_FULLNAME', "$repo_src_name2", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_NAME', "$repo_dir_name2")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_NAME', "$repo_dir_name2", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_FULLNAME', "$repo_src_name3")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_FULLNAME', "$repo_src_name3", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_NAME', "$repo_dir_name3")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_NAME', "$repo_dir_name3", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_PATH', "$git_path/$repo_dir_name3")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_PATH', "$git_path/$repo_dir_name3", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value "$git_path/$repo_dir_name3" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', "$repo_src_name4")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', "$repo_src_name4", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_NAME', "$repo_dir_name4")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_NAME', "$repo_dir_name4", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_PATH', "$git_path/$repo_dir_name4")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_PATH', "$git_path/$repo_dir_name4", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_FULLNAME', "$repo_src_name5")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_FULLNAME', "$repo_src_name5", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_NAME', "$repo_dir_name5")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_NAME', "$repo_dir_name5", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_PATH', "$git_path/$repo_dir_name5")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_PATH', "$git_path/$repo_dir_name5", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', "$repo_src_name6")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', "$repo_src_name6", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_NAME', "$repo_dir_name6")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_NAME', "$repo_dir_name6", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_PATH', "$git_path/$repo_dir_name6")
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_PATH', "$git_path/$repo_dir_name6", [System.EnvironmentVariableTarget]::Machine)
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
     }
     catch {}
     try {
-        [System.Environment]::SetEnvironmentVariable('WSL_UTF8', "1", [System.EnvironmentVariableTarget]::Machine)
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('WSL_UTF8', "1")
+        Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('WSL_UTF8', "1", [System.EnvironmentVariableTarget]::Machine)
     }
     catch {}
 
@@ -254,7 +283,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList"-noexit", "-Command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
+        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -276,7 +305,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList"-noexit", "-Command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
+        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
     
     }
@@ -286,7 +315,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList"-noexit", "-Command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo;exit;}" -Wait
     return $new_install
 }
 
@@ -515,7 +544,7 @@ function install_everything {
             }
             else {
                 . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList"-noexit", "-Command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo;run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo;run_installer;}"
             }
     
             do {
@@ -570,11 +599,11 @@ function install_everything {
                         wsl.exe --cd /hal --exec cdir
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
-                        powershell.exe -noexit -command Set-Location -literalPath $env:USERPROFILE
+                        powershell.exe $env:KINDTEK_NEW_PROC_NOEXIT -command Set-Location -literalPath $env:USERPROFILE
                     }
                     elseif ($dvlp_choice -ieq 'cdw' ) {
                         # one day might get the windows cdir working
-                        Start-Process powershell.exe -LoadUserProfile -noexit -command Set-Location -literalPath $env:USERPROFILE
+                        Start-Process powershell.exe -LoadUserProfile $env:KINDTEK_NEW_PROC_NOEXIT -command Set-Location -literalPath $env:USERPROFILE
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd') {
