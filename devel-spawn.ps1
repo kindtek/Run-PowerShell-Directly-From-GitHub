@@ -300,7 +300,8 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', '$repo_src_name4')        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', '$repo_src_name4', [System.EnvironmentVariableTarget]::Machine)"
+        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', '$repo_src_name4')        
+        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', '$repo_src_name4', [System.EnvironmentVariableTarget]::Machine)"
         Start-Process -FilePath powershell.exe -ArgumentList "-Command &{$cmd_str}"
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
             Write-Host 'error setting KINDTEK_WIN_DVLADV_FULLNAME'
@@ -395,7 +396,8 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', '$repo_src_name6')        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', '$repo_src_name6', [System.EnvironmentVariableTarget]::Machine)"
+        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', '$repo_src_name6')        
+        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', '$repo_src_name6', [System.EnvironmentVariableTarget]::Machine)"
         Start-Process -FilePath powershell.exe -ArgumentList "-Command &{$cmd_str}"
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
             Write-Host 'error setting KINDTEK_WIN_MNT_FULLNAME'
@@ -426,7 +428,8 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_PATH', '$git_path/$repo_dir_name6')        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_PATH', '$git_path/$repo_dir_name6', [System.EnvironmentVariableTarget]::Machine)"
+        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_PATH', '$git_path/$repo_dir_name6')        
+        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_PATH', '$git_path/$repo_dir_name6', [System.EnvironmentVariableTarget]::Machine)"
         Start-Process -FilePath powershell.exe -ArgumentList "-Command &{$cmd_str}"
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
             Write-Host 'error setting KINDTEK_WIN_MNT_PATH'
