@@ -25,6 +25,7 @@ function set_dvlp_envs {
     echo "setting globals"
     start-sleep 3
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
+        write-host "setting global environment variables ..."
         try {
             if ([string]::IsNullOrEmpty($DEBUG_MODE)) {
                 [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)
