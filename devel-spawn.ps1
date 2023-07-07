@@ -204,18 +204,19 @@ try {
     # test_dvlp
     test_tools
 
-} catch {
-        set_dvlp_envs 1
+}
+catch {
+    set_dvlp_envs 1
     echo 'test_tools2'
-        $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
-        $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
-        $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
-        $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+    $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
+    $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+    $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
+    $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
         
-        $set_local_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$local_paths")
-        $set_machine_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$machine_paths", [System.EnvironmentVariableTarget]::Machine)
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_local_path_command"
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_machine_path_command"
+    $set_local_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$local_paths")
+    $set_machine_path_command = [string][System.Environment]::SetEnvironmentVariable('path', "$machine_paths", [System.EnvironmentVariableTarget]::Machine)
+    Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_local_path_command"
+    Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_machine_path_command"
     
 }
 
@@ -228,8 +229,8 @@ function unset_dvlp_envs {
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_command = [string][System.Environment]::SetEnvironmentVariable([string]$_.name, $null, [System.EnvironmentVariableTarget]::Machine)
-        Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-noexit",  "-Command $unset_command"
-        echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-noexit",  "-Command $unset_command"
+        Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-noexit", "-Command $unset_command"
+        echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-noexit", "-Command $unset_command"
     }
 }
 
@@ -364,7 +365,8 @@ function sync_repo {
         try {
             git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
             write-host "$env:KINDTEK_WIN_DVLW_NAME cloned"
-        } catch {}
+        }
+        catch {}
     }
     Push-Location $env:KINDTEK_WIN_DVLW_NAME
     try {
@@ -383,7 +385,8 @@ function sync_repo {
             write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled"
             git submodule update --init --remote --progress -- $env:KINDTEK_WIN_POWERHELL_NAME
             write-host "$env:KINDTEK_WIN_POWERHELL_NAME pulled"
-        } catch {}
+        }
+        catch {}
     }
     Push-Location $env:KINDTEK_WIN_DVLP_NAME
     try {
@@ -398,7 +401,8 @@ function sync_repo {
             write-host "$env:KINDTEK_WIN_MNT_NAME pulled"
             git submodule update --init --remote --progress -- $env:KINDTEK_WIN_KERNELS_NAME
             write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled"
-        } catch {}
+        }
+        catch {}
     }
     Pop-Location
     Pop-Location
