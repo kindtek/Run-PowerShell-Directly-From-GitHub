@@ -8,7 +8,7 @@ function unset_dvlp_envs {
 }
 
 function set_dvlp_envs_new_win {
-    Start-Process powershell -LoadUserProfile -WindowStyle $global:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
 }
 function set_dvlp_envs {
     param (
