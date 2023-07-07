@@ -10,10 +10,10 @@ try {
         $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
         $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
         $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
-        echo "machine path:$machine_paths"
-        echo "local path:$local_paths"
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command [System.Environment]::SetEnvironmentVariable('path', $local_paths)"
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command [System.Environment]::SetEnvironmentVariable('path', $machine_paths, [System.EnvironmentVariableTarget]::Machine)"
+        $set_local_path_command = [string][System.Environment]::SetEnvironmentVariable('path', '$local_paths')
+        $set_machine_path_command = [string][System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_local_path_command"
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_machine_path_command)"
     
 }
 
@@ -94,7 +94,6 @@ function set_dvlp_envs {
     try {
         Start-Process -FilePath powershell.exe -ArgumentList -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEVEL_TOOLS', "'$git_parent_path/scripts/devel-tools.ps1 source'")            
         Start-Process -FilePath powershell.exe -ArgumentList -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEVEL_TOOLS', "'$git_parent_path/scripts/devel-tools.ps1 source'", [System.EnvironmentVariableTarget]::Machine)            
-        echo Start-Process -FilePath powershell.exe -ArgumentList -Command [System.Environment]::SetEnvironmentVariable('KINDTEK_DEVEL_TOOLS', "'$git_parent_path/scripts/devel-tools.ps1 source'", [System.EnvironmentVariableTarget]::Machine)            
         # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
     }
     catch {}
