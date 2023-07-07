@@ -105,7 +105,7 @@ function set_dvlp_envs {
             Write-Host 'error setting KINDTEK_DEVEL_TOOLS'
             Write-Host "$cmd_str"
         }
-         # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
+        # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
     }
     catch {
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
@@ -525,7 +525,8 @@ function test_dvlp_spawn {
 function unset_dvlp_envs {
     if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
         $dvlp_owner = 'kindtek'
-    } else {
+    }
+    else {
         $dvlp_owner = $env:KINDTEK_WIN_GIT_OWNER
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
