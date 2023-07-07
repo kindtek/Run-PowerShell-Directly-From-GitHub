@@ -524,7 +524,6 @@ function unset_dvlp_envs {
     }
 }
 
-
 function get_default_wsl_distro {
     $default_wsl_distro = wsl.exe --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
