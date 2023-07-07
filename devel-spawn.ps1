@@ -1,8 +1,8 @@
 
 try {
     if (!(test_dvlp)){
-        $new_path_local = [string][System.Environment]::GetEnvironmentVariable('path')+="$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
-        $new_path_machine = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)+="$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
+        $new_path_local = [string][System.Environment]::GetEnvironmentVariable('path')+=";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
+        $new_path_machine = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)+=";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source"
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_local)
         Start-Process -FilePath powershell.exe -Command [System.Environment]::SetEnvironmentVariable('path', $new_path_machine, [System.EnvironmentVariableTarget]::Machine)
     }
@@ -694,14 +694,14 @@ if ([string]::IsNullOrEmpty($args[0])) {
         # include above functions and devel-tools
         set_dvlp_envs_new_win 1 
         start-sleep 3
-        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
+        # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
     }
 }
 else {
     if ($args[0] -eq "source") {
         # include above functions and devel-tools
         set_dvlp_envs_new_win 1 
-        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
+        # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
     }
     else {
         # write-host "$args[0] is not empty"
