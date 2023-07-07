@@ -427,8 +427,7 @@ function unset_dvlp_envs {
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
-        $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null')"
-        Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle minimized -ArgumentList "-noexit", "-Command $unset_cmd_local"
+        [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle minimized -ArgumentList "-noexit", "-Command $unset_cmd_machine"
         # echo "unset:$unset_cmd_machine"
