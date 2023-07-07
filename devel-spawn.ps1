@@ -1,5 +1,3 @@
-$env:WSL_UTF8 = 1# Install-Module -Name Pscx -RequiredVersion 3.3.2 -Force -AllowClobber
-
 function unset_dvlp_envs {
     if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)){
         $dvlp_owner = 'kindtek'
@@ -100,6 +98,9 @@ function set_dvlp_envs {
             # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value "$repo_dir_name2" -Force
         }
         catch {}
+        try {
+            [System.Environment]::SetEnvironmentVariable('WSL_UTF8', "1", [System.EnvironmentVariableTarget]::Machine)
+        } catch {}
     }
 }
 
