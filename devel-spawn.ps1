@@ -285,25 +285,33 @@ function sync_repo {
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     Write-Host "synchronizing kindtek github repos ..." -ForegroundColor DarkCyan
     Push-Location $env:KINDTEK_WIN_GIT_PATH
+    Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     try {
         git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
+        write-host "$env:KINDTEK_WIN_DVLW_NAME pulled"
     } catch {
         git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
-        $new_install = $true
+        write-host "$env:KINDTEK_WIN_DVLW_NAME cloned"
     }
     Push-Location $env:KINDTEK_WIN_DVLW_NAME
     try {
         git submodule update --remote --progress -- dvlp dvl-adv powerhell
+        write-host "$env:KINDTEK_WIN_DVLP_NAME pulled"
     } catch {
         git submodule update --init --remote --progress -- dvlp dvl-adv powerhell
-        $new_install = $true
+        write-host "$env:KINDTEK_WIN_DVLP_NAME initialized"
     }
     Push-Location $env:KINDTEK_WIN_DVLP_NAME
     try {
-        git submodule update --progress -- mnt kernels
+        git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_KERNELS_NAME
+        write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled"
+        git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_MNT_NAME
+        write-host "$env:KINDTEK_WIN_MNT_NAME pulled"
     } catch {
-        git submodule update --init --progress -- mnt kernels
-    }
+        git submodule update --init --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_KERNELS_NAME
+        write-host "$env:KINDTEK_WIN_KERNELS_NAME initialized"
+        git submodule update --progress -- $env:KINDTEK_WIN_MNT_NAME $env:KINDTEK_WIN_MNT_NAME
+        write-host "$env:KINDTEK_WIN_MNT_NAME initialized"    }
     Pop-Location
     Pop-Location
     Pop-Location
@@ -623,4 +631,6 @@ else {
         install_everything $args[0]
     }
 }
+
+
 
