@@ -1003,14 +1003,15 @@ function dvlp_spawn {
         set_dvlp_envs_new_win 1 
         echo 'test_dvlp_tools2'
         $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
-        $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+        $local_paths += ";$env:SYSTEMROOT\System32\WindowsPowerShell\v1.0\;$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+        # $local_paths += "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
         $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
-        $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+        # $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+        $machine_paths += ";$env:SYSTEMROOT\System32\WindowsPowerShell\v1.0\;$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
         $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
         $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str_local" -wait
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $cmd_str_machine" -wait
-        
     }
 }
 
