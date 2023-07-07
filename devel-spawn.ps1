@@ -422,6 +422,8 @@ function test_dvlp_spawn {
 function unset_dvlp_envs {
     if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
         $dvlp_owner = 'kindtek'
+    } else {
+        $dvlp_owner = $env:KINDTEK_WIN_GIT_OWNER
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
