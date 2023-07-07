@@ -10,7 +10,7 @@ function unset_dvlp_envs {
 }
 
 function set_dvlp_envs_new_win {
-    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList"-noexit", "-Command &{. $env:KINDTEK_WIN_GIT_PATH/dvlp.ps1 source;set_dvlp_envs;exit;}" -Wait
 }
 function set_dvlp_envs {
     param (
@@ -254,7 +254,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList "-command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
+        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList"-noexit", "-Command &{powershell.exe -executionpolicy remotesigned -File $file}" -Wait
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -276,7 +276,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList "-command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
+        Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList"-noexit", "-Command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
     
     }
@@ -286,7 +286,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo;exit;}" -Wait
+    Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList"-noexit", "-Command &{. $env:USERPROFILE/dvlp.ps1 source;sync_repo;exit;}" -Wait
     return $new_install
 }
 
@@ -515,7 +515,7 @@ function install_everything {
             }
             else {
                 . $env:USERPROFILE/dvlp.ps1 source
-                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList "-command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo;run_installer;}"
+                Start-Process powershell -LoadUserProfile -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -ArgumentList"-noexit", "-Command &{. $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;. $env:USERPROFILE/dvlp.ps1 source;install_winget $env:KINDTEK_WIN_GIT_PATH; sync_repo;run_installer;}"
             }
     
             do {
