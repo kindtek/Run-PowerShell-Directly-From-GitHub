@@ -65,7 +65,8 @@ function set_dvlp_envs {
             if (!([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE))) {        
                 Write-Host "debug mode set to $env:KINDTEK_DEBUG_MODE"
                 Write-Host "$cmd_str_dbg"
-            } else {
+            }
+            else {
                 Write-Host "debug mode not set"
                 Write-Host "$cmd_str_dbg"
             }
@@ -497,7 +498,8 @@ function test_dvlp_spawn {
 function unset_dvlp_envs {
     if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
         $dvlp_owner = 'kindtek'
-    } else {
+    }
+    else {
         $dvlp_owner = $env:KINDTEK_WIN_GIT_OWNER
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
@@ -542,7 +544,8 @@ function revert_default_wsl_distro {
     }
     if ( (get_default_wsl_distro) -eq $env:KINDTEK_FAILSAFE_WSL_DISTRO ) {
         return $true
-    } else {
+    }
+    else {
         return $false
     }
 }
@@ -605,7 +608,8 @@ function install_winget {
         # Stop-Process -InputObject $p
         # Get-Process | Where-Object { $_.HasExited }
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.winget-installed"
-    } else {
+    }
+    else {
         Write-Host "$software_name already installed" -ForegroundColor DarkCyan
     }
 }
@@ -623,7 +627,8 @@ function install_git {
         Start-Process powershell -WindowStyle $env:KINDTEK_NEW_PROC_STYLE -LoadUserProfile -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT, "-Command &{winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;}" -Wait
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
     
-    } else {
+    }
+    else {
         Write-Host "$software_name already installed" -ForegroundColor DarkCyan
     }
     # allow git to be used in same window immediately after installation
@@ -1012,7 +1017,8 @@ dvlp_spawn
 if ([string]::IsNullOrEmpty($args[0])) {
     if ($PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
         install_everything
-    } else {
+    }
+    else {
         # include above functions and devel-tools
         # set_dvlp_envs_new_win 1 
         # start-sleep 3
@@ -1024,7 +1030,8 @@ else {
         # include above functions and devel-tools
         # set_dvlp_envs_new_win 1 
         # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1 source
-    } else {
+    }
+    else {
         # write-host "$args[0] is not empty"
         install_everything $args[0]
     }
