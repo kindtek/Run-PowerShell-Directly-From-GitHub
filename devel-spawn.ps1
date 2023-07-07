@@ -13,7 +13,7 @@ try {
         $set_local_path_command = [string][System.Environment]::SetEnvironmentVariable('path', '$local_paths')
         $set_machine_path_command = [string][System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)
         Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_local_path_command"
-        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_machine_path_command)"
+        Start-Process -FilePath powershell.exe -ArgumentList "-Command $set_machine_path_command"
     
 }
 
