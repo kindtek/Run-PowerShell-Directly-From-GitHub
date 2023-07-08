@@ -194,7 +194,7 @@ class dvlp_norm_process : dvlp_process {
 
 function set_dvlp_envs_new_win {
     if ([string]::IsNullOrEmpty($env:KINDTEK_NEW_PROC_STYLE)) {
-        $this_proc_style =[string][System.Diagnostics.ProcessWindowStyle]::Minimized
+        $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Minimized
         $this_proc_style = "-WindowStyle $this_proc_style"
     }
     else {
@@ -232,11 +232,11 @@ function set_dvlp_envs {
     try {
         if ([string]::IsNullOrEmpty($DEBUG_MODE) -or $DEBUG_MODE -eq '0') {
             Set-PSDebug -Trace 0;
-            $this_proc_style =[string][System.Diagnostics.ProcessWindowStyle]::Hidden
+            $this_proc_style =[System.Diagnostics.ProcessWindowStyle]::Hidden
             [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0')
             $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)"
             [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
-            [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE',[string][System.Diagnostics.ProcessWindowStyle]::Hidden)
+            [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE',[System.Diagnostics.ProcessWindowStyle]::Hidden)
             $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', [System.Diagnostics.ProcessWindowStyle]::Hidden, [System.EnvironmentVariableTarget]::Machine)"
             [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
             [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', ' ')
@@ -245,7 +245,7 @@ function set_dvlp_envs {
         }
         elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and $DEBUG_MODE -ne '0') {
             Set-PSDebug -Trace 2;
-            $this_proc_style = [string][System.Diagnostics.ProcessWindowStyle]::Normal;
+            $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
             [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', "$this_proc_style")
             $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', '$this_proc_style', [System.EnvironmentVariableTarget]::Machine)"
             [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
@@ -983,7 +983,7 @@ function install_everything {
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
                 if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
                     $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
-                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle[string][System.Diagnostics.ProcessWindowStyle]::Maximized -ArgumentList $CommandLine
+                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle [System.Diagnostics.ProcessWindowStyle]::Maximized -ArgumentList $CommandLine
                     Exit
                 }
             }
