@@ -230,7 +230,7 @@ function set_dvlp_envs_new_win {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
     . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-    [dvlp_min_process]::new("set_dvlp_envs;exit;", "wait")
+    [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("set_dvlp_envs;exit;", "wait")
 }
 function set_dvlp_envs {
     param (
@@ -648,7 +648,7 @@ function set_dvlp_envs {
     }
     foreach ($cmd in $cmd_strs) {
         echo "$cmd"
-        [dvlp_min_process]::new("$cmd")
+        [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd")
     }
     while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
             -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
@@ -694,7 +694,7 @@ function unset_dvlp_envs {
         $unset_var = $_.name
         $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
-        [dvlp_quiet_process]::new("$unset_cmd_local;", 'wait')
+        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$unset_cmd_local;", 'wait')
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -702,7 +702,7 @@ function unset_dvlp_envs {
     [Environment]::GetEnvironmentVariables('machine') | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]::new("$unset_cmd_machine;", 'wait')
+        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$unset_cmd_machine;", 'wait')
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -789,7 +789,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        [dvlp_norm_process]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
+        [dvlp_norm_process]$dvlp_proc = [dvlp_norm_process]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -910,7 +910,7 @@ function run_devels_playground {
             # $current_process_object = Get-Process -id $current_process
             # Set-ForegroundWindow $current_process_object.MainWindowHandle
             # Set-ForegroundWindow ($current_process_object).MainWindowHandle
-            [dvlp_min_process]::new("$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro', 'wait'")
+            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro', 'wait'")
 
             # powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
@@ -935,7 +935,7 @@ function install_everything {
     $host.UI.RawUI.BackgroundColor = "Black"
     $dvlp_choice = 'n'
     do {
-        [dvlp_min_process]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1", 'wait')
+        [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1", 'wait')
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
@@ -1058,7 +1058,7 @@ function install_everything {
                 }
             } else {
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-                [dvlp_min_process]::new("sync_repo;run_installer;", 'wait')
+                [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("sync_repo;run_installer;", 'wait')
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -1186,12 +1186,12 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
         if ($local_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1") {
             $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
-            [dvlp_min_process]::new("$cmd_str_local", 'wait')
+            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_local", 'wait')
         }
         if ($machine_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1") {
             $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_min_process]::new("$cmd_str_machine", 'wait')
+            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_machine", 'wait')
         }
     } catch {}
     set_dvlp_envs
