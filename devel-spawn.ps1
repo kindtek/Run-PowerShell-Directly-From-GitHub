@@ -788,7 +788,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        [dvlp_norm_process]$dvlp_proc = [dvlp_norm_process]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
+        [dvlp_norm_process]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -957,7 +957,7 @@ function install_everything {
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
                 if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
                     $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
-                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle [string][System.Diagnostics.ProcessWindowStyle]::Maximized -ArgumentList $CommandLine
+                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList $CommandLine
                     Exit
                 }
             }
