@@ -191,7 +191,7 @@ class dvlp_norm_process : dvlp_process {
 }
 
 # [dvlp_quiet_process]::new("wsl_docker_full_restart;exit;", 'wait')::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
-function dvlp_set_env {
+function set_dvlp_env {
     param (
         $dvlp_env_var, $dvlp_env_val, $set_system_env
     )
@@ -224,7 +224,6 @@ function set_dvlp_envs_new_win {
     else {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
-    . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
     [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("set_dvlp_envs;exit;", "wait")
 }
 function set_dvlp_envs {
@@ -258,11 +257,11 @@ function set_dvlp_envs {
     try {
         if ([string]::IsNullOrEmpty($DEBUG_MODE) -or $DEBUG_MODE -eq '0') {
             Set-PSDebug -Trace 0;
-            $cmd_str = dvlp_set_env 'KINDTEK_DEBUG_MODE' [System.Diagnostics.ProcessWindowStyle]::Hidden
+            $cmd_str = set_dvlp_env 'KINDTEK_DEBUG_MODE' [System.Diagnostics.ProcessWindowStyle]::Hidden
             if ($null -ne $cmd_str){
                 $cmd_strs.Add($cmd_str) > $null
             }
-            $cmd_str = dvlp_set_env 'KINDTEK_NEW_PROC_NOEXIT' " "
+            $cmd_str = set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' " "
             if ($null -ne $cmd_str){
                 $cmd_strs.Add($cmd_str) > $null
             }
@@ -270,15 +269,15 @@ function set_dvlp_envs {
         elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and $DEBUG_MODE -ne '0') {
             Set-PSDebug -Trace 2;
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
-            $cmd_str = dvlp_set_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style"
+            $cmd_str = set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style"
             if ($null -ne $cmd_str){
                 $cmd_strs.Add($cmd_str) > $null
             }
-            $cmd_str = dvlp_set_env 'KINDTEK_NEW_PROC_STYLE' "-noexit"
+            $cmd_str = set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "-noexit"
             if ($null -ne $cmd_str){
                 $cmd_strs.Add($cmd_str) > $null
             }
-            $cmd_str = dvlp_set_env 'KINDTEK_NEW_PROC_NOEXIT' "-noexit"
+            $cmd_str = set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' "-noexit"
             if ($null -ne $cmd_str){
                 $cmd_strs.Add($cmd_str) > $null
             }
@@ -299,7 +298,7 @@ function set_dvlp_envs {
     }
     # }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_FAILSAFE_WSL_DISTRO' "kalilinux-kali-rolling-latest"
+        $cmd_str = set_dvlp_env 'KINDTEK_FAILSAFE_WSL_DISTRO' "kalilinux-kali-rolling-latest"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -312,7 +311,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_DEFAULT_WSL_DISTRO' "kalilinux-kali-rolling-latest"
+        $cmd_str = set_dvlp_env 'KINDTEK_DEFAULT_WSL_DISTRO' "kalilinux-kali-rolling-latest"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -325,7 +324,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_DEVEL_TOOLS' "$git_parent_path/scripts/devel-tools.ps1"
+        $cmd_str = set_dvlp_env 'KINDTEK_DEVEL_TOOLS' "$git_parent_path/scripts/devel-tools.ps1"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -338,7 +337,7 @@ function set_dvlp_envs {
         }
     }    
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_GIT_OWNER' "$repo_src_owner"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_GIT_OWNER' "$repo_src_owner"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -351,7 +350,7 @@ function set_dvlp_envs {
         }
     }
     try { 
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_GIT_PATH' "$git_parent_path"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_GIT_PATH' "$git_parent_path"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -364,7 +363,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLW_PATH' "$git_path"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLW_PATH' "$git_path"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -377,7 +376,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLW_FULLNAME' "$repo_src_name"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLW_FULLNAME' "$repo_src_name"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -390,7 +389,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLW_NAME' "$repo_dir_name"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLW_NAME' "$repo_dir_name"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -403,7 +402,7 @@ function set_dvlp_envs {
         }
     }
     try {            
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLW_BRANCH' "$repo_src_branch"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLW_BRANCH' "$repo_src_branch"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -416,7 +415,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLP_PATH' "$git_path/$repo_dir_name2"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLP_PATH' "$git_path/$repo_dir_name2"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -429,7 +428,7 @@ function set_dvlp_envs {
         }
     }
     try {            
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLP_FULLNAME' "$repo_src_name2"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLP_FULLNAME' "$repo_src_name2"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -442,7 +441,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLP_NAME' "$repo_dir_name2"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLP_NAME' "$repo_dir_name2"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -455,7 +454,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_POWERHELL_FULLNAME' "$repo_dir_name3"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_POWERHELL_FULLNAME' "$repo_dir_name3"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -468,7 +467,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_POWERHELL_NAME' "$repo_dir_name3"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_POWERHELL_NAME' "$repo_dir_name3"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -482,7 +481,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_POWERHELL_PATH' "$git_path/$repo_dir_name3"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_POWERHELL_PATH' "$git_path/$repo_dir_name3"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -499,7 +498,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLADV_FULLNAME' "$repo_dir_name4"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLADV_FULLNAME' "$repo_dir_name4"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -512,7 +511,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLADV_NAME' "$repo_dir_name4"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLADV_NAME' "$repo_dir_name4"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -525,7 +524,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLADV_PATH' "$git_path/$repo_dir_name4"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLADV_PATH' "$git_path/$repo_dir_name4"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -538,7 +537,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_KERNELS_FULLNAME' "$repo_dir_name5"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_KERNELS_FULLNAME' "$repo_dir_name5"
         if ($dvlp_var -ne $false){
             $cmd_str = "[System.Environment]::SetEnvironmentVariable($dvlp_var, '$dvlp_val', [System.EnvironmentVariableTarget]::Machine)"
             $cmd_strs.Add($cmd_str) > $null
@@ -552,7 +551,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_KERNELS_NAME' "$repo_dir_name5"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_KERNELS_NAME' "$repo_dir_name5"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -569,7 +568,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_KERNELS_PATH' "$repo_dir_name5"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_KERNELS_PATH' "$repo_dir_name5"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -586,7 +585,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_MNT_FULLNAME' "$repo_dir_name6"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_MNT_FULLNAME' "$repo_dir_name6"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -598,7 +597,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_MNT_NAME' "$repo_dir_name6"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_MNT_NAME' "$repo_dir_name6"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -615,7 +614,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'KINDTEK_WIN_MNT_PATH' "$git_path/$repo_dir_name6"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_MNT_PATH' "$git_path/$repo_dir_name6"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -627,7 +626,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = dvlp_set_env 'WSL_UTF8' '1'
+        $cmd_str = set_dvlp_env 'WSL_UTF8' '1'
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
