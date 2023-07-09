@@ -257,7 +257,7 @@ function set_dvlp_envs {
     try {
         if ([string]::IsNullOrEmpty($DEBUG_MODE) -or $DEBUG_MODE -eq '0') {
             Set-PSDebug -Trace 0;
-            $cmd_str = set_dvlp_env 'KINDTEK_DEBUG_MODE' [System.Diagnostics.ProcessWindowStyle]::Hidden
+            $cmd_str = set_dvlp_env 'KINDTEK_DEBUG_MODE' '0'
             if ($null -ne $cmd_str){
                 $cmd_strs.Add($cmd_str) > $null
             }
