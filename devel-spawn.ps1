@@ -1190,6 +1190,6 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
             [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_machine", 'wait')
         }
     } catch {}
-    set_dvlp_envs
+    set_dvlp_envs 1
     install_everything $args[0]
 }
