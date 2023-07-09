@@ -201,7 +201,7 @@ function set_dvlp_env {
             [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
         }
         if ([System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable($dvlp_env_var, '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
+            $cmd_str = "[System.Environment]::SetEnvironmentVariable('$dvlp_env_var', '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
             return $cmd_str
         }
         return $null
