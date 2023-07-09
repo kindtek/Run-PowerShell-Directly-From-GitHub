@@ -1175,8 +1175,23 @@ function install_everything {
 
 
 if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
-    try {$local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
+
+    try {
+        $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
         $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
+        $local_ext = [System.Environment]::GetEnvironmentVariable('pathext')
+        $machine_ext = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
+        
+        if ($local_ext -split ";" -notcontains ".ps1") {
+            $local_ext += ";.ps1"
+            $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('pathext', '$local_ext')"
+            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_local", 'wait')
+        }
+        if ($machine_ext -split ";" -notcontains ".ps1") {
+            $machine_ext += ";.ps1"
+            $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('pathext', '$machine_ext', [System.EnvironmentVariableTarget]::Machine)"
+            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_machine", 'wait')
+        }
         if ($local_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1") {
             $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
