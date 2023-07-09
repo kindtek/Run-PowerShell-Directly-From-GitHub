@@ -647,7 +647,8 @@ function set_dvlp_envs {
         }
     }
     foreach ($cmd in $cmd_strs) {
-
+        echo "$cmd"
+        [dvlp_min_process]::new("$cmd")
     }
     while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
             -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
