@@ -197,19 +197,14 @@ function dvlp_set_env {
     )
     
     try {
-        [System.Environment]::SetEnvironmentVariable($dvlp_env_var, "$dvlp_env_val")
-        if ([System.Environment]::GetEnvironmentVariable($dvlp_env_var) -ne "$dvlp_env_val"){
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable($dvlp_env_var, '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
-            $cmd_strs.Add($cmd_str) > $null
-        }
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host "error setting $dvlp_env_var"
-            Write-Host "$cmd_str"
-        }
         if (!([string]::IsNullOrEmpty($set_system_env) -or [string]::IsNullOrEmpty($set_system_env) -eq '0' -or [string]::IsNullOrEmpty($set_system_env) -eq 0)){
             [System.Environment]::SetEnvironmentVariable($dvlp_env_var, "$dvlp_env_val")
         }
-        return "[System.Environment]::SetEnvironmentVariable($dvlp_env_var, '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
+        if ([System.Environment]::GetEnvironmentVariable($dvlp_env_var, [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
+            $cmd_str = "[System.Environment]::SetEnvironmentVariable($dvlp_env_var, '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
+            return $cmd_str
+        }
+        return $null
     }
     catch {
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
@@ -254,6 +249,7 @@ function set_dvlp_envs {
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
     . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+
 
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         write-host "setting global environment variables ..."
