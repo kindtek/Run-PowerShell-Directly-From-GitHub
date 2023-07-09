@@ -1180,7 +1180,7 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
         $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
         $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
         $local_ext = [System.Environment]::GetEnvironmentVariable('pathext')
-        $machine_ext = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
+        $machine_ext = [string][System.Environment]::GetEnvironmentVariable('pathext', [System.EnvironmentVariableTarget]::Machine)
         
         if ($local_ext -split ";" -notcontains ".ps1") {
             $local_ext += ";.ps1"
