@@ -538,8 +538,7 @@ function set_dvlp_envs {
     }
     try {
         $cmd_str = set_dvlp_env 'KINDTEK_WIN_KERNELS_FULLNAME' "$repo_dir_name5"
-        if ($dvlp_var -ne $false){
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable($dvlp_var, '$dvlp_val', [System.EnvironmentVariableTarget]::Machine)"
+        if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value '$repo_dir_name2' -Force
