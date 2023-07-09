@@ -190,7 +190,36 @@ class dvlp_norm_process : dvlp_process {
     }
 }
 
-# [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
+# [dvlp_quiet_process]::new("wsl_docker_full_restart;exit;", 'wait')::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
+function dvlp_set_env {
+    param (
+        $dvlp_env_var, $dvlp_env_val, $set_system_env
+    )
+    
+    try {
+        [System.Environment]::SetEnvironmentVariable($dvlp_env_var, "$dvlp_env_val")
+        if ([System.Environment]::GetEnvironmentVariable($dvlp_env_var) -ne "$dvlp_env_val"){
+            $cmd_str = "[System.Environment]::SetEnvironmentVariable($dvlp_env_var, '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
+            $cmd_strs.Add($cmd_str) > $null
+        }
+        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
+            Write-Host "error setting $dvlp_env_var"
+            Write-Host "$cmd_str"
+        }
+        if (!([string]::IsNullOrEmpty($set_system_env) -or [string]::IsNullOrEmpty($set_system_env) -eq '0' -or [string]::IsNullOrEmpty($set_system_env) -eq 0)){
+            [System.Environment]::SetEnvironmentVariable($dvlp_env_var, "$dvlp_env_val")
+        }
+        return "[System.Environment]::SetEnvironmentVariable($dvlp_env_var, '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
+    }
+    catch {
+        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
+            Write-Host "error setting $dvlp_env_var"
+            Write-Host "$cmd_str"
+        }
+        return $null
+    }
+
+}
 
 function set_dvlp_envs_new_win {
     if ([string]::IsNullOrEmpty($env:KINDTEK_NEW_PROC_STYLE)) {
@@ -201,12 +230,13 @@ function set_dvlp_envs_new_win {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
     . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-    [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("set_dvlp_envs;exit;", "wait")
+    [dvlp_min_process]::new("set_dvlp_envs;exit;", "wait")
 }
 function set_dvlp_envs {
     param (
         $DEBUG_MODE
     )
+    $cmd_strs = New-Object System.Collections.ArrayList
     $repo_src_owner = 'kindtek'
     $repo_src_name = 'devels-workshop'
     $repo_dir_name = 'dvlw'
@@ -232,35 +262,33 @@ function set_dvlp_envs {
     try {
         if ([string]::IsNullOrEmpty($DEBUG_MODE) -or $DEBUG_MODE -eq '0') {
             Set-PSDebug -Trace 0;
-            $this_proc_style =[System.Diagnostics.ProcessWindowStyle]::Hidden
-            [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0')
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '0', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
-            [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE',[System.Diagnostics.ProcessWindowStyle]::Hidden)
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', [System.Diagnostics.ProcessWindowStyle]::Hidden, [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
-            [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', ' ')
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', ' ', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
+            $cmd_str = dvlp_set_env 'KINDTEK_DEBUG_MODE' [System.Diagnostics.ProcessWindowStyle]::Hidden
+            if ($null -ne $cmd_str){
+                $cmd_strs.Add($cmd_str) > $null
+            }
+            $cmd_str = dvlp_set_env 'KINDTEK_NEW_PROC_NOEXIT' " "
+            if ($null -ne $cmd_str){
+                $cmd_strs.Add($cmd_str) > $null
+            }
         }
         elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and $DEBUG_MODE -ne '0') {
             Set-PSDebug -Trace 2;
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
-            [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', "$this_proc_style")
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', '$this_proc_style', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
-            [System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1')
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_DEBUG_MODE', '1', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
-            [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', "-noexit")
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_STYLE', [System.Diagnostics.ProcessWindowStyle]::Minimized, [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
-            [System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', "-noexit")
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_NEW_PROC_NOEXIT', '-noexit', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str;", 'wait')
+            $cmd_str = dvlp_set_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style"
+            if ($null -ne $cmd_str){
+                $cmd_strs.Add($cmd_str) > $null
+            }
+            $cmd_str = dvlp_set_env 'KINDTEK_NEW_PROC_STYLE' "-noexit"
+            if ($null -ne $cmd_str){
+                $cmd_strs.Add($cmd_str) > $null
+            }
+            $cmd_str = dvlp_set_env 'KINDTEK_NEW_PROC_NOEXIT' "-noexit"
+            if ($null -ne $cmd_str){
+                $cmd_strs.Add($cmd_str) > $null
+            }
             Write-Output "debug = true"
         }
-        if (!([string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE))) {        
+        if ($DEBUG_MODE -ne '0') {        
             Write-Host "debug mode set to $env:KINDTEK_DEBUG_MODE"
             Write-Host "$cmd_str_dbg"
         }
@@ -275,12 +303,9 @@ function set_dvlp_envs {
     }
     # }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest')
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_FAILSAFE_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)"     
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {        
-            Write-Host 'error setting KINDTEK_FAILSAFE_WSL_DISTRO'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_FAILSAFE_WSL_DISTRO' "kalilinux-kali-rolling-latest"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
     }
@@ -291,12 +316,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_DEFAULT_WSL_DISTRO', 'kalilinux-kali-rolling-latest')
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_DEFAULT_WSL_DISTRO', 'kalilinux-kali-rolling-latest', [System.EnvironmentVariableTarget]::Machine)"     
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {        
-            Write-Host 'error setting KINDTEK_DEFAULT_WSL_DISTRO'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_DEFAULT_WSL_DISTRO' "kalilinux-kali-rolling-latest"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
     }
@@ -307,12 +329,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_DEVEL_TOOLS', "$git_parent_path/scripts/devel-tools.ps1 source")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_DEVEL_TOOLS', '$git_parent_path/scripts/devel-tools.ps1 source', [System.EnvironmentVariableTarget]::Machine)"         
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and ([string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS))) {
-            Write-Host 'error setting KINDTEK_DEVEL_TOOLS'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_DEVEL_TOOLS' "$git_parent_path/scripts/devel-tools.ps1"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
     }
@@ -323,13 +342,9 @@ function set_dvlp_envs {
         }
     }    
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', "$repo_src_owner")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', '$repo_src_owner', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str", 'wait')
-        # [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_GIT_OWNER'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_GIT_OWNER' "$repo_src_owner"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_GIT_OWNER -Value  $repo_src_owner -Force
     }
@@ -340,12 +355,9 @@ function set_dvlp_envs {
         }
     }
     try { 
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_PATH', "$git_parent_path")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_GIT_PATH', '$git_parent_path', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_GIT_PATH'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_GIT_PATH' "$git_parent_path"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_GIT_PATH -Value $git_parent_path -Force
     }
@@ -356,12 +368,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_PATH', "$git_path")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_PATH', '$git_path', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLW_PATH'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLW_PATH' "$git_path"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLW_PATH -Value $git_path -Force
     }
@@ -372,12 +381,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_FULLNAME', "$repo_src_name")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_FULLNAME', '$repo_src_name', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLW_FULLNAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLW_FULLNAME' "$repo_src_name"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLW_FULLNAME -Value $repo_src_name -Force
     }
@@ -388,12 +394,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_NAME', "$repo_dir_name")        
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_NAME', '$repo_dir_name', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLW_NAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLW_NAME' "$repo_dir_name"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLW_NAME -Value $repo_dir_name -Force
     }
@@ -404,12 +407,9 @@ function set_dvlp_envs {
         }
     }
     try {            
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_BRANCH', "$repo_src_branch")        
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLW_BRANCH', '$repo_src_branch', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLW_BRANCH'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLW_BRANCH' "$repo_src_branch"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLW_BRANCH -Value $repo_src_branch -Force
     }
@@ -420,12 +420,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_PATH', "$git_path/$repo_dir_name2")        
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_PATH', '$git_path/$repo_dir_name2', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLP_PATH'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLP_PATH' "$git_path/$repo_dir_name2"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLP_PATH -Value '$git_path/$repo_dir_name2' -Force
     }
@@ -436,12 +433,9 @@ function set_dvlp_envs {
         }
     }
     try {            
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_FULLNAME', "$repo_src_name2")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_FULLNAME', '$repo_src_name2'', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLP_FULLNAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLP_FULLNAME' "$repo_src_name2"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLP_FULLNAME -Value $repo_src_name2 -Force
     }
@@ -452,12 +446,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_NAME', "$repo_dir_name2")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLP_NAME', '$repo_dir_name2', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLP_NAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLP_NAME' "$repo_dir_name2"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLP_NAME -Value $repo_dir_name2 -Force
     }
@@ -468,12 +459,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_FULLNAME', "$repo_src_name3")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_FULLNAME', '$repo_src_name3', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_POWERHELL_FULLNAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_POWERHELL_FULLNAME' "$repo_dir_name3"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value '$git_path/$repo_dir_name3' -Force
     }
@@ -484,13 +472,11 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_NAME', "$repo_dir_name3")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_NAME', '$repo_dir_name3', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_POWERHELL_NAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_POWERHELL_NAME' "$repo_dir_name3"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
+        KINDTEK_WIN_POWERHELL_FULLNAME
         # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value '$git_path/$repo_dir_name3' -Force
     }
     catch {
@@ -500,9 +486,10 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_PATH', "$git_path/$repo_dir_name3")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_POWERHELL_PATH', '$git_path/$repo_dir_name3', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_POWERHELL_PATH' "$git_path/$repo_dir_name3"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
+        }
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
             Write-Host 'error setting KINDTEK_WIN_POWERHELL_PATH'
             Write-Host "$cmd_str"
@@ -516,12 +503,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', "$repo_src_name4")        
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_FULLNAME', '$repo_src_name4', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLADV_FULLNAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLADV_FULLNAME' "$repo_dir_name4"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value '$repo_dir_name2' -Force
     }
@@ -532,12 +516,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_NAME', "$repo_dir_name4")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_NAME', '$repo_dir_name4', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLADV_NAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLADV_NAME' "$repo_dir_name4"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value '$repo_dir_name2' -Force
     }
@@ -548,13 +529,9 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_PATH', "$git_path/$repo_dir_name4")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_DVLADV_PATH', '$git_path/$repo_dir_name4', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str", 'wait')
-        # [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_DVLADV_PATH'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_DVLADV_PATH' "$git_path/$repo_dir_name4"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value '$repo_dir_name2' -Force
     }
@@ -565,12 +542,10 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_FULLNAME', "$repo_src_name5")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_FULLNAME', '$repo_src_name5', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_KERNELS_FULLNAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_KERNELS_FULLNAME' "$repo_dir_name5"
+        if ($dvlp_var -ne $false){
+            $cmd_str = "[System.Environment]::SetEnvironmentVariable($dvlp_var, '$dvlp_val', [System.EnvironmentVariableTarget]::Machine)"
+            $cmd_strs.Add($cmd_str) > $null
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value '$repo_dir_name2' -Force
     }
@@ -581,11 +556,12 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_NAME', "$repo_dir_name5")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_NAME', '$repo_dir_name5', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_KERNELS_NAME' "$repo_dir_name5"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
+        }
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_KERNELS_NAME'
+            Write-Host 'error setting KINDTEK_WIN_KERNELS_PATH'
             Write-Host "$cmd_str"
         }
         # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value '$repo_dir_name2' -Force
@@ -597,9 +573,10 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_PATH', "$git_path/$repo_dir_name5")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_KERNELS_PATH', '$git_path/$repo_dir_name5', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_KERNELS_PATH' "$repo_dir_name5"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
+        }
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
             Write-Host 'error setting KINDTEK_WIN_KERNELS_PATH'
             Write-Host "$cmd_str"
@@ -613,14 +590,10 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', "$repo_src_name6")        
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_FULLNAME', '$repo_src_name6', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_MNT_FULLNAME'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_MNT_FULLNAME' "$repo_dir_name6"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
-        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value '$repo_dir_name2' -Force
     }
     catch {
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
@@ -629,9 +602,10 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_NAME', "$repo_dir_name6")
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_NAME', '$repo_dir_name6', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_MNT_NAME' "$repo_dir_name6"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
+        }
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
             Write-Host 'error setting KINDTEK_WIN_MNT_NAME'
             Write-Host "$cmd_str"
@@ -645,14 +619,10 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_PATH', "$git_path/$repo_dir_name6")        
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('KINDTEK_WIN_MNT_PATH', '$git_path/$repo_dir_name6', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
-        if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-            Write-Host 'error setting KINDTEK_WIN_MNT_PATH'
-            Write-Host "$cmd_str"
+        $cmd_str = dvlp_set_env 'KINDTEK_WIN_MNT_PATH' "$git_path/$repo_dir_name6"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
         }
-        # Set-Item -Path env:KINDTEK_WIN_DVLADV_PATH -Value '$repo_dir_name2' -Force
     }
     catch {
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
@@ -661,9 +631,10 @@ function set_dvlp_envs {
         }
     }
     try {
-        [System.Environment]::SetEnvironmentVariable('WSL_UTF8', '1')
-        $cmd_str = "[System.Environment]::SetEnvironmentVariable('WSL_UTF8', '1', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$cmd_str", 'wait')
+        $cmd_str = dvlp_set_env 'WSL_UTF8' '1'
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
+        }
         if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
             Write-Host 'error setting WSL_UTF8'
             Write-Host "$cmd_str"
@@ -717,18 +688,16 @@ function unset_dvlp_envs {
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
-        echo "unsetting $unset_var local var"
         [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$unset_cmd_machine;", 'wait')
+        [dvlp_quiet_process]::new("wsl_docker_full_restart;exit;", 'wait')::new("$unset_cmd_machine;", 'wait')
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
     }
     [Environment]::GetEnvironmentVariables('machine') | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
-        echo "unsetting $unset_var machine var"
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$unset_cmd_machine;", 'wait')
+        [dvlp_quiet_process]::new("wsl_docker_full_restart;exit;", 'wait')::new("$unset_cmd_machine;", 'wait')
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
     }
@@ -935,7 +904,7 @@ function run_devels_playground {
             # $current_process_object = Get-Process -id $current_process
             # Set-ForegroundWindow $current_process_object.MainWindowHandle
             # Set-ForegroundWindow ($current_process_object).MainWindowHandle
-            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro', 'wait'")
+            [dvlp_min_process]::new("$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro', 'wait'")
 
             # powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
@@ -960,7 +929,7 @@ function install_everything {
     $host.UI.RawUI.BackgroundColor = "Black"
     $dvlp_choice = 'n'
     do {
-        [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1", 'wait')
+        [dvlp_min_process]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1", 'wait')
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
@@ -1083,7 +1052,7 @@ function install_everything {
                 }
             } else {
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-                [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("sync_repo;run_installer;", 'wait')
+                [dvlp_min_process]::new("sync_repo;run_installer;", 'wait')
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -1211,12 +1180,12 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
         if ($local_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1") {
             $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
-            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_local", 'wait')
+            [dvlp_min_process]::new("$cmd_str_local", 'wait')
         }
         if ($machine_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1") {
             $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_machine", 'wait')
+            [dvlp_min_process]::new("$cmd_str_machine", 'wait')
         }
     } catch {}
     set_dvlp_envs
