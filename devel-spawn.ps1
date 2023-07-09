@@ -646,6 +646,9 @@ function set_dvlp_envs {
             Write-Host "$cmd_str"
         }
     }
+    foreach ($cmd in $cmd_strs) {
+
+    }
     while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
             -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
             -or [string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS) `
@@ -688,16 +691,18 @@ function unset_dvlp_envs {
     }
     get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
+        $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
-        $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]::new("wsl_docker_full_restart;exit;", 'wait')::new("$unset_cmd_machine;", 'wait')
+        [dvlp_quiet_process]::new("$unset_cmd_local;", 'wait')
+        env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
     }
     [Environment]::GetEnvironmentVariables('machine') | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]::new("wsl_docker_full_restart;exit;", 'wait')::new("$unset_cmd_machine;", 'wait')
+        [dvlp_quiet_process]::new("$unset_cmd_machine;", 'wait')
+        env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
     }
@@ -946,13 +951,13 @@ function install_everything {
             Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
     
         }
-        if ($confirmation -eq '') {  
+        if ($confirmation -eq '') {
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
             # Self-elevate the script if required
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
                 if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
                     $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
-                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle [System.Diagnostics.ProcessWindowStyle]::Maximized -ArgumentList $CommandLine
+                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle [string][System.Diagnostics.ProcessWindowStyle]::Maximized -ArgumentList $CommandLine
                     Exit
                 }
             }
