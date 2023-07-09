@@ -198,9 +198,9 @@ function set_dvlp_env {
     
     try {
         if (!([string]::IsNullOrEmpty($set_system_env) -or [string]::IsNullOrEmpty($set_system_env) -eq '0' -or [string]::IsNullOrEmpty($set_system_env) -eq 0)){
-            [System.Environment]::SetEnvironmentVariable($dvlp_env_var, "$dvlp_env_val")
+            [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
         }
-        if ([System.Environment]::GetEnvironmentVariable($dvlp_env_var, [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
+        if ([System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
             $cmd_str = "[System.Environment]::SetEnvironmentVariable($dvlp_env_var, '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
             return $cmd_str
         }
