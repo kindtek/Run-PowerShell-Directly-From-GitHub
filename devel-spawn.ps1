@@ -703,6 +703,21 @@ function unset_dvlp_envs {
     }
 }
 
+function test_wsl_distro {
+    params (
+        $distro_name
+    )
+    if ([string]::IsNullOrEmpty($distro_name)){
+        return $false
+    }
+    $test_string = 'helloworld'
+    $test = wsl.exe -d $distro_name --exec echo $test_string
+    if ($test -eq $test_string){
+        return $false
+    }
+    return $true
+}
+
 function get_default_wsl_distro {
     $default_wsl_distro = wsl.exe --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
