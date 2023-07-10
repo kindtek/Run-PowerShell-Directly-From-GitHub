@@ -1008,7 +1008,7 @@ function install_everything {
                     if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                         run_devels_playground "default"
                         if (test_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO -and get_default_wsl_distro -eq $env:KINDTEK_FAILSAFE_WSL_DISTRO){
-                            Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLP_PATH/.dvlp-installed"
+                            Write-Host "docker devel installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed"
                         }
                     }
                     
