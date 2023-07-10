@@ -995,11 +995,10 @@ function install_everything {
                 New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
-                $host.UI.RawUI.ForegroundColor = "DarkGray"
                 install_git
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
                 run_installer
-
+                $host.UI.RawUI.ForegroundColor = "DarkGray"
                 $host.UI.RawUI.ForegroundColor = "White"
                 require_docker_online_new_win
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
