@@ -749,6 +749,13 @@ function set_default_wsl_distro {
     param (
         $new_wsl_default_distro
     )
+    if ([string]::IsNullOrEmpty($new_wsl_default_distro)){
+        if (!([string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_DISTRO))){
+            $new_wsl_default_distro = $env:KINDTEK_FAILSAFE_DISTRO
+        } else {
+            return $false
+        }
+    }
     try {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
@@ -763,7 +770,7 @@ function set_default_wsl_distro {
             }
         }
         # handle failed installations
-        if ( (get_default_wsl_distro) -ne $new_wsl_default_distro -Or (is_docker_desktop_online) -eq $false ) {
+        if ( get_default_wsl_distro -ne $new_wsl_default_distro -Or is_docker_desktop_online -eq $false ) {
             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
             Start-Sleep 3
             Write-Host "reverting to $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro ..."
@@ -781,6 +788,7 @@ function set_default_wsl_distro {
             # wsl_docker_restart
             wsl_docker_restart_new_win
             require_docker_online_new_win
+            $env:OLD_DEFAULT_WSL_DISTRO = $old_wsl_default_distro
             return $false
         }
         else {
@@ -1072,12 +1080,12 @@ function install_everything {
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $env:DEFAULT_WSL_DISTRO = get_default_wsl_distro
-                if ([string]::IsNullOrEmpty($env:ORIG_DEFAULT_WSL_DISTRO)) {
-                    $env:ORIG_DEFAULT_WSL_DISTRO = $env:KINDTEK_FAILSAFE_WSL_DISTRO
-                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $env:ORIG_DEFAULT_WSL_DISTRO)"
+                if ([string]::IsNullOrEmpty($env:OLD_DEFAULT_WSL_DISTRO)) {
+                    $env:OLD_DEFAULT_WSL_DISTRO = $env:KINDTEK_FAILSAFE_WSL_DISTRO
+                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $env:OLD_DEFAULT_WSL_DISTRO)"
                 }
-                elseif ("$env:ORIG_DEFAULT_WSL_DISTRO" -ne "$env:DEFAULT_WSL_DISTRO") {
-                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $env:ORIG_DEFAULT_WSL_DISTRO)"
+                elseif ("$env:OLD_DEFAULT_WSL_DISTRO" -ne "$env:DEFAULT_WSL_DISTRO") {
+                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $env:OLD_DEFAULT_WSL_DISTRO)"
                 }
                 else {
                     $wsl_distro_undo_option = ''
@@ -1152,10 +1160,10 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_choice -ieq 'u') {
-                    if ($env:ORIG_DEFAULT_WSL_DISTRO -ne "") {
+                    if ($env:OLD_DEFAULT_WSL_DISTRO -ne "") {
                         # wsl.exe --set-default kalilinux-kali-rolling-latest
-                        Write-Host "`r`n`r`nsetting $env:ORIG_DEFAULT_WSL_DISTRO as default distro ..."
-                        wsl.exe --set-default $env:ORIG_DEFAULT_WSL_DISTRO
+                        Write-Host "`r`n`r`nsetting $env:OLD_DEFAULT_WSL_DISTRO as default distro ..."
+                        wsl.exe --set-default $env:OLD_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
                         require_docker_online_new_win
