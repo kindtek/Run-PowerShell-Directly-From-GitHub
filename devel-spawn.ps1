@@ -4,6 +4,7 @@ class dvlp_process {
     [String]$proc_noexit
     [String]$proc_exit
     [String]$proc_style
+    [String]$proc_nowin
 
     hidden init ([string]$proc_cmd) {
         $this.init($proc_cmd, '')
@@ -21,17 +22,19 @@ class dvlp_process {
         else {
             $this.proc_cmd = ''
         }
-        if (!([String]::IsNullOrEmpty($proc_wait))) {
-            $this.proc_wait = "wait"
-        }
-        else {
-            $this.proc_wait = ''
-        }
-        if (!([String]::IsNullOrEmpty($proc_noexit))) {
-            $this.proc_noexit = '-noexit'
-        }
-        else {
-            $this.proc_noexit = ''
+        if ([string]::IsNullOrEmpty($this.proc_nowin)){
+            if (!([String]::IsNullOrEmpty($proc_wait))) {
+                $this.proc_wait = "wait"
+            }
+            else {
+                $this.proc_wait = ''
+            }
+            if (!([String]::IsNullOrEmpty($proc_noexit))) {
+                $this.proc_noexit = '-noexit'
+            }
+            else {
+                $this.proc_noexit = ''
+            } 
         }
         # $this.start()
     }
@@ -75,7 +78,11 @@ class dvlp_process {
         if (([string]::IsNullOrEmpty($this.proc_cmd))) {
             return $false
         }
-        if ([string]::IsNullOrEmpty($this.proc_style)){
+        if (!([string]::IsNullOrEmpty($this.proc_nowin))){
+            $proc_show = @{
+                NoNewWindow = $null
+            }    
+        }  elseif ([string]::IsNullOrEmpty($this.proc_style)){
             $proc_show = @{
                 WindowStyle = $($this.proc_style)
             }    
@@ -102,20 +109,20 @@ class dvlp_process {
     }
 }
 
-class dvlp_quiet_process : dvlp_process {
+class dvlp_process_quiet : dvlp_process {
     [String]$proc_exit
     [String]$proc_noexit
     [String]$proc_style
 
-    dvlp_quiet_process([string]$proc_cmd) : base($proc_cmd){
+    dvlp_process_quiet([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_quiet_process([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
+    dvlp_process_quiet([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_quiet_process([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
+    dvlp_process_quiet([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
@@ -124,20 +131,20 @@ class dvlp_quiet_process : dvlp_process {
     }
 }
 
-class dvlp_max_process : dvlp_process {
+class dvlp_process_popmax : dvlp_process {
     [String]$proc_exit
     [String]$proc_noexit
     [String]$proc_style
 
-    dvlp_max_process([string]$proc_cmd) : base($proc_cmd){
+    dvlp_process_popmax([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_max_process([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
+    dvlp_process_popmax([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_max_process([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
+    dvlp_process_popmax([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
@@ -146,20 +153,34 @@ class dvlp_max_process : dvlp_process {
     }
 }
 
-class dvlp_min_process : dvlp_process {
+class dvlp_same_process : dvlp_process {
     [String]$proc_exit
     [String]$proc_noexit
     [String]$proc_style
 
-    dvlp_min_process([string]$proc_cmd) : base($proc_cmd){
+    dvlp_same_process([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_min_process([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
+    re_set () {
+        $this.proc_nowin = 'nowin'
+    }
+}
+
+class dvlp_process_popmin : dvlp_process {
+    [String]$proc_exit
+    [String]$proc_noexit
+    [String]$proc_style
+
+    dvlp_process_popmin([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_min_process([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
+    dvlp_process_popmin([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
+        $this.re_set()
+        ([dvlp_process] $this).start()
+    }
+    dvlp_process_popmin([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
@@ -168,20 +189,20 @@ class dvlp_min_process : dvlp_process {
     }
 }
 
-class dvlp_norm_process : dvlp_process {
+class dvlp_process_pop : dvlp_process {
     [String]$proc_exit
     [String]$proc_noexit
     [String]$proc_style
 
-    dvlp_norm_process([string]$proc_cmd) : base($proc_cmd){
+    dvlp_process_pop([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_norm_process([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
+    dvlp_process_pop([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_norm_process([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
+    dvlp_process_pop([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
@@ -190,7 +211,7 @@ class dvlp_norm_process : dvlp_process {
     }
 }
 
-# [dvlp_quiet_process]::new("wsl_docker_full_restart;exit;", 'wait')::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
+# [dvlp_process_quiet]::new("wsl_docker_full_restart;exit;", 'wait')::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
 function set_dvlp_env {
     param (
         $dvlp_env_var, $dvlp_env_val, $set_system_env
@@ -224,7 +245,7 @@ function set_dvlp_envs_new_win {
     else {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
-    [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("set_dvlp_envs;exit;", "wait")
+    [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("set_dvlp_envs;exit;", "wait")
 }
 function set_dvlp_envs {
     param (
@@ -642,7 +663,7 @@ function set_dvlp_envs {
     }
     foreach ($cmd in $cmd_strs) {
         echo "$cmd"
-        [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd")
+        [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd")
     }
     while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
             -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
@@ -688,7 +709,7 @@ function unset_dvlp_envs {
         $unset_var = $_.name
         $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$unset_cmd_local;", 'wait')
+        [dvlp_process_quiet]$dvlp_proc = [dvlp_process_quiet]::new("$unset_cmd_local;", 'wait')
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -696,7 +717,7 @@ function unset_dvlp_envs {
     [Environment]::GetEnvironmentVariables('machine') | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_quiet_process]$dvlp_proc = [dvlp_quiet_process]::new("$unset_cmd_machine;", 'wait')
+        [dvlp_process_quiet]$dvlp_proc = [dvlp_process_quiet]::new("$unset_cmd_machine;", 'wait')
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -819,7 +840,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        [dvlp_norm_process]$dvlp_proc = [dvlp_norm_process]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
+        [dvlp_process_pop]$dvlp_proc = [dvlp_process_pop]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -841,7 +862,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        [dvlp_norm_process]$dvlp_proc = [dvlp_norm_process]::new("winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;", 'wait')
+        [dvlp_process_pop]$dvlp_proc = [dvlp_process_pop]::new("winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;", 'wait')
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
     }
     else {
@@ -850,7 +871,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    [dvlp_norm_process]$dvlp_proc = [dvlp_norm_process]::new("sync_repo;exit;", 'wait')
+    [dvlp_process_pop]$dvlp_proc = [dvlp_process_pop]::new("sync_repo;exit;", 'wait')
     # assuming the repos are now synced now is a good time to dot source devel-tools
     . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
     # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
@@ -960,7 +981,7 @@ function install_everything {
 
     $dvlp_choice = 'n'
     do {
-        [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1", 'wait')
+        [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1", 'wait')
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
@@ -1087,7 +1108,7 @@ function install_everything {
                 }
             } else {
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-                [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("install_git;run_installer;", 'wait')
+                [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("install_git;run_installer;", 'wait')
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -1141,11 +1162,11 @@ function install_everything {
                         wsl.exe --cd /hal --exec cdir
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
-                        [dvlp_max_process]$dvlp_proc = [dvlp_max_process]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cdw' ) {
                         # one day might get the windows cdir working
-                        [dvlp_max_process]$dvlp_proc = [dvlp_max_process]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd') {
@@ -1220,22 +1241,22 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
         if ($local_ext -split ";" -notcontains ".ps1") {
             $local_ext += ";.ps1"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('pathext', '$local_ext')"
-            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_local", 'wait')
+            [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_local", 'wait')
         }
         if ($machine_ext -split ";" -notcontains ".ps1") {
             $machine_ext += ";.ps1"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('pathext', '$machine_ext', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_machine", 'wait')
+            [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_machine", 'wait')
         }
         if ($local_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
             $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
-            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_local", 'wait')
+            [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_local", 'wait')
         }
         if ($machine_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
             $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new("$cmd_str_machine", 'wait')
+            [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_machine", 'wait')
         }
     } catch {}
     set_dvlp_envs
