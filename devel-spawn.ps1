@@ -714,7 +714,7 @@ function unset_dvlp_envs {
         $unset_var = $_.name
         $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
-        [dvlp_process_quiet]$dvlp_proc = [dvlp_process_quiet]::new("$unset_cmd_local;", 'wait')
+        [dvlp_process_quiet]$dvlp_proc_local_envs = [dvlp_process_quiet]::new("$unset_cmd_local;", 'wait')
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -722,7 +722,7 @@ function unset_dvlp_envs {
     [Environment]::GetEnvironmentVariables('machine') | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_process_quiet]$dvlp_proc = [dvlp_process_quiet]::new("$unset_cmd_machine;", 'wait')
+        [dvlp_process_quiet]$dvlp_proc_machine_envs = [dvlp_process_quiet]::new("$unset_cmd_machine;", 'wait')
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -867,7 +867,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        [dvlp_process_pop]$dvlp_proc = [dvlp_process_pop]::new("winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;", 'wait')
+        [dvlp_process_pop]$dvlp_proc_git = [dvlp_process_pop]::new("winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;", 'wait')
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
     }
     else {
@@ -876,7 +876,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    [dvlp_process_pop]$dvlp_proc = [dvlp_process_pop]::new("sync_repo;exit;", 'wait')
+    [dvlp_process_pop]$dvlp_proc_sync = [dvlp_process_pop]::new("sync_repo;exit;", 'wait')
     # assuming the repos are now synced now is a good time to dot source devel-tools
     . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
     # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
@@ -986,7 +986,7 @@ function install_everything {
 
     $dvlp_choice = 'n'
     do {
-        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1")
+        . $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
@@ -1036,7 +1036,7 @@ function install_everything {
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 install_git
-                [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1")
+                . $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1
                 run_installer
                 $host.UI.RawUI.ForegroundColor = "DarkGray"
                 $host.UI.RawUI.ForegroundColor = "White"
@@ -1112,7 +1112,7 @@ function install_everything {
                     }
                 }
             } else {
-                [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new(". $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1")
+                . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
                 [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("install_git;run_installer;")
             } 
             do {
