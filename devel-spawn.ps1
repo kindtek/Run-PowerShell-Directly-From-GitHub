@@ -923,9 +923,6 @@ function run_devels_playground {
 
             # powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
-            if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLP_PATH/.dvlp-installed" -PathType Leaf)) {
-                Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLP_PATH/.dvlp-installed"
-            }
         }
         else {
             Write-Host "`r`nmake sure docker desktop is running"
@@ -1003,6 +1000,9 @@ function install_everything {
                 try {
                     if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                         run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
+                        if (test_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO -and get_default_wsl_distro -eq $env:KINDTEK_FAILSAFE_WSL_DISTRO){
+                            Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLP_PATH/.dvlp-installed"
+                        }
                     }
                     
                 }
