@@ -35,6 +35,10 @@ class dvlp_process {
             else {
                 $this.proc_noexit = ''
             } 
+        } else {
+            write-host "start process powershell -nonewwindow -argument list $($this.proc_cmd)"
+            $this.proc_wait = ''
+            $this.proc_noexit = ''
         }
         # $this.start()
     }
