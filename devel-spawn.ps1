@@ -157,6 +157,7 @@ class dvlp_process_same : dvlp_process {
     [String]$proc_exit
     [String]$proc_noexit
     [String]$proc_style
+    [string]$proc_nowin
 
     dvlp_process_same([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
