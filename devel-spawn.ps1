@@ -704,7 +704,7 @@ function unset_dvlp_envs {
 }
 
 function test_wsl_distro {
-    params (
+    param (
         $distro_name
     )
     if ([string]::IsNullOrEmpty($distro_name)){
@@ -716,6 +716,20 @@ function test_wsl_distro {
         return $false
     }
     return $true
+}
+
+function test_default_wsl_distro {
+    param (
+        $distro_name
+    )
+
+    if ( test_wsl_distro $distro_name){
+        if (get_default_wsl_distro -eq $distro_name -and is_docker_desktop_online -eq $true){
+            return $true
+        }
+    }
+
+    return $false
 }
 
 function get_default_wsl_distro {
@@ -738,7 +752,7 @@ function revert_default_wsl_distro {
             return $false
         }
     }
-    if ( (get_default_wsl_distro) -eq $env:KINDTEK_FAILSAFE_WSL_DISTRO ) {
+    if ( test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO ) {
         return $true
     }
     else {
@@ -762,15 +776,14 @@ function set_default_wsl_distro {
             wsl.exe -s $new_wsl_default_distro
         }
         catch {
-            try {
-                run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
-            }
-            catch {
-                Write-Host "error setting $new_wsl_default_distro as default wsl distro"
-            }
+            Write-Host "error changing wsl default distro from $old_wsl_default_distro to $new_wsl_default_distro"
+            $new_wsl_default_distro = $env:KINDTEK_FAILSAFE_DISTRO
+            Write-Host "restoring default distro as $old_wsl_default_distro"
+            set_default_wsl_distro $old_wsl_default_distro
+            $new_wsl_default_distro = $old_wsl_default_distro
         }
         # handle failed installations
-        if ( get_default_wsl_distro -ne $new_wsl_default_distro -Or is_docker_desktop_online -eq $false ) {
+        if ( test_default_wsl_distro $new_wsl_default_distro -eq $false ) {
             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
             Start-Sleep 3
             Write-Host "reverting to $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro ..."
@@ -1006,7 +1019,7 @@ function install_everything {
                 try {
                     if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                         run_devels_playground "default"
-                        if (test_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO -and get_default_wsl_distro -eq $env:KINDTEK_FAILSAFE_WSL_DISTRO){
+                        if (test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO){
                             Write-Host "docker devel installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed"
                         }
                     }
