@@ -731,7 +731,7 @@ function revert_default_wsl_distro {
     }
     catch {
         try {
-            run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
+            run_devels_playground "default"
         }
         catch {
             Write-Host "error reverting to $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -905,10 +905,9 @@ function sync_repo {
 
 function run_devels_playground {
     param (
-        $git_path, $img_name_tag, $non_interactive, $default_distro
+        $img_name_tag, $non_interactive, $default_distro
     )
     try {
-        
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
         Write-Host "establishing a connection with docker desktop ...`r`n" 
@@ -1007,7 +1006,7 @@ function install_everything {
                 # $env:KINDTEK_WIN_DVLW_PATH, $img_name_tag, $non_interactive, $default_distro
                 try {
                     if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
-                        run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
+                        run_devels_playground "default"
                         if (test_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO -and get_default_wsl_distro -eq $env:KINDTEK_FAILSAFE_WSL_DISTRO){
                             Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLP_PATH/.dvlp-installed"
                         }
@@ -1034,7 +1033,7 @@ function install_everything {
                 # install distro requested in arg
                 try {
                     $old_wsl_default_distro = get_default_wsl_distro
-                    run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                    run_devels_playground"$img_name_tag" "kindtek-$img_name_tag" "default"
                     $new_wsl_default_distro = get_default_wsl_distro
                     require_docker_online_new_win
                     if ( is_docker_desktop_online -eq $false ) {
@@ -1102,12 +1101,12 @@ function install_everything {
                 $dvlp_choice = Read-Host $dvlp_options
                 if ($dvlp_choice -ieq 'f') {
                     try {
-                        wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
+                        set_default_wsl_distro
                         require_docker_online_new_win
                     }
                     catch {
                         try {
-                            run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
+                            revert_default_wsl_distro
                         }
                         catch {
                             Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -1138,11 +1137,11 @@ function install_everything {
                 }
                 elseif ($dvlp_choice -ieq 'd') {
                     require_docker_online_new_win
-                    run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "$img_name_tag"
+                    run_devels_playground "$img_name_tag"
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online_new_win
-                    run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "$img_name_tag" "kindtek-$img_name_tag" "default"
+                    run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
                 elseif ($dvlp_choice -like 'k*') {
                     if ($dvlp_choice -ieq 'k') {
