@@ -153,12 +153,12 @@ class dvlp_process_popmax : dvlp_process {
     }
 }
 
-class dvlp_same_process : dvlp_process {
+class dvlp_process_same : dvlp_process {
     [String]$proc_exit
     [String]$proc_noexit
     [String]$proc_style
 
-    dvlp_same_process([string]$proc_cmd) : base($proc_cmd){
+    dvlp_process_same([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
@@ -981,7 +981,7 @@ function install_everything {
 
     $dvlp_choice = 'n'
     do {
-        [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1", 'wait')
+        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1")
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
@@ -1031,7 +1031,7 @@ function install_everything {
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 install_git
-                . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+                [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1")
                 run_installer
                 $host.UI.RawUI.ForegroundColor = "DarkGray"
                 $host.UI.RawUI.ForegroundColor = "White"
@@ -1107,8 +1107,8 @@ function install_everything {
                     }
                 }
             } else {
-                . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-                [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("install_git;run_installer;", 'wait')
+                [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new(". $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1")
+                [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("install_git;run_installer;")
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
