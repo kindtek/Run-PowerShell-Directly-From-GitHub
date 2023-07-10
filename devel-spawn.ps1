@@ -957,11 +957,12 @@ function install_everything {
     param (
         $img_tag
     )
-    $host.UI.RawUI.ForegroundColor = "White"
-    $host.UI.RawUI.BackgroundColor = "Black"
+
     $dvlp_choice = 'n'
     do {
         [dvlp_min_process]$dvlp_proc = [dvlp_min_process]::new(". $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1", 'wait')
+        $host.UI.RawUI.ForegroundColor = "White"
+        $host.UI.RawUI.BackgroundColor = "Black"
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
