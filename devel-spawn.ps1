@@ -1115,7 +1115,7 @@ function install_everything {
                         $new_wsl_default_distro = get_default_wsl_distro
                         run_dvlp_latest_kernel_installer
                         require_docker_online_new_win
-                        if (($new_wsl_default_distro -ne $old_wsl_default_distro) -and is_docker_desktop_online -eq $false) {
+                        if (($new_wsl_default_distro -ne $old_wsl_default_distro) -and (is_docker_desktop_online -eq $false)) {
                             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                             Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                             try {
