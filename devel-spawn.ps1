@@ -812,7 +812,8 @@ function set_default_wsl_distro {
     try {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
-            cmd.exe /c net stop LxssManager && net start LxssManager
+            cmd.exe /c net stop LxssManager
+            cmd.exe /c net start LxssManager
             wsl.exe -s $new_wsl_default_distro
         }
         catch {
