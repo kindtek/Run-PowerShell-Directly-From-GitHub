@@ -988,15 +988,10 @@ function run_dvlp_latest_kernel_installer {
     param (
         $distro
     )
-    push-location $env:KINDTEK_WIN_DVLP_PATH/docker/kali/Dockerfile
+    push-location $env:KINDTEK_WIN_KERNELS_PATH/linux/kache
     require_docker_online_new_win
     if (is_docker_desktop_online -eq $true){
-        if ([string]::IsNullOrEmpty($distro)) {
-            wsl --cd /hal/dvlw/dvlp/mnt/HOME_WIN --exec bash k-home.sh $env:USERNAME
-        
-        } else {
-            wsl -d $distro --cd /hal/dvlw/dvlp/mnt/HOME_WIN --exec bash k-home.sh $env:USERNAME
-        }
+        ./wsl-kernel-install.ps1 latest
     }
     push-location $env:USERPROFILE/kache
     ./wsl-kernel-install.ps1 latest
