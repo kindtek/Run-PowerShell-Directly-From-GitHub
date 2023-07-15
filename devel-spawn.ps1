@@ -984,10 +984,6 @@ function run_devels_playground {
                 powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
             } else {
                 powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro', 'wait'"
-                if ($default_distro -ieq "default"){
-                    cmd.exe /c net stop LxssManager
-                    cmd.exe /c net start LxssManager
-                }
             }
 
             # powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
