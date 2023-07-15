@@ -987,7 +987,7 @@ function install_everything {
 
     $dvlp_choice = 'n'
     do {
-        . $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1
+        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
@@ -1037,7 +1037,7 @@ function install_everything {
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 install_git
-                . $env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1
+                . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
                 run_installer
                 $host.UI.RawUI.ForegroundColor = "DarkGray"
                 $host.UI.RawUI.ForegroundColor = "White"
