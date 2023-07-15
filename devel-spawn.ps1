@@ -1111,11 +1111,11 @@ function install_everything {
                         $host.UI.RawUI.BackgroundColor = "White"
 
                         $old_wsl_default_distro = get_default_wsl_distro
-                        run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
+                        run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" 
                         $new_wsl_default_distro = get_default_wsl_distro
                         run_dvlp_latest_kernel_installer
                         require_docker_online_new_win
-                        if ( is_docker_desktop_online -eq $false ) {
+                        if (($new_wsl_default_distro -ne $old_wsl_default_distro) -and is_docker_desktop_online -eq $false) {
                             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                             Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                             try {
@@ -1154,7 +1154,7 @@ function install_everything {
                 }
             } else {
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-                [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("install_git;run_installer;")
+                [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("install_git;run_installer;")
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -1217,7 +1217,11 @@ function install_everything {
                 }
                 elseif ($dvlp_choice -ieq 'd') {
                     require_docker_online_new_win
-                    run_devels_playground "$img_name_tag"
+                    if ([string]::IsNullOrEmpty($img_name_tag)){
+                        run_devels_playground
+                    } else {
+                        run_devels_playground "$img_name_tag" "kindtek-$img_name_tag"
+                    }
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online_new_win
