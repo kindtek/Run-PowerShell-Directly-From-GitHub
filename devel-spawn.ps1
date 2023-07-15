@@ -753,9 +753,14 @@ function test_default_wsl_distro {
     )
 
     if ( test_wsl_distro $distro_name){
+        Write-Host "testing wsl default distro $distro_name"
         require_docker_online_new_win
         if (get_default_wsl_distro -eq $distro_name -and is_docker_desktop_online -eq $true){
+            Write-Host "$distro_name is valid"
+
             return $true
+        } else {
+            Write-Host "$distro_name is INVALID"
         }
     }
 
@@ -1088,30 +1093,32 @@ function install_everything {
                 catch {}
                 # install distro requested in arg
                 try {
-                    $host.UI.RawUI.ForegroundColor = "Black"
-                    $host.UI.RawUI.BackgroundColor = "White"
+                    if (!([string]::IsNullOrEmpty($img_tag))) {
+                        $host.UI.RawUI.ForegroundColor = "Black"
+                        $host.UI.RawUI.BackgroundColor = "White"
 
-                    $old_wsl_default_distro = get_default_wsl_distro
-                    run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
-                    $new_wsl_default_distro = get_default_wsl_distro
-                    run_dvlp_latest_kernel_installer
-                    require_docker_online_new_win
-                    if ( is_docker_desktop_online -eq $false ) {
-                        Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
-                        Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
-                        try {
-                            wsl.exe -s $old_wsl_default_distro
-                            wsl_docker_restart_new_win
-                            # wsl_docker_restart
-                            require_docker_online_new_win
-                        }
-                        catch {
+                        $old_wsl_default_distro = get_default_wsl_distro
+                        run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
+                        $new_wsl_default_distro = get_default_wsl_distro
+                        run_dvlp_latest_kernel_installer
+                        require_docker_online_new_win
+                        if ( is_docker_desktop_online -eq $false ) {
+                            Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
+                            Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                             try {
-                                revert_default_wsl_distro
+                                wsl.exe -s $old_wsl_default_distro
+                                wsl_docker_restart_new_win
+                                # wsl_docker_restart
                                 require_docker_online_new_win
                             }
                             catch {
-                                Write-Host "error setting failsafe as default wsl distro"
+                                try {
+                                    revert_default_wsl_distro
+                                    require_docker_online_new_win
+                                }
+                                catch {
+                                    Write-Host "error setting failsafe as default wsl distro"
+                                }
                             }
                         }
                     }
