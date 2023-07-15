@@ -983,6 +983,27 @@ function run_devels_playground {
     }
     catch {}
 }
+
+function run_dvlp_latest_kernel_installer {
+    param (
+        $distro
+    )
+    push-location $env:KINDTEK_WIN_DVLP_PATH/docker/kali/Dockerfile
+    require_docker_online_new_win
+    if (is_docker_desktop_online -eq $true){
+        if ([string]::IsNullOrEmpty($distro)) {
+            wsl --cd /hal/dvlw/dvlp/mnt/HOME_WIN --exec bash k-home.sh $env:USERNAME
+        
+        } else {
+            wsl -d $distro --cd /hal/dvlw/dvlp/mnt/HOME_WIN --exec bash k-home.sh $env:USERNAME
+        }
+    }
+    push-location $env:USERPROFILE/kache
+    ./wsl-kernel-install.ps1 latest
+    
+    pop-location
+}
+
 function install_everything {  
     param (
         $img_tag
@@ -1042,8 +1063,8 @@ function install_everything {
                 install_git
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
                 run_installer
-                $host.UI.RawUI.ForegroundColor = "DarkGray"
-                $host.UI.RawUI.ForegroundColor = "White"
+                # $host.UI.RawUI.ForegroundColor = "DarkGray"
+                # $host.UI.RawUI.ForegroundColor = "White"
                 require_docker_online_new_win
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 # $env:KINDTEK_WIN_DVLW_PATH, $img_name_tag, $non_interactive, $default_distro
@@ -1062,7 +1083,7 @@ function install_everything {
 
                 # install hypervm on next open
                 try {
-                    if (!(Test-Path "env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed" -PathType Leaf)) {
+                    if (!(Test-Path "$env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed" -PathType Leaf)) {
                         $profilePath = Join-Path $env:USERPROFILE 'Documents\PowerShell\Microsoft.PowerShell_profile.ps1'
                         $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
                         New-Item -Path $profilePath -ItemType File -Force
@@ -1078,6 +1099,7 @@ function install_everything {
                     $old_wsl_default_distro = get_default_wsl_distro
                     run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
                     $new_wsl_default_distro = get_default_wsl_distro
+                    run_dvlp_latest_kernel_installer
                     require_docker_online_new_win
                     if ( is_docker_desktop_online -eq $false ) {
                         Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
