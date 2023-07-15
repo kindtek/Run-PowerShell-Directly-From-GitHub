@@ -755,6 +755,7 @@ function test_default_wsl_distro {
     param (
         $distro_name
     )
+    Write-Host "preparing to test wsl default distro $distro_name"
 
     if ( test_wsl_distro $distro_name){
         Write-Host "testing wsl default distro $distro_name"
