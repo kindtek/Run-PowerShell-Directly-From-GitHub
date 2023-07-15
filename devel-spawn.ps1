@@ -978,7 +978,7 @@ function run_devels_playground {
             # $current_process_object = Get-Process -id $current_process
             # Set-ForegroundWindow $current_process_object.MainWindowHandle
             # Set-ForegroundWindow ($current_process_object).MainWindowHandle
-            powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd $img_name_tag $non_interactive $default_distro, 'wait'"
+            powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro', 'wait'"
 
             # powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
