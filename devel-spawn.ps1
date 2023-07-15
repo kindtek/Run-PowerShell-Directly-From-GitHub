@@ -959,9 +959,6 @@ function run_devels_playground {
     param (
         $img_name_tag, $non_interactive, $default_distro
     )
-    if ([string]::IsNullOrEmpty($img_name_tag)){
-        return $false
-    }
     try {
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
@@ -981,7 +978,11 @@ function run_devels_playground {
             # $current_process_object = Get-Process -id $current_process
             # Set-ForegroundWindow $current_process_object.MainWindowHandle
             # Set-ForegroundWindow ($current_process_object).MainWindowHandle
-            powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro', 'wait'"
+            if ([string]::IsNullOrEmpty($img_name_tag)){
+                powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+            } else {
+                powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro', 'wait'"
+            }
 
             # powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
             # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
