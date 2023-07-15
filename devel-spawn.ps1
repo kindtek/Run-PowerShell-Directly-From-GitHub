@@ -739,10 +739,14 @@ function test_wsl_distro {
     if ([string]::IsNullOrEmpty($distro_name)){
         return $false
     }
+    Write-Host "testing wsl distro $distro_name"
     $test_string = 'helloworld'
     $test = wsl.exe -d $distro_name --exec echo $test_string
     if ($test -eq $test_string){
+        Write-Host "$distro_name is valid"
         return $false
+    } else {
+        Write-Host "$distro_name is INVALID"
     }
     return $true
 }
