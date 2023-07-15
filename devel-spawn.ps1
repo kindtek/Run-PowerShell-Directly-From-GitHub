@@ -1044,8 +1044,8 @@ function install_everything {
                     Exit
                 }
             }
-            # img_tag must not empty and if they are must not equal 'source' ... OR dvlp must not installed
-            if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
+            # img_tag must not empty ... OR dvlp must not installed
+            if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -or (!([string]::IsNullOrEmpty($img_tag)))) {
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
