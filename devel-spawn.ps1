@@ -959,6 +959,9 @@ function run_devels_playground {
     param (
         $img_name_tag, $non_interactive, $default_distro
     )
+    if ([string]::IsNullOrEmpty($img_name_tag)){
+        return $false
+    }
     try {
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
@@ -1009,9 +1012,6 @@ function install_everything {
     param (
         $img_tag
     )
-    if ([string]::IsNullOrEmpty($img_tag)){
-        return $false
-    }
     $dvlp_choice = 'n'
     do {
         . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
