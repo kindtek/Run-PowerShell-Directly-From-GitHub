@@ -1015,7 +1015,7 @@ function install_everything {
         . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "White"
-        $img_name = $env:KINDTEK_WIN_DVLP_NAME
+        $img_name = $env:KINDTEK_WIN_DVLP_FULLNAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
     
