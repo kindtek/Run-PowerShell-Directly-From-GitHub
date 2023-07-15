@@ -988,7 +988,7 @@ function run_dvlp_latest_kernel_installer {
     param (
         $distro
     )
-    push-location $env:KINDTEK_WIN_DVLP_PATH/linux/kache
+    push-location $env:KINDTEK_WIN_DVLP_PATH/kernels/linux/kache
     require_docker_online_new_win
     if (is_docker_desktop_online -eq $true){
         ./wsl-kernel-install.ps1 latest
@@ -1088,6 +1088,9 @@ function install_everything {
                 catch {}
                 # install distro requested in arg
                 try {
+                    $host.UI.RawUI.BackgroundColor = "Black"
+                    $host.UI.RawUI.ForegroundColor = "White"
+
                     $old_wsl_default_distro = get_default_wsl_distro
                     run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
                     $new_wsl_default_distro = get_default_wsl_distro
