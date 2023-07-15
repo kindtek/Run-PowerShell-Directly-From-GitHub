@@ -1004,8 +1004,8 @@ function install_everything {
     $dvlp_choice = 'n'
     do {
         . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-        $host.UI.RawUI.ForegroundColor = "White"
-        $host.UI.RawUI.BackgroundColor = "Black"
+        $host.UI.RawUI.ForegroundColor = "Black"
+        $host.UI.RawUI.BackgroundColor = "White"
         $img_name = $env:KINDTEK_WIN_DVLP_NAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
@@ -1088,8 +1088,8 @@ function install_everything {
                 catch {}
                 # install distro requested in arg
                 try {
-                    $host.UI.RawUI.BackgroundColor = "Black"
-                    $host.UI.RawUI.ForegroundColor = "White"
+                    $host.UI.RawUI.ForegroundColor = "Black"
+                    $host.UI.RawUI.BackgroundColor = "White"
 
                     $old_wsl_default_distro = get_default_wsl_distro
                     run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
