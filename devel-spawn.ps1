@@ -744,11 +744,11 @@ function test_wsl_distro {
     $test = wsl.exe -d $distro_name --exec echo $test_string
     if ($test -eq $test_string){
         Write-Host "$distro_name is valid distro"
-        return $false
+        return $true
     } else {
         Write-Host "$distro_name is INVALID distro"
+        return $false
     }
-    return $true
 }
 
 function test_default_wsl_distro {
