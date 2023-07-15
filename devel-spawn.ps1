@@ -1073,7 +1073,7 @@ function install_everything {
                 # install distro requested in arg
                 try {
                     $old_wsl_default_distro = get_default_wsl_distro
-                    run_devels_playground"$img_name_tag" "kindtek-$img_name_tag" "default"
+                    run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
                     $new_wsl_default_distro = get_default_wsl_distro
                     require_docker_online_new_win
                     if ( is_docker_desktop_online -eq $false ) {
