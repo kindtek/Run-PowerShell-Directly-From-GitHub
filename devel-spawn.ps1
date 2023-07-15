@@ -1072,12 +1072,12 @@ function install_everything {
                 try {
                     if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                         run_devels_playground "default"
-                        write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
+                        # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
                         if ((test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) -eq $true){
-                            write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test passed"
+                            # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test passed"
                             Write-Host "docker devel installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed"
                         } else {
-                            write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test FAILED"
+                            # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test FAILED"
                         }
                     }
                     
