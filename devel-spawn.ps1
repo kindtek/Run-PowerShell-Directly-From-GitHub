@@ -743,10 +743,10 @@ function test_wsl_distro {
     $test_string = 'helloworld'
     $test = wsl.exe -d $distro_name --exec echo $test_string
     if ($test -eq $test_string){
-        Write-Host "$distro_name is valid"
+        Write-Host "$distro_name is valid distro"
         return $false
     } else {
-        Write-Host "$distro_name is INVALID"
+        Write-Host "$distro_name is INVALID distro"
     }
     return $true
 }
@@ -760,11 +760,11 @@ function test_default_wsl_distro {
         Write-Host "testing wsl default distro $distro_name"
         require_docker_online_new_win
         if ((get_default_wsl_distro -eq $distro_name) -and (is_docker_desktop_online -eq $true)){
-            Write-Host "$distro_name is valid"
+            Write-Host "$distro_name is valid default distro"
 
             return $true
         } else {
-            Write-Host "$distro_name is INVALID"
+            Write-Host "$distro_name is INVALID default distro"
         }
     }
 
