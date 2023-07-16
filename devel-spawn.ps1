@@ -1078,6 +1078,8 @@ function install_everything {
                 try {
                     if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                         run_devels_playground "default"
+                        cmd.exe /c net stop LxssManager
+                        cmd.exe /c net start LxssManager
                         # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
                         if ((test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) -eq $true){
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test passed"
@@ -1113,6 +1115,8 @@ function install_everything {
                         $old_wsl_default_distro = get_default_wsl_distro
                         run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
                         $new_wsl_default_distro = get_default_wsl_distro
+                        cmd.exe /c net stop LxssManager
+                        cmd.exe /c net start LxssManager
                         run_dvlp_latest_kernel_installer
                         require_docker_online_new_win
                         if (($new_wsl_default_distro -ne $old_wsl_default_distro) -and (is_docker_desktop_online -eq $false)) {
