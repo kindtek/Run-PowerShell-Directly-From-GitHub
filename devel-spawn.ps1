@@ -833,7 +833,7 @@ function set_default_wsl_distro {
             }
             catch {
                 try {
-                    run_devels_playground "$env:KINDTEK_WIN_DVLW_PATH" "default"
+                    run_devels_playground "default"
                 }
                 catch {
                     Write-Host "error setting $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro"
@@ -1084,26 +1084,25 @@ function install_everything {
                         } else {
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test FAILED"
                         }
+                        # install hypervm on next open
+                        try {
+                            if (!(Test-Path "$env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed" -PathType Leaf)) {
+                                $profilePath = Join-Path $env:USERPROFILE 'Documents\PowerShell\Microsoft.PowerShell_profile.ps1'
+                                $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
+                                New-Item -Path $profilePath -ItemType File -Force
+                                New-Item -Path $vmpPath -ItemType File -Force
+                                Add-Content $profilePath "./kindtek.Set-VMP.ps1;Clear-Content 'kindtek.Set-VMP.ps1';./$env:USERPROFILE/dvlp"
+                                Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
+                                Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed"
+                            }
+                        }
+                        catch {}
                     }
                     
                 }
                 catch {
                     Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
                 }
-
-                # install hypervm on next open
-                try {
-                    if (!(Test-Path "$env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed" -PathType Leaf)) {
-                        $profilePath = Join-Path $env:USERPROFILE 'Documents\PowerShell\Microsoft.PowerShell_profile.ps1'
-                        $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
-                        New-Item -Path $profilePath -ItemType File -Force
-                        New-Item -Path $vmpPath -ItemType File -Force
-                        Add-Content $profilePath "./kindtek.Set-VMP.ps1;Clear-Content 'kindtek.Set-VMP.ps1';./$env:USERPROFILE/dvlp"
-                        Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
-                        Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.hypervm-installed"
-                    }
-                }
-                catch {}
                 # install distro requested in arg
                 try {
                     if (!([string]::IsNullOrEmpty($img_tag))) {
@@ -1111,7 +1110,7 @@ function install_everything {
                         $host.UI.RawUI.BackgroundColor = "White"
 
                         $old_wsl_default_distro = get_default_wsl_distro
-                        run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" 
+                        run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
                         $new_wsl_default_distro = get_default_wsl_distro
                         run_dvlp_latest_kernel_installer
                         require_docker_online_new_win
