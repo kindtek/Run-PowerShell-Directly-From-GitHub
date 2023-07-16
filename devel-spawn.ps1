@@ -759,8 +759,7 @@ function test_default_wsl_distro {
 
     if ( test_wsl_distro $distro_name){
         Write-Host "testing wsl default distro $distro_name"
-        require_docker_online_new_win
-        if ((get_default_wsl_distro -eq $distro_name) -and (is_docker_desktop_online -eq $true)){
+        if ((get_default_wsl_distro -eq $distro_name) -and (require_docker_online)){
             # Write-Host "$distro_name is valid default distro"
             return $true
         } else {
