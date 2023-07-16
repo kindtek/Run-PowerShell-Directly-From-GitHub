@@ -1224,7 +1224,7 @@ function install_everything {
                     if ([string]::IsNullOrEmpty($img_name_tag)){
                         run_devels_playground
                     } else {
-                        run_devels_playground "$img_name_tag" "kindtek-$img_name_tag"
+                        run_devels_playground "$img_name_tag" 
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
