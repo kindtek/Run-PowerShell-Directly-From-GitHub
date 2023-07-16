@@ -812,15 +812,17 @@ function set_default_wsl_distro {
     try {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
+            wsl.exe -s $new_wsl_default_distro
             cmd.exe /c net stop LxssManager
             cmd.exe /c net start LxssManager
-            wsl.exe -s $new_wsl_default_distro
         }
         catch {
             Write-Host "error changing wsl default distro from $old_wsl_default_distro to $new_wsl_default_distro"
             $new_wsl_default_distro = $env:KINDTEK_FAILSAFE_DISTRO
             Write-Host "restoring default distro as $old_wsl_default_distro"
             wsl.exe -s $old_wsl_default_distro
+            cmd.exe /c net stop LxssManager
+            cmd.exe /c net start LxssManager
             $new_wsl_default_distro = $old_wsl_default_distro
         }
         # handle failed installations
