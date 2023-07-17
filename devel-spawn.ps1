@@ -24,7 +24,8 @@ class dvlp_process {
     hidden init ([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) {
         $this.re_set()
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            $this.proc_cmd = $proc_cmd
+            $this.proc_cmd = ". $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$proc_cmd"
+
         }
         else {
             $this.proc_cmd = ''
