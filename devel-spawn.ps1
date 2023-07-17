@@ -1157,7 +1157,7 @@ function install_everything {
                 }
             } else {
                 . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-                [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("install_git;run_installer;")
+                [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("install_git;run_installer;",'noexit','wait')
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
