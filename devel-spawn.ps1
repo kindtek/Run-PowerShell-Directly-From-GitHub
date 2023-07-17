@@ -1112,7 +1112,11 @@ function install_everything {
                         $host.UI.RawUI.BackgroundColor = "White"
 
                         $old_wsl_default_distro = get_default_wsl_distro
-                        run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
+                        if ($dvlp_choice -ieq 'kw'){
+                            run_devels_playground "$img_name_tag"
+                        } else {
+                            run_devels_playground "$img_name_tag" 
+                        }
                         $new_wsl_default_distro = get_default_wsl_distro
                         cmd.exe /c net stop LxssManager
                         cmd.exe /c net start LxssManager
