@@ -1,6 +1,10 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 
+if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+    . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+}
+
 class dvlp_process {
     [String]$proc_cmd
     [String]$proc_wait
@@ -1325,8 +1329,8 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
             [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_machine", 'wait')
         }
     } catch {}
-    set_dvlp_envs 1
+    set_dvlp_envs
     install_everything $args[0]
 } else {
-    set_dvlp_envs 1
+    set_dvlp_envs
 }
