@@ -1218,10 +1218,10 @@ function install_everything {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        wsl.exe --cd /hal
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("wsl.exe --cd cdir", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        wsl.exe --cd /hal --exec cdir
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("wsl.exe --cd /hal --exec cdir", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
                         [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
@@ -1312,7 +1312,7 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
         if ($machine_ext -split ";" -notcontains ".ps1") {
             $machine_ext += ";.ps1"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('pathext', '$machine_ext', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_machine", 'wait')
+            [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_machine")
         }
         if ($local_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
             $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
@@ -1320,7 +1320,7 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
             [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_local", 'wait')
         }
         if ($machine_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
-            $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$env:USERPROFILE\dvlp.ps1"
+            $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$env:USERPROFILE\dvlp.ps1;$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
             [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_machine", 'wait')
         }
