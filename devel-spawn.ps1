@@ -81,6 +81,10 @@ class dvlp_process {
     [bool]start() {
         if (([string]::IsNullOrEmpty($this.proc_cmd))) {
             return $false
+        } else {
+            if (!([string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_PATH))){
+                $this.proc_cmd = ". $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$($this.proc_cmd)"
+            } 
         }
         if (!([string]::IsNullOrEmpty($this.proc_nowin))){
             $proc_show = @{
