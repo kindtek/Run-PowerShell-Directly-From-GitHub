@@ -1,3 +1,7 @@
+if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-spawn.ps1" -PathType Leaf)) {
+    . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-spawn.ps1
+}
+
 class dvlp_process {
     [String]$proc_cmd
     [String]$proc_wait
