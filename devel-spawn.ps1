@@ -675,7 +675,7 @@ function set_dvlp_envs {
     }
     foreach ($cmd in $cmd_strs) {
         echo "$cmd"
-        [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd")
+        [dvlp_process_quiet]$dvlp_proc = [dvlp_process_quiet]::new("$cmd")
     }
     while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
             -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
@@ -1053,8 +1053,8 @@ function install_everything {
                     Exit
                 }
             }
-            # if confirmation is kw and (img_tag must not empty ... OR dvlp must not installed)
-            if (($confirmation -ne 'kw') -and (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -or (!([string]::IsNullOrEmpty($img_tag))))) {
+            # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
+            if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -or (!([string]::IsNullOrEmpty($img_tag))))) {
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
