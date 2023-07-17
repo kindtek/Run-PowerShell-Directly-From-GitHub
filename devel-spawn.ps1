@@ -826,24 +826,24 @@ function set_default_wsl_distro {
         }
         # handle failed installations
         if ( test_default_wsl_distro $new_wsl_default_distro -eq $false ) {
-            Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
-            Start-Sleep 3
-            Write-Host "reverting to $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro ..."
-            try {
-                wsl.exe -s $env:KINDTEK_FAILSAFE_DISTRO
-            }
-            catch {
-                try {
-                    run_devels_playground "default"
-                }
-                catch {
-                    Write-Host "error setting $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro"
-                }
-            }
-            # wsl_docker_restart
-            wsl_docker_restart_new_win
-            require_docker_online_new_win
-            $env:OLD_DEFAULT_WSL_DISTRO = $old_wsl_default_distro
+            # Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
+            # Start-Sleep 3
+            # Write-Host "reverting to $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro ..."
+            # try {
+            #     wsl.exe -s $env:KINDTEK_FAILSAFE_DISTRO
+            # }
+            # catch {
+            #     try {
+            #         run_devels_playground "default"
+            #     }
+            #     catch {
+            #         Write-Host "error setting $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro"
+            #     }
+            # }
+            # # wsl_docker_restart
+            # wsl_docker_restart_new_win
+            # require_docker_online_new_win
+            # $env:OLD_DEFAULT_WSL_DISTRO = $old_wsl_default_distro
             return $false
         }
         else {
