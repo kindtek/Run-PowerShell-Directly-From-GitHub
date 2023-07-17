@@ -316,9 +316,9 @@ function set_dvlp_envs {
             }
             Write-Output "debug = true"
         }
-        if ($DEBUG_MODE -ne '0') {        
-            Write-Host "debug mode set to $env:KINDTEK_DEBUG_MODE"
-            Write-Host "$cmd_str_dbg"
+        if ($DEBUG_MODE -ne '0' -and $DEBUG_MODE -ne 0) {        
+            # Write-Host "debug mode set to $env:KINDTEK_DEBUG_MODE"
+            # Write-Host "$cmd_str_dbg"
         }
         else {
             Write-Host "debug mode not set"
@@ -1327,4 +1327,6 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
     } catch {}
     set_dvlp_envs
     install_everything $args[0]
+} else {
+    set_dvlp_envs
 }
