@@ -677,36 +677,36 @@ function set_dvlp_envs {
         echo "$cmd"
         [dvlp_process_quiet]$dvlp_proc = [dvlp_process_quiet]::new("$cmd")
     }
-    while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_WSL_DISTRO) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_NAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_FULLNAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_BRANCH) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_PATH) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_NAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_FULLNAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_PATH) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_NAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_FULLNAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_PATH) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_NAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_FULLNAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_PATH) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_NAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_FULLNAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_PATH) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_NAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_FULLNAME) `
-            -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_PATH) ) {
-        echo 'waiting for environment variables to update'
-        start-sleep 5
+    # while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_WSL_DISTRO) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_NAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_FULLNAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_BRANCH) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_PATH) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_NAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_FULLNAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_PATH) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_NAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_FULLNAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_PATH) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_NAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_FULLNAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_PATH) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_NAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_FULLNAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_PATH) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_NAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_FULLNAME) `
+    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_PATH) ) {
+    #     echo 'waiting for environment variables to update'
+    #     start-sleep 5
 
-    }
+    # }
     try {
         . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
     }catch{}
@@ -724,7 +724,7 @@ function unset_dvlp_envs {
         $unset_var = $_.name
         $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
-        [dvlp_process_quiet]$dvlp_proc_local_envs = [dvlp_process_quiet]::new("$unset_cmd_local;", 'wait')
+        [dvlp_process_quiet]$dvlp_proc_local_envs = [dvlp_process_quiet]::new("$unset_cmd_local;")
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -732,7 +732,7 @@ function unset_dvlp_envs {
     [Environment]::GetEnvironmentVariables('machine') | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [dvlp_process_quiet]$dvlp_proc_machine_envs = [dvlp_process_quiet]::new("$unset_cmd_machine;", 'wait')
+        [dvlp_process_quiet]$dvlp_proc_machine_envs = [dvlp_process_quiet]::new("$unset_cmd_machine;")
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
