@@ -299,7 +299,7 @@ function set_dvlp_envs {
     $repo_dir_name6 = 'mnt'
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
-    # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+    # . $env:KINDTEK_DEVEL_TOOLS
 
 
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
@@ -747,7 +747,7 @@ function set_dvlp_envs {
     #     if ($local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"){
     #         $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"
     #     }
-    #     $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+    #     $local_paths += ";$env:KINDTEK_DEVEL_TOOLS"
         
     #     if ($local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
     #         $local_paths += ";$env:KINDTEK_WIN_DVLP_PATH/scripts/"
@@ -763,7 +763,7 @@ function set_dvlp_envs {
     #     if ($machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"){
     #         $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"
     #     }
-    #     $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+    #     $machine_paths += ";$env:KINDTEK_DEVEL_TOOLS"
         
     #     if ($machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
     #         $machine_paths += ";$env:KINDTEK_WIN_DVLP_PATH/scripts/"
@@ -803,9 +803,9 @@ function set_dvlp_envs {
     # }
     # try {
     #     write-output "dot sourcing devel-tools"
-    #     if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+    #     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
     #         write-output 'dot sourcing devel tools'
-    #         . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+    #         . $env:KINDTEK_DEVEL_TOOLS
     #     }
     # }catch{}
 
@@ -1003,9 +1003,9 @@ function install_git {
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     [dvlp_process_same]$dvlp_proc_sync = [dvlp_process_same]::new("sync_repo;exit;", 'wait')
     # assuming the repos are now synced now is a good time to dot source devel-tools
-    if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
-        write-output 'dot sourcing devel tools'
-        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+    if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
+        write-host 'dot sourcing devel tools'
+        . $env:KINDTEK_DEVEL_TOOLS
     }
     # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
     return $new_install
@@ -1130,9 +1130,9 @@ function install_everything {
     )
     $dvlp_choice = 'n'
     do {
-        if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+        if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
             write-output 'dot sourcing devel tools'
-            . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+            . $env:KINDTEK_DEVEL_TOOLS
         }
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "White"
@@ -1182,9 +1182,9 @@ function install_everything {
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 install_git
-                if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+                if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
                     write-output 'dot sourcing devel tools'
-                    . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+                    . $env:KINDTEK_DEVEL_TOOLS
                 }
                 run_installer
                 # $host.UI.RawUI.ForegroundColor = "DarkGray"
@@ -1280,9 +1280,9 @@ function install_everything {
                     }
                 }
             } else {
-                if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+                if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
                     write-output 'dot sourcing devel tools'
-                    . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+                    . $env:KINDTEK_DEVEL_TOOLS
                 }
                 [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("install_git;run_installer;",'noexit','wait')
             } 
