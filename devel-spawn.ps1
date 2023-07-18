@@ -20,8 +20,7 @@ class dvlp_process {
     hidden init ([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) {
         $this.re_set()
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            $this.proc_cmd = "$proc_cmd"
-
+            $this.proc_cmd = "write-output 'dot sourcing $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1';. $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$proc_cmd"
         }
         else {
             $this.proc_cmd = ''
@@ -709,12 +708,12 @@ function set_dvlp_envs {
             [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine")
         }
         if ($local_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
-            $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$env:USERPROFILE\dvlp.ps1;$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;"
+            $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1;$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
             [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_local", 'wait')
         }
         if ($machine_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
-            $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$env:USERPROFILE\dvlp.ps1;$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;"
+            $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1;$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
             [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine", 'wait')
         }
@@ -785,13 +784,13 @@ function set_dvlp_envs {
     #     start-sleep 5
 
     # }
-    try {
-        write-output "dot sourcing devel-tools"
-        if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
-            write-output 'dot sourcing devel tools'
-            . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
-        }
-    }catch{}
+    # try {
+    #     write-output "dot sourcing devel-tools"
+    #     if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+    #         write-output 'dot sourcing devel tools'
+    #         . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+    #     }
+    # }catch{}
 
 }
 
