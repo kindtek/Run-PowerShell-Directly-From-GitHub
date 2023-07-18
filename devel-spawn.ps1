@@ -467,7 +467,7 @@ function set_dvlp_envs {
             # Write-Host "$cmd_str_dbg"
         }
         else {
-            Write-Host "debug mode not set"
+            # Write-Host "debug mode not set"
         }
     }
     catch {
