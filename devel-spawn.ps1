@@ -40,7 +40,7 @@ class dvlp_process {
             $this.proc_noexit = ''
         }
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            $this.proc_cmd = "write-output 'dot sourcing $($env:KINDTEK_WIN_DVLW_PATH)/scripts/devel-tools.ps1';write-output '$proc_cmd';. $($env:KINDTEK_WIN_DVLW_PATH)/scripts/devel-tools.ps1;$proc_cmd"
+            $this.proc_cmd = "write-output 'dot sourcing $env:KINDTEK_DEVEL_TOOLS';write-output '$proc_cmd';. $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
         }
         else {
             $this.proc_cmd = 'write-output "command string empty"'
