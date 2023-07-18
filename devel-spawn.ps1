@@ -683,7 +683,7 @@ function set_dvlp_envs {
         }
     }
     foreach ($cmd in $cmd_strs) {
-        echo "$cmd"
+        echo "cmd: $cmd"
         [dvlp_process_quiet]$dvlp_proc = [dvlp_process_quiet]::new("$cmd")
     }
     # while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
@@ -729,11 +729,13 @@ function set_dvlp_envs {
 function unset_dvlp_envs {
     if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
         $dvlp_owner = 'kindtek'
-    }
-    else {
+    }    else {
         $dvlp_owner = $env:KINDTEK_WIN_GIT_OWNER
     }
-    get-childitem env: | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
+    get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+        write-host "$($_.name)"
+    }
+    get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         $unset_var = $_.name
         $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
@@ -743,11 +745,11 @@ function unset_dvlp_envs {
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
     }
-    [Environment]::GetEnvironmentVariables('machine') | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
+    [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         write-host "$unset_cmd_machine"
-        [dvlp_process_quiet]$dvlp_proc_machine_envs = [dvlp_process_quiet]::new("$unset_cmd_machine;")
+        [dvlp_process]$dvlp_proc_machine_envs = [dvlp_process]::new("$unset_cmd_machine;")
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
