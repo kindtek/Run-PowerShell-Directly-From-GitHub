@@ -823,8 +823,8 @@ function unset_dvlp_envs {
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         $unset_var = $_.name
         $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
-        write-host "$unset_cmd_local"
+        # [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
+        # write-host "$unset_cmd_local"
         [dvlp_process_same]$dvlp_proc_local_envs = [dvlp_process_same]::new("$unset_cmd_local;")
         env_refresh
         # echo "unset:$unset_cmd_machine"
@@ -833,7 +833,7 @@ function unset_dvlp_envs {
     [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        write-host "$unset_cmd_machine"
+        # write-host "$unset_cmd_machine"
         [dvlp_process_same]$dvlp_proc_machine_envs = [dvlp_process_same]::new("$unset_cmd_machine;")
         env_refresh
         # echo "unset:$unset_cmd_machine"
