@@ -939,8 +939,8 @@ function install_everything {
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
             # if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -or (!([string]::IsNullOrEmpty($img_tag))))) {
             if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
-                write-host "confirmation: $confirmation"
-                write-host "test path $($env:KINDTEK_WIN_DVLW_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
+                # write-host "confirmation: $confirmation"
+                # write-host "test path $($env:KINDTEK_WIN_DVLW_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
@@ -1008,12 +1008,10 @@ function install_everything {
                         $host.UI.RawUI.BackgroundColor = "White"
 
                         $old_wsl_default_distro = get_default_wsl_distro
-                        if ($dvlp_choice -ieq 'kw'){
+                        if (($dvlp_choice -ieq 'kw') -or (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)){
                             run_devels_playground "$img_name_tag"
-
                         } else {
                             run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
-
                         }
                         $new_wsl_default_distro = get_default_wsl_distro
                         cmd.exe /c net stop LxssManager
