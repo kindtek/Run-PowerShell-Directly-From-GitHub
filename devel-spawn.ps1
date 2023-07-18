@@ -229,7 +229,7 @@ class dvlp_process_pop : dvlp_process {
     }
 }
 
-# [dvlp_process]::new("wsl_docker_full_restart;exit;", 'wait')::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
+# [dvlp_process_same]::new("wsl_docker_full_restart;exit;", 'wait')::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
 function set_dvlp_env {
     param (
         $dvlp_env_var, $dvlp_env_val, $set_system_env
@@ -266,7 +266,7 @@ function set_dvlp_envs_new_win {
     else {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
-    [dvlp_process]$dvlp_proc = [dvlp_process]::new("set_dvlp_envs;exit;", "wait")
+    [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("set_dvlp_envs;exit;", "wait")
 }
 function set_dvlp_envs {
     param (
@@ -684,7 +684,7 @@ function set_dvlp_envs {
     }
     foreach ($cmd in $cmd_strs) {
         echo "cmd: $cmd"
-        [dvlp_process]$dvlp_proc = [dvlp_process]::new("$cmd")
+        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd")
     }
     # while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
     #         -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
@@ -740,7 +740,7 @@ function unset_dvlp_envs {
         $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
         write-host "$unset_cmd_local"
-        [dvlp_process]$dvlp_proc_local_envs = [dvlp_process]::new("$unset_cmd_local;")
+        [dvlp_process_same]$dvlp_proc_local_envs = [dvlp_process_same]::new("$unset_cmd_local;")
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -749,7 +749,7 @@ function unset_dvlp_envs {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
         write-host "$unset_cmd_machine"
-        [dvlp_process]$dvlp_proc_machine_envs = [dvlp_process]::new("$unset_cmd_machine;")
+        [dvlp_process_same]$dvlp_proc_machine_envs = [dvlp_process_same]::new("$unset_cmd_machine;")
         env_refresh
         # echo "unset:$unset_cmd_machine"
         # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
@@ -885,7 +885,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        [dvlp_process]$dvlp_proc = [dvlp_process]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
+        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -907,7 +907,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        [dvlp_process]$dvlp_proc_git = [dvlp_process]::new("winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;", 'wait')
+        [dvlp_process_same]$dvlp_proc_git = [dvlp_process_same]::new("winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;", 'wait')
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
     }
     else {
@@ -916,7 +916,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    [dvlp_process]$dvlp_proc_sync = [dvlp_process]::new("sync_repo;exit;", 'wait')
+    [dvlp_process_same]$dvlp_proc_sync = [dvlp_process_same]::new("sync_repo;exit;", 'wait')
     # assuming the repos are now synced now is a good time to dot source devel-tools
     if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
         write-output 'dot sourcing devel tools'
@@ -1199,7 +1199,7 @@ function install_everything {
                     write-output 'dot sourcing devel tools'
                     . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
                 }
-                [dvlp_process]$dvlp_proc = [dvlp_process]::new("install_git;run_installer;",'noexit','wait')
+                [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("install_git;run_installer;",'noexit','wait')
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -1247,17 +1247,17 @@ function install_everything {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        [dvlp_process]$dvlp_proc = [dvlp_process]::new("wsl.exe --cd cdir", '', 'noexit')
+                        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("wsl.exe --cd cdir", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        [dvlp_process]$dvlp_proc = [dvlp_process]::new("wsl.exe --cd /hal --exec cdir", '', 'noexit')
+                        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("wsl.exe --cd /hal --exec cdir", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
-                        [dvlp_process]$dvlp_proc = [dvlp_process]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
+                        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cdw' ) {
                         # one day might get the windows cdir working
-                        [dvlp_process]$dvlp_proc = [dvlp_process]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
+                        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd') {
@@ -1336,22 +1336,22 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
         if ($local_ext -split ";" -notcontains ".ps1") {
             $local_ext += ";.ps1"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('pathext', '$local_ext')"
-            [dvlp_process]$dvlp_proc = [dvlp_process]::new("$cmd_str_local", 'wait')
+            [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_local", 'wait')
         }
         if ($machine_ext -split ";" -notcontains ".ps1") {
             $machine_ext += ";.ps1"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('pathext', '$machine_ext', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_process]$dvlp_proc = [dvlp_process]::new("$cmd_str_machine")
+            [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine")
         }
         if ($local_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
             $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
-            [dvlp_process]$dvlp_proc = [dvlp_process]::new("$cmd_str_local", 'wait')
+            [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_local", 'wait')
         }
         if ($machine_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
             $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$env:USERPROFILE\dvlp.ps1;$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;"
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
-            [dvlp_process]$dvlp_proc = [dvlp_process]::new("$cmd_str_machine", 'wait')
+            [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine", 'wait')
         }
     } catch {}
     set_dvlp_envs 1
