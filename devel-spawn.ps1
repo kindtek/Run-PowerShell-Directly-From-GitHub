@@ -126,20 +126,20 @@ class dvlp_process {
     }
 }
 
-class dvlp_process_quiet : dvlp_process {
+class dvlp_process_hide : dvlp_process {
     [String]$proc_exit
     [String]$proc_noexit
     [String]$proc_style
 
-    dvlp_process_quiet([string]$proc_cmd) : base($proc_cmd){
+    dvlp_process_hide([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_process_quiet([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
+    dvlp_process_hide([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
-    dvlp_process_quiet([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
+    dvlp_process_hide([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
@@ -170,24 +170,24 @@ class dvlp_process_popmax : dvlp_process {
     }
 }
 
-class dvlp_process_same : dvlp_process {
+class dvlp_process_embed : dvlp_process {
     [String]$proc_exit
     [String]$proc_noexit
     [String]$proc_style
     [string]$proc_nowin
 
-    # dvlp_process_same([string]$proc_cmd) : base($proc_cmd){
-    dvlp_process_same([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd){
+    # dvlp_process_embed([string]$proc_cmd) : base($proc_cmd){
+    dvlp_process_embed([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
 
-    dvlp_process_same([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd){
+    dvlp_process_embed([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
 
-    dvlp_process_same([string]$proc_cmd) : base($proc_cmd){
+    dvlp_process_embed([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
     }
@@ -241,6 +241,47 @@ class dvlp_process_pop : dvlp_process {
 }
 # [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
 
+function start_dvlp_process {
+    param (
+        $proc_cmd, $proc_wait, $proc_noexit
+    )
+    [dvlp_process]$dvlp_proc = [dvlp_process]::new($proc_cmd, $proc_wait, $proc_noexit)
+}
+
+function start_dvlp_process_pop {
+    param (
+        $proc_cmd, $proc_wait, $proc_noexit
+    )
+    [dvlp_process_pop]$dvlp_proc = [dvlp_process_pop]::new($proc_cmd, $proc_wait, $proc_noexit)
+}
+
+function start_dvlp_process_popmin {
+    param (
+        $proc_cmd, $proc_wait, $proc_noexit
+    )
+    [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new($proc_cmd, $proc_wait, $proc_noexit)
+}
+
+function start_dvlp_process_popmax {
+    param (
+        $proc_cmd, $proc_wait, $proc_noexit
+    )
+    [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new($proc_cmd, $proc_wait, $proc_noexit)
+}
+
+function start_dvlp_process_hide {
+    param (
+        $proc_cmd, $proc_wait, $proc_noexit
+    )
+    [dvlp_process_hide]$dvlp_proc = [dvlp_process_hide]::new($proc_cmd, $proc_wait, $proc_noexit)
+}
+
+function start_dvlp_process_embed {
+    param (
+        $proc_cmd, $proc_wait, $proc_noexit
+    )
+    [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new($proc_cmd, $proc_wait, $proc_noexit)
+}
 function get_dvlp_env {
     param (
         $dvlp_env_var, $set_machine_env_flag
@@ -308,7 +349,7 @@ function set_dvlp_envs_new_win {
     else {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
-    [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("set_dvlp_envs;exit;", "wait")
+    [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new("set_dvlp_envs;exit;", "wait")
 }
 
 
@@ -485,13 +526,13 @@ function set_dvlp_envs {
             # $local_ext += ";.ps1"
             set_dvlp_env "pathext" ";.ps1"
             # $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('pathext', '$local_ext')"
-            # [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_local", 'wait')
+            # [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new("$cmd_str_local", 'wait')
         }
         if ($machine_ext -split ";" -notcontains ".ps1") {
             # $machine_ext += ";.ps1"
             # $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('pathext', '$machine_ext', '$([System.EnvironmentVariableTarget]::Machine)')"
             set_dvlp_env "pathext" ";.ps1" "machine" 
-            # [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine")
+            # [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new("$cmd_str_machine")
         }
         if ($local_paths -split ";" -notcontains "$envKINDTEK_DEVEL_SPAWN" -or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
             # $local_paths += ";$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
@@ -525,7 +566,7 @@ function set_dvlp_envs {
     #         $local_paths += ";$env:KINDTEK_WIN_DVLP_PATH/scripts/"
     #     }
     #     $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
-    #     [dvlp_process_same]$dvlp_proc_local_paths = [dvlp_process_same]::new("$cmd_str_local", 'wait')
+    #     [dvlp_process_embed]$dvlp_proc_local_paths = [dvlp_process_embed]::new("$cmd_str_local", 'wait')
     # }
     # $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
     # if ($machine_paths -split ";" -notcontains "devel-tools.ps1") {
@@ -541,7 +582,7 @@ function set_dvlp_envs {
     #         $machine_paths += ";$env:KINDTEK_WIN_DVLP_PATH/scripts/"
     #     }
     #     $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths')"
-    #     [dvlp_process_same]$dvlp_proc_machine_envs = [dvlp_process_same]::new("$cmd_str_machine", 'wait')
+    #     [dvlp_process_embed]$dvlp_proc_machine_envs = [dvlp_process_embed]::new("$cmd_str_machine", 'wait')
     # }
     # while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
     #         -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
@@ -712,7 +753,7 @@ function install_winget {
         $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
         Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
-        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
+        [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new("powershell.exe -executionpolicy remotesigned -File $file", 'wait')
         # install winget and use winget to install everything else
         # $p = Get-Process -Name "PackageManagement"
         # Stop-Process -InputObject $p
@@ -734,7 +775,7 @@ function install_git {
     $progress_flag = $orig_progress_flag
     if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
         Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-        [dvlp_process_same]$dvlp_proc_git = [dvlp_process_same]::new("winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;", 'wait')
+        [dvlp_process_embed]$dvlp_proc_git = [dvlp_process_embed]::new("winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;", 'wait')
         Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
     }
     else {
@@ -743,7 +784,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    [dvlp_process_same]$dvlp_proc_sync = [dvlp_process_same]::new("sync_repo;exit;", 'wait')
+    [dvlp_process_embed]$dvlp_proc_sync = [dvlp_process_embed]::new("sync_repo;exit;", 'wait')
     # assuming the repos are now synced now is a good time to dot source devel-tools
     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
         write-host 'dot sourcing devel tools'
@@ -986,22 +1027,22 @@ function install_everything {
                         require_docker_online_new_win
                         if (($new_wsl_default_distro -ne $old_wsl_default_distro) -and (is_docker_desktop_online -eq $false)) {
                             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
-                            Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
-                            try {
-                                wsl.exe -s $old_wsl_default_distro
-                                wsl_docker_restart_new_win
-                                # wsl_docker_restart
-                                require_docker_online_new_win
-                            }
-                            catch {
-                                try {
-                                    revert_default_wsl_distro
-                                    require_docker_online_new_win
-                                }
-                                catch {
-                                    Write-Host "error setting failsafe as default wsl distro"
-                                }
-                            }
+                            # Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
+                            # try {
+                            #     wsl.exe -s $old_wsl_default_distro
+                            #     wsl_docker_restart_new_win
+                            #     # wsl_docker_restart
+                            #     require_docker_online_new_win
+                            # }
+                            # catch {
+                            #     try {
+                            #         revert_default_wsl_distro
+                            #         require_docker_online_new_win
+                            #     }
+                            #     catch {
+                            #         Write-Host "error setting failsafe as default wsl distro"
+                            #     }
+                            # }
                         }
                     }
                 }
@@ -1026,7 +1067,7 @@ function install_everything {
                     write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("install_git;run_installer;",'wait','noexit')
+                [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new("install_git;run_installer;",'wait','noexit')
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -1074,7 +1115,7 @@ function install_everything {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_same]::new("wsl.exe --cd cdir", '', 'noexit')
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_embed]::new("wsl.exe --cd cdir", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
                         [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("wsl.exe --cd /hal --exec cdir", '', 'noexit')
