@@ -239,7 +239,7 @@ class dvlp_process_pop : dvlp_process {
         $this.proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal
     }
 }
-# [dvlp_process_same]::new("wsl_docker_full_restart;exit;", 'wait')::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
+# [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
 
 function get_dvlp_env {
     param (
@@ -278,7 +278,7 @@ function set_dvlp_env {
             } elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -and ($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val)){
             # if ([System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
                 write-host "setting machine env $dvlp_env_var to $dvlp_env_val"
-                write-host "[System.Environment]::SetEnvironmentVariable('$dvlp_env_var', '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine) "
+                # write-host "[System.Environment]::SetEnvironmentVariable('$dvlp_env_var', '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine) "
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
                 # $cmd_str = "[System.Environment]::SetEnvironmentVariable('$dvlp_env_var', '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
                 # return $cmd_str
