@@ -297,8 +297,8 @@ function set_dvlp_envs {
     $repo_dir_name5 = 'kernels'
     $repo_src_name6 = 'mnt'
     $repo_dir_name6 = 'mnt'
-    $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
-    $git_path = "$git_parent_path/$repo_dir_name"
+    $git_parent_path = "$($env:USERPROFILE)/repos/$($repo_src_owner)"
+    $git_path = "$($git_parent_path)/$($repo_dir_name)"
     # . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
 
 
@@ -376,7 +376,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = set_dvlp_env 'KINDTEK_DEVEL_TOOLS' "$git_parent_path/scripts/devel-tools.ps1"
+        $cmd_str = set_dvlp_env 'KINDTEK_DEVEL_TOOLS' "$($git_parent_path)/scripts/devel-tools.ps1"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -385,6 +385,19 @@ function set_dvlp_envs {
     catch {
         if (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and ([string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS))) {
             Write-Host 'error setting KINDTEK_DEVEL_TOOLS'
+            Write-Host "$cmd_str"
+        }
+    }    
+    try {
+        $cmd_str = set_dvlp_env 'KINDTEK_DEVEL_SPAWN' "$($git_parent_path)/powerhell/devel-spawn.ps1"
+        if ($null -ne $cmd_str){
+            $cmd_strs.Add($cmd_str) > $null
+        }
+        # Set-Item -Path env:$env:KINDTEK_FAILSAFE_WSL_DISTRO -Value 'kalilinux-kali-rolling-latest' -Force
+    }
+    catch {
+        if (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and ([string]::IsNullOrEmpty($env:KINDTEK_DEVEL_SPAWN))) {
+            Write-Host 'error setting KINDTEK_DEVEL_SPAWN'
             Write-Host "$cmd_str"
         }
     }    
@@ -402,7 +415,7 @@ function set_dvlp_envs {
         }
     }
     try { 
-        $cmd_str = set_dvlp_env 'KINDTEK_WIN_GIT_PATH' "$git_parent_path"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_GIT_PATH' "$($git_parent_path)"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -415,7 +428,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLW_PATH' "$git_path"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLW_PATH' "$($git_path)"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -467,7 +480,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLP_PATH' "$git_path/$repo_dir_name2"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLP_PATH' "$($git_path)/$repo_dir_name2"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -532,7 +545,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = set_dvlp_env 'KINDTEK_WIN_POWERHELL_PATH' "$git_path/$repo_dir_name3"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_POWERHELL_PATH' "$($git_path)/$repo_dir_name3"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -575,7 +588,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLADV_PATH' "$git_path/$repo_dir_name4"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_DVLADV_PATH' "$($git_path)/$repo_dir_name4"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -664,7 +677,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = set_dvlp_env 'KINDTEK_WIN_MNT_PATH' "$git_path/$repo_dir_name6"
+        $cmd_str = set_dvlp_env 'KINDTEK_WIN_MNT_PATH' "$($git_path)/$repo_dir_name6"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
