@@ -307,8 +307,8 @@ function set_dvlp_envs {
         start-sleep 3
     }
     try {
-        if ([string]::IsNullOrEmpty($DEBUG_MODE) -or $DEBUG_MODE -eq '0') {
-            Set-PSDebug -Trace 0;
+        if ([string]::IsNullOrEmpty($DEBUG_MODE) -or $DEBUG_MODE -eq '0' -or $DEBUG_MODE -eq 0) {
+            # Set-PSDebug -Trace 0;
             $cmd_str = set_dvlp_env 'KINDTEK_DEBUG_MODE' '0'
             if ($null -ne $cmd_str){
                 $cmd_strs.Add($cmd_str) > $null
@@ -318,7 +318,7 @@ function set_dvlp_envs {
                 $cmd_strs.Add($cmd_str) > $null
             }
         }
-        elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and $DEBUG_MODE -ne '0') {
+        elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and $DEBUG_MODE -ne '0' -or $DEBUG_MODE -eq 0) {
             Set-PSDebug -Trace 2;
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
             $cmd_str = set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style"
