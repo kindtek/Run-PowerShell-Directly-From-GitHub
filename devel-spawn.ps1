@@ -40,10 +40,10 @@ class dvlp_process {
             $this.proc_noexit = ''
         }
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            $this.proc_cmd = "write-output 'dot sourcing $env:KINDTEK_DEVEL_TOOLS';write-output '$proc_cmd';. $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
+            $this.proc_cmd = "write-host 'dot sourcing $env:KINDTEK_DEVEL_TOOLS';write-host '$proc_cmd';. $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
         }
         else {
-            $this.proc_cmd = 'write-output "command string empty"'
+            $this.proc_cmd = 'write-host "command string empty"'
             $this.proc_wait = "wait"
             $this.proc_noexit = '-noexit'
         }
@@ -333,7 +333,7 @@ function set_dvlp_envs {
             if ($null -ne $cmd_str){
                 $cmd_strs.Add($cmd_str) > $null
             }
-            Write-Output "debug = true"
+            write-host "debug = true"
         }
         if ($DEBUG_MODE -ne '0' -and $DEBUG_MODE -ne 0) {        
             # Write-Host "debug mode set to $env:KINDTEK_DEBUG_MODE"
@@ -802,9 +802,9 @@ function set_dvlp_envs {
 
     # }
     # try {
-    #     write-output "dot sourcing devel-tools"
+    #     write-host "dot sourcing devel-tools"
     #     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-    #         write-output 'dot sourcing devel tools'
+    #         write-host 'dot sourcing devel tools'
     #         . $env:KINDTEK_DEVEL_TOOLS
     #     }
     # }catch{}
@@ -1131,7 +1131,7 @@ function install_everything {
     $dvlp_choice = 'n'
     do {
         if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-            write-output 'dot sourcing devel tools'
+            write-host 'dot sourcing devel tools'
             . $env:KINDTEK_DEVEL_TOOLS
         }
         $host.UI.RawUI.ForegroundColor = "Black"
@@ -1183,7 +1183,7 @@ function install_everything {
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 install_git
                 if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-                    write-output 'dot sourcing devel tools'
+                    write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
                 run_installer
@@ -1281,7 +1281,7 @@ function install_everything {
                 }
             } else {
                 if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-                    write-output 'dot sourcing devel tools'
+                    write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
                 [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("install_git;run_installer;",'noexit','wait')
