@@ -376,7 +376,7 @@ function set_dvlp_envs {
         }
     }
     try {
-        $cmd_str = set_dvlp_env 'KINDTEK_DEVEL_TOOLS' "$git_parent_path/scripts/devel-tools.ps1"
+        $cmd_str = set_dvlp_env 'KINDTEK_DEVEL_TOOLS' "$git_parent/scripts/devel-tools.ps1"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
@@ -389,7 +389,7 @@ function set_dvlp_envs {
         }
     }    
     try {
-        $cmd_str = set_dvlp_env 'KINDTEK_DEVEL_SPAWN' "$git_parent_path/powerhell/devel-spawn.ps1"
+        $cmd_str = set_dvlp_env 'KINDTEK_DEVEL_SPAWN' "$git_parent/powerhell/devel-spawn.ps1"
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
