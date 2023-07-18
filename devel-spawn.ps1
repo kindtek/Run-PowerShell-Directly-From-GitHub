@@ -250,6 +250,7 @@ function set_dvlp_env {
             [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
         }
         write-host "$dvlp_env_var :"
+        [System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine)
         write-host [System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine)
         if ([System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
             write-host "setting $dvlp_env_var to $dvlp_env_val"
@@ -721,7 +722,7 @@ function set_dvlp_envs {
         }
         if ($machine_ext -split ";" -notcontains ".ps1") {
             $machine_ext += ";.ps1"
-            $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('pathext', '$machine_ext', [System.EnvironmentVariableTarget]::Machine)"
+            $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('pathext', '$machine_ext', '$([System.EnvironmentVariableTarget]::Machine)')"
             [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine")
         }
         if ($local_paths -split ";" -notcontains "$envKINDTEK_DEVEL_SPAWN" -or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
@@ -731,7 +732,7 @@ function set_dvlp_envs {
         }
         if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
             $machine_paths += ";$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
-            $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
+            $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', '$([System.EnvironmentVariableTarget]::Machine)')"
             [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine", 'wait')
         }
         write-host "cmd_str_machine: $cmd_str_machine"
