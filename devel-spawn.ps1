@@ -745,6 +745,7 @@ function unset_dvlp_envs {
     [Environment]::GetEnvironmentVariables('machine') | where-object name -match ("^" + [regex]::escape($dvlp_owner) + ".*$") | foreach-object {
         $unset_var = $_.name
         $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
+        write-host $unset_cmd_machine
         [dvlp_process_quiet]$dvlp_proc_machine_envs = [dvlp_process_quiet]::new("$unset_cmd_machine;")
         env_refresh
         # echo "unset:$unset_cmd_machine"
