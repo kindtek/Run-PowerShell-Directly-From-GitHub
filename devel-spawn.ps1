@@ -1107,10 +1107,10 @@ function install_everything {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        start_dvlp_process_popmax "wsl.exe --cd cdir" '' 'noexit'
+                        start_dvlp_process_popmax "wsl --cd /hal" '' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        start_dvlp_process_popmax "wsl.exe --cd /hal --exec cdir" '' 'noexit'
+                        start_dvlp_process_popmax "wsl --cd /hal --exec cdir" '' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
                         start_dvlp_process_popmax "Set-Location -literalPath $env:USERPROFILE" '' 'noexit'
