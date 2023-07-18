@@ -251,7 +251,6 @@ function set_dvlp_env {
         }
         write-host "$dvlp_env_var :"
         [System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine)
-        write-host [System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine)
         if ([System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
             write-host "setting $dvlp_env_var to $dvlp_env_val"
             $cmd_str = "[System.Environment]::SetEnvironmentVariable('$dvlp_env_var', '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
