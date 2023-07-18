@@ -112,11 +112,11 @@ class dvlp_process {
         try {
             if ([string]::IsNullOrEmpty($this.proc_noexit)){
                 # Start-Process -Filepath powershell.exe @proc_show -ArgumentList $($this.proc_noexit), '-Command', $($this.proc_cmd)
-                # write-host  "Start-Process -Filepath powershell.exe @proc_show -ArgumentList '-Command', '$($this.proc_cmd)'"
-                Start-Process -Filepath powershell.exe @proc_show -ArgumentList '-Command', $($this.proc_cmd)
+                write-host  "Start-Process -Filepath powershell.exe @proc_show -ArgumentList `"-Command`", `"$($this.proc_cmd)`""
+                Start-Process -Filepath powershell.exe @proc_show -ArgumentList '-Command', $this.proc_cmd
             } else {
-                # Write-host "Start-Process -Filepath powershell.exe @proc_show -ArgumentList $($this.proc_noexit), '-Command', '$($this.proc_cmd)'"
-                Start-Process -Filepath powershell.exe @proc_show -ArgumentList $($this.proc_noexit), '-Command', $($this.proc_cmd)
+                Write-host "Start-Process -Filepath powershell.exe @proc_show -ArgumentList $($this.proc_noexit), '-Command', '$($this.proc_cmd)'"
+                Start-Process -Filepath powershell.exe @proc_show -ArgumentList $this.proc_noexit, '-Command', $this.proc_cmd
             }
         }
         catch { 
@@ -243,20 +243,22 @@ class dvlp_process_pop : dvlp_process {
 # [dvlp_process_same]::new("wsl_docker_full_restart;exit;", 'wait')::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
 function set_dvlp_env {
     param (
-        $dvlp_env_var, $dvlp_env_val, $set_system_env
+        $dvlp_env_var, $dvlp_env_val, $set_system_env_flag
     )
     
     try {
-        if (!([string]::IsNullOrEmpty($set_system_env) -or [string]::IsNullOrEmpty($set_system_env) -eq '0' -or [string]::IsNullOrEmpty($set_system_env) -eq 0)){
-            [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
+        write-host "setting local $dvlp_env_var to $dvlp_env_val"
+        [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
+        # if (!([string]::IsNullOrEmpty($set_system_env_flag)) -and [System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
+        if ([System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
+            write-host "setting system $dvlp_env_var to $dvlp_env_val"
+            [System.Environment]::SetEnvironmentVariable($dvlp_env_var, $dvlp_env_val, [System.EnvironmentVariableTarget]::Machine)                  
+            # $cmd_str = "[System.Environment]::SetEnvironmentVariable('$dvlp_env_var', '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
+            # return $cmd_str
         }
         # write-host "$dvlp_env_var :"
         # write-host [System.Environment]::GetEnvironmentVariable("$dvlp_env_var", "$([System.EnvironmentVariableTarget]::Machine)")
-        if ([System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine) -ne "$dvlp_env_val"){
-            write-host "setting $dvlp_env_var to $dvlp_env_val"
-            $cmd_str = "[System.Environment]::SetEnvironmentVariable('$dvlp_env_var', '$dvlp_env_val', [System.EnvironmentVariableTarget]::Machine)"
-            return $cmd_str
-        }
+
         return $null
     }
     catch {
@@ -279,6 +281,39 @@ function set_dvlp_envs_new_win {
     }
     [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("set_dvlp_envs;exit;", "wait")
 }
+
+
+function unset_dvlp_envs {
+    if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
+        $dvlp_owner = 'kindtek'
+    }    else {
+        $dvlp_owner = $env:KINDTEK_WIN_GIT_OWNER
+    }
+    echo "dvlp owner: $dvlp_owner"
+    get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+        write-host "$($_.name)"
+    }
+    get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+        $unset_var = $_.name
+        $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null')"
+        # [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
+        write-host "$unset_cmd_local"
+        Invoke-Expression $unset_cmd_local
+        env_refresh
+        # echo "unset:$unset_cmd_machine"
+        # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
+    }
+    [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+        $unset_var = $_.name
+        $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
+        write-host "$unset_cmd_machine"
+        [dvlp_process_same]$dvlp_proc_machine_envs = [dvlp_process_same]::new("$unset_cmd_machine;")
+        env_refresh
+        # echo "unset:$unset_cmd_machine"
+        # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
+    }
+}
+
 function set_dvlp_envs {
     param (
         $DEBUG_MODE
@@ -810,36 +845,6 @@ function set_dvlp_envs {
     #     }
     # }catch{}
 
-}
-
-function unset_dvlp_envs {
-    if ( [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER)) {
-        $dvlp_owner = 'kindtek'
-    }    else {
-        $dvlp_owner = $env:KINDTEK_WIN_GIT_OWNER
-    }
-    get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
-        write-host "$($_.name)"
-    }
-    get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
-        $unset_var = $_.name
-        $unset_cmd_local = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null')"
-        # [System.Environment]::SetEnvironmentVariable("$unset_var", "$null")
-        write-host "$unset_cmd_local"
-        [dvlp_process_same]$dvlp_proc_local_envs = [dvlp_process_same]::new("$unset_cmd_local;")
-        env_refresh
-        # echo "unset:$unset_cmd_machine"
-        # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
-    }
-    [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
-        $unset_var = $_.name
-        $unset_cmd_machine = "[System.Environment]::SetEnvironmentVariable('$unset_var', '$null', [System.EnvironmentVariableTarget]::Machine)"
-        write-host "$unset_cmd_machine"
-        [dvlp_process_same]$dvlp_proc_machine_envs = [dvlp_process_same]::new("$unset_cmd_machine;")
-        env_refresh
-        # echo "unset:$unset_cmd_machine"
-        # echo Start-Process -FilePath powershell.exe -LoadUserProfile -WindowStyle "$env:KINDTEK_NEW_PROC_STYLE" -ArgumentList "-noexit", "-Command $unset_cmd"
-    }
 }
 
 function test_wsl_distro {
