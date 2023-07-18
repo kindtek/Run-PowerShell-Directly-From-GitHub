@@ -176,6 +176,17 @@ class dvlp_process_same : dvlp_process {
     [String]$proc_style
     [string]$proc_nowin
 
+    # dvlp_process_same([string]$proc_cmd) : base($proc_cmd){
+    dvlp_process_same([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd){
+        $this.re_set()
+        ([dvlp_process] $this).start()
+    }
+
+    dvlp_process_same([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd){
+        $this.re_set()
+        ([dvlp_process] $this).start()
+    }
+
     dvlp_process_same([string]$proc_cmd) : base($proc_cmd){
         $this.re_set()
         ([dvlp_process] $this).start()
@@ -1247,17 +1258,17 @@ function install_everything {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("wsl.exe --cd cdir", '', 'noexit')
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_same]::new("wsl.exe --cd cdir", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("wsl.exe --cd /hal --exec cdir", '', 'noexit')
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("wsl.exe --cd /hal --exec cdir", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
-                        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
                     }
                     elseif ($dvlp_choice -ieq 'cdw' ) {
                         # one day might get the windows cdir working
-                        [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
+                        [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("Set-Location -literalPath $env:USERPROFILE", '', 'noexit')
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd') {
