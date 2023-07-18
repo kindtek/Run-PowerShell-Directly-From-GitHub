@@ -715,7 +715,7 @@ function set_dvlp_envs {
             [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine")
         }
         if ($local_paths -split ";" -notcontains "$env:USERPROFILE\dvlp.ps1" -and $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1") {
-            $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1"
+            $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$env:USERPROFILE\dvlp.ps1;$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1;"
             $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
             [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_local", 'wait')
         }
@@ -724,6 +724,9 @@ function set_dvlp_envs {
             $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', [System.EnvironmentVariableTarget]::Machine)"
             [dvlp_process_same]$dvlp_proc = [dvlp_process_same]::new("$cmd_str_machine", 'wait')
         }
+        write-host "cmd_str_machine: $cmd_str_machine"
+        write-host "cmd_str_local: $cmd_str_local"
+
     } catch {}
 
     # $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
