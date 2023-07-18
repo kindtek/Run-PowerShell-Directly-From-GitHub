@@ -2,6 +2,7 @@ $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 
 if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+    write-output 'dot sourcing devel tools'
     . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
 }
 
@@ -24,7 +25,7 @@ class dvlp_process {
     hidden init ([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) {
         $this.re_set()
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            $this.proc_cmd = ". $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$proc_cmd"
+            $this.proc_cmd = "write-output 'dot sourcing devel-tools';. $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$proc_cmd"
 
         }
         else {
@@ -1335,8 +1336,8 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
             [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new("$cmd_str_machine", 'wait')
         }
     } catch {}
-    set_dvlp_envs
+    set_dvlp_envs 1
     install_everything $args[0]
 } else {
-    set_dvlp_envs
+    set_dvlp_envs 1
 }
