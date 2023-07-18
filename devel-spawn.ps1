@@ -84,7 +84,7 @@ class dvlp_process {
         else {
             $this.proc_style = [System.Diagnostics.ProcessWindowStyle]::$env:KINDTEK_NEW_PROC_STYLE
         }
-        write-host "style: $($this.proc_style)"
+        # write-host "style: $($this.proc_style)"
     }
 
     [bool]start() {
@@ -715,7 +715,10 @@ function set_dvlp_envs {
     # }
     try {
         write-output "dot sourcing devel-tools"
-        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+        if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+            write-output 'dot sourcing devel tools'
+            . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+        }
     }catch{}
 
 }
@@ -908,8 +911,10 @@ function install_git {
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     [dvlp_process_pop]$dvlp_proc_sync = [dvlp_process_pop]::new("sync_repo;exit;", 'wait')
     # assuming the repos are now synced now is a good time to dot source devel-tools
-    write-output "dot sourcing devel-tools"
-    . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+    if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+        write-output 'dot sourcing devel tools'
+        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+    }
     # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
     return $new_install
 }
@@ -1033,8 +1038,10 @@ function install_everything {
     )
     $dvlp_choice = 'n'
     do {
-        write-output "dot sourcing devel-tools"
-        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+        if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+            write-output 'dot sourcing devel tools'
+            . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+        }
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "White"
         $img_name = $env:KINDTEK_WIN_DVLP_FULLNAME
@@ -1083,8 +1090,10 @@ function install_everything {
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 install_git
-                write-output "dot sourcing devel-tools"
-                . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+                if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+                    write-output 'dot sourcing devel tools'
+                    . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+                }
                 run_installer
                 # $host.UI.RawUI.ForegroundColor = "DarkGray"
                 # $host.UI.RawUI.ForegroundColor = "White"
@@ -1179,8 +1188,10 @@ function install_everything {
                     }
                 }
             } else {
-                write-output "dot sourcing devel-tools"
-                . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+                if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1" -PathType Leaf)) {
+                    write-output 'dot sourcing devel tools'
+                    . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+                }
                 [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new("install_git;run_installer;",'noexit','wait')
             } 
             do {
