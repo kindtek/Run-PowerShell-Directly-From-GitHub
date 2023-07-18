@@ -1,6 +1,8 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 
+$global:devel_spawn = 'sourced'
+
 class dvlp_process {
     [String]$proc_cmd
     [String]$proc_wait
@@ -19,12 +21,6 @@ class dvlp_process {
 
     hidden init ([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) {
         $this.re_set()
-        if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            $this.proc_cmd = "write-output 'dot sourcing $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1';. $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$proc_cmd"
-        }
-        else {
-            $this.proc_cmd = ''
-        }
         if ([string]::IsNullOrEmpty($this.proc_nowin)){
             if (!([String]::IsNullOrEmpty($proc_wait))) {
                 $this.proc_wait = "wait"
@@ -42,6 +38,14 @@ class dvlp_process {
             write-host "start process powershell -nonewwindow -argument list $($this.proc_cmd)"
             $this.proc_wait = ''
             $this.proc_noexit = ''
+        }
+        if (!([String]::IsNullOrEmpty($proc_cmd))) {
+            $this.proc_cmd = "write-output 'dot sourcing $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1';. $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1;$proc_cmd"
+        }
+        else {
+            $this.proc_cmd = 'write-output "command string empty"'
+            $this.proc_wait = "wait"
+            $this.proc_noexit = '-noexit'
         }
         # $this.start()
     }
@@ -1397,6 +1401,13 @@ if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFIL
     echo 'installing everything and setting envs ..'
     set_dvlp_envs 1
     install_everything $args[0]
-} else {
+} elseif ($global:devel_tools -ne "sourced"){
+    echo 'devel_tools not sourced'
+    set_dvlp_envs 1
+    if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
+        . $env:KINDTEK_WIN_DVLW_PATH/scripts/devel-tools.ps1
+    }
+}
+else {
     echo 'not installing anything ..'
 }
