@@ -525,7 +525,6 @@ function set_dvlp_envs {
         if ($null -ne $cmd_str){
             $cmd_strs.Add($cmd_str) > $null
         }
-        KINDTEK_WIN_POWERHELL_FULLNAME
         # Set-Item -Path env:KINDTEK_WIN_POWERHELL_PATH -Value '$git_path/$repo_dir_name3' -Force
     }
     catch {
@@ -1401,6 +1400,9 @@ function install_everything {
 
 
 if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
+    echo 'installing everything and setting envs ..'
     set_dvlp_envs 1
     install_everything $args[0]
-} 
+} else {
+    echo 'not installing anything ..'
+}
