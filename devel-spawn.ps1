@@ -34,13 +34,14 @@ class dvlp_process {
             else {
                 $this.proc_noexit = ''
             } 
+            write-host "start process powershell -argument list $proc_wait $proc_noexit $proc_cmd"
         } else {
-            write-host "start process powershell -nonewwindow -argument list $($this.proc_cmd)"
+            write-host "start process powershell -nonewwindow -argument list $proc_cmd"
             $this.proc_wait = ''
             $this.proc_noexit = ''
         }
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            $this.proc_cmd = "write-host 'dot sourcing $env:KINDTEK_DEVEL_TOOLS';write-host '$proc_cmd';. $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
+            $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
         }
         else {
             $this.proc_cmd = 'write-host "command string empty"'
