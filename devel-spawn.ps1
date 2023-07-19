@@ -667,6 +667,7 @@ function revert_default_wsl_distro {
     }
     catch {
         try {
+            echo 'run_devel 670'
             run_devels_playground "default"
         }
         catch {
@@ -972,6 +973,7 @@ function install_everything {
                 # $env:KINDTEK_WIN_DVLW_PATH, $img_name_tag, $non_interactive, $default_distro
                 try {
                     if (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
+                        echo 'run_devel 976'
                         run_devels_playground "default"
                         cmd.exe /c net stop LxssManager
                         cmd.exe /c net start LxssManager
@@ -1009,8 +1011,10 @@ function install_everything {
 
                         $old_wsl_default_distro = get_default_wsl_distro
                         if (($dvlp_choice -ieq 'kw') -or (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)){
+                            echo 'run_devel 1014'
                             run_devels_playground "$img_name_tag"
                         } else {
+                            echo 'run_devel 1017'
                             run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
                         }
                         $new_wsl_default_distro = get_default_wsl_distro
@@ -1124,13 +1128,16 @@ function install_everything {
                 elseif ($dvlp_choice -ieq 'd') {
                     require_docker_online_new_win
                     if ([string]::IsNullOrEmpty($img_name_tag)){
+                        echo 'run_devel 1131'
                         run_devels_playground
                     } else {
+                        echo 'run_devel 1134'
                         run_devels_playground "$img_name_tag" 
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online_new_win
+                    echo 'run_devel 1140'
                     run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
                 }
                 elseif ($dvlp_choice -like 'k*') {
