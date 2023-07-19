@@ -1012,7 +1012,7 @@ function install_everything {
                         $old_wsl_default_distro = get_default_wsl_distro
                         if (($dvlp_choice -ieq 'kw') -or (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)){
                             echo 'run_devel 1014'
-                            run_devels_playground "$img_name_tag"
+                            run_devels_playground "$img_name_tag" "" ""
                         } else {
                             echo 'run_devel 1017'
                             run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
