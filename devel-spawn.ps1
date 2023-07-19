@@ -344,7 +344,7 @@ function set_dvlp_envs_new_win {
     else {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
-    start_dvlp_process_hide "set_dvlp_envs;exit;" "wait"
+    start_dvlp_process_hide "set_dvlp_envs;exit;"
 }
 
 
@@ -776,7 +776,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    start_dvlp_process_popmin "sync_repo;exit;" 'wait'
+    start_dvlp_process_popmin "sync_repo"
     # assuming the repos are now synced now is a good time to dot source devel-tools
     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
         # write-host 'dot sourcing devel tools'
@@ -1060,7 +1060,7 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                start_dvlp_process_popmax "install_git;run_installer;" 'wait' 'noexit'
+                start_dvlp_process_popmax "install_git;run_installer;" 'wait'
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
