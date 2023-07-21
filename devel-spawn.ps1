@@ -1138,7 +1138,7 @@ function install_everything {
                         start_dvlp_process_popmax "wsl --cd /hal" '' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        start_dvlp_process_popmax "wsl --cd /hal --exec cdir" '' 'noexit'
+                        start_dvlp_process_popmax "wsl --cd /hal -- `$(cdir)" '' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
                         start_dvlp_process_popmax "Set-Location -literalPath $env:USERPROFILE" '' 'noexit'
@@ -1166,6 +1166,19 @@ function install_everything {
                         $dvlp_kindtek_options = Read-Host
                         if ($dvlp_kindtek_options -ieq 'l' -or $dvlp_kindtek_options -ieq 'w') {
                             $dvlp_choice = $dvlp_choice + $dvlp_kindtek_options
+                            if ($dvlp_kindtek_options -ieq 'w') {
+                                Write-Host "`r`n`t[d]ocker re-install or [w]indows re-install"
+                                $dvlp_kindtek_options_win = Read-Host
+                                if ($dvlp_kindtek_options_win -ieq 'd') {
+                                    powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/reinstall-docker.ps1")
+                                }
+                                if ($dvlp_kindtek_options_win -ieq 'w') {
+                                    powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/add-windows-features.ps1")
+                                    powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/del-windows-features.ps1")
+                                }
+                            } elseif ($dvlp_kindtek_options_win -ieq 'l') {
+                                $dvlp_kindtek_options_win = Read-Host
+                            }
                         }
                     }
                     if ($dvlp_choice -ieq 'kl' ) {
