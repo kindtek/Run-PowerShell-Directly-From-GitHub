@@ -984,6 +984,7 @@ function install_everything {
                         if ((test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) -eq $true){
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test passed"
                             Write-Host "docker devel installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed"
+                            $dvlp_new_install = $true
                         } else {
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test FAILED"
                         }
@@ -1013,10 +1014,12 @@ function install_everything {
                         $host.UI.RawUI.BackgroundColor = "White"
 
                         $old_wsl_default_distro = get_default_wsl_distro
-                        if (($dvlp_choice -ieq 'kw') -or (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)){
-                            run_devels_playground "$img_name_tag" "" ""
+                        if ((($dvlp_choice -ieq 'kw') -or (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) -and (!($dvlp_new_install -eq $true))){
+                            run_devels_playground "$img_name_tag" '' ''
+                            
                         } else {
                             run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
+                            $dvlp_new_install = $false
                         }
                         $new_wsl_default_distro = get_default_wsl_distro
                         cmd.exe /c net stop LxssManager
