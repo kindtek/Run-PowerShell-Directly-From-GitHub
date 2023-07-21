@@ -1082,14 +1082,33 @@ function install_everything {
                 write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
                 write-host "  WSL Distros"
                 write-host " --------------------------------------------------------------------------"
-                wsl -l -v
+                wsl_distro_list_display
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nChoose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter the number of wsl distro or choose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
-                if ($dvlp_choice -ieq 'f') {
+                if ($dvlp_choice -is [int]){
+                    $wsl_distro_selected = wsl_distro_list_select $dvlp_choice
+                    if ([string]::IsNullOrEmpty($wsl_distro_selected)){
+                        write-host "no distro found for $dvlp_choice``r`n`r`nEnter 'DELETE' for option to delete multiple distros"
+                        read-host $wsl_choice
+                        if ($wsl_choice -ceq 'DELETE') {
+                            ./$(get_dvlp_env('KINDTEK_WIN_DVLP')/scripts/wsl-remove-distros.ps1)
+                        }
+                    }
+                    else {
+                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter 'DELETE' or 'set default'"
+                        read-host $wsl_choice
+                        if ($wsl_choice -ceq 'DELETE') {
+                            wsl --unregister $wsl_distro_selected
+                        } elseif ($wsl_choice -eq 'set default') {
+                            wsl --set-default $wsl_distro_selected
+                        }
+                    }
+                }
+                elseif ($dvlp_choice -ieq 'f') {
                     try {
                         set_default_wsl_distro
                         require_docker_online_new_win
