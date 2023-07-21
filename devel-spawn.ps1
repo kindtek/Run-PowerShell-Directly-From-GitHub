@@ -1061,7 +1061,7 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                start_dvlp_process_hide "install_git;run_installer;"
+                start_dvlp_process "install_git;run_installer;" "" ""
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -1112,6 +1112,7 @@ function install_everything {
                             write-host "setting $wsl_distro_selected as default distro ..."
                             wsl --set-default $wsl_distro_selected
                         } elseif ([string]::IsNullOrEmpty($wsl_choice)){
+                            write-host "type 'exit' to return to main menu"
                             wsl -d $wsl_distro_selected --user agl --cd /hal
                         }
                     }
@@ -1153,16 +1154,16 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd') {
-                    require_docker_online_new_win
+                    # require_docker_online
                     if ([string]::IsNullOrEmpty($img_name_tag)){
-                        run_devels_playground "" "" ""
+                        start_dvlp_process_popmax "run_devels_playground '' '' ''"
                     } else {
-                        run_devels_playground "$img_name_tag" "" ""
+                        start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' '' ''"
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
-                    require_docker_online_new_win
-                    run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
+                    # require_docker_online
+                    start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' 'kindtek-$img_name_tag' 'default'"
                 }
                 elseif ($dvlp_choice -like 'k*') {
                     if ($dvlp_choice -ieq 'k') {
