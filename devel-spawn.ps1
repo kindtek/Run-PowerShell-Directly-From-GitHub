@@ -1106,7 +1106,7 @@ function install_everything {
                         }
                     }
                     else {
-                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter 'DELETE' or 'set default' `r`n`t ... or press ENTER to open"
+                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter 'DELETE', 'set default' `r`n`t ... or press ENTER to open"
                         $wsl_choice = read-host "
 (open $wsl_distro_selected)"
                         if ($wsl_choice -ceq 'DELETE') {
