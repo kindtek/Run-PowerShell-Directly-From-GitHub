@@ -1224,6 +1224,13 @@ function install_everything {
                         require_docker_online_new_win
                     }
                 }
+                elseif ($dvlp_choice -ceq 'rk'){
+                    $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
+                    if (Test-Path $wsl_kernel_rollback_path -PathType Leaf -ErrorAction SilentlyContinue ){
+                        powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+                        require_docker_online_new_win
+                    }
+                }
                 elseif ($dvlp_choice -ceq 'R!') {
                     reboot_prompt
                     # elseif ($dvlp_choice -ieq 'v') {
