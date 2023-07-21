@@ -1089,7 +1089,7 @@ function install_everything {
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
-                if ($dvlp_choice -is [int]){
+                if ($dvlp_choice -match "\d"){
                     $wsl_distro_selected = wsl_distro_list_select $dvlp_choice
                     if ([string]::IsNullOrEmpty($wsl_distro_selected)){
                         write-host "no distro found for $dvlp_choice``r`n`r`nEnter 'DELETE' for option to delete multiple distros"
