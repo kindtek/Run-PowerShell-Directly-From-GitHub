@@ -1094,7 +1094,7 @@ function install_everything {
                     $wsl_distro_selected = wsl_distro_list_select $(get_wsl_distro_list) $dvlp_choice
                     if ([string]::IsNullOrEmpty($wsl_distro_selected)){
                         write-host "no distro found for $dvlp_choice`r`n`r`nEnter 'DELETE' for option to delete multiple distros"
-                        $wsl_choice = read-host
+                        $wsl_choice = read-host 
                         if ($wsl_choice -ceq 'DELETE') {
                             write-host $(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')
                             write-host $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
@@ -1103,13 +1103,16 @@ function install_everything {
                     }
                     else {
                         write-host "$wsl_distro_selected selected.`r`n`r`nEnter 'DELETE' or 'set default'"
-                        $wsl_choice = read-host
+                        $wsl_choice = read-host "
+(open $wsl_distro_selected)"
                         if ($wsl_choice -ceq 'DELETE') {
                             write-host "deleting $wsl_distro_selected distro ..."
                             wsl --unregister $wsl_distro_selected
                         } elseif ($wsl_choice -eq 'set default') {
                             write-host "setting $wsl_distro_selected as default distro ..."
                             wsl --set-default $wsl_distro_selected
+                        } elseif ([string]::IsNullOrEmpty($wsl_distro_selected)){
+                            wsl -d $wsl_distro_selected --user agl --cd /hal
                         }
                     }
                 }
