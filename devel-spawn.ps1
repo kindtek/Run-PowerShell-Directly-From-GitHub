@@ -1156,14 +1156,14 @@ function install_everything {
                 elseif ($dvlp_choice -ieq 'd') {
                     # require_docker_online
                     if ([string]::IsNullOrEmpty($img_name_tag)){
-                        start_dvlp_process_popmax "run_devels_playground '' '' ''"
+                        start_dvlp_process_popmax "run_devels_playground" '' ''
                     } else {
-                        start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' '' ''"
+                        start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' '' ''" '' 'noexit'
                     }
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     # require_docker_online
-                    start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' 'kindtek-$img_name_tag' 'default'"
+                    start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' 'kindtek-$img_name_tag' 'default'" '' 'noexit'
                 }
                 elseif ($dvlp_choice -like 'k*') {
                     if ($dvlp_choice -ieq 'k') {
