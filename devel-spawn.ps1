@@ -1171,7 +1171,7 @@ function install_everything {
                                 Write-Host "`r`n`t[d]ocker re-install or [w]indows re-install"
                                 $dvlp_kindtek_options_win = Read-Host
                                 if ($dvlp_kindtek_options_win -ieq 'd') {
-                                    powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/reinstall-docker.ps1")
+                                    powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/scripts/reinstall-docker.ps1")
                                 }
                                 if ($dvlp_kindtek_options_win -ieq 'w') {
                                     powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/add-windows-features.ps1")
