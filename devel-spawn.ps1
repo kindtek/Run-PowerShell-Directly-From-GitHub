@@ -1084,7 +1084,7 @@ function install_everything {
                 write-host " --------------------------------------------------------------------------"
                 wsl_distro_list_display
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter the number of wsl distro or choose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
@@ -1093,7 +1093,7 @@ function install_everything {
                     $wsl_distro_selected = wsl_distro_list_select $(get_wsl_distro_list) $dvlp_choice
                     if ([string]::IsNullOrEmpty($wsl_distro_selected)){
                         write-host "no distro found for $dvlp_choice`r`n`r`nEnter 'DELETE' for option to delete multiple distros"
-                        read-host wsl_choice
+                        read-host $wsl_choice
                         if ($wsl_choice -ceq 'DELETE') {
                             ./$($(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1)
                         }
