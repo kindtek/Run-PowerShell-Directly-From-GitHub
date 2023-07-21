@@ -103,6 +103,10 @@ class dvlp_process {
             $proc_show = @{
                 WindowStyle = $($this.proc_style)
             }    
+        } elseif ([string]::IsNullOrEmpty($this.proc_wait)){
+            $proc_show = @{
+                WindowStyle = $($this.proc_style)
+            }    
         } else {
             $proc_show = @{
                 WindowStyle = $($this.proc_style)
