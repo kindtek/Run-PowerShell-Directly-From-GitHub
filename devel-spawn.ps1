@@ -1172,13 +1172,16 @@ function install_everything {
                                 $dvlp_kindtek_options_win = Read-Host
                                 if ($dvlp_kindtek_options_win -ceq 'd') {
                                     reset_docker_settings_hard
+                                    wsl_docker_full_restart_new_win
                                 }
                                 if ($dvlp_kindtek_options_win -ceq 'D') {
                                     powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/reinstall-docker.ps1")
+                                    wsl_docker_full_restart_new_win
                                 }
                                 if ($dvlp_kindtek_options_win -ieq 'w') {
                                     powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/add-windows-features.ps1")
                                     powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/del-windows-features.ps1")
+                                    wsl_docker_full_restart_new_win
                                 }
                             } elseif ($dvlp_kindtek_options_win -ieq 'l') {
                                 $dvlp_kindtek_options_win = Read-Host
