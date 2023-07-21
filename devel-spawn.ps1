@@ -1097,7 +1097,7 @@ function install_everything {
                         if ($wsl_choice -ceq 'DELETE') {
                             write-host $(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')
                             write-host $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
-                            ./$("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
+                            powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
                         }
                     }
                     else {
