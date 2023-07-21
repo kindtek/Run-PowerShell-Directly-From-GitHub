@@ -83,6 +83,7 @@ class dvlp_process {
         else {
             $this.proc_style = [System.Diagnostics.ProcessWindowStyle]::$env:KINDTEK_NEW_PROC_STYLE
         }
+        $this.proc_wait = ''
         # write-host "style: $($this.proc_style)"
     }
 
