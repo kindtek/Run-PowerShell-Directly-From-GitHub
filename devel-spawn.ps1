@@ -1168,9 +1168,12 @@ function install_everything {
                         if ($dvlp_kindtek_options -ieq 'l' -or $dvlp_kindtek_options -ieq 'w') {
                             $dvlp_choice = $dvlp_choice + $dvlp_kindtek_options
                             if ($dvlp_kindtek_options -ieq 'w') {
-                                Write-Host "`r`n`t[d]ocker re-install or [w]indows re-install"
+                                Write-Host "`t-`t[d]ocker settings reset`r`n`t-`t[D]ocker re-install`r`n`t-`t[w]indows re-install`r`n"
                                 $dvlp_kindtek_options_win = Read-Host
-                                if ($dvlp_kindtek_options_win -ieq 'd') {
+                                if ($dvlp_kindtek_options_win -ceq 'd') {
+                                    reset_docker_settings_hard
+                                }
+                                if ($dvlp_kindtek_options_win -ceq 'D') {
                                     powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/reinstall-docker.ps1")
                                 }
                                 if ($dvlp_kindtek_options_win -ieq 'w') {
