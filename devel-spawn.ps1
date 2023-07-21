@@ -345,7 +345,7 @@ function set_dvlp_envs_new_win {
     else {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
-    start_dvlp_process_hide "set_dvlp_envs;exit;"
+    start_dvlp_process "set_dvlp_envs;exit;"
 }
 
 
