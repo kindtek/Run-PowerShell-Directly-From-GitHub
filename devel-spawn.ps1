@@ -1109,7 +1109,7 @@ function install_everything {
                 elseif ($dvlp_choice -imatch "d\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
                     echo "wsl_choice: $wsl_choice"
-                    $wsl_distro_choice = wsl_distro_select $wsl_distro_list $wsl_choice
+                    $wsl_distro_choice = wsl_distro_list_select $wsl_distro_list $wsl_choice
                     if ($wsl_choice){
                         write-output "`r`n`tpress ENTER to set $wsl_distro_choice as default distro`r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
