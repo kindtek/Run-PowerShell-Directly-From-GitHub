@@ -1169,9 +1169,10 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
-                    $wsl_choice = $dvlp_choice.Substring(1,1)
+                    [int]$wsl_choice = $dvlp_choice.Substring(1,1)
+                    echo "wsl_choice: $wsl_choice"
                     $wsl_distro_choice = wsl_distro_select $wsl_distro_list $wsl_choice
-                    if (!([string]::isnullorempty($wsl_distro_choice))){
+                    if ($wsl_choice){
                         write-output "`r`n`tpress ENTER to set $wsl_distro_choice as default distro`r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
 (set $wsl_distro_choice as default distro)"
@@ -1179,7 +1180,7 @@ function install_everything {
                             set_default_wsl_distro $wsl_distro_choice
                         }
                     } else {
-                        write-host "no distro for d$wsl_choice found"
+                        write-host "no distro for d${wsl_choice} found"
                     }
                     $dvlp_choice = 'kw'
                 }
