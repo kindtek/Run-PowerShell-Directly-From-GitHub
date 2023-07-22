@@ -1089,7 +1089,8 @@ function install_everything {
                 write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
                 write-host "  WSL Distros"
                 write-host " --------------------------------------------------------------------------"
-                wsl_distro_list_display
+                $wsl_distro_list = get_wsl_distro_list
+                wsl_distro_list_display $wsl_distro_list
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
                 $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel$wsl_distro_undo_option`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
@@ -1097,7 +1098,7 @@ function install_everything {
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
                 if ($dvlp_choice -match "\d"){
-                    $wsl_distro_selected = wsl_distro_list_select $(get_wsl_distro_list) $dvlp_choice
+                    $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_choice
                     if ([string]::IsNullOrEmpty($wsl_distro_selected)){
                         write-host "no distro found for $dvlp_choice`r`n`r`nEnter 'DELETE' for option to delete multiple distros"
                         $wsl_choice = read-host 
@@ -1166,6 +1167,19 @@ function install_everything {
                     } else {
                         start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' '' ''" '' 'noexit'
                     }
+                }
+                elseif ($dvlp_choice -imatch "d\d"){
+                    $wsl_choice = $dvlp_choice.Substring(1,1)
+                    $wsl_distro_choice = wsl_distro_select $wsl_distro_list $wsl_choice
+                    if (!([string]::isnullorempty($wsl_distro_choice))){
+                        write-output "`r`n`tpress ENTER to set $wsl_distro_choice as default distro`r`n`t`t.. or enter any other key to skip "
+                        $wsl_distro_choice_confirm = read-host "
+(set $wsl_distro_choice as default distro)"
+                        if ([string]::isnullorempty($wsl_distro_choice_confirm)){
+                            set_default_wsl_distro $wsl_distro_choice
+                        }
+                    }
+
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     # require_docker_online
