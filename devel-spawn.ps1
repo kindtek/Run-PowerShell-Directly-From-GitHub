@@ -857,11 +857,10 @@ function run_devels_playground {
     try {
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
-        Write-Host "establishing a connection with docker desktop ...`r`n" 
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
         require_docker_online_new_win
         if (is_docker_desktop_online -eq $true) {
-            Write-Host "now connected to docker desktop ...`r`n"
+            # Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $env:img_name_tag"
             # Write-Host "$([char]27)[2J"
             # Write-Host "`r`npowershell.exe -Command `"$env:"$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
