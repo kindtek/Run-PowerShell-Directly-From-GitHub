@@ -1123,6 +1123,7 @@ function install_everything {
                             wsl -d $wsl_distro_selected --user agl --cd /hal
                         }
                     }
+                    $dvlp_choice = 'kw'
                 }
                 elseif ($dvlp_choice -ieq 'f') {
                     try {
@@ -1167,6 +1168,7 @@ function install_everything {
                     } else {
                         start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' '' ''" '' 'noexit'
                     }
+                    $dvlp_choice = 'kw'
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
@@ -1180,7 +1182,7 @@ function install_everything {
                             set_default_wsl_distro $wsl_distro_choice
                         }
                     } else {
-                        write-host "no distro for d${wsl_choice} found"
+                        write-host "no distro for ${wsl_choice} found"
                     }
                     $dvlp_choice = 'kw'
                 }
