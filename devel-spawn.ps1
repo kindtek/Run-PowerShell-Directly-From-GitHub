@@ -1096,8 +1096,36 @@ function install_everything {
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
-                $dvlp_choice = Read-Host $dvlp_options
-                if ($dvlp_choice -match "\d"){
+                $dvlp_choice = Read-Host $dvlp_optionselseif ($dvlp_choice -ieq 'd') {
+                    # require_docker_online
+                    if ([string]::IsNullOrEmpty($img_name_tag)){
+                        start_dvlp_process_popmax "run_devels_playground" '' ''
+                    } else {
+                        start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' '' ''" '' 'noexit'
+                    }
+                    $dvlp_choice = 'kw'
+                }
+                elseif ($dvlp_choice -imatch "d\d"){
+                    [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
+                    echo "wsl_choice: $wsl_choice"
+                    $wsl_distro_choice = wsl_distro_select $wsl_distro_list $wsl_choice
+                    if ($wsl_choice){
+                        write-output "`r`n`tpress ENTER to set $wsl_distro_choice as default distro`r`n`t`t.. or enter any other key to skip "
+                        $wsl_distro_choice_confirm = read-host "
+(set $wsl_distro_choice as default distro)"
+                        if ([string]::isnullorempty($wsl_distro_choice_confirm)){
+                            set_default_wsl_distro $wsl_distro_choice
+                        }
+                    } else {
+                        write-host "no distro for ${wsl_choice} found"
+                    }
+                    $dvlp_choice = 'kw'
+                }
+                elseif ($dvlp_choice -ieq 'd!') {
+                    # require_docker_online
+                    start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' 'kindtek-$img_name_tag' 'default'" '' 'noexit'
+                } 
+                elseif ($dvlp_choice -match "\d"){
                     $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_choice
                     if ([string]::IsNullOrEmpty($wsl_distro_selected)){
                         write-host "no distro found for $dvlp_choice`r`n`r`nEnter 'DELETE' for option to delete multiple distros"
@@ -1160,35 +1188,6 @@ function install_everything {
                         # one day might get the windows cdir working
                         start_dvlp_process_popmax "Set-Location -literalPath $env:USERPROFILE" '' 'noexit'
                     }
-                }
-                elseif ($dvlp_choice -ieq 'd') {
-                    # require_docker_online
-                    if ([string]::IsNullOrEmpty($img_name_tag)){
-                        start_dvlp_process_popmax "run_devels_playground" '' ''
-                    } else {
-                        start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' '' ''" '' 'noexit'
-                    }
-                    $dvlp_choice = 'kw'
-                }
-                elseif ($dvlp_choice -imatch "d\d"){
-                    [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
-                    echo "wsl_choice: $wsl_choice"
-                    $wsl_distro_choice = wsl_distro_select $wsl_distro_list $wsl_choice
-                    if ($wsl_choice){
-                        write-output "`r`n`tpress ENTER to set $wsl_distro_choice as default distro`r`n`t`t.. or enter any other key to skip "
-                        $wsl_distro_choice_confirm = read-host "
-(set $wsl_distro_choice as default distro)"
-                        if ([string]::isnullorempty($wsl_distro_choice_confirm)){
-                            set_default_wsl_distro $wsl_distro_choice
-                        }
-                    } else {
-                        write-host "no distro for ${wsl_choice} found"
-                    }
-                    $dvlp_choice = 'kw'
-                }
-                elseif ($dvlp_choice -ieq 'd!') {
-                    # require_docker_online
-                    start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' 'kindtek-$img_name_tag' 'default'" '' 'noexit'
                 }
                 elseif ($dvlp_choice -like 'k*') {
                     if ($dvlp_choice -ieq 'k') {
