@@ -1178,8 +1178,10 @@ function install_everything {
                         if ([string]::isnullorempty($wsl_distro_choice_confirm)){
                             set_default_wsl_distro $wsl_distro_choice
                         }
+                    } else {
+                        write-host "no distro for d$wsl_choice found"
                     }
-
+                    $dvlp_choice = 'kw'
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     # require_docker_online
@@ -1216,7 +1218,7 @@ function install_everything {
                         wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
                     }
                     elseif ($dvlp_choice -ieq 'kw' ) {
-                        Write-Host 'checking for new updates ...'
+                        Write-Host 'refreshing ...'
                     }
                 }
                 elseif ($dvlp_choice -ieq 'u') {
