@@ -1096,7 +1096,8 @@ function install_everything {
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
-                $dvlp_choice = Read-Host $dvlp_optionselseif ($dvlp_choice -ieq 'd') {
+                $dvlp_choice = Read-Host $dvlp_options
+                if ($dvlp_choice -ieq 'd') {
                     # require_docker_online
                     if ([string]::IsNullOrEmpty($img_name_tag)){
                         start_dvlp_process_popmax "run_devels_playground" '' ''
