@@ -917,9 +917,7 @@ function install_everything {
         $host.UI.RawUI.BackgroundColor = "White"
         $img_name = $env:KINDTEK_WIN_DVLP_FULLNAME
         $img_name_tag = "$img_name`:$img_tag"
-        $confirmation = ''
-        set_dvlp_env '_AGL' $USERNAME
-    
+        $confirmation = ''    
         if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
             $host.UI.RawUI.ForegroundColor = "Black"
             $host.UI.RawUI.BackgroundColor = "DarkRed"
@@ -1344,7 +1342,7 @@ function install_everything {
 }
 
 pull_dvlp_envs
-
+set_dvlp_env '_AGL' $USERNAME
 if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
     set_dvlp_envs
