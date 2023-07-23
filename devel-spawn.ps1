@@ -1152,11 +1152,13 @@ function install_everything {
                             $wsl_kernel_make_path = "$($env:USERPROFILE)/kache/wsl-kernel-make.ps1"
                             $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
                             $wsl_kernel_install_path = "$($env:USERPROFILE)/kache/wsl-kernel-install.ps1"
-                            if (Test-Path $wsl_kernel_install_path -PathType Leaf -ErrorAction SilentlyContinue ){
-                                $kernel_choices += 'install'
-                            }
-                            if (Test-Path $wsl_kernel_make_path -PathType Leaf -ErrorAction SilentlyContinue ){
-                                $kernel_choices += 'make'
+                            if ($(get_default_wsl_distro $wsl_distro_selected)){
+                                if (Test-Path $wsl_kernel_install_path -PathType Leaf -ErrorAction SilentlyContinue ){
+                                    $kernel_choices += 'install'
+                                }
+                                if (Test-Path $wsl_kernel_make_path -PathType Leaf -ErrorAction SilentlyContinue ){
+                                    $kernel_choices += 'make'
+                                }
                             }
                             if (Test-Path $wsl_kernel_rollback_path -PathType Leaf -ErrorAction SilentlyContinue ){
                                 $kernel_choices += 'rollback'
@@ -1175,6 +1177,9 @@ function install_everything {
                             }
                             if ($kernel_choice  = 'rollback'){
                                 powershell -File $wsl_kernel_rollback_path                                
+                            }
+                            if ($kernel_choice = ''){
+                                $dvlp_choice = 'kw'
                             }
 
                         } elseif ($wsl_choice -ceq 'SETUP') {
