@@ -1072,7 +1072,7 @@ function install_everything {
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $env:DEFAULT_WSL_DISTRO = get_default_wsl_distro
-                if (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf -and (!([string]::IsNullOrEmpty($image_name_tag)))){
+                if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -and (!([string]::IsNullOrEmpty($image_name_tag)))){
                     $run_devels_playground_noninteractive = "`r`n`t- [d!] install $image_name_tag)"
                 }
                 if ([string]::IsNullOrEmpty($env:OLD_DEFAULT_WSL_DISTRO)) {
