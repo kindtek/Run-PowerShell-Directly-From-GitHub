@@ -918,6 +918,7 @@ function install_everything {
         $img_name = $env:KINDTEK_WIN_DVLP_FULLNAME
         $img_name_tag = "$img_name`:$img_tag"
         $confirmation = ''
+        set_dvlp_env '_AGL' $USERNAME
     
         if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
             $host.UI.RawUI.ForegroundColor = "Black"
@@ -1141,6 +1142,22 @@ function install_everything {
                     }
                     $dvlp_choice = 'kw'
                 }
+                elseif ($dvlp_choice -imatch "o\d"){
+                    [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
+                    echo "wsl_choice: $wsl_choice"
+                    $wsl_distro_choice = wsl_distro_list_select $wsl_distro_list $wsl_choice
+                    if ($wsl_distro_choice){
+                        write-output "`r`n`tpress ENTER to open $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
+                        $wsl_distro_choice_confirm = read-host "
+(OPEN $wsl_distro_choice)"
+                        if ([string]::isnullorempty($wsl_distro_choice_confirm)){
+                            wsl --cd /hal --user $(get_dvlp_env '_AGL') -d $wsl_distro_choice -- bash source .bashrc
+                        }
+                    } else {
+                        write-host "no distro for ${wsl_choice} found"
+                    }
+                    $dvlp_choice = 'kw'
+                }
                 elseif ($dvlp_choice -ieq 'd!') {
                     # require_docker_online
                     start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' 'kindtek-$img_name_tag' 'default'" '' 'noexit'
@@ -1204,10 +1221,10 @@ function install_everything {
 
                         } elseif ($wsl_choice -ceq 'SETUP') {
                             write-host "setting up $wsl_distro_selected ..."
-                            wsl -d $wsl_distro_selected --user agl --cd /hal --exec bash ./setup.sh $env:USERNAME
+                            wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash ./setup.sh $env:USERNAME
                         }  elseif ([string]::IsNullOrEmpty($wsl_choice) -or $wsl_choice -ieq 'open' ){
                             write-host "type 'exit' to return to main menu"
-                            wsl -d $wsl_distro_selected --user agl --cd /hal
+                            wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal
                         }
                     }
                     $dvlp_choice = 'kw'
