@@ -1181,6 +1181,7 @@ function install_everything {
                             if ($kernel_choice = ''){
                                 $dvlp_choice = 'kw'
                             }
+                            $kernel_choice = ''
 
                         } elseif ($wsl_choice -ceq 'SETUP') {
                             write-host "setting up $wsl_distro_selected ..."
