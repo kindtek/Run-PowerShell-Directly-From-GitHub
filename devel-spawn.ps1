@@ -1131,7 +1131,7 @@ function install_everything {
                         $wsl_distro_choice_confirm = read-host "
 (DELETE $wsl_distro_choice)"
                         if ([string]::isnullorempty($wsl_distro_choice_confirm)){
-                            set_default_wsl_distro $wsl_distro_choice
+                            wsl --unregister $wsl_distro_choice
                         }
                     } else {
                         write-host "no distro for ${wsl_choice} found"
