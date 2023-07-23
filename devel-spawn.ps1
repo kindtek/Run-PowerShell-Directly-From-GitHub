@@ -117,10 +117,10 @@ class dvlp_process {
         try {
             if ([string]::IsNullOrEmpty($this.proc_noexit)){
                 # write-host  "Start-Process -Filepath powershell.exe @proc_show -ArgumentList `"-Command`", `"$($this.proc_cmd)`""
-                Start-Process -Filepath powershell.exe @proc_show -ArgumentList '-Command', $this.proc_cmd
+                Start-Process -Filepath powershell.exe -LoadUserProfile @proc_show -ArgumentList '-Command', $this.proc_cmd
             } else {
                 # Write-host "Start-Process -Filepath powershell.exe @proc_show -ArgumentList $($this.proc_noexit), '-Command', '$($this.proc_cmd)'"
-                Start-Process -Filepath powershell.exe @proc_show -ArgumentList $this.proc_noexit, '-Command', $this.proc_cmd
+                Start-Process -Filepath powershell.exe -LoadUserProfile @proc_show -ArgumentList $this.proc_noexit, '-Command', $this.proc_cmd
             }
         }
         catch { 
