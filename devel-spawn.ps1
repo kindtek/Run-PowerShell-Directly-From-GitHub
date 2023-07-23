@@ -446,7 +446,8 @@ function set_dvlp_envs {
     $repo_dir_name6 = 'mnt'  
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
-
+    set_dvlp_env '_AGL' $USERNAME
+    set_dvlp_env '_AGL' $USERNAME 'machine'
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         write-host "setting global environment variables ..."
         start-sleep 1
@@ -1342,7 +1343,6 @@ function install_everything {
 }
 
 pull_dvlp_envs
-set_dvlp_env '_AGL' $USERNAME
 if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
     set_dvlp_envs
