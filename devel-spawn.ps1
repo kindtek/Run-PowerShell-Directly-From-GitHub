@@ -1138,16 +1138,49 @@ function install_everything {
                         }
                     }
                     else {
-                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter 'DELETE', 'set default' `r`n`t ... or press ENTER to open"
+                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter OPEN, DEFAULT, SETUP, KERNEL, DELETE`r`n`t ... or press ENTER to open"
                         $wsl_choice = read-host "
 (open $wsl_distro_selected)"
                         if ($wsl_choice -ceq 'DELETE') {
                             write-host "deleting $wsl_distro_selected distro ..."
                             wsl --unregister $wsl_distro_selected
-                        } elseif ($wsl_choice -eq 'set default') {
+                        } elseif ($wsl_choice -ceq 'DEFAULT') {
                             write-host "setting $wsl_distro_selected as default distro ..."
                             wsl --set-default $wsl_distro_selected
-                        } elseif ([string]::IsNullOrEmpty($wsl_choice)){
+                        } elseif ($wsl_choice -ceq 'KERNEL') {
+                            $kernel_choices = @()
+                            $wsl_kernel_make_path = "$($env:USERPROFILE)/kache/wsl-kernel-make.ps1"
+                            $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
+                            $wsl_kernel_install_path = "$($env:USERPROFILE)/kache/wsl-kernel-install.ps1"
+                            if (Test-Path $wsl_kernel_install_path -PathType Leaf -ErrorAction SilentlyContinue ){
+                                $kernel_choices += 'install'
+                            }
+                            if (Test-Path $wsl_kernel_make_path -PathType Leaf -ErrorAction SilentlyContinue ){
+                                $kernel_choices += 'make'
+                            }
+                            if (Test-Path $wsl_kernel_rollback_path -PathType Leaf -ErrorAction SilentlyContinue ){
+                                $kernel_choices += 'rollback'
+                            }
+                            write-host 'enter one of the following:'
+                            for ($i = 0; $i -le $kernel_choices.length - 1; $i++) {
+                                write-host $kernel_choices[$i]
+                            }
+                            $kernel_choice = read-host "
+(exit)"
+                            if ($kernel_choice  = 'install'){
+                                powershell -File $wsl_kernel_install_path                               
+                            }
+                            if ($kernel_choice  = 'make'){
+                                powershell -File $wsl_kernel_make_path                                
+                            }
+                            if ($kernel_choice  = 'rollback'){
+                                powershell -File $wsl_kernel_rollback_path                                
+                            }
+
+                        } elseif ($wsl_choice -ceq 'SETUP') {
+                            write-host "setting up $wsl_distro_selected ..."
+                            wsl -d $wsl_distro_selected --user agl --cd /hal --exec bash ./setup.sh $env:USERNAME
+                        }  elseif ([string]::IsNullOrEmpty($wsl_choice) -or $wsl_choice -ieq 'open' ){
                             write-host "type 'exit' to return to main menu"
                             wsl -d $wsl_distro_selected --user agl --cd /hal
                         }
