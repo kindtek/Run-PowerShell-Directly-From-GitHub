@@ -1122,6 +1122,22 @@ function install_everything {
                     }
                     $dvlp_choice = 'kw'
                 }
+                elseif ($dvlp_choice -imatch "x\d"){
+                    [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
+                    echo "wsl_choice: $wsl_choice"
+                    $wsl_distro_choice = wsl_distro_list_select $wsl_distro_list $wsl_choice
+                    if ($wsl_distro_choice){
+                        write-output "`r`n`tpress ENTER to delete $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
+                        $wsl_distro_choice_confirm = read-host "
+(DELETE $wsl_distro_choice)"
+                        if ([string]::isnullorempty($wsl_distro_choice_confirm)){
+                            set_default_wsl_distro $wsl_distro_choice
+                        }
+                    } else {
+                        write-host "no distro for ${wsl_choice} found"
+                    }
+                    $dvlp_choice = 'kw'
+                }
                 elseif ($dvlp_choice -ieq 'd!') {
                     # require_docker_online
                     start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' 'kindtek-$img_name_tag' 'default'" '' 'noexit'
