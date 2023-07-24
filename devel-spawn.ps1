@@ -800,6 +800,21 @@ function install_git {
     return $new_install
 }
 
+function clone_repo {
+    Push-Location $env:KINDTEK_WIN_GIT_PATH
+    $clone_result = git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
+    Pop-Location
+    return $clone_result
+}
+
+function pull_repo {
+    Push-Location $env:KINDTEK_WIN_DVLW_PATH
+    write-host "pulling $env:KINDTEK_WIN_DVLW_NAME" -ForegroundColor DarkCyan
+    $clone_result = git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
+    write-host "$env:KINDTEK_WIN_DVLW_NAME pulled" -ForegroundColor DarkCyan
+    Pop-Location
+    return $clone_result
+}
 function sync_repo {
 
     Write-Host "testing git command ..." -ForegroundColor DarkCyan
@@ -809,20 +824,18 @@ function sync_repo {
     echo "entering path $($env:KINDTEK_WIN_GIT_PATH)"
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
+
+    if (!(Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git" -PathType Leaf)) {
+        clone_repo
+    } else {
+        pull_repo
+    }
     try {
-        write-host "pulling $env:KINDTEK_WIN_DVLW_NAME cloned" -ForegroundColor DarkCyan
-        git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
-        write-host "$env:KINDTEK_WIN_DVLW_NAME pulled" -ForegroundColor DarkCyan
+        Push-Location $env:KINDTEK_WIN_DVLW_NAME
+    } catch {
+        clone_repo
+        Push-Location $env:KINDTEK_WIN_DVLW_PATH
     }
-    catch {
-        try {
-            write-host "cloning $env:KINDTEK_WIN_DVLW_NAME cloned" -ForegroundColor DarkCyan
-            git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
-            write-host "$env:KINDTEK_WIN_DVLW_NAME cloned" -ForegroundColor DarkCyan
-        }
-        catch {}
-    }
-    Push-Location $env:KINDTEK_WIN_DVLW_NAME
     try {
         git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
         write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
