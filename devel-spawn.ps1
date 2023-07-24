@@ -961,7 +961,6 @@ function install_everything {
         }
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "White"
-        $img_name = $env:KINDTEK_WIN_DVLP_FULLNAME
         $confirmation = ''    
         if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
             $host.UI.RawUI.ForegroundColor = "Black"
@@ -1058,10 +1057,10 @@ function install_everything {
 
                         $old_wsl_default_distro = get_default_wsl_distro
                         if ((($dvlp_choice -ieq 'kw') -or (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) -and (!($dvlp_new_install -eq $true))){
-                            run_devels_playground "$img_name_tag" '' ''
+                            run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' ''
                             
                         } else {
-                            run_devels_playground "$img_name_tag" "kindtek-$img_name_tag" "default"
+                            run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
                             $dvlp_new_install = $false
                         }
                         $new_wsl_default_distro = get_default_wsl_distro
@@ -1091,7 +1090,7 @@ function install_everything {
                     }
                 }
                 catch {
-                    Write-Host "error setting "kindtek-$img_name_tag" as default wsl distro"
+                    Write-Host "error setting "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" as default wsl distro"
                     try {
                         wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
                         require_docker_online_new_win
@@ -1117,7 +1116,7 @@ function install_everything {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $env:DEFAULT_WSL_DISTRO = get_default_wsl_distro
                 if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -and (!([string]::IsNullOrEmpty($img_name_tag)))){
-                    $run_devels_playground_noninteractive = "`r`n`t- [d!] (import $img_name_tag)"
+                    $run_devels_playground_noninteractive = "`r`n`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag)"
                 }
                 if ([string]::IsNullOrEmpty($env:OLD_DEFAULT_WSL_DISTRO)) {
                     $env:OLD_DEFAULT_WSL_DISTRO = $env:KINDTEK_FAILSAFE_WSL_DISTRO
@@ -1149,7 +1148,7 @@ function install_everything {
                     if ([string]::IsNullOrEmpty($img_name_tag)){
                         start_dvlp_process_popmax "run_devels_playground" '' ''
                     } else {
-                        start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' '' ''" '' 'noexit'
+                        start_dvlp_process_popmax "require_docker_online;run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' '' ''" '' 'noexit'
                     }
                     $dvlp_choice = 'kw'
                 }
@@ -1203,7 +1202,7 @@ function install_everything {
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     # require_docker_online
-                    start_dvlp_process_popmax "require_docker_online;run_devels_playground '$img_name_tag' 'kindtek-$img_name_tag' 'default'" '' 'noexit'
+                    start_dvlp_process_popmax "require_docker_online;run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default'" '' 'noexit'
                 } 
                 elseif ($dvlp_choice -match "\d"){
                     $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_choice
