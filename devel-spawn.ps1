@@ -826,7 +826,7 @@ function sync_repo {
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     write-host "testing path $($env:KINDTEK_WIN_DVLW_PATH)/.git" 
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git" -PathType Leaf)) {
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
         write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
         pull_repo
     } else {
@@ -840,7 +840,7 @@ function sync_repo {
         clone_repo
         Push-Location $env:KINDTEK_WIN_DVLW_PATH
     }
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLP_PATH)/.git" -PathType Leaf)) {
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLP_PATH)/.git")) {
         write-host "pulling $env:KINDTEK_WIN_DVLP_NAME ..." -ForegroundColor DarkCyan
         git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
         write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
@@ -850,7 +850,7 @@ function sync_repo {
         git submodule update --init --init --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
         write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
     }
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLADV_PATH)/.git" -PathType Leaf)) {
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLADV_PATH)/.git")) {
         write-host "pulling $env:KINDTEK_WIN_DVLADV_NAME ..." -ForegroundColor DarkCyan
         git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLADV_NAME
         write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled" -ForegroundColor DarkCyan
@@ -860,7 +860,7 @@ function sync_repo {
         git submodule update --init --remote --progress -- $env:KINDTEK_WIN_DVLADV_NAME
         write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled" -ForegroundColor DarkCyan
     }
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_POWERHELL_PATH)/.git" -PathType Leaf)) {
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_POWERHELL_PATH)/.git")) {
         write-host "pulling $env:KINDTEK_WIN_POWERHELL_NAME ..." -ForegroundColor DarkCyan
         git submodule update --remote --progress -- $env:KINDTEK_WIN_POWERHELL_NAME
         write-host "$env:KINDTEK_WIN_POWERHELL_NAME pulled" -ForegroundColor DarkCyan
@@ -871,7 +871,7 @@ function sync_repo {
         write-host "$env:KINDTEK_WIN_POWERHELL_NAME pulled" -ForegroundColor DarkCyan
     }
     Push-Location $env:KINDTEK_WIN_DVLP_NAME
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_KERNELS_PATH)/.git" -PathType Leaf)) {
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_KERNELS_PATH)/.git")) {
         write-host "pulling $env:KINDTEK_WIN_KERNELS_NAME ..." -ForegroundColor DarkCyan
         git submodule update --remote --progress -- $env:KINDTEK_WIN_KERNELS_NAME
         write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled" -ForegroundColor DarkCyan
@@ -881,7 +881,7 @@ function sync_repo {
         git submodule update --init --remote --progress -- $env:KINDTEK_WIN_KERNELS_NAME
         write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled" -ForegroundColor DarkCyan
     }
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_MNT_PATH)/.git" -PathType Leaf)) {
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_MNT_PATH)/.git")) {
         write-host "pulling $env:KINDTEK_WIN_MNT_NAME" -ForegroundColor DarkCyan
         git submodule update --remote --progress -- $env:KINDTEK_WIN_MNT_NAME
         write-host "$env:KINDTEK_WIN_MNT_NAME pulled" -ForegroundColor DarkCyan
