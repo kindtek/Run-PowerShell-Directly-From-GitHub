@@ -1211,8 +1211,8 @@ function install_everything {
                     $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_choice
                     if ([string]::IsNullOrEmpty($wsl_distro_selected)){
                         write-host "no distro found for $dvlp_choice`r`n`r`nEnter 'DELETE' for option to delete multiple distros"
-                        $wsl_choice = read-host 
-                        if ($wsl_choice -ceq 'DELETE') {
+                        $wsl_action_choice = read-host 
+                        if ($wsl_action_choice -ceq 'DELETE') {
                             write-host $(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')
                             write-host $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
                             powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
@@ -1220,15 +1220,15 @@ function install_everything {
                     }
                     else {
                         write-host "$wsl_distro_selected selected.`r`n`r`nEnter OPEN, DEFAULT, SETUP, KERNEL, DELETE`r`n`t ... or press ENTER to open"
-                        $wsl_choice = read-host "
+                        $wsl_action_choice = read-host "
 (open $wsl_distro_selected)"
-                        if ($wsl_choice -ceq 'DELETE') {
+                        if ($wsl_action_choice -ceq 'DELETE') {
                             write-host "deleting $wsl_distro_selected distro ..."
                             wsl --unregister $wsl_distro_selected
-                        } elseif ($wsl_choice -ceq 'DEFAULT') {
+                        } elseif ($wsl_action_choice -ceq 'DEFAULT') {
                             write-host "setting $wsl_distro_selected as default distro ..."
                             wsl --set-default $wsl_distro_selected
-                        } elseif ($wsl_choice -ceq 'KERNEL') {
+                        } elseif ($wsl_action_choice -ceq 'KERNEL') {
                             $kernel_choices = @()
                             $wsl_kernel_make_path = "$($env:USERPROFILE)/kache/wsl-kernel-make.ps1"
                             $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
@@ -1264,10 +1264,10 @@ function install_everything {
                             }
                             $kernel_choice = ''
 
-                        } elseif ($wsl_choice -ceq 'SETUP') {
+                        } elseif ($wsl_action_choice -ceq 'SETUP') {
                             write-host "setting up $wsl_distro_selected ..."
                             wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash ./setup.sh $env:USERNAME
-                        }  elseif ([string]::IsNullOrEmpty($wsl_choice) -or $wsl_choice -ieq 'open' ){
+                        }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'open' ){
                             write-host "type 'exit' to return to main menu"
                             wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal
                         }
