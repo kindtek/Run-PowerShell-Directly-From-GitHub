@@ -967,6 +967,8 @@ function install_everything {
                 if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
+                } else {
+                    sync_repo
                 }
                 run_installer
                 # $host.UI.RawUI.ForegroundColor = "DarkGray"
