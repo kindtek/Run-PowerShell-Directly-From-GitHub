@@ -810,6 +810,7 @@ function sync_repo {
         }
         catch {}
     }
+    New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_DVLW_NAME | Out-Null
     Push-Location $env:KINDTEK_WIN_DVLW_NAME
     try {
         git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
