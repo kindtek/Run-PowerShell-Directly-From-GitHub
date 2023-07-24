@@ -41,7 +41,12 @@ class dvlp_process {
             $this.proc_noexit = ''
         }
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
+            if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
+                # write-host 'dot sourcing devel tools'
+                $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
+            } else {
+                $this.proc_cmd = $proc_cmd
+            }
         }
         else {
             $this.proc_cmd = 'write-host "command string empty"'
