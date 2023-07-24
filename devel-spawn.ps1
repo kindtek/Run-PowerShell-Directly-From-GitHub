@@ -809,11 +809,13 @@ function sync_repo {
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     try {
+        write-host "pulling $env:KINDTEK_WIN_DVLW_NAME cloned"
         git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
         write-host "$env:KINDTEK_WIN_DVLW_NAME pulled"
     }
     catch {
         try {
+            write-host "cloning $env:KINDTEK_WIN_DVLW_NAME cloned"
             git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
             write-host "$env:KINDTEK_WIN_DVLW_NAME cloned"
         }
