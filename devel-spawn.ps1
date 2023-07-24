@@ -446,8 +446,8 @@ function set_dvlp_envs {
     $repo_dir_name6 = 'mnt'  
     $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
     $git_path = "$git_parent_path/$repo_dir_name"
-    set_dvlp_env '_AGL' $(get_dvlp_env 'USERNAME')
-    set_dvlp_env '_AGL' $(get_dvlp_env 'USERNAME') 'machine'
+    set_dvlp_env '_AGL' $(get_dvlp_env 'agl')
+    set_dvlp_env '_AGL' $(get_dvlp_env 'agl') 'machine'
     if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         write-host "setting global environment variables ..."
         start-sleep 1
