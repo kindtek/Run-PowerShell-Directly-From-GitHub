@@ -782,7 +782,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    start_dvlp_process_embed "sync_repo"
+    start_dvlp_process_embed 'sync_repo' 'wait'
     # assuming the repos are now synced now is a good time to dot source devel-tools
     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
         # write-host 'dot sourcing devel tools'
@@ -797,6 +797,7 @@ function sync_repo {
     Write-Host "testing git command ..." -ForegroundColor DarkCyan
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     Write-Host "synchronizing kindtek github repos ..." -ForegroundColor DarkCyan
+    New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     try {
@@ -810,7 +811,6 @@ function sync_repo {
         }
         catch {}
     }
-    New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_DVLW_NAME | Out-Null
     Push-Location $env:KINDTEK_WIN_DVLW_NAME
     try {
         git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
@@ -965,12 +965,11 @@ function install_everything {
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 install_git
+                sync_repo
                 if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
-                } else {
-                    sync_repo
-                }
+                } 
                 run_installer
                 # $host.UI.RawUI.ForegroundColor = "DarkGray"
                 # $host.UI.RawUI.ForegroundColor = "White"
