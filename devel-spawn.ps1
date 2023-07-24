@@ -1150,7 +1150,7 @@ function install_everything {
                         $wsl_distro_choice_confirm = read-host "
 (OPEN $wsl_distro_choice)"
                         if ([string]::isnullorempty($wsl_distro_choice_confirm)){
-                            wsl --cd /hal --user $(get_dvlp_env '_AGL') -d $wsl_distro_choice -- bash source .bashrc
+                            wsl --cd /hal --user agl -d $wsl_distro_choice -- bash source .bashrc
                         }
                     } else {
                         write-host "no distro for ${wsl_choice} found"
