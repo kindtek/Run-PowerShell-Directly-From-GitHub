@@ -905,13 +905,12 @@ function run_devels_playground {
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
-        require_docker_online_new_win
+        require_docker_online | Out-Null
         if (is_docker_desktop_online -eq $true) {
             # Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $env:img_name_tag"
             # Write-Host "$([char]27)[2J"
             # Write-Host "`r`npowershell.exe -Command `"$env:"$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
-            $img_name_tag = $img_name_tag.replace("\s+", '')
             # write-host `$img_name_tag $img_name_tag
             # write-host `$non_interactive $non_interactive
             # write-host `$default_distro $default_distro
@@ -952,7 +951,7 @@ function run_dvlp_latest_kernel_installer {
 
 function install_everything {  
     param (
-        $img_tag
+        $img_name_tag
     )
     $dvlp_choice = 'n'
     do {
@@ -963,9 +962,6 @@ function install_everything {
         $host.UI.RawUI.ForegroundColor = "Black"
         $host.UI.RawUI.BackgroundColor = "White"
         $img_name = $env:KINDTEK_WIN_DVLP_FULLNAME
-        if (!([string]::IsNullOrEmpty($image_name_tag))){
-            $img_name_tag = "$img_name`:$img_tag"
-        }
         $confirmation = ''    
         if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
             $host.UI.RawUI.ForegroundColor = "Black"
@@ -989,7 +985,7 @@ function install_everything {
                 }
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
-            # if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -or (!([string]::IsNullOrEmpty($img_tag))))) {
+            # if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -or (!([string]::IsNullOrEmpty($img_name_tag))))) {
             if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
                 # write-host "confirmation: $confirmation"
                 # write-host "test path $($env:KINDTEK_WIN_DVLW_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
@@ -1056,7 +1052,7 @@ function install_everything {
                 }
                 # install distro requested in arg
                 try {
-                    if (!([string]::IsNullOrEmpty($img_tag))) {
+                    if (!([string]::IsNullOrEmpty($img_name_tag))) {
                         $host.UI.RawUI.ForegroundColor = "Black"
                         $host.UI.RawUI.BackgroundColor = "White"
 
@@ -1072,7 +1068,7 @@ function install_everything {
                         cmd.exe /c net stop LxssManager
                         cmd.exe /c net start LxssManager
                         run_dvlp_latest_kernel_installer
-                        require_docker_online_new_win
+                        require_docker_online | Out-Null
                         if (($new_wsl_default_distro -ne $old_wsl_default_distro) -and (is_docker_desktop_online -eq $false)) {
                             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                             # Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
