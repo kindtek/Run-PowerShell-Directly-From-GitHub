@@ -810,7 +810,7 @@ function clone_repo {
 }
 
 function pull_repo {
-    Push-Location $env:KINDTEK_WIN_DVLW_PATH
+    Push-Location $env:KINDTEK_WIN_GIT_PATH
     write-host "pulling $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
     $clone_result = git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
     write-host "$env:KINDTEK_WIN_DVLW_NAME pulled" -ForegroundColor DarkCyan
