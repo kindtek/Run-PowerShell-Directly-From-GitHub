@@ -324,15 +324,16 @@ function set_dvlp_env {
     )
     
     try {
-        if (!([string]::IsNullOrEmpty($dvlp_env_var))) {    
+        if (!([string]::IsNullOrEmpty($dvlp_env_var))) {
+            # Write-Host "setting $dvlp_env_var to $dvlp_env_val"
             if (([string]::IsNullOrEmpty($set_machine_env_flag)) -and ([string]::IsNullOrEmpty($set_both_env_flag))){
-                # write-host "setting local env $dvlp_env_var to $dvlp_env_val"
+                write-host "setting local env $dvlp_env_var to $dvlp_env_val"
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
             } elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -and ($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val)){
-                # write-host "setting machine env $dvlp_env_var to $dvlp_env_val"
+                write-host "setting machine env $dvlp_env_var to $dvlp_env_val"
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
             } elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -and (($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val) -or ($(get_dvlp_env "$dvlp_env_var") -ne $dvlp_env_val))){
-                # write-host "setting local and machine env $dvlp_env_var to $dvlp_env_val"
+                write-host "setting local and machine env $dvlp_env_var to $dvlp_env_val"
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
             } else {
