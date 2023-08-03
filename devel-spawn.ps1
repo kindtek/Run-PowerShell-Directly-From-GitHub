@@ -1155,7 +1155,7 @@ function install_everything {
                     } else {
                         start_dvlp_process_popmax "require_docker_online;run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' '' ''" '' 'noexit'
                     }
-                    $dvlp_choice = 'kw'
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
@@ -1171,7 +1171,7 @@ function install_everything {
                     } else {
                         write-host "no distro for ${wsl_choice} found"
                     }
-                    $dvlp_choice = 'kw'
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -imatch "x\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
@@ -1187,7 +1187,7 @@ function install_everything {
                     } else {
                         write-host "no distro for ${wsl_choice} found"
                     }
-                    $dvlp_choice = 'kw'
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -imatch "o\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
@@ -1203,7 +1203,7 @@ function install_everything {
                     } else {
                         write-host "no distro for ${wsl_choice} found"
                     }
-                    $dvlp_choice = 'kw'
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     # require_docker_online
@@ -1262,7 +1262,7 @@ function install_everything {
                                 powershell -File $wsl_kernel_rollback_path                                
                             }
                             if ($kernel_choice = ''){
-                                $dvlp_choice = 'kw'
+                                $dvlp_choice = 'refresh'
                             }
                             $kernel_choice = ''
 
