@@ -985,7 +985,7 @@ function install_everything {
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
             # if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -or (!([string]::IsNullOrEmpty($img_name_tag))))) {
-            if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
+            if (($dvlp_choice -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
                 # write-host "confirmation: $confirmation"
                 # write-host "test path $($env:KINDTEK_WIN_DVLW_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
@@ -1110,7 +1110,7 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                start_dvlp_process "install_git;run_installer;" "" ""
+                start_dvlp_process_popmin "install_git;run_installer;" "" ""
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
