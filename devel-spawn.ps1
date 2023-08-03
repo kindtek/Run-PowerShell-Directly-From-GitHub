@@ -710,8 +710,6 @@ function set_default_wsl_distro {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
             wsl.exe -s $new_wsl_default_distro
-            cmd.exe /c net stop LxssManager
-            cmd.exe /c net start LxssManager
         }
         catch {
             Write-Host "error changing wsl default distro from $old_wsl_default_distro to $new_wsl_default_distro"
@@ -1383,7 +1381,7 @@ function install_everything {
                 }
             } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne ''-And $dvlp_choice -ne 'refresh')
         }
-    } while ($dvlp_choice -ieq 'kw')
+    } while ($dvlp_choice -ieq 'kw' -or $dvlp_choice -ieq 'refresh')
     
     
     Write-Host "`r`nGoodbye!`r`n"
