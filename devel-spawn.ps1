@@ -895,6 +895,7 @@ function sync_repo {
     Pop-Location
     Pop-Location
     Pop-Location
+    Copy-Item $env:KINDTEK_WIN_DVLADV/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1
 }
 
 function run_devels_playground {
@@ -1138,7 +1139,7 @@ function install_everything {
                 $wsl_distro_list = get_wsl_distro_list
                 wsl_distro_list_display $wsl_distro_list
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}${wsl_distro_undo_option}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}${wsl_distro_undo_option}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`t- [refresh]`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
@@ -1342,7 +1343,7 @@ function install_everything {
                         wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
                     }
                     elseif ($dvlp_choice -ieq 'kw' ) {
-                        Write-Host 'refreshing ...'
+                        Write-Host 'checking for updates ...'
                     }
                 }
                 elseif ($dvlp_choice -ieq 'u') {
