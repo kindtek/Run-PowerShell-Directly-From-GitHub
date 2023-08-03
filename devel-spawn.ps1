@@ -413,6 +413,7 @@ function pull_dvlp_envs {
     }
 }
 
+# push local envs to machine
 function push_dvlp_envs {
     if ([string]::IsNullOrEmpty([System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER'))) {
         $dvlp_owner = 'kindtek'
@@ -469,7 +470,7 @@ function set_dvlp_envs {
             set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
             set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' " " 'machine' 'both'
         }
-        elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -and $DEBUG_MODE -ne '0' -and $DEBUG_MODE -eq 0) {
+        elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -or $DEBUG_MODE -ne '0' -or $DEBUG_MODE -eq 0) {
             Set-PSDebug -Trace 2;
             set_dvlp_env 'KINDTEK_DEBUG_MODE' 'on' 'machine' 'both'
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
