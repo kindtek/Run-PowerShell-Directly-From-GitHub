@@ -1143,7 +1143,11 @@ function install_everything {
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
-                if ($dvlp_choice -ieq 'd') {
+                if ($dvlp_choice -ieq 'refresh') {
+                    # require_docker_online
+                    sync_repo
+                }
+                elseif ($dvlp_choice -ieq 'd') {
                     # require_docker_online
                     if ([string]::IsNullOrEmpty($img_name_tag)){
                         start_dvlp_process_popmax "run_devels_playground" '' ''
@@ -1377,7 +1381,7 @@ function install_everything {
                 else {
                     $dvlp_choice = ''
                 }
-            } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne '')
+            } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne ''-And $dvlp_choice -ne 'refresh')
         }
     } while ($dvlp_choice -ieq 'kw')
     
