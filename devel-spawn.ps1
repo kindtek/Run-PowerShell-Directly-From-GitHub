@@ -465,14 +465,14 @@ function set_dvlp_envs {
     try {
         if ([string]::IsNullOrEmpty($DEBUG_MODE) -or $DEBUG_MODE -eq '0' -or $DEBUG_MODE -eq 0) {
             # Set-PSDebug -Trace 0;
-            set_dvlp_env 'KINDTEK_DEBUG_MODE' '' 'machine' 'both'
+            set_dvlp_env 'KINDTEK_DEBUG_MODE' '0' 'machine' 'both'
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Hidden;
             set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
             set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' " " 'machine' 'both'
         }
         elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -or $DEBUG_MODE -ne '0' -or $DEBUG_MODE -eq 0) {
             Set-PSDebug -Trace 2;
-            set_dvlp_env 'KINDTEK_DEBUG_MODE' 'on' 'machine' 'both'
+            set_dvlp_env 'KINDTEK_DEBUG_MODE' '1' 'machine' 'both'
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
             set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
             set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' "-noexit" 'machine' 'both'
