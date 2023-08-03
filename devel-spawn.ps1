@@ -797,7 +797,7 @@ function install_git {
         . $env:KINDTEK_DEVEL_TOOLS
     }
     # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
-    return $new_install
+    return
 }
 
 function clone_repo {
@@ -1027,7 +1027,6 @@ function install_everything {
                         if ((test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) -eq $true){
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test passed"
                             Write-Host "docker devel installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed"
-                            $dvlp_new_install = $true
                         } else {
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test FAILED"
                         }
@@ -1057,18 +1056,17 @@ function install_everything {
                         $host.UI.RawUI.BackgroundColor = "White"
 
                         $old_wsl_default_distro = get_default_wsl_distro
-                        if ((($dvlp_choice -ieq 'kw') -or (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) -and (!($dvlp_new_install -eq $true))){
-                            run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' ''
-                            
+                        if ($dvlp_choice -ieq 'kw' -and (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
+                            start_dvlp_process $(run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' 'default')
+                            run_dvlp_latest_kernel_installer
+                            require_docker_online_new_win
                         } else {
                             run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
-                            $dvlp_new_install = $false
+                            run_dvlp_latest_kernel_installer
+                            require_docker_online | Out-Null
                         }
                         $new_wsl_default_distro = get_default_wsl_distro
-                        cmd.exe /c net stop LxssManager
-                        cmd.exe /c net start LxssManager
-                        run_dvlp_latest_kernel_installer
-                        require_docker_online | Out-Null
+                        
                         if (($new_wsl_default_distro -ne $old_wsl_default_distro) -and (is_docker_desktop_online -eq $false)) {
                             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                             # Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
