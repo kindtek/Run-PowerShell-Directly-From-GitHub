@@ -677,7 +677,6 @@ function get_default_wsl_distro {
 }
 
 function revert_default_wsl_distro {
-    $env:KINDTEK_FAILSAFE_WSL_DISTRO = 'kalilinux-kali-rolling-latest'
     try {
         wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
     }
@@ -702,8 +701,8 @@ function set_default_wsl_distro {
         $new_wsl_default_distro
     )
     if ([string]::IsNullOrEmpty($new_wsl_default_distro)){
-        if (!([string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_DISTRO))){
-            $new_wsl_default_distro = $env:KINDTEK_FAILSAFE_DISTRO
+        if (!([string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_WSL_DISTRO))){
+            $new_wsl_default_distro = $env:KINDTEK_FAILSAFE_WSL_DISTRO
         } else {
             return $false
         }
@@ -716,7 +715,7 @@ function set_default_wsl_distro {
         }
         catch {
             Write-Host "error changing wsl default distro from $old_wsl_default_distro to $new_wsl_default_distro"
-            $new_wsl_default_distro = $env:KINDTEK_FAILSAFE_DISTRO
+            $new_wsl_default_distro = $env:KINDTEK_FAILSAFE_WSL_DISTRO
             Write-Host "restoring default distro as $old_wsl_default_distro"
             wsl.exe -s $old_wsl_default_distro
             cmd.exe /c net stop LxssManager
@@ -729,16 +728,16 @@ function set_default_wsl_distro {
         if ( test_default_wsl_distro $new_wsl_default_distro -eq $false ) {
             # Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
             # Start-Sleep 3
-            # Write-Host "reverting to $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro ..."
+            # Write-Host "reverting to $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro ..."
             # try {
-            #     wsl.exe -s $env:KINDTEK_FAILSAFE_DISTRO
+            #     wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
             # }
             # catch {
             #     try {
             #         run_devels_playground "default"
             #     }
             #     catch {
-            #         Write-Host "error setting $env:KINDTEK_FAILSAFE_DISTRO as default wsl distro"
+            #         Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
             #     }
             # }
             # # wsl_docker_restart
