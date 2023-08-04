@@ -956,7 +956,7 @@ function install_everything {
     param (
         $img_name_tag
     )
-    $dvlp_choice = 'n'
+    $dvlp_choice = 'refresh'
     do {
         if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
             # write-host 'dot sourcing devel tools'
