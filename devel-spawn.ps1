@@ -1291,6 +1291,7 @@ function install_everything {
                             Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
                         }
                     }
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -like 'c**') {    
                     if ($dvlp_choice -ieq 'c') {
@@ -1313,6 +1314,8 @@ function install_everything {
                         # one day might get the windows cdir working
                         start_dvlp_process_embed "Set-Location -literalPath $env:USERPROFILE" 
                     }
+                    $dvlp_choice = 'refresh'
+
                 }
                 elseif ($dvlp_choice -like 'k*') {
                     if ($dvlp_choice -ieq 'k') {
@@ -1340,9 +1343,12 @@ function install_everything {
                                 $dvlp_kindtek_options_win = Read-Host
                             }
                         }
+                        $dvlp_choice = 'refresh'
                     }
                     if ($dvlp_choice -ieq 'kl' ) {
                         wsl.exe --cd /hal exec bash setup.sh $env:USERNAME
+                        $dvlp_choice = 'refresh'
+
                     }
                     elseif ($dvlp_choice -ieq 'kw' ) {
                         Write-Host 'checking for updates ...'
@@ -1355,21 +1361,25 @@ function install_everything {
                         wsl.exe --set-default $env:OLD_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
+                        $dvlp_choice = 'refresh'
                     }
                 }
                 elseif ($dvlp_choice -ceq 'restart') {
                     # wsl_docker_restart
                     wsl_docker_restart_new_win
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -ceq 'restart!') {
                     # wsl_docker_restart
                     wsl_docker_full_restart_new_win
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -ceq 'RESTART') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                         require_docker_online_new_win
                     }
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -ceq 'rk'){
                     $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
@@ -1377,13 +1387,16 @@ function install_everything {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                         require_docker_online_new_win
                     }
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -ceq 'reboot') {
                     reboot_prompt
                     # elseif ($dvlp_choice -ieq 'v') {
                     #     wsl sh -c "cd /hel;. code"
+                    $dvlp_choice = 'refresh'
                 }
                 else {
+                    # exit
                     $dvlp_choice = ''
                 }
             } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne ''-And $dvlp_choice -ne 'refresh')
