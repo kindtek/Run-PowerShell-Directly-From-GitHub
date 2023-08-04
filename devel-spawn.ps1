@@ -1359,12 +1359,12 @@ function install_everything {
                         require_docker_online_new_win
                     }
                 }
-                elseif ($dvlp_choice -ceq 'refresh') {
+                elseif ($dvlp_choice -ceq 'restart') {
                     # wsl_docker_restart
                     wsl_docker_restart_new_win
                     require_docker_online_new_win
                 }
-                elseif ($dvlp_choice -ceq 'REFRESH') {
+                elseif ($dvlp_choice -ceq 'RESTART') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                         require_docker_online_new_win
