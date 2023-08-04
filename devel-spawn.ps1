@@ -1125,10 +1125,10 @@ function install_everything {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
                 if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -and (!([string]::IsNullOrEmpty($img_name_tag)))){
-                    $run_devels_playground_noninteractive = "`r`n`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag)"
+                    $run_devels_playground_noninteractive = "`r`n`t`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
                 }
                 if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -and !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -and "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -and "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
-                    $wsl_distro_revert_option = "- [r]evert to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
+                    $wsl_distro_revert_option = "- [r]evert wsl to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
                 }
                 else {
                     $wsl_distro_revert_option = ''
@@ -1137,12 +1137,12 @@ function install_everything {
                 #     $wsl_distro_revert_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_revert_option
                 # }
                 write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                write-host "  WSL Distros"
+                write-host "  WSL DEVEL"
                 write-host " --------------------------------------------------------------------------"
                 $wsl_distro_list = get_wsl_distro_list
                 wsl_distro_list_display $wsl_distro_list
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup`r`n`t- [refresh]`r`n`t- [restart] wsl`r`n`t- [reboot] computer`r`n`t${wsl_distro_revert_option}- [revert] to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl`r`n`t${wsl_distro_revert_option}- [revert] wsl to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`t- [reboot] computer`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
