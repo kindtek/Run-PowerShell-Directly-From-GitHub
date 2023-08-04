@@ -41,13 +41,13 @@ class dvlp_process {
             $this.proc_noexit = ''
         }
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
-            echo testing path $env:KINDTEK_DEVEL_TOOLS
+            # echo testing path $env:KINDTEK_DEVEL_TOOLS
             if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
                 # write-host 'dot sourcing devel tools'
-                echo path $env:KINDTEK_DEVEL_TOOLS exists
+                # echo path $env:KINDTEK_DEVEL_TOOLS exists
                 $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
             } else {
-                echo path $env:KINDTEK_DEVEL_TOOLS does not exist
+                # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
                 $this.proc_cmd = $proc_cmd
             }
         }
@@ -125,10 +125,10 @@ class dvlp_process {
         try {
             if ([string]::IsNullOrEmpty($this.proc_noexit)){
                 # write-host  "Start-Process -Filepath powershell.exe @proc_show -ArgumentList `"-Command`", `"$($this.proc_cmd)`""
-                Start-Process -Filepath powershell.exe -LoadUserProfile @proc_show -ArgumentList '-Command', $this.proc_cmd
+                Start-Process -Filepath powershell.exe -LoadUserProfile -WorkingDirectory $env:USERPROFILE @proc_show -ArgumentList '-Command', $this.proc_cmd
             } else {
                 # Write-host "Start-Process -Filepath powershell.exe @proc_show -ArgumentList $($this.proc_noexit), '-Command', '$($this.proc_cmd)'"
-                Start-Process -Filepath powershell.exe -LoadUserProfile @proc_show -ArgumentList $this.proc_noexit, '-Command', $this.proc_cmd
+                Start-Process -Filepath powershell.exe -LoadUserProfile -WorkingDirectory $env:USERPROFILE @proc_show -ArgumentList $this.proc_noexit, '-Command', $this.proc_cmd
             }
         }
         catch { 
