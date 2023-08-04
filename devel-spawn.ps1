@@ -960,8 +960,8 @@ function install_everything {
             # write-host 'dot sourcing devel tools'
             . $env:KINDTEK_DEVEL_TOOLS
         }
-        $host.UI.RawUI.ForegroundColor = "Black"
-        $host.UI.RawUI.BackgroundColor = "White"
+        $host.UI.RawUI.ForegroundColor = "White"
+        $host.UI.RawUI.BackgroundColor = "Black"
         $confirmation = ''    
         if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
             $host.UI.RawUI.ForegroundColor = "Black"
@@ -973,6 +973,8 @@ function install_everything {
             Write-Host "$([char]27)[2J"
             Write-Host "`r`n`r`n`r`n`r`n`r`n`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`t"
     
+        } else {
+            Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         }
         if ($confirmation -eq '') {
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
@@ -1052,8 +1054,8 @@ function install_everything {
                 # install distro requested in arg
                 try {
                     if (!([string]::IsNullOrEmpty($img_name_tag))) {
-                        $host.UI.RawUI.ForegroundColor = "Black"
-                        $host.UI.RawUI.BackgroundColor = "White"
+                        $host.UI.RawUI.ForegroundColor = "White"
+                        $host.UI.RawUI.BackgroundColor = "Black"
 
                         $old_wsl_default_distro = get_default_wsl_distro
                         if ($dvlp_choice -ieq 'kw' -and (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
