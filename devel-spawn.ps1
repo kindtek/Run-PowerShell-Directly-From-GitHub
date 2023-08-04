@@ -1128,7 +1128,7 @@ function install_everything {
                     $run_devels_playground_noninteractive = "`r`n`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag)"
                 }
                 if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -and !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -and "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -and "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
-                    $wsl_distro_revert_option = "`r`n`t- [r]evert to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO"
+                    $wsl_distro_revert_option = "- [r]evert to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
                 }
                 else {
                     $wsl_distro_revert_option = ''
