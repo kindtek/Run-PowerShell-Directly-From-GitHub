@@ -1142,7 +1142,7 @@ function install_everything {
                 $wsl_distro_list = get_wsl_distro_list
                 wsl_distro_list_display $wsl_distro_list
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup`r`n`t- [refresh]`r`n`t- [restart] wsl`r`n`t- [reboot] computer`r`n`t${wsl_distro_revert_option}- [revert] to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup`r`n`t- [refresh]`r`n`t- [restart] wsl`r`n`t- [reboot] computer`r`n`t${wsl_distro_revert_option}- [revert] to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
@@ -1391,7 +1391,7 @@ function install_everything {
                     }
                     $dvlp_choice = 'refresh'
                 }
-                elseif ($dvlp_choice -ceq 'rk'){
+                elseif ($dvlp_choice -ceq 'rollback'){
                     $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
                     if (Test-Path $wsl_kernel_rollback_path -PathType Leaf -ErrorAction SilentlyContinue ){
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
@@ -1407,7 +1407,7 @@ function install_everything {
                 }
                 else {
                     # exit
-                    $dvlp_choice = ''
+                    run_devels_playground "$dvlp_choice" '' ''
                 }
             } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne ''-And $dvlp_choice -ne 'refresh')
         }
