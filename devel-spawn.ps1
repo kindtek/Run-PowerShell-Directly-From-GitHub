@@ -723,7 +723,8 @@ function set_default_wsl_distro {
             $new_wsl_default_distro = $old_wsl_default_distro
         }
         set_dvlp_env 'KINDTEK_DEFAULT_WSL_DISTRO' $new_wsl_default_distro
-        set_dvlp_env 'KINDTEK_DEFAULT_WSL_DISTRO' $new_wsl_default_distro 'machine'
+        set_dvlp_env 'KINDTEK_OLD_DEFAULT_WSL_DISTRO' $old_wsl_default_distro
+        push_dvlp_envs
         # handle failed installations
         if ( test_default_wsl_distro $new_wsl_default_distro -eq $false ) {
             # Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
@@ -743,7 +744,7 @@ function set_default_wsl_distro {
             # # wsl_docker_restart
             # wsl_docker_restart_new_win
             # require_docker_online_new_win
-            # $env:OLD_DEFAULT_WSL_DISTRO = $old_wsl_default_distro
+            # $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = $old_wsl_default_distro
             return $false
         }
         else {
@@ -1117,16 +1118,12 @@ function install_everything {
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
-                $env:DEFAULT_WSL_DISTRO = get_default_wsl_distro
+                $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
                 if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -and (!([string]::IsNullOrEmpty($img_name_tag)))){
                     $run_devels_playground_noninteractive = "`r`n`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag)"
                 }
-                if ([string]::IsNullOrEmpty($env:OLD_DEFAULT_WSL_DISTRO)) {
-                    $env:OLD_DEFAULT_WSL_DISTRO = $env:KINDTEK_FAILSAFE_WSL_DISTRO
-                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (reset to $env:OLD_DEFAULT_WSL_DISTRO)"
-                }
-                elseif ("$env:OLD_DEFAULT_WSL_DISTRO" -ne "$env:DEFAULT_WSL_DISTRO") {
-                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $env:OLD_DEFAULT_WSL_DISTRO)"
+                if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO") {
+                    $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)"
                 }
                 else {
                     $wsl_distro_undo_option = ''
@@ -1355,10 +1352,10 @@ function install_everything {
                     }
                 }
                 elseif ($dvlp_choice -ieq 'u') {
-                    if ($env:OLD_DEFAULT_WSL_DISTRO -ne "") {
+                    if ($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO -ne "") {
                         # wsl.exe --set-default kalilinux-kali-rolling-latest
-                        Write-Host "`r`n`r`nsetting $env:OLD_DEFAULT_WSL_DISTRO as default distro ..."
-                        wsl.exe --set-default $env:OLD_DEFAULT_WSL_DISTRO
+                        Write-Host "`r`n`r`nsetting $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO as default distro ..."
+                        wsl.exe --set-default $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
                         $dvlp_choice = 'refresh'
