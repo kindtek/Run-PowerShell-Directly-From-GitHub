@@ -1302,19 +1302,19 @@ function install_everything {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        start_dvlp_process_pop "wsl --cd /hal -- " 'wait' 'noexit'
+                        start_dvlp_process_pop "wsl --cd /hal -- " '' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        start_dvlp_process_pop "wsl --cd /hal -- `$(cdir)" 'wait' 'noexit'
+                        start_dvlp_process_pop "wsl --cd /hal -- `$(cdir)" '' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
-                        start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
+                        start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" '' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cdw' ) {
                         # one day might get the windows cdir working
-                        start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
+                        start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" '' 'noexit'
                     }
-                    $dvlp_choice = 'refresh'
+                    # $dvlp_choice = 'refresh'
 
                 }
                 elseif ($dvlp_choice -like 'k*') {
