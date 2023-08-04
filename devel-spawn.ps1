@@ -1113,7 +1113,7 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                start_dvlp_process_hide "install_git" "" ""
+                sync_repo
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
@@ -1148,7 +1148,7 @@ function install_everything {
                 $dvlp_choice = Read-Host $dvlp_options
                 if ($dvlp_choice -ieq 'refresh') {
                     # require_docker_online
-                    sync_repo
+                    # sync_repo
                 }
                 elseif ($dvlp_choice -ieq 'd') {
                     # require_docker_online
