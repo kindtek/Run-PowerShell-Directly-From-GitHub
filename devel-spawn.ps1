@@ -1356,13 +1356,15 @@ function install_everything {
                         wsl.exe --set-default $env:OLD_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
-                        require_docker_online_new_win
                     }
                 }
                 elseif ($dvlp_choice -ceq 'restart') {
                     # wsl_docker_restart
                     wsl_docker_restart_new_win
-                    require_docker_online_new_win
+                }
+                elseif ($dvlp_choice -ceq 'restart!') {
+                    # wsl_docker_restart
+                    wsl_docker_full_restart_new_win
                 }
                 elseif ($dvlp_choice -ceq 'RESTART') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
