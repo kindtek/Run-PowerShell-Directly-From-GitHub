@@ -1305,7 +1305,7 @@ function install_everything {
                         start_dvlp_process_pop "wsl --cd /hal -- " 'wait' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        start_dvlp_process_pop "wsl --cd /hal -- `$(cdir)" '' 'noexit'
+                        start_dvlp_process_pop "wsl --cd /hal -- `$(cdir)" 'wait' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
                         start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
