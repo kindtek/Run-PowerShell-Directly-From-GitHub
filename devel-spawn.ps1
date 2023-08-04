@@ -1173,7 +1173,7 @@ function install_everything {
                         write-output "`r`n`tpress ENTER to set $wsl_distro_choice as default distro`r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
 (set $wsl_distro_choice as default distro)"
-                        if ([string]::isnullorempty($wsl_distro_choice_confirm)){
+                        if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
                             set_default_wsl_distro $wsl_distro_choice
                         }
                     } else {
@@ -1189,7 +1189,7 @@ function install_everything {
                         write-output "`r`n`tpress ENTER to delete $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
 (DELETE $wsl_distro_choice)"
-                        if ([string]::isnullorempty($wsl_distro_choice_confirm)){
+                        if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
                             if ($wsl_distro_choice -eq $(get_default_wsl_distro)){
                                 write-host "replacing $wsl_distro_choice with $env:KINDTEK_FAILSAFE_WSL_DISTRO as default distro ..."
                                 revert_default_wsl_distro
@@ -1209,7 +1209,7 @@ function install_everything {
                         write-output "`r`n`tpress ENTER to open $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
 (OPEN $wsl_distro_choice)"
-                        if ([string]::isnullorempty($wsl_distro_choice_confirm)){
+                        if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
                             wsl --cd /hal --user agl -d $wsl_distro_choice -- bash source .bashrc
                         }
                     } else {
@@ -1406,8 +1406,10 @@ function install_everything {
                     $dvlp_choice = 'refresh'
                 }
                 else {
-                    # exit
-                    run_devels_playground "$dvlp_choice" '' ''
+                    if (!([string]::IsNullOrEmpty($dvlp_choice))){
+                        run_devels_playground "$dvlp_choice" '' ''
+                    } 
+                    # else exit
                 }
             } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne ''-And $dvlp_choice -ne 'refresh')
         }
