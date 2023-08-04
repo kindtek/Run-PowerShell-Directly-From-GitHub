@@ -792,7 +792,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    start_dvlp_process_embed 'sync_repo' 'wait'
+    start_dvlp_process_hide 'sync_repo' 'wait'
     # assuming the repos are now synced now is a good time to dot source devel-tools
     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
         # write-host 'dot sourcing devel tools'
@@ -1302,17 +1302,17 @@ function install_everything {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        start_dvlp_process_embed "wsl --cd /hal --"  
+                        start_dvlp_process_pop "wsl --cd /hal --"  
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        start_dvlp_process_embed "wsl --cd /hal -- `$(cdir)" 
+                        start_dvlp_process_pop "wsl --cd /hal -- `$(cdir)" 
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
-                        start_dvlp_process_embed "Set-Location -literalPath $env:USERPROFILE" 
+                        start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 
                     }
                     elseif ($dvlp_choice -ieq 'cdw' ) {
                         # one day might get the windows cdir working
-                        start_dvlp_process_embed "Set-Location -literalPath $env:USERPROFILE" 
+                        start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 
                     }
                     $dvlp_choice = 'refresh'
 
