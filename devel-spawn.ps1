@@ -1154,11 +1154,16 @@ function install_everything {
                 elseif ($dvlp_choice -ieq 'd') {
                     # require_docker_online
                     if ([string]::IsNullOrEmpty($img_name_tag)){
-                        start_dvlp_process_popmax "run_devels_playground" '' ''
+                        run_devels_playground
                     } else {
-                        start_dvlp_process_popmax "require_docker_online;run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' '' ''" '' 'noexit'
+                        require_docker_online;
+                        run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' '' ''
                     }
                     $dvlp_choice = 'refresh'
+                }
+                elseif ($dvlp_choice -ieq 'd!') {
+                    require_docker_online
+                    run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default'
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
@@ -1211,10 +1216,6 @@ function install_everything {
                         write-host "no distro for ${wsl_choice} found"
                     }
                     $dvlp_choice = 'refresh'
-                }
-                elseif ($dvlp_choice -ieq 'd!') {
-                    # require_docker_online
-                    start_dvlp_process_popmax "require_docker_online;run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default'" '' 'noexit'
                 } 
                 elseif ($dvlp_choice -match "\d"){
                     $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_choice
