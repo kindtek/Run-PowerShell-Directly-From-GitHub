@@ -1272,7 +1272,7 @@ function install_everything {
                             wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal
                         }
                     }
-                    $dvlp_choice = 'kw'
+                    $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -ieq 'f') {
                     try {
