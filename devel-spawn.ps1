@@ -1113,7 +1113,7 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                start_dvlp_process_pop "sync_repo" "" ""
+                start_dvlp_process_pop "sync_repo" "" "noexit"
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
