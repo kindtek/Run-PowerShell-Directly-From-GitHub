@@ -792,7 +792,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
     powershell.exe -Command $refresh_envs | Out-Null
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-    start_dvlp_process_hide 'sync_repo' 'wait'
+    start_dvlp_process_pop 'sync_repo' 'wait'
     # assuming the repos are now synced now is a good time to dot source devel-tools
     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
         # write-host 'dot sourcing devel tools'
@@ -1113,7 +1113,7 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                start_dvlp_process_pop "sync_repo" "" "noexit"
+                start_dvlp_process_pop "install_git" "" "noexit"
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
