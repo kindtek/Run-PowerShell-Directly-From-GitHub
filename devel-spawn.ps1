@@ -1184,6 +1184,10 @@ function install_everything {
                         $wsl_distro_choice_confirm = read-host "
 (DELETE $wsl_distro_choice)"
                         if ([string]::isnullorempty($wsl_distro_choice_confirm)){
+                            if ($wsl_distro_selected -eq $(get_default_wsl_distro)){
+                                write-host "replacing $(get_default_wsl_distro) with $env:KINDTEK_DEFAULT_WSL_DISTRO as default distro ..."
+                                revert_default_wsl_distro
+                            }
                             wsl --unregister $wsl_distro_choice
                         }
                     } else {
