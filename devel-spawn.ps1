@@ -1157,13 +1157,13 @@ function install_everything {
                         run_devels_playground
                     } else {
                         require_docker_online;
-                        run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' '' ''
+                        run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' ''
                     }
                     $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online
-                    run_devels_playground '$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default'
+                    run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default'
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
