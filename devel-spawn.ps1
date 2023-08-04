@@ -1113,6 +1113,7 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
+                echo 'installing git/ syncing repos'
                 start_dvlp_process_pop "install_git;run_installer;sync_repo;" "" "noexit"
             } 
             do {
