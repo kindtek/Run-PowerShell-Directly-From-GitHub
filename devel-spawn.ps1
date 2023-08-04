@@ -1111,7 +1111,7 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                start_dvlp_process_popmin "install_git;run_installer;" "" ""
+                start_dvlp_process "install_git;run_installer;" "" ""
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
