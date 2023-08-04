@@ -712,6 +712,7 @@ function set_default_wsl_distro {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
             wsl.exe -s $new_wsl_default_distro
+            $new_wsl_default_distro = get_default_wsl_distro
         }
         catch {
             Write-Host "error changing wsl default distro from $old_wsl_default_distro to $new_wsl_default_distro"
@@ -722,6 +723,8 @@ function set_default_wsl_distro {
             cmd.exe /c net start LxssManager
             $new_wsl_default_distro = $old_wsl_default_distro
         }
+        set_dvlp_env 'KINDTEK_DEFAULT_WSL_DISTRO' $new_wsl_default_distro
+        set_dvlp_env 'KINDTEK_DEFAULT_WSL_DISTRO' $new_wsl_default_distro 'machine'
         # handle failed installations
         if ( test_default_wsl_distro $new_wsl_default_distro -eq $false ) {
             # Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
@@ -1139,7 +1142,7 @@ function install_everything {
                 $wsl_distro_list = get_wsl_distro_list
                 wsl_distro_list_display $wsl_distro_list
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}${wsl_distro_undo_option}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`t- [refresh]`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}${wsl_distro_undo_option}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`t- [refresh]`r`n`t- [restart]`r`n`t- [reboot]`r`n`t- [revert] to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
@@ -1276,7 +1279,7 @@ function install_everything {
                     }
                     $dvlp_choice = 'refresh'
                 }
-                elseif ($dvlp_choice -ieq 'f') {
+                elseif ($dvlp_choice -ieq 'revert') {
                     try {
                         set_default_wsl_distro
                         require_docker_online_new_win
@@ -1374,7 +1377,7 @@ function install_everything {
                         require_docker_online_new_win
                     }
                 }
-                elseif ($dvlp_choice -ceq 'R!') {
+                elseif ($dvlp_choice -ceq 'reboot') {
                     reboot_prompt
                     # elseif ($dvlp_choice -ieq 'v') {
                     #     wsl sh -c "cd /hel;. code"
