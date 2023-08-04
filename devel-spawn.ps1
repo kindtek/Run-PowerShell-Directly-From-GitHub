@@ -1302,7 +1302,7 @@ function install_everything {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        start_dvlp_process_pop "wsl --cd /hal --" '' 'noexit'
+                        wsl --cd /hal --
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
                         start_dvlp_process_pop "wsl --cd /hal -- `$(cdir)" '' 'noexit'
