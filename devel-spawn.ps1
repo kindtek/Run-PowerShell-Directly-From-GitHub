@@ -1308,7 +1308,7 @@ function install_everything {
                         start_dvlp_process_pop "wsl --cd /hal -- `$(cdir)" '' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
-                        start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" '' 'noexit'
+                        start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cdw' ) {
                         # one day might get the windows cdir working
