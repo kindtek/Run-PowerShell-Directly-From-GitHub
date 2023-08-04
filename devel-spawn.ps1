@@ -1135,14 +1135,13 @@ function install_everything {
                 # if (get_default_wsl_distro -eq $env:KINDTEK_FAILSAFE_WSL_DISTRO){
                 #     $wsl_distro_undo_option = "`r`n`t- set [f]ailsafe distro as default" + $wsl_distro_undo_option
                 # }
-                $restart_option = "`r`n`t- [r]estart"
                 write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
                 write-host "  WSL Distros"
                 write-host " --------------------------------------------------------------------------"
                 $wsl_distro_list = get_wsl_distro_list
                 wsl_distro_list_display $wsl_distro_list
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}${wsl_distro_undo_option}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup$restart_option`r`n`t- [refresh]`r`n`t- [restart] wsl`r`n`t- [reboot] computer`r`n`t- [revert] to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number or choose from the following:`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}${wsl_distro_undo_option}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup`r`n`t- [refresh]`r`n`t- [restart] wsl`r`n`t- [reboot] computer`r`n`t- [revert] to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
