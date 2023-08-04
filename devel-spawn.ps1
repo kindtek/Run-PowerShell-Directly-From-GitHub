@@ -1114,7 +1114,11 @@ function install_everything {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                sync_repo
+                if (($dvlp_choice -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
+                    start_dvlp_process_hide 'sync_repo'
+                } else {
+                    sync_repo
+                }
             } 
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
