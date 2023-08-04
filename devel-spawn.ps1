@@ -1122,7 +1122,7 @@ function install_everything {
                 if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -and (!([string]::IsNullOrEmpty($img_name_tag)))){
                     $run_devels_playground_noninteractive = "`r`n`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag)"
                 }
-                if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO") {
+                if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -and !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO))) {
                     $wsl_distro_undo_option = "`r`n`t- [u]ndo wsl changes (revert to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)"
                 }
                 else {
