@@ -897,7 +897,7 @@ function sync_repo {
     Pop-Location
     Pop-Location
     Pop-Location
-    Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1
+    Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1 -Verbose
 }
 
 function run_devels_playground {
