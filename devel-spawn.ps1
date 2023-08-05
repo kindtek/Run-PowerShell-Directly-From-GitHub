@@ -1419,11 +1419,6 @@ function wsl_devel_spawn {
                     # elseif ($dvlp_choice -ieq 'v') {
                     #     wsl sh -c "cd /hel;. code"
                     $dvlp_choice = 'screen'
-                }
-                elseif (!([string]::IsNullOrEmpty($dvlp_choice))) {
-                    # exit
-                    Write-Host "bad input: '$dvlp_choice'"
-                    $dvlp_choice = ''
                 } else {
                     # $dvlp_choice = ''
                 }
