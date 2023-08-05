@@ -1162,11 +1162,11 @@ function wsl_devel_spawn {
                         $dvlp_choice = 'screen'
                     } 
                 }
-                # elseif ($dvlp_choice -ieq 'refresh') {
-                #     # require_docker_online
-                #     # sync_repo
-                # }
-                if ($dvlp_choice -ieq 'd') {
+                if ($dvlp_choice -ieq 'refresh') {
+                    # require_docker_online
+                    # sync_repo
+                }
+                elseif ($dvlp_choice -ieq 'd') {
                     # require_docker_online
                     if ([string]::IsNullOrEmpty($img_name_tag)){
                         docker_devel_spawn
