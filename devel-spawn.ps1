@@ -1164,7 +1164,7 @@ function wsl_devel_spawn {
                         Write-Host "$dvlp_choice is a valid docker hub official image"
                         docker_devel_spawn "$dvlp_choice"
                         $dvlp_choice = 'screen'
-                    } elseif (docker manifest inspect $dvlp_choice) {
+                    } elseif (docker manifest inspect $dvlp_choice | Out-Null) {
                         Write-Host "$dvlp_choice is a valid docker hub official image"
                         docker_devel_spawn "$dvlp_choice"
                         $dvlp_choice = 'screen'
