@@ -1426,7 +1426,7 @@ function wsl_devel_spawn {
                     # elseif ($dvlp_choice -ieq 'v') {
                     #     wsl sh -c "cd /hel;. code"
                     $dvlp_choice = 'screen'
-                } elseif (docker manifest inspect $dvlp_choice) {
+                } elseif (!([string]::isnullorempty($dvlp_choice)) -and $dvlp_choice -ine 'screen' -and $dvlp_choice -ine 'refresh' -and $dvlp_choice -ine 'KW' -and $(docker manifest inspect $dvlp_choice)) {
                     Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
                     docker_devel_spawn "$dvlp_choice"
                     $dvlp_choice = 'screen'
