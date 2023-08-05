@@ -1407,7 +1407,17 @@ function install_everything {
                 }
                 else {
                     if (!([string]::IsNullOrEmpty($dvlp_choice))){
-                        run_devels_playground "$dvlp_choice" '' ''
+                        if ($dvlp_choice -Like 'kindtek/*:*'){
+                            run_devels_playground "$dvlp_choice" 
+                        } else {
+                            if ($(docker manifest inspect $dvlp_choice) ){ 
+                                run_devels_playground "$dvlp_choice" 
+                            } else {
+                                 Write-Output "Could not find $dvlp_choice"
+                                #  $dvlp_choice = 'refresh'
+                            }
+                        }
+                        
                     } 
                     # else exit
                 }
