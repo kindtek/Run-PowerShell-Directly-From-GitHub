@@ -1178,8 +1178,8 @@ function wsl_devel_spawn {
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online
-                    write-host "docker_devel_spawn 'kindtek/$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default'"
-                    docker_devel_spawn "kindtek/$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default'
+                    write-host "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag' 'default'"
+                    docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
