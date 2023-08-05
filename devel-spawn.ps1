@@ -1418,6 +1418,7 @@ function wsl_devel_spawn {
                            #  $dvlp_choice = 'screen'
                        }
                     } 
+                    Write-Host "Input was '$dvlp_choice'"
                     # else exit
                 }
             } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne '' -And $dvlp_choice -ne 'refresh' -And $dvlp_choice -ne 'screen')
