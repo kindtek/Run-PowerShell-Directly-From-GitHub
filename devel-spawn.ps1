@@ -800,6 +800,7 @@ function install_git {
         . $env:KINDTEK_DEVEL_TOOLS
     }
     # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
+    git config --global core.autocrlf input
     return
 }
 
