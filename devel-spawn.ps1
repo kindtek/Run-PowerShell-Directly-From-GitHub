@@ -682,7 +682,7 @@ function revert_default_wsl_distro {
     }
     catch {
         try {
-            run_devels_playground "default"
+            docker_devel_spawn "default"
         }
         catch {
             Write-Host "error reverting to $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -735,7 +735,7 @@ function set_default_wsl_distro {
             # }
             # catch {
             #     try {
-            #         run_devels_playground "default"
+            #         docker_devel_spawn "default"
             #     }
             #     catch {
             #         Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
@@ -901,7 +901,7 @@ function sync_repo {
     Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1 -Verbose
 }
 
-function run_devels_playground {
+function docker_devel_spawn {
     param (
         $img_name_tag, $non_interactive, $default_distro
     )
@@ -953,7 +953,7 @@ function run_dvlp_latest_kernel_installer {
     pop-location
 }
 
-function install_everything {  
+function wsl_devel_spawn {  
     param (
         $img_name_tag
     )
@@ -1025,7 +1025,7 @@ function install_everything {
                 # $env:KINDTEK_WIN_DVLW_PATH, $img_name_tag, $non_interactive, $default_distro
                 try {
                     if (!(Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.dvlp-installed" -PathType Leaf)) {
-                        run_devels_playground "default"
+                        docker_devel_spawn "default"
                         cmd.exe /c net stop LxssManager
                         cmd.exe /c net start LxssManager
                         # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
@@ -1062,12 +1062,12 @@ function install_everything {
 
                         $old_wsl_default_distro = get_default_wsl_distro
                         if ($dvlp_choice -ieq 'kw' -and (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
-                            # start_dvlp_process_pop "$(run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' 'default')" 'wait'
-                            run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' 'default'
+                            # start_dvlp_process_pop "$(docker_devel_spawn "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' 'default')" 'wait'
+                            docker_devel_spawn "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' 'default'
                             run_dvlp_latest_kernel_installer
                             require_docker_online_new_win
                         } else {
-                            run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
+                            docker_devel_spawn "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
                             run_dvlp_latest_kernel_installer
                             require_docker_online | Out-Null
                         }
@@ -1110,7 +1110,10 @@ function install_everything {
                         }
                     }
                 }
-            } else {
+            } elseif ($dvlp_choice -eq 'screen') {
+                # do nothing but refresh screen
+            }
+            else {
                 if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
@@ -1125,7 +1128,7 @@ function install_everything {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
                 if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -and (!([string]::IsNullOrEmpty($img_name_tag)))){
-                    $run_devels_playground_noninteractive = "`r`n`t`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
+                    $docker_devel_spawn_noninteractive = "`r`n`t`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
                 }
                 if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -and !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -and "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -and "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
                     $wsl_distro_revert_option = "- [r]evert wsl to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
@@ -1142,7 +1145,7 @@ function install_everything {
                 $wsl_distro_list = get_wsl_distro_list
                 wsl_distro_list_display $wsl_distro_list
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${run_devels_playground_noninteractive}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl`r`n`t${wsl_distro_revert_option}- [revert] wsl to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`t- [reboot] computer`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl`r`n`t${wsl_distro_revert_option}- [revert] wsl to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`t- [reboot] computer`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
@@ -1154,16 +1157,16 @@ function install_everything {
                 elseif ($dvlp_choice -ieq 'd') {
                     # require_docker_online
                     if ([string]::IsNullOrEmpty($img_name_tag)){
-                        run_devels_playground
+                        docker_devel_spawn
                     } else {
                         require_docker_online;
-                        run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' ''
+                        docker_devel_spawn "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' ''
                     }
                     $dvlp_choice = 'refresh'
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online
-                    run_devels_playground "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default'
+                    docker_devel_spawn "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default'
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
@@ -1407,21 +1410,18 @@ function install_everything {
                 }
                 else {
                     if (!([string]::IsNullOrEmpty($dvlp_choice))){
-                        if ($dvlp_choice -Like 'kindtek/*:*'){
-                            run_devels_playground "$dvlp_choice" 
+                        if ($dvlp_choice -Like 'kindtek/*:* ' -or $(docker manifest inspect $dvlp_choice)){
+                            docker_devel_spawn "$dvlp_choice" 
                         } else {
-                            if ($(docker manifest inspect $dvlp_choice) ){ 
-                                run_devels_playground "$dvlp_choice" 
-                            } else {
-                                 Write-Host "Could not find $dvlp_choice"
-                                #  $dvlp_choice = 'refresh'
-                            }
-                        }
+                            Write-Host "Could not find $dvlp_choice"
+                           #  $dvlp_choice = 'refresh'
+                       }
+                        
                         
                     } 
                     # else exit
                 }
-            } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne ''-And $dvlp_choice -ne 'refresh')
+            } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne '' -And $dvlp_choice -ne 'refresh' -And $dvlp_choice -ne 'screen')
         }
     } while ($dvlp_choice -ieq 'kw' -or $dvlp_choice -ieq 'refresh')
     
@@ -1433,7 +1433,7 @@ pull_dvlp_envs
 if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
     set_dvlp_envs
-    install_everything $args[0]
+    wsl_devel_spawn $args[0]
 } elseif ($global:devel_tools -ne "sourced"){
     # echo 'devel_tools not yet sourced'
     if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
