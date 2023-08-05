@@ -1409,6 +1409,7 @@ function wsl_devel_spawn {
                     $dvlp_choice = 'screen'
                 }
                 else {
+                    Write-Host "parsing input '$dvlp_choice'"
                     if (!([string]::IsNullOrEmpty($dvlp_choice)) -and $dvlp_choice -ne 'screen'){
                         if ($dvlp_choice -Like 'kindtek/*:* ' -or $(docker manifest inspect $dvlp_choice)){
                             Write-Host "docker_devel_spawn '$dvlp_choice' "
