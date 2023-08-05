@@ -1423,7 +1423,7 @@ function wsl_devel_spawn {
                 }
             } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne '' -And $dvlp_choice -ne 'refresh' -And $dvlp_choice -ne 'screen')
         }
-    } while ($dvlp_choice -ieq 'kw' -or $dvlp_choice -ieq 'refresh')
+    } while ($dvlp_choice -ieq 'kw' -or $dvlp_choice -ieq 'refresh' -or $dvlp_choice -ieq 'screen')
     
     
     Write-Host "`r`nGoodbye!`r`n"
