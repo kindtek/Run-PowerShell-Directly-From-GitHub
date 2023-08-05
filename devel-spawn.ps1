@@ -1409,7 +1409,7 @@ function wsl_devel_spawn {
                     $dvlp_choice = 'screen'
                 }
                 else {
-                    if (!([string]::IsNullOrEmpty($dvlp_choice))){
+                    if (!([string]::IsNullOrEmpty($dvlp_choice)) -and $dvlp_choice -ne 'screen'){
                         if ($dvlp_choice -Like 'kindtek/*:* ' -or $(docker manifest inspect $dvlp_choice)){
                             docker_devel_spawn "$dvlp_choice" 
                         } else {
