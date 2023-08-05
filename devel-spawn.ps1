@@ -1308,7 +1308,7 @@ function wsl_devel_spawn {
                             wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash ./setup.sh $env:USERNAME
                         }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'open' ){
                             write-host "type 'exit' to return to main menu"
-                            wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal
+                            wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash
                         }
                     }
                     $dvlp_choice = 'screen'
@@ -1337,10 +1337,10 @@ function wsl_devel_spawn {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'cl' ) {
-                        start_dvlp_process_pop "wsl --cd /hal -- " 'wait' 'noexit'
+                        start_dvlp_process_pop "wsl --cd /hal --exec bash " 'wait' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cdl' ) {
-                        start_dvlp_process_pop "wsl --cd /hal -- `$(cdir)" 'wait' 'noexit'
+                        start_dvlp_process_pop "wsl --cd /hal --exec bash `$(cdir)" 'wait' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'cw' ) {
                         start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
