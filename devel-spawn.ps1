@@ -1412,14 +1412,18 @@ function wsl_devel_spawn {
                     if (!([string]::IsNullOrEmpty($dvlp_choice)) -and $dvlp_choice -ne 'screen'){
                         if ($dvlp_choice -Like 'kindtek/*:* ' -or $(docker manifest inspect $dvlp_choice)){
                             Write-Host "docker_devel_spawn '$dvlp_choice' "
+                            Write-Host "$dvlp_choice is valid image"
                             docker_devel_spawn "$dvlp_choice" 
                         } else {
-                            Write-Host "Could not find $dvlp_choice"
-                           #  $dvlp_choice = 'screen'
+                            Write-Host "error: could not find $dvlp_choice"
+                            Start-Sleep 5
+                            $dvlp_choice = 'screen'
                        }
-                    } 
-                    Write-Host "Input was '$dvlp_choice'"
-                    # else exit
+                    } else {
+                        # exit
+                        Write-Host "bad input: '$dvlp_choice'"
+                        $dvlp_choice = ''
+                    }
                 }
             } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne '' -And $dvlp_choice -ne 'refresh' -And $dvlp_choice -ne 'screen')
         }
