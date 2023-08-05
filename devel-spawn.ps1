@@ -1151,7 +1151,7 @@ function wsl_devel_spawn {
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
                 if (!([string]::IsNullOrEmpty($dvlp_choice))){
-                    write-host "checking if $dvlp_choice is a docker image"
+                    # write-host "checking if $dvlp_choice is a docker image"
                     if ( $dvlp_choice -Like 'kindtek/*:*'){
                         Write-Host "$dvlp_choice is a valid kindtek docker image"
                         docker_devel_spawn "$dvlp_choice"
