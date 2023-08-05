@@ -1151,16 +1151,22 @@ function wsl_devel_spawn {
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
                 Write-Host "parsing input '$dvlp_choice'"
-                if (!([string]::IsNullOrEmpty($dvlp_choice)) -and $dvlp_choice -ne 'screen' -and( $dvlp_choice -Like 'kindtek/*:* ' -or ( $dvlp_choice -Like '*/*:* ' -and $(docker manifest inspect $dvlp_choice)))){
-                        Write-Host "docker_devel_spawn '$dvlp_choice' "
-                        Write-Host "$dvlp_choice is valid image"
-                        docker_devel_spawn "$dvlp_choice" 
+                if (!([string]::IsNullOrEmpty($dvlp_choice))){
+                    if ( $dvlp_choice -Like 'kindtek/*:*'){
+                        Write-Host "$dvlp_choice is valid kindtek image"
+                        docker_devel_spawn "$dvlp_choice"
+                        $dvlp_choice = 'screen'
+                    } elseif ( $dvlp_choice -Like '*/*:*' -and $(docker manifest inspect $dvlp_choice)) {
+                        Write-Host "$dvlp_choice is valid kindtek image"
+                        docker_devel_spawn "$dvlp_choice"
+                        $dvlp_choice = 'screen'
+                    } 
                 }
-                elseif ($dvlp_choice -ieq 'refresh') {
-                    # require_docker_online
-                    # sync_repo
-                }
-                elseif ($dvlp_choice -ieq 'd') {
+                # elseif ($dvlp_choice -ieq 'refresh') {
+                #     # require_docker_online
+                #     # sync_repo
+                # }
+                if ($dvlp_choice -ieq 'd') {
                     # require_docker_online
                     if ([string]::IsNullOrEmpty($img_name_tag)){
                         docker_devel_spawn
