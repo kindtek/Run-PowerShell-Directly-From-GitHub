@@ -1128,7 +1128,7 @@ function wsl_devel_spawn {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
                 if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -and (!([string]::IsNullOrEmpty($img_name_tag)))){
-                    $docker_devel_spawn_noninteractive = "`r`n`t`t- [d!] (import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
+                    $docker_devel_spawn_noninteractive = "`r`n`t  (use [d!] to import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
                 }
                 if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -and !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -and "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -and "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
                     $wsl_distro_revert_option = "- [r]evert wsl to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
