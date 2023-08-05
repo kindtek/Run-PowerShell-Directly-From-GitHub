@@ -1157,7 +1157,7 @@ function wsl_devel_spawn {
                         docker_devel_spawn "$dvlp_choice"
                         $dvlp_choice = 'screen'
                     } elseif ( $dvlp_choice -Like '*/*:*' -and $(docker manifest inspect $dvlp_choice)) {
-                        Write-Host "$dvlp_choice is valid kindtek image"
+                        Write-Host "$dvlp_choice is valid docker hub image"
                         docker_devel_spawn "$dvlp_choice"
                         $dvlp_choice = 'screen'
                     } 
