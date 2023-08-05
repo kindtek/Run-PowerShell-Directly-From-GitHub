@@ -1178,14 +1178,15 @@ function wsl_devel_spawn {
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online
+                    write-host "docker_devel_spawn 'kindtek/$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default'"
                     docker_devel_spawn "kindtek/$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default'
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
-                    echo "wsl_choice: $wsl_choice"
+                    write-host "wsl_choice: $wsl_choice"
                     $wsl_distro_choice = wsl_distro_list_select $wsl_distro_list $wsl_choice
                     if ($wsl_distro_choice){
-                        write-output "`r`n`tpress ENTER to set $wsl_distro_choice as default distro`r`n`t`t.. or enter any other key to skip "
+                        write-host "`r`n`tpress ENTER to set $wsl_distro_choice as default distro`r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
 (set $wsl_distro_choice as default distro)"
                         if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
@@ -1201,7 +1202,7 @@ function wsl_devel_spawn {
                     echo "wsl_choice: $wsl_choice"
                     $wsl_distro_choice = wsl_distro_list_select $wsl_distro_list $wsl_choice
                     if ($wsl_distro_choice){
-                        write-output "`r`n`tpress ENTER to delete $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
+                        write-host "`r`n`tpress ENTER to delete $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
 (DELETE $wsl_distro_choice)"
                         if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
@@ -1221,7 +1222,7 @@ function wsl_devel_spawn {
                     echo "wsl_choice: $wsl_choice"
                     $wsl_distro_choice = wsl_distro_list_select $wsl_distro_list $wsl_choice
                     if ($wsl_distro_choice){
-                        write-output "`r`n`tpress ENTER to open $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
+                        write-host "`r`n`tpress ENTER to open $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
 (OPEN $wsl_distro_choice)"
                         if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
