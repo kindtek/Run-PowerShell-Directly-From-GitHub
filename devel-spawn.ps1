@@ -1413,7 +1413,7 @@ function install_everything {
                             if ($(docker manifest inspect $dvlp_choice) ){ 
                                 run_devels_playground "$dvlp_choice" 
                             } else {
-                                 Write-Output "Could not find $dvlp_choice"
+                                 Write-Host "Could not find $dvlp_choice"
                                 #  $dvlp_choice = 'refresh'
                             }
                         }
