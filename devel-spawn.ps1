@@ -1150,7 +1150,13 @@ function wsl_devel_spawn {
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
-                if ($dvlp_choice -ieq 'refresh') {
+                Write-Host "parsing input '$dvlp_choice'"
+                if (!([string]::IsNullOrEmpty($dvlp_choice)) -and $dvlp_choice -ne 'screen' -and $dvlp_choice -Like '*/*:* ' -and $(docker manifest inspect $dvlp_choice)){
+                        Write-Host "docker_devel_spawn '$dvlp_choice' "
+                        Write-Host "$dvlp_choice is valid image"
+                        docker_devel_spawn "$dvlp_choice" 
+                }
+                elseif ($dvlp_choice -ieq 'refresh') {
                     # require_docker_online
                     # sync_repo
                 }
@@ -1394,7 +1400,7 @@ function wsl_devel_spawn {
                     }
                     $dvlp_choice = 'screen'
                 }
-                elseif ($dvlp_choice -ceq 'rollback'){
+                elseif ($dvlp_choice -ieq 'rollback'){
                     $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
                     if (Test-Path $wsl_kernel_rollback_path -PathType Leaf -ErrorAction SilentlyContinue ){
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
@@ -1408,23 +1414,12 @@ function wsl_devel_spawn {
                     #     wsl sh -c "cd /hel;. code"
                     $dvlp_choice = 'screen'
                 }
-                else {
-                    Write-Host "parsing input '$dvlp_choice'"
-                    if (!([string]::IsNullOrEmpty($dvlp_choice)) -and $dvlp_choice -ne 'screen'){
-                        if ($dvlp_choice -Like 'kindtek/*:* ' -or $(docker manifest inspect $dvlp_choice)){
-                            Write-Host "docker_devel_spawn '$dvlp_choice' "
-                            Write-Host "$dvlp_choice is valid image"
-                            docker_devel_spawn "$dvlp_choice" 
-                        } else {
-                            Write-Host "error: could not find $dvlp_choice"
-                            Start-Sleep 5
-                            $dvlp_choice = 'screen'
-                       }
-                    } else {
-                        # exit
-                        Write-Host "bad input: '$dvlp_choice'"
-                        $dvlp_choice = ''
-                    }
+                elseif (!([string]::IsNullOrEmpty($dvlp_choice))) {
+                    # exit
+                    Write-Host "bad input: '$dvlp_choice'"
+                    $dvlp_choice = ''
+                } else {
+                    # $dvlp_choice = ''
                 }
             } while ($dvlp_choice -ne 'kw' -And $dvlp_choice -ne '' -And $dvlp_choice -ne 'refresh' -And $dvlp_choice -ne 'screen')
         }
