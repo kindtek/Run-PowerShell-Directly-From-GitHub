@@ -1153,15 +1153,15 @@ function wsl_devel_spawn {
                 if (!([string]::IsNullOrEmpty($dvlp_choice))){
                     # write-host "checking if $dvlp_choice is a docker image"
                     if ( $dvlp_choice -Like 'kindtek/*:*'){
-                        Write-Host "$dvlp_choice is a valid kindtek docker image"
+                        Write-Host "`r`n$dvlp_choice is a valid kindtek docker image"
                         docker_devel_spawn "$dvlp_choice"
                         $dvlp_choice = 'screen'
                     } elseif ( $dvlp_choice -Like '*/*:*' -and $(docker manifest inspect $dvlp_choice)) {
-                        Write-Host "$dvlp_choice is a valid docker hub image"
+                        Write-Host "`r`n$dvlp_choice is a valid docker hub image"
                         docker_devel_spawn "$dvlp_choice"
                         $dvlp_choice = 'screen'
                     } elseif ( $dvlp_choice -Like '*:*' -or $dvlp_choice -Like '*/*'  -and $(docker manifest inspect $dvlp_choice) ) {
-                        Write-Host "$dvlp_choice is a valid docker hub official image"
+                        Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
                         docker_devel_spawn "$dvlp_choice"
                         $dvlp_choice = 'screen'
                     }
@@ -1427,7 +1427,7 @@ function wsl_devel_spawn {
                     #     wsl sh -c "cd /hel;. code"
                     $dvlp_choice = 'screen'
                 } elseif (docker manifest inspect $dvlp_choice) {
-                    Write-Host "$dvlp_choice is a valid docker hub official image"
+                    Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
                     docker_devel_spawn "$dvlp_choice"
                     $dvlp_choice = 'screen'
                 } else {
