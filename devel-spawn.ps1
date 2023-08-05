@@ -1151,7 +1151,7 @@ function wsl_devel_spawn {
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
                 Write-Host "parsing input '$dvlp_choice'"
-                if (!([string]::IsNullOrEmpty($dvlp_choice)) -and $dvlp_choice -ne 'screen' -and $dvlp_choice -Like '*/*:* ' -and $(docker manifest inspect $dvlp_choice)){
+                if (!([string]::IsNullOrEmpty($dvlp_choice)) -and $dvlp_choice -ne 'screen' -and( $dvlp_choice -Like 'kindtek/*:* ' -or ( $dvlp_choice -Like '*/*:* ' -and $(docker manifest inspect $dvlp_choice)))){
                         Write-Host "docker_devel_spawn '$dvlp_choice' "
                         Write-Host "$dvlp_choice is valid image"
                         docker_devel_spawn "$dvlp_choice" 
