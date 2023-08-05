@@ -1166,6 +1166,9 @@ function wsl_devel_spawn {
                         $dvlp_choice = 'screen'
                     }
                 }
+                if ($dvlp_choice -ieq 'x'){
+                    $dvlp_choice = 'exit'
+                }
                 if ($dvlp_choice -ieq 'refresh') {
                     # require_docker_online
                     # sync_repo
