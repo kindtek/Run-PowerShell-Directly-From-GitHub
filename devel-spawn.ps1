@@ -1162,7 +1162,7 @@ function wsl_devel_spawn {
                         require_docker_online;
                         docker_devel_spawn "$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' ''
                     }
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online
@@ -1182,7 +1182,7 @@ function wsl_devel_spawn {
                     } else {
                         write-host "no distro for ${wsl_choice} found"
                     }
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -imatch "x\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
@@ -1202,7 +1202,7 @@ function wsl_devel_spawn {
                     } else {
                         write-host "no distro for ${wsl_choice} found"
                     }
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -imatch "o\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
@@ -1218,7 +1218,7 @@ function wsl_devel_spawn {
                     } else {
                         write-host "no distro for ${wsl_choice} found"
                     }
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 } 
                 elseif ($dvlp_choice -match "\d"){
                     $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_choice
@@ -1277,7 +1277,7 @@ function wsl_devel_spawn {
                                 powershell -File $wsl_kernel_rollback_path                                
                             }
                             if ($kernel_choice = ''){
-                                $dvlp_choice = 'refresh'
+                                $dvlp_choice = 'screen'
                             }
                             $kernel_choice = ''
 
@@ -1289,7 +1289,7 @@ function wsl_devel_spawn {
                             wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal
                         }
                     }
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -ieq 'revert') {
                     try {
@@ -1304,7 +1304,7 @@ function wsl_devel_spawn {
                             Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
                         }
                     }
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -like 'c**') {    
                     if ($dvlp_choice -ieq 'c') {
@@ -1327,7 +1327,7 @@ function wsl_devel_spawn {
                         # one day might get the windows cdir working
                         start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
                     }
-                    # $dvlp_choice = 'refresh'
+                    # $dvlp_choice = 'screen'
 
                 }
                 elseif ($dvlp_choice -like 'k*') {
@@ -1374,25 +1374,25 @@ function wsl_devel_spawn {
                         wsl.exe --set-default $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
-                        $dvlp_choice = 'refresh'
+                        $dvlp_choice = 'screen'
                     }
                 }
                 elseif ($dvlp_choice -ceq 'restart') {
                     # wsl_docker_restart
                     wsl_docker_restart_new_win
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -ceq 'restart!') {
                     # wsl_docker_restart
                     wsl_docker_full_restart_new_win
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -ceq 'RESTART') {
                     if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                         require_docker_online_new_win
                     }
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -ceq 'rollback'){
                     $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
@@ -1400,13 +1400,13 @@ function wsl_devel_spawn {
                         powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                         require_docker_online_new_win
                     }
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 elseif ($dvlp_choice -ceq 'reboot') {
                     reboot_prompt
                     # elseif ($dvlp_choice -ieq 'v') {
                     #     wsl sh -c "cd /hel;. code"
-                    $dvlp_choice = 'refresh'
+                    $dvlp_choice = 'screen'
                 }
                 else {
                     if (!([string]::IsNullOrEmpty($dvlp_choice))){
@@ -1414,7 +1414,7 @@ function wsl_devel_spawn {
                             docker_devel_spawn "$dvlp_choice" 
                         } else {
                             Write-Host "Could not find $dvlp_choice"
-                           #  $dvlp_choice = 'refresh'
+                           #  $dvlp_choice = 'screen'
                        }
                         
                         
