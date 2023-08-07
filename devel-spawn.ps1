@@ -48,7 +48,7 @@ class dvlp_process {
                 $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
             } else {
                 # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
-                $this.proc_cmd = $proc_cmd
+                $this.proc_cmd = ". $env:KINDTEK_DEVEL_SPAWN;$proc_cmd"
             }
         }
         else {
