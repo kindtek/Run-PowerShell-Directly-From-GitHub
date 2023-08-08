@@ -1065,11 +1065,12 @@ function wsl_devel_spawn {
                         $old_wsl_default_distro = get_default_wsl_distro
                         if ($dvlp_choice -ieq 'kw' -and (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                             # start_dvlp_process_pop "$(docker_devel_spawn "kindtek/$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' 'default')" 'wait'
-                            docker_devel_spawn "kindtek/$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" '' 'default'
+                            docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
                             run_dvlp_latest_kernel_installer
                             require_docker_online_new_win
                         } else {
-                            docker_devel_spawn "kindtek/$env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
+                            write-host "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default'"
+                            docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
                             run_dvlp_latest_kernel_installer
                             require_docker_online | Out-Null
                         }
