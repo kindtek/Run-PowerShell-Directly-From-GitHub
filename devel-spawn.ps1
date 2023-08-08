@@ -1044,7 +1044,7 @@ function wsl_devel_spawn {
                                 $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
                                 New-Item -Path $profilePath -ItemType File -Force
                                 New-Item -Path $vmpPath -ItemType File -Force
-                                Add-Content $profilePath ".$vmpPath;Clear-Content $profilePath;.$env:USERPROFILE/dvlp.ps1"
+                                Add-Content $profilePath ".$vmpPath;Clear-Content $vmpPath;.$env:USERPROFILE/dvlp.ps1"
                                 Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
                                 Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed"
                             }
