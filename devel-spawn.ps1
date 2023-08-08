@@ -926,7 +926,7 @@ function docker_devel_spawn {
             if ([string]::IsNullOrEmpty($img_name_tag)){
                 powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
             } else {
-                Write-Host powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
+                # Write-Host powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
                 powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
             }
 
@@ -1069,7 +1069,6 @@ function wsl_devel_spawn {
                             run_dvlp_latest_kernel_installer
                             require_docker_online_new_win
                         } else {
-                            write-host "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default'"
                             docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
                             run_dvlp_latest_kernel_installer
                             require_docker_online | Out-Null
@@ -1188,9 +1187,7 @@ function wsl_devel_spawn {
                 }
                 elseif ($dvlp_choice -ieq 'd!') {
                     require_docker_online
-                    write-host "dvlp fullname: $env:KINDTEK_WIN_DVLP_FULLNAME"
-                    write-host "dvlp nametag: $img_name_tag"
-                    write-host "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag' 'default'"
+
                     docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
                 }
                 elseif ($dvlp_choice -imatch "d\d"){
