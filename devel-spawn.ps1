@@ -1437,7 +1437,7 @@ enter new name for $base_distro
                             }                                                                   
                             try {
                                 if (!(Test-Path -Path $old_distro_backup_path -PathType Leaf)){
-                                    $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' }
+                                    $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' } | Sort-Object
                                     $backup_distro_num = 0
                                     foreach ($backup_distro_file in $backup_distro_files) {
                                         $backup_distro_num+=1
