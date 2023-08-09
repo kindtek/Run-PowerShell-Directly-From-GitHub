@@ -1364,10 +1364,10 @@ enter new name for $base_distro"
 
                             if ([string]::IsNullOrEmpty($base_distro_id)) {
                                 $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)"
-                                $new_distro_file_path = "$($new_distro_root_path)\$filetime.tar"
+                                $new_distro_file_path = "$($new_distro_root_path)\$($new_distro_name)-$filetime.tar"
                             } else {
                                 $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)\$($base_distro_id)"
-                                $new_distro_file_path = "$($new_distro_root_path)\$($base_distro_id)-$filetime.tar"
+                                $new_distro_file_path = "$($new_distro_root_path)\$($new_distro_name)-$($base_distro_id)-$filetime.tar"
                             }
 
                             New-Item -ItemType Directory -Force -Path "$new_distro_root_path" | Out-Null
@@ -1376,8 +1376,8 @@ enter new name for $base_distro"
                                 write-host "importing $new_distro_file_path as $new_distro_name ..."
                                 if (wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path") {
                                     wsl.exe --unregister $wsl_distro_selected
-                                    $new_distro_diskman ="$($new_distro_root_path)\$(diskman.ps1)"
-                                    $new_distro_diskshrink ="$($new_distro_root_path)\$(diskshrink.ps1)"
+                                    $new_distro_diskman ="$($new_distro_root_path)\diskman.ps1"
+                                    $new_distro_diskshrink ="$($new_distro_root_path)\diskshrink.ps1"
                                     New-Item -Path $new_distro_diskman -ItemType File -Force
                                     Add-Content $new_distro_diskman $(Write-Host "select vdisk file=$new_distro_diskman\ext4.vhdx 
                                     attach vdisk readonly 
@@ -1412,8 +1412,8 @@ enter new name for $base_distro"
                                      $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro_name)\$($base_distro_id)"
                                      Remove-Item  "$base_distro_root_path\$(diskshrink.ps1)"
                                      Remove-Item  "$base_distro_root_path\$(diskman.ps1)"
-                                     Move-Item  "$base_distro_root_path\$(.container_id)" "$base_distro_root_path\$(.container_id)" -Force -ErrorAction SilentlyContinue
-                                     Move-Item  "$base_distro_root_path\$(.image_id)" "$base_distro_root_path\$(.image_id)" -Force -ErrorAction SilentlyContinue
+                                     Move-Item  "$base_distro_root_path\$(.container_id)" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue
+                                     Move-Item  "$base_distro_root_path\$(.image_id)" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue
                                 }
                             }
                         }
