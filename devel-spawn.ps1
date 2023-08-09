@@ -1480,6 +1480,8 @@ function wsl_devel_spawn {
                                     read-host "(main menu)"
 
                                 }
+                            } else {
+                                $dvlp_choice = 'screen'
                             }
                         }
                         # $dvlp_choice = 'screen'
