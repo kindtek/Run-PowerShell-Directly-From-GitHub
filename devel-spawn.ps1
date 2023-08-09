@@ -1122,8 +1122,12 @@ function wsl_devel_spawn {
                 }
                 if (($dvlp_choice -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
+                    $global:devel_spawn = $null
+                    $global:devel_tools = $null
                 } else {
                     sync_repo
+                    $global:devel_spawn = $null
+                    $global:devel_tools = $null
                 }
             } 
             do {
