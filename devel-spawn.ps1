@@ -1351,7 +1351,7 @@ function wsl_devel_spawn {
                             $base_distro = $wsl_distro_selected.Substring(0, $wsl_distro_selected.lastIndexOf('-'))
                             $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
                             $base_distro_backup_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro)\$($base_distro_id)\backups"
-                            $base_distro_backup_file_path = "$($base_distro_backup_root_path)\$($base_distro-$base_distro_id)-$((Get-Date).ToFileTime())"
+                            $base_distro_backup_file_path = "$($base_distro_backup_root_path)\$($base_distro)-$($base_distro_id)-$((Get-Date).ToFileTime())"
                             New-Item -ItemType Directory -Force -Path "$base_distro_backup_path" | Out-Null
                             write-host "backing up $wsl_distro_selected to $base_distro_backup_file_path ..."
                             wsl.exe --export $wsl_distro_selected "$base_distro_backup_file_path"
