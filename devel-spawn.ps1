@@ -1319,6 +1319,7 @@ function wsl_devel_spawn {
                                 write-host $(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')
                                 write-host $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
                                 powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
+                                $dvlp_choice = 'screen'
                             }
                         }
                         else {
@@ -1332,6 +1333,7 @@ function wsl_devel_spawn {
                                 }
                                 write-host "deleting $wsl_distro_selected distro ..."
                                 wsl --unregister $wsl_distro_selected
+                                $dvlp_choice = 'screen'
                             }
                             elseif ($wsl_action_choice -ceq 'DEFAULT') {
                                 write-host "setting $wsl_distro_selected as default distro ..."
