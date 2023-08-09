@@ -1378,12 +1378,12 @@ enter new name for $base_distro"
                                     wsl.exe --unregister $wsl_distro_selected
                                     $new_distro_diskman ="$($new_distro_root_path)\diskman.ps1"
                                     $new_distro_diskshrink ="$($new_distro_root_path)\diskshrink.ps1"
-                                    New-Item -Path $new_distro_diskman -ItemType File -Force
+                                    New-Item -Path $new_distro_diskman -ItemType File -Force | Out-Null
                                     Add-Content $new_distro_diskman $(Write-Host "select vdisk file=$new_distro_diskman\ext4.vhdx 
                                     attach vdisk readonly 
                                     compact vdisk 
-                                    detach vdisk ")
-                                    New-Item -Path $new_distro_diskshrink -ItemType File -Force
+                                    detach vdisk ") | Out-Null
+                                    New-Item -Path $new_distro_diskshrink -ItemType File -Force | Out-Null
                                     Add-Content $new_distro_diskshrink $(Write-Host "try { 
                                         # Self-elevate the privileges 
                                         if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) { 
@@ -1408,12 +1408,12 @@ enter new name for $base_distro"
                                      start-service wsl*; 
                                      start-service docker*; 
                                      write-host 'done.'; 
-                                     read-host ")
+                                     read-host ") | Out-Null
                                      $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro_name)\$($base_distro_id)"
-                                     Remove-Item  "$base_distro_root_path\.diskshrink.ps1" -Force -ErrorAction SilentlyContinue
-                                     Remove-Item  "$base_distro_root_path\.diskman.ps1" -Force -ErrorAction SilentlyContinue
-                                     Move-Item  "$base_distro_root_path\.container_id" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue
-                                     Move-Item  "$base_distro_root_path\.image_id" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue
+                                     Remove-Item  "$base_distro_root_path\.diskshrink.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
+                                     Remove-Item  "$base_distro_root_path\.diskman.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
+                                     Move-Item  "$base_distro_root_path\.container_id" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue | Out-Null
+                                     Move-Item  "$base_distro_root_path\.image_id" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue | Out-Null
                                 }
                             }
                         }
