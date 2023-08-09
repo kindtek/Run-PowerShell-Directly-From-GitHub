@@ -1391,28 +1391,28 @@ enter new name for $base_distro"
                                                 Exit 
                                             } 
                                         } 
-                                     }  catch {} 
-                                     docker system df 
-                                     docker builder prune -af --volumes 
-                                     docker system prune -af --volumes 
-                                     stop-service -name docker* -force;  
-                                     # wsl.exe -- sudo shutdown -h now; 
-                                     # wsl.exe -- sudo shutdown -r 0; 
-                                     wsl.exe --shutdown; 
-                                     stop-service -name wsl* -force -ErrorAction SilentlyContinue; 
-                                     stop-process -name docker* -force -ErrorAction SilentlyContinue; 
-                                     stop-process -name wsl* -force -ErrorAction SilentlyContinue; 
-                                     Invoke-Command -ScriptBlock { diskpart /s $new_distro_diskman } -ArgumentList '-Wait -Verbose'; 
-                                     start-service wsl*; 
-                                     start-service docker*; 
-                                     write-host 'done.'; 
-                                     read-host " | Out-Null
-                                     $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro_name)\$($base_distro_id)"
-                                     Remove-Item  "$base_distro_root_path\.diskshrink.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
-                                     Remove-Item  "$base_distro_root_path\.diskman.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
-                                     Move-Item  "$base_distro_root_path\.container_id" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue | Out-Null
-                                     Move-Item  "$base_distro_root_path\.image_id" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue | Out-Null
-                                     Move-Item  "$base_distro_root_path\backups" "$base_distro_root_path\backups" -Force -ErrorAction SilentlyContinue | Out-Null
+                                    }  catch {} 
+                                    docker system df 
+                                    docker builder prune -af --volumes 
+                                    docker system prune -af --volumes 
+                                    stop-service -name docker* -force;  
+                                    # wsl.exe -- sudo shutdown -h now; 
+                                    # wsl.exe -- sudo shutdown -r 0; 
+                                    wsl.exe --shutdown; 
+                                    stop-service -name wsl* -force -ErrorAction SilentlyContinue; 
+                                    stop-process -name docker* -force -ErrorAction SilentlyContinue; 
+                                    stop-process -name wsl* -force -ErrorAction SilentlyContinue; 
+                                    Invoke-Command -ScriptBlock { diskpart /s $new_distro_diskman } -ArgumentList '-Wait -Verbose'; 
+                                    start-service wsl*; 
+                                    start-service docker*; 
+                                    write-host 'done.'; 
+                                    read-host " | Out-Null
+                                    $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro_name)\$($base_distro_id)"
+                                    Remove-Item  "$base_distro_root_path\.diskshrink.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
+                                    Remove-Item  "$base_distro_root_path\.diskman.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
+                                    Move-Item  "$base_distro_root_path\.container_id" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue | Out-Null
+                                    Move-Item  "$base_distro_root_path\.image_id" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue | Out-Null
+                                    Move-Item  "$base_distro_root_path\backups" "$base_distro_root_path\backups" -Force -ErrorAction SilentlyContinue | Out-Null
 
                                 }
                             }
@@ -1430,7 +1430,7 @@ enter new name for $base_distro"
                             }
                             [int]$restore_backup_choice = read-host "enter the number of a backup to restore"
                             for ($i = 0; $i -le $backup_distro_files.length - 1; $i++) { 
-                                if ($restore_backup_choice = $i){
+                                if ($restore_backup_choice = $i) {
                                     wsl.exe --import "$new_distro_name-${filetime}-${base_distro_id}" "$($backup_distro_files[$i].name)" "$new_distro_file_path"
                                 }
                             }
