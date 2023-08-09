@@ -1410,10 +1410,10 @@ enter new name for $base_distro"
                                      write-host 'done.'; 
                                      read-host ")
                                      $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro_name)\$($base_distro_id)"
-                                     Remove-Item  "$base_distro_root_path\$(diskshrink.ps1)"
-                                     Remove-Item  "$base_distro_root_path\$(diskman.ps1)"
-                                     Move-Item  "$base_distro_root_path\$(.container_id)" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue
-                                     Move-Item  "$base_distro_root_path\$(.image_id)" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue
+                                     Remove-Item  "$base_distro_root_path\diskshrink.ps1"
+                                     Remove-Item  "$base_distro_root_path\diskman.ps1"
+                                     Move-Item  "$base_distro_root_path\.container_id" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue
+                                     Move-Item  "$base_distro_root_path\.image_id" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue
                                 }
                             }
                         }
