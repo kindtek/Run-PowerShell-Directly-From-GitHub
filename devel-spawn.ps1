@@ -1348,7 +1348,7 @@ function wsl_devel_spawn {
 
                             }
                         } elseif ($wsl_action_choice -ieq 'BACKUP') {
-                            $base_distro = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-'))
+                            $base_distro = $wsl_distro_selected.Substring(0, $wsl_distro_selected.lastIndexOf('-'))
                             $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
                             $base_distro_backup_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro)\$($base_distro_id)\backups"
                             $base_distro_backup_file_path = "$($base_distro_backup_root_path)\$($base_distro-$base_distro_id)-$((Get-Date).ToFileTime())"
@@ -1357,7 +1357,7 @@ function wsl_devel_spawn {
                             wsl.exe --export $wsl_distro_selected "$base_distro_backup_file_path"
                         } elseif ($wsl_action_choice -ieq 'RENAME') {
                             $filetime = "$((Get-Date).ToFileTime())"
-                            $base_distro = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-'))
+                            $base_distro = $wsl_distro_selected.Substring(0, $wsl_distro_selected.lastIndexOf('-'))
                             $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
                             $new_distro_name = read-host "
 enter new name for $base_distro"
