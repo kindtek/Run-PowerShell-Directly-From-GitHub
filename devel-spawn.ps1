@@ -1138,7 +1138,7 @@ function wsl_devel_spawn {
                 else {
                     $wsl_distro_revert_options = ''
                 }
-                if (get_default_wsl_distro -ne $env:KINDTEK_FAILSAFE_WSL_DISTRO){
+                if (get_default_wsl_distro -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO"){
                     $wsl_distro_revert_options = $wsl_distro_revert_options + "- [revert] wsl to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`t"
                 }
                 write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
