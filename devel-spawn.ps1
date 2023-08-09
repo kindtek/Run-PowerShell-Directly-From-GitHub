@@ -1317,7 +1317,7 @@ function wsl_devel_spawn {
                                 write-host $kernel_choices[$i]
                             }
                             $kernel_choice = read-host "
-(exit)"
+(main menu)"
                             if ($kernel_choice  = 'install'){
                                 powershell -File $wsl_kernel_install_path                               
                             }
@@ -1360,7 +1360,8 @@ function wsl_devel_spawn {
                             $base_distro = $wsl_distro_selected.Substring(0, $wsl_distro_selected.lastIndexOf('-'))
                             $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
                             $new_distro_name = read-host "
-enter new name for $base_distro"
+enter new name for $base_distro
+(main menu)"
 
                             if ([string]::IsNullOrEmpty($base_distro_id)) {
                                 $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)"
@@ -1435,32 +1436,37 @@ enter new name for $base_distro"
                                 # $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro)\$($base_distro_id)"
                             }                                                                   
                             try {
-                                $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' }
-                                $backup_distro_num = 0
-                                foreach ($backup_distro_file in $backup_distro_files) {
-                                    $backup_distro_num+=1
-                                    write-host "`r`n`t$backup_distro_num)`t$($backup_distro_file.name)"
-                                }
-                                [int]$restore_backup_choice = read-host "`r`n`tenter number of a distro backup to restore"
-                                $restore_backup_choice = $restore_backup_choice-=1
-                                foreach ($backup_distro_file in $backup_distro_files) {
-                                    # write-host "restore choice: $([int]$restore_backup_choice + 1)"
-                                    write-host "backup chosen for recovery: $($backup_distro_files[$restore_backup_choice])"
-                                    # write-host "$($backup_distro_files[$restore_backup_choice]) -eq $backup_distro_file"
-                                    if ("$($backup_distro_files[$restore_backup_choice])" -eq "${backup_distro_file}") {
-                                        $new_distro_file_path = "$($new_distro_root_path)\backups\$($backup_distro_file.name)"
-                                        write-host "restoring '$($backup_distro_file.name)' to $new_distro_file_path"
-                                        write-host "wsl.exe --import '$new_distro_file_name' '$new_distro_root_path' '$new_distro_file_path'"
-                                        New-Item -ItemType Directory -Force -Path "$($new_distro_root_path)\backups" | Out-Null
-                                        Copy-Item "$old_distro_backup_path\$($backup_distro_file.name)" "$new_distro_file_path" -Verbose
-                                        wsl.exe --import "$new_distro_file_name" "$new_distro_root_path" "$new_distro_file_path"
+                                if (!(Test-Path -Path $old_distro_backup_path -PathType Leaf)){
+                                    $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' }
+                                    $backup_distro_num = 0
+                                    foreach ($backup_distro_file in $backup_distro_files) {
+                                        $backup_distro_num+=1
+                                        write-host "`r`n`t$backup_distro_num)`t$($backup_distro_file.name)"
                                     }
-                                }
+                                    [int]$restore_backup_choice = read-host "`r`n`tenter number of a distro backup to restore
+`t(main menu)"
+                                    $restore_backup_choice = $restore_backup_choice-=1
+                                    foreach ($backup_distro_file in $backup_distro_files) {
+                                        # write-host "restore choice: $([int]$restore_backup_choice + 1)"
+                                        write-host "backup chosen for recovery: $($backup_distro_files[$restore_backup_choice])"
+                                        # write-host "$($backup_distro_files[$restore_backup_choice]) -eq $backup_distro_file"
+                                        if ("$($backup_distro_files[$restore_backup_choice])" -eq "${backup_distro_file}") {
+                                            $new_distro_file_path = "$($new_distro_root_path)\backups\$($backup_distro_file.name)"
+                                            write-host "restoring '$($backup_distro_file.name)' to $new_distro_file_path"
+                                            write-host "wsl.exe --import '$new_distro_file_name' '$new_distro_root_path' '$new_distro_file_path'"
+                                            New-Item -ItemType Directory -Force -Path "$($new_distro_root_path)\backups" | Out-Null
+                                            Copy-Item "$old_distro_backup_path\$($backup_distro_file.name)" "$new_distro_file_path" -Verbose
+                                            wsl.exe --import "$new_distro_file_name" "$new_distro_root_path" "$new_distro_file_path"
+                                        }
+                                    }
                                 } else {
-                                write-host "no backups found for $wsl_distro_selected"
-                            }
+                                    write-host "no backups found for $wsl_distro_selected"
+                                    read-host "(main menu)"
+                                }
                             } catch {
                                 write-host "there was a problem retreiving backups found for $wsl_distro_selected"
+                                read-host "(main menu)"
+
                             }
                         }
                     }
