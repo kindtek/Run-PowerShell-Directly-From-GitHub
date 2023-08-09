@@ -1437,26 +1437,30 @@ enter new name for $base_distro"
                             # write-host "old_distro_backup_path: $old_distro_backup_path"   
                             # write-host "$backup_distro_files = Get-ChildItem -Path '$old_distro_backup_path' -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' }"  
                             # write-host "array.length: $($backup_distro_files.length)"                                                            
-                            $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' }
-                            $backup_distro_num = 0
-                            foreach ($backup_distro_file in $backup_distro_files) {
-                                $backup_distro_num+=1
-                                write-host "`r`n`t$backup_distro_num)`t$($backup_distro_file.name)"
-                            }
-                            [int]$restore_backup_choice = read-host "`r`n`tenter number of a distro backup to restore"
-                            $restore_backup_choice = $restore_backup_choice-=1
-                            foreach ($backup_distro_file in $backup_distro_files) {
-                                # write-host "restore choice: $([int]$restore_backup_choice + 1)"
-                                # write-host "distro chosen: $($backup_distro_files[$restore_backup_choice])"
-                                # write-host "$($backup_distro_files[$restore_backup_choice]) -eq $backup_distro_file"
-                                if ("$($backup_distro_files[$restore_backup_choice])" -eq "${backup_distro_file}") {
-                                    $new_distro_file_path = "$($new_distro_root_path)\backups\$($backup_distro_file.name)"
-                                    write-host "restoring '$($backup_distro_file.name)'"
-                                    write-host "wsl.exe --import '$new_distro_file_name' '$new_distro_root_path' '$new_distro_file_path'"
-                                    New-Item -ItemType Directory -Force -Path "$($new_distro_root_path)\backups" | Out-Null
-                                    Copy-Item "$old_distro_backup_path\$($backup_distro_file.name)" "$new_distro_file_path" -Verbose
-                                    wsl.exe --import "$new_distro_file_name" "$new_distro_root_path" "$new_distro_file_path"
+                            try {
+                                $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' }
+                                $backup_distro_num = 0
+                                foreach ($backup_distro_file in $backup_distro_files) {
+                                    $backup_distro_num+=1
+                                    write-host "`r`n`t$backup_distro_num)`t$($backup_distro_file.name)"
                                 }
+                                [int]$restore_backup_choice = read-host "`r`n`tenter number of a distro backup to restore"
+                                $restore_backup_choice = $restore_backup_choice-=1
+                                foreach ($backup_distro_file in $backup_distro_files) {
+                                    # write-host "restore choice: $([int]$restore_backup_choice + 1)"
+                                    # write-host "distro chosen: $($backup_distro_files[$restore_backup_choice])"
+                                    # write-host "$($backup_distro_files[$restore_backup_choice]) -eq $backup_distro_file"
+                                    if ("$($backup_distro_files[$restore_backup_choice])" -eq "${backup_distro_file}") {
+                                        $new_distro_file_path = "$($new_distro_root_path)\backups\$($backup_distro_file.name)"
+                                        write-host "restoring '$($backup_distro_file.name)'"
+                                        write-host "wsl.exe --import '$new_distro_file_name' '$new_distro_root_path' '$new_distro_file_path'"
+                                        New-Item -ItemType Directory -Force -Path "$($new_distro_root_path)\backups" | Out-Null
+                                        Copy-Item "$old_distro_backup_path\$($backup_distro_file.name)" "$new_distro_file_path" -Verbose
+                                        wsl.exe --import "$new_distro_file_name" "$new_distro_root_path" "$new_distro_file_path"
+                                    }
+                                }
+                            } catch {
+                                write-host "no backups found for $wsl_distro_selected"
                             }
                         }
                     }
