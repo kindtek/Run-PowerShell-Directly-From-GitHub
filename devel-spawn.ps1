@@ -1374,7 +1374,8 @@ function wsl_devel_spawn {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
                     if ($dvlp_choice -ieq 'tl' ) {
-                        start_dvlp_process_pop "wsl.exe cd [regex]::escape(`$HOME) ``&``& bash " 'wait' 'noexit'
+                        home_escaped = "[regex]::escape(`$HOME)"
+                        start_dvlp_process_pop "wsl.exe cd $home_escaped ``&``& bash " 'wait' 'noexit'
                     }
                     elseif ($dvlp_choice -ieq 'tdl' ) {
                         # wsl.exe -d devels-playground-kali-git -- cd `$HOME/.local/bin `&`& alias cdir`=`'source cdir.sh`' `&`& alias grep=`'grep --color=auto`' `&`& ls -al `&`& cdir_cli
