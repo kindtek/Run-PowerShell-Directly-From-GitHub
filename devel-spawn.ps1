@@ -1239,8 +1239,8 @@ function wsl_devel_spawn {
                         $wsl_distro_choice_confirm = read-host "
 (OPEN $wsl_distro_choice terminal)"
                         if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
-                            
-                            wsl.exe -d $wsl_distro_choice cd `$HOME `&`& bash
+                            start_dvlp_process_pop "wsl.exe -d $wsl_distro_choice cd ```$HOME ```&```& bash " 'wait' 'noexit'
+                            # wsl.exe -d $wsl_distro_choice cd `$HOME `&`& bash
                         }
                     } else {
                         write-host "no distro for ${wsl_choice} found"
