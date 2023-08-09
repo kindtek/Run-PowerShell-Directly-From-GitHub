@@ -1613,7 +1613,7 @@ function wsl_devel_spawn {
                 } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
             } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
         }
-    } while ($dvlp_choice -ieq 'kw' -Or $dvlp_choice -ieq 'refresh' -Or $dvlp_choice -ieq 'screen' -Or "$confirmation" -ieq "")
+    } while ($dvlp_choice -ieq 'kw' -Or $dvlp_choice -ieq 'refresh' -Or $dvlp_choice -ieq 'screen' -Or $dvlp_choice -ieq 'exit' -Or "$confirmation" -ieq "")
     
     
     Write-Host "`r`nGoodbye!`r`n"
