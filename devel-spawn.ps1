@@ -1227,6 +1227,7 @@ function wsl_devel_spawn {
                         require_docker_online
 
                         docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
+                        $dvlp_choice = 'screen'
                     }
                     elseif ($dvlp_choice -imatch "d\d") {
                         [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
