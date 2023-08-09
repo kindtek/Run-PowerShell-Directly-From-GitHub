@@ -1049,6 +1049,7 @@ function wsl_devel_spawn {
         
                 install_winget $env:KINDTEK_WIN_GIT_PATH
                 install_git
+                    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
                 if ((Test-Path -Path "$($env:KINDTEK_DEVEL_TOOLS)" -PathType Leaf)) {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
