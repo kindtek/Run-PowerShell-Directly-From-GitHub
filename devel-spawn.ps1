@@ -1371,6 +1371,7 @@ enter new name for $base_distro"
                             }
 
                             New-Item -ItemType Directory -Force -Path "$new_distro_root_path" | Out-Null
+                            New-Item -ItemType Directory -Force -Path "$new_distro_root_path\backups" | Out-Null
                             write-host "backing up $wsl_distro_selected to $new_distro_file_path ..."
                             if (!([string]::IsNullOrEmpty($new_distro_name)) -and $(wsl.exe --export "$wsl_distro_selected" "$new_distro_file_path")) {
                                 write-host "importing $new_distro_file_path as $new_distro_name ..."
@@ -1414,6 +1415,8 @@ enter new name for $base_distro"
                                      Remove-Item  "$base_distro_root_path\.diskman.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
                                      Move-Item  "$base_distro_root_path\.container_id" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue | Out-Null
                                      Move-Item  "$base_distro_root_path\.image_id" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue | Out-Null
+                                     Move-Item  "$base_distro_root_path\backups" "$base_distro_root_path\backups" -Force -ErrorAction SilentlyContinue | Out-Null
+
                                 }
                             }
                         }
