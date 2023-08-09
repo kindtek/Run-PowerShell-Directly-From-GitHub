@@ -1357,21 +1357,18 @@ function wsl_devel_spawn {
                             wsl.exe --export $wsl_distro_selected "$base_distro_backup_file_path"
                         } elseif ($wsl_action_choice -ceq 'RENAME') {
                             $filetime = "$((Get-Date).ToFileTime())"
-                            $new_distro_name = read-host "
-enter new name for $wsl_distro_selected"
                             $base_distro = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-'))
                             $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
-                            $base_distro_backup_root_path = "$env:USERPROFILE\kache\docker2wsl\$base_distro\$base_distro_id\backups"
-                            $base_distro_backup_file_path = "$base_distro_backup_root_path\$base_distro-$base_distro_id-$filetime.tar"
+                            $new_distro_name = read-host "
+enter new name for $new_distro_name"
                             $new_distro_root_path = "$env:USERPROFILE\kache\docker2wsl\$new_distro_name\$base_distro_id"
                             $new_distro_file_path = "$base_distro_backup_root_path\$base_distro_id-$filetime.tar"
 
-                            New-Item -ItemType Directory -Force -Path "$base_distro_backup_root_path" | Out-Null
                             New-Item -ItemType Directory -Force -Path "$new_distro_root_path" | Out-Null
                             write-host "backing up $wsl_distro_selected to $new_distro_file_path ..."
-                            if (wsl.exe --export "$wsl_distro_selected" "$base_distro_backup_file_path") {
+                            if (!([string]::IsNullOrEmpty($new_distro_name)) && $(wsl.exe --export "$wsl_distro_selected" "$new_distro_file_path")) {
                                 write-host "importing $base_distro_backup_file_path as $new_distro_name ..."
-                                wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$base_distro_backup_file_path"
+                                wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path"
                             }
                         }
                     }
