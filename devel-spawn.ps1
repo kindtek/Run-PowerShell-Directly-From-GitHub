@@ -1416,6 +1416,24 @@ enter new name for $base_distro"
 
                                 }
                             }
+                        } elseif ($wsl_action_choice -ieq 'RESTORE') {
+                            $filetime = "$((Get-Date).ToFileTime())"
+                            $base_distro = $wsl_distro_selected.Substring(0, $wsl_distro_selected.lastIndexOf('-'))
+                            $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
+                            $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro_name)\$($base_distro_id)"
+                            $base_distro_backup_path = "$base_distro_root_path\backups"
+#                             $new_distro_name = read-host "
+# enter new name for $base_distro"
+                            $backup_distro_files = Get-ChildItem -Path "$base_distro_backup_path" –File | where-object name -match "^.*$([regex]::escape('.tar'))$"
+                            for ($i = 0; $i -le $backup_distro_files.length - 1; $i++) {
+                                write-host "`t$($i+1))`t$backup_distro_files[$i]"
+                            }
+                            [int]$restore_backup_choice = read-host "enter the number of a backup to restore"
+                            for ($i = 0; $i -le $backup_distro_files.length - 1; $i++) { 
+                                if ($restore_backup_choice = $i){
+                                    wsl.exe --import "$new_distro_name-${filetime}-${base_distro_id}" "$($backup_distro_files[$i].name)" "$new_distro_file_path"
+                                }
+                            }
                         }
                     }
                     $dvlp_choice = 'screen'
