@@ -1439,9 +1439,10 @@ enter new name for $base_distro
                                 if (!(Test-Path -Path $old_distro_backup_path -PathType Leaf)){
                                     $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' } | Sort-Object
                                     $backup_distro_num = 0
+                                    write-host "`r`n"
                                     foreach ($backup_distro_file in $backup_distro_files) {
                                         $backup_distro_num+=1
-                                        write-host "`r`n`t$backup_distro_num)`t$($backup_distro_file.name)"
+                                        write-host "`t$backup_distro_num)`t$($backup_distro_file.name)"
                                     }
                                     [int]$restore_backup_choice = read-host "`r`n`tenter number of a distro backup to restore
 `t(main menu)"
