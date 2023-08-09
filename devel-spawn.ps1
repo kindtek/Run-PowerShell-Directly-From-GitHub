@@ -1444,20 +1444,23 @@ enter new name for $base_distro
                                         $backup_distro_num+=1
                                         write-host "`t$backup_distro_num)`t$($backup_distro_file.name)"
                                     }
-                                    [int]$restore_backup_choice = read-host "`r`n`tenter number of a distro backup to restore
+                                    [string]$restore_backup_choice_string = read-host "`r`n`tenter number of a distro backup to restore
 `t(main menu)"
-                                    $restore_backup_choice = $restore_backup_choice-=1
-                                    foreach ($backup_distro_file in $backup_distro_files) {
-                                        # write-host "restore choice: $([int]$restore_backup_choice + 1)"
-                                        write-host "backup chosen for recovery: $($backup_distro_files[$restore_backup_choice])"
-                                        # write-host "$($backup_distro_files[$restore_backup_choice]) -eq $backup_distro_file"
-                                        if ("$($backup_distro_files[$restore_backup_choice])" -eq "${backup_distro_file}") {
-                                            $new_distro_file_path = "$($new_distro_root_path)\backups\$($backup_distro_file.name)"
-                                            write-host "restoring '$($backup_distro_file.name)' to $new_distro_file_path"
-                                            write-host "wsl.exe --import '$new_distro_file_name' '$new_distro_root_path' '$new_distro_file_path'"
-                                            New-Item -ItemType Directory -Force -Path "$($new_distro_root_path)\backups" | Out-Null
-                                            Copy-Item "$old_distro_backup_path\$($backup_distro_file.name)" "$new_distro_file_path" -Verbose
-                                            wsl.exe --import "$new_distro_file_name" "$new_distro_root_path" "$new_distro_file_path"
+                                    if (!([string]::IsNullOrEmpty($restore_backup_choice_string))){
+                                        [int]$restore_backup_choice_int = [string]$restore_backup_choice_string
+                                        $restore_backup_choice_int = $restore_backup_choice_int-=1
+                                        foreach ($backup_distro_file in $backup_distro_files) {
+                                            # write-host "restore choice: $([int]$restore_backup_choice_int + 1)"
+                                            write-host "backup chosen for recovery: $($backup_distro_files[$restore_backup_choice_int])"
+                                            # write-host "$($backup_distro_files[$restore_backup_choice_int]) -eq $backup_distro_file"
+                                            if ("$($backup_distro_files[$restore_backup_choice_int])" -eq "${backup_distro_file}") {
+                                                $new_distro_file_path = "$($new_distro_root_path)\backups\$($backup_distro_file.name)"
+                                                write-host "restoring '$($backup_distro_file.name)' to $new_distro_file_path"
+                                                write-host "wsl.exe --import '$new_distro_file_name' '$new_distro_root_path' '$new_distro_file_path'"
+                                                New-Item -ItemType Directory -Force -Path "$($new_distro_root_path)\backups" | Out-Null
+                                                Copy-Item "$old_distro_backup_path\$($backup_distro_file.name)" "$new_distro_file_path" -Verbose
+                                                wsl.exe --import "$new_distro_file_name" "$new_distro_root_path" "$new_distro_file_path"
+                                            }
                                         }
                                     }
                                 } else {
