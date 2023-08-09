@@ -1366,11 +1366,10 @@ enter new name for $base_distro"
                                 $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)"
                                 $new_distro_file_path = "$($new_distro_root_path)\$($new_distro_name)-$filetime.tar"
                             } else {
-                                $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)\$($base_distro_id)"
+                                $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)\$($base_distro_id)\backups"
                                 $new_distro_file_path = "$($new_distro_root_path)\$($new_distro_name)-$($base_distro_id)-$filetime.tar"
                             }
 
-                            New-Item -ItemType Directory -Force -Path "$new_distro_root_path" | Out-Null
                             New-Item -ItemType Directory -Force -Path "$new_distro_root_path\backups" | Out-Null
                             write-host "backing up $wsl_distro_selected to $new_distro_file_path ..."
                             if (!([string]::IsNullOrEmpty($new_distro_name)) -and $(wsl.exe --export "$wsl_distro_selected" "$new_distro_file_path")) {
