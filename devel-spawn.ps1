@@ -326,13 +326,13 @@ function set_dvlp_env {
     try {
         if (!([string]::IsNullOrEmpty($dvlp_env_var))) {
             # Write-Host "setting $dvlp_env_var to $dvlp_env_val"
-            if (([string]::IsNullOrEmpty($set_machine_env_flag)) -and ([string]::IsNullOrEmpty($set_both_env_flag))){
+            if (([string]::IsNullOrEmpty($set_machine_env_flag)) -And ([string]::IsNullOrEmpty($set_both_env_flag))){
                 # write-host "setting local env $dvlp_env_var to $dvlp_env_val"
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
-            } elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -and ($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val)){
+            } elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val)){
                 # write-host "setting machine env $dvlp_env_var to $dvlp_env_val"
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
-            } elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -and (($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val) -or ($(get_dvlp_env "$dvlp_env_var") -ne $dvlp_env_val))){
+            } elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val) -Or ($(get_dvlp_env "$dvlp_env_var") -ne $dvlp_env_val))){
                 # write-host "setting local and machine env $dvlp_env_var to $dvlp_env_val"
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
                 [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
@@ -458,19 +458,19 @@ function set_dvlp_envs {
     $git_path = "$git_parent_path/$repo_dir_name"
     set_dvlp_env '_AGL' 'agl'
     set_dvlp_env '_AGL' 'agl' 'machine'
-    if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
+    if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -Or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
         write-host "setting global environment variables ..."
         start-sleep 1
     }
     try {
-        if ([string]::IsNullOrEmpty($DEBUG_MODE) -or $DEBUG_MODE -eq '0' -or $DEBUG_MODE -eq 0) {
+        if ([string]::IsNullOrEmpty($DEBUG_MODE) -Or $DEBUG_MODE -eq '0' -Or $DEBUG_MODE -eq 0) {
             # Set-PSDebug -Trace 0;
             set_dvlp_env 'KINDTEK_DEBUG_MODE' '0' 'machine' 'both'
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Hidden;
             set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
             set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' " " 'machine' 'both'
         }
-        elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -or $DEBUG_MODE -ne '0' -or $DEBUG_MODE -eq 0) {
+        elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -Or $DEBUG_MODE -ne '0' -Or $DEBUG_MODE -eq 0) {
             Set-PSDebug -Trace 2;
             set_dvlp_env 'KINDTEK_DEBUG_MODE' '1' 'machine' 'both'
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
@@ -478,7 +478,7 @@ function set_dvlp_envs {
             set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' "-noexit" 'machine' 'both'
             write-host "debug = true"
         }
-        if ($DEBUG_MODE -ne '0' -and $DEBUG_MODE -ne 0 -and !([string]::IsNullOrEmpty($DEBUG_MODE))) {        
+        if ($DEBUG_MODE -ne '0' -And $DEBUG_MODE -ne 0 -And !([string]::IsNullOrEmpty($DEBUG_MODE))) {        
             Write-Host "debug mode $(get_dvlp_env 'KINDTEK_DEBUG_MODE', 'machine')"
             # Write-Host "$cmd_str_dbg"
         }
@@ -542,12 +542,12 @@ function set_dvlp_envs {
             set_dvlp_env "pathext" "$(get_dvlp_env 'pathext' 'machine');.ps1" "machine" 
             # [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new("$cmd_str_machine")
         }
-        if ($local_paths -split ";" -notcontains "$envKINDTEK_DEVEL_SPAWN" -or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
+        if ($local_paths -split ";" -notcontains "$envKINDTEK_DEVEL_SPAWN" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
             # $local_paths += ";$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
             # $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
             set_dvlp_env "path" "$(get_dvlp_env 'path');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
         }
-        if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
+        if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
             # $machine_paths += ";$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
             # $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', '$([System.EnvironmentVariableTarget]::Machine)')"
             set_dvlp_env "path" "$(get_dvlp_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
@@ -593,31 +593,31 @@ function set_dvlp_envs {
     #     [dvlp_process_embed]$dvlp_proc_machine_envs = [dvlp_process_embed]::new("$cmd_str_machine", 'wait')
     # }
     # while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_WSL_DISTRO) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_NAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_FULLNAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_BRANCH) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_PATH) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_NAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_FULLNAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_PATH) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_NAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_FULLNAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_PATH) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_NAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_FULLNAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_PATH) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_NAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_FULLNAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_PATH) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_NAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_FULLNAME) `
-    #         -or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_PATH) ) {
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_WSL_DISTRO) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_NAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_FULLNAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_BRANCH) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_PATH) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_NAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_FULLNAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_PATH) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_NAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_FULLNAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_PATH) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_NAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_FULLNAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_PATH) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_NAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_FULLNAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_PATH) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_NAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_FULLNAME) `
+    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_PATH) ) {
     #     echo 'waiting for environment variables to update'
     #     start-sleep 5
 
@@ -659,7 +659,7 @@ function test_default_wsl_distro {
 
     if ( test_wsl_distro $distro_name){
         Write-Host "testing wsl default distro $distro_name"
-        if (get_default_wsl_distro -eq $distro_name -and require_docker_online){
+        if (get_default_wsl_distro -eq $distro_name -And require_docker_online){
             # Write-Host "$distro_name is valid default distro"
             return $true
         } else {
@@ -671,7 +671,7 @@ function test_default_wsl_distro {
 }
 
 function get_default_wsl_distro {
-    $default_wsl_distro = wsl.exe --list | Where-Object { $_ -and $_ -ne '' -and $_ -match '(.*)\(' }
+    $default_wsl_distro = wsl.exe --list | Where-Object { $_ -And $_ -ne '' -And $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
     return $default_wsl_distro
 }
@@ -992,8 +992,8 @@ function wsl_devel_spawn {
                 }
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
-            # if (($confirmation -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -or (!([string]::IsNullOrEmpty($img_name_tag))))) {
-            if (($dvlp_choice -eq 'kw') -or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
+            # if (($confirmation -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
+            if (($dvlp_choice -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
                 # write-host "confirmation: $confirmation"
                 # write-host "test path $($env:KINDTEK_WIN_DVLW_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
@@ -1063,7 +1063,7 @@ function wsl_devel_spawn {
                         $host.UI.RawUI.BackgroundColor = "Black"
 
                         $old_wsl_default_distro = get_default_wsl_distro
-                        if ($dvlp_choice -ieq 'kw' -and (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
+                        if ($dvlp_choice -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
                             # start_dvlp_process_pop "$(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default')" 'wait'
                             docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
                             run_dvlp_latest_kernel_installer
@@ -1075,7 +1075,7 @@ function wsl_devel_spawn {
                         }
                         $new_wsl_default_distro = get_default_wsl_distro
                         
-                        if (($new_wsl_default_distro -ne $old_wsl_default_distro) -and (is_docker_desktop_online -eq $false)) {
+                        if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And (is_docker_desktop_online -eq $false)) {
                             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                             # Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                             # try {
@@ -1133,10 +1133,10 @@ function wsl_devel_spawn {
             do {
                 $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
                 $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
-                if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -and (!([string]::IsNullOrEmpty($img_name_tag)))){
+                if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag)))){
                     $docker_devel_spawn_noninteractive = "`r`n`t  (use [d!] to import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
                 }
-                if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -and !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -and "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -and "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
+                if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -And !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -And "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -And "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
                     $wsl_distro_revert_options = "- [r]evert wsl to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
                 }
                 else {
@@ -1163,17 +1163,17 @@ function wsl_devel_spawn {
                             Write-Host "`r`n$dvlp_choice is a valid kindtek docker image"
                             docker_devel_spawn "$dvlp_choice"
                             $dvlp_choice = 'screen'
-                        } elseif ( $dvlp_choice -Like '*/*:*' -and $(docker manifest inspect $dvlp_choice)) {
+                        } elseif ( $dvlp_choice -Like '*/*:*' -And $(docker manifest inspect $dvlp_choice)) {
                             Write-Host "`r`n$dvlp_choice is a valid docker hub image"
                             docker_devel_spawn "$dvlp_choice"
                             $dvlp_choice = 'screen'
-                        } elseif ( $dvlp_choice -Like '*:*' -or $dvlp_choice -Like '*/*'  -and $(docker manifest inspect $dvlp_choice) ) {
+                        } elseif ( $dvlp_choice -Like '*:*' -Or $dvlp_choice -Like '*/*'  -And $(docker manifest inspect $dvlp_choice) ) {
                             Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
                             docker_devel_spawn "$dvlp_choice"
                             $dvlp_choice = 'screen'
                         }
                     }
-                    if ($dvlp_choice -ieq 'x' -or $dvlp_choice -ieq 'exit' -or $dvlp_choice -ieq ''){
+                    if ($dvlp_choice -ieq 'x' -Or $dvlp_choice -ieq 'exit' -Or $dvlp_choice -ieq ''){
                         $dvlp_choice = 'exit'
                     }
                     if ($dvlp_choice -ieq 'refresh') {
@@ -1339,10 +1339,10 @@ function wsl_devel_spawn {
                             } elseif ($wsl_action_choice -ceq 'SETUP') {
                                 write-host "setting up $wsl_distro_selected ..."
                                 wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./setup.sh "$env:USERNAME"
-                            }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'TERMINAL' ){
+                            }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ){
                                 write-host "use 'exit' to exit terminal"
                                 wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash 
-                            }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'GUI' ){
+                            }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ){
                                 write-host "use 'exit' to exit terminal"
                                 try {
                                     wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
@@ -1377,7 +1377,7 @@ function wsl_devel_spawn {
 
                                 New-Item -ItemType Directory -Force -Path "$new_distro_root_path\backups" | Out-Null
                                 write-host "backing up $wsl_distro_selected to $new_distro_file_path ..."
-                                if (!([string]::IsNullOrEmpty($new_distro_name)) -and $(wsl.exe --export "$wsl_distro_selected" "$new_distro_file_path")) {
+                                if (!([string]::IsNullOrEmpty($new_distro_name)) -And $(wsl.exe --export "$wsl_distro_selected" "$new_distro_file_path")) {
                                     write-host "importing $new_distro_file_path as $new_distro_name ..."
                                     if (wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path") {
                                         wsl.exe --unregister $wsl_distro_selected
@@ -1443,7 +1443,7 @@ function wsl_devel_spawn {
                                 }                                                                   
                                 try {
                                     if (!(Test-Path -Path $old_distro_backup_path -PathType Leaf)){
-                                        $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -and $_ -ne '' -and $_ -match '^(.*)\.tar$' } | Sort-Object
+                                        $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -And $_ -ne '' -And $_ -match '^(.*)\.tar$' } | Sort-Object
                                         $backup_distro_num = 0
                                         write-host "`r`n"
                                         foreach ($backup_distro_file in $backup_distro_files) {
@@ -1506,7 +1506,7 @@ function wsl_devel_spawn {
                             Write-Host "`r`n`t[l]inux or [w]indows"
                             $dvlp_cli_options = Read-Host
                         }
-                        if ($dvlp_cli_options -ieq 'l' -or $dvlp_cli_options -ieq 'w') {
+                        if ($dvlp_cli_options -ieq 'l' -Or $dvlp_cli_options -ieq 'w') {
                             $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                         }
                         if ($dvlp_choice -ieq 'tl' ) {
@@ -1530,7 +1530,7 @@ function wsl_devel_spawn {
                         if ($dvlp_choice -ieq 'k') {
                             Write-Host "`r`n`t[l]inux or [w]indows"
                             $dvlp_kindtek_options = Read-Host
-                            if ($dvlp_kindtek_options -ieq 'l' -or $dvlp_kindtek_options -ieq 'w') {
+                            if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
                                 $dvlp_choice = $dvlp_choice + $dvlp_kindtek_options
                                 if ($dvlp_kindtek_options -ieq 'w') {
                                     Write-Host "`t-`t[d]ocker settings reset`r`n`t-`t[D]ocker re-install`r`n`t-`t[w]indows re-install`r`n"
@@ -1603,7 +1603,7 @@ function wsl_devel_spawn {
                         # elseif ($dvlp_choice -ieq 'v') {
                         #     wsl sh -c "cd /hel;. code"
                         $dvlp_choice = 'screen'
-                    } elseif (!([string]::isnullorempty($dvlp_choice)) -and $dvlp_choice -ine 'exit' -and $dvlp_choice -ine 'screen' -and $dvlp_choice -ine 'refresh' -and $dvlp_choice -ine 'KW' -and $(docker manifest inspect $dvlp_choice)) {
+                    } elseif (!([string]::isnullorempty($dvlp_choice)) -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'screen' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'KW' -And $(docker manifest inspect $dvlp_choice)) {
                         Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
                         docker_devel_spawn "$dvlp_choice"
                         $dvlp_choice = 'screen'
@@ -1613,14 +1613,14 @@ function wsl_devel_spawn {
                 } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
             } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
         }
-    } while ($dvlp_choice -ieq 'kw' -or $dvlp_choice -ieq 'refresh' -or $dvlp_choice -ieq 'screen' -or "$confirmation" -ieq "")
+    } while ($dvlp_choice -ieq 'kw' -Or $dvlp_choice -ieq 'refresh' -Or $dvlp_choice -ieq 'screen' -Or "$confirmation" -ieq "")
     
     
     Write-Host "`r`nGoodbye!`r`n"
 }
 
 pull_dvlp_envs
-if (!([string]::IsNullOrEmpty($args[0])) -or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
+if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
     set_dvlp_envs
     wsl_devel_spawn $args[0]
