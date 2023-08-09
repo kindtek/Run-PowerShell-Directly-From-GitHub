@@ -1151,7 +1151,7 @@ function wsl_devel_spawn {
                 $wsl_distro_list = get_wsl_distro_list
                 wsl_distro_list_display $wsl_distro_list
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [c]ommand line`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
+                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
@@ -1365,25 +1365,25 @@ function wsl_devel_spawn {
                     }
                     $dvlp_choice = 'screen'
                 }
-                elseif ($dvlp_choice -like 'c**') {    
-                    if ($dvlp_choice -ieq 'c') {
+                elseif ($dvlp_choice -like 't**') {    
+                    if ($dvlp_choice -ieq 't') {
                         Write-Host "`r`n`t[l]inux or [w]indows"
                         $dvlp_cli_options = Read-Host
                     }
                     if ($dvlp_cli_options -ieq 'l' -or $dvlp_cli_options -ieq 'w') {
                         $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                     }
-                    if ($dvlp_choice -ieq 'cl' ) {
-                        start_dvlp_process_pop "wsl.exe -d $wsl_distro_choice cd ``$HOME ``&``& bash " 'wait' 'noexit'
+                    if ($dvlp_choice -ieq 'tl' ) {
+                        start_dvlp_process_pop "wsl.exe cd ``$HOME ``&``& bash " 'wait' 'noexit'
                     }
-                    elseif ($dvlp_choice -ieq 'cdl' ) {
+                    elseif ($dvlp_choice -ieq 'tdl' ) {
                         # wsl.exe -d devels-playground-kali-git -- cd `$HOME/.local/bin `&`& alias cdir`=`'source cdir.sh`' `&`& alias grep=`'grep --color=auto`' `&`& ls -al `&`& cdir_cli
                         # start_dvlp_process_pop "wsl --cd /hal --exec bash `$(cdir)" 'wait' 'noexit'
                     }
-                    elseif ($dvlp_choice -ieq 'cw' ) {
+                    elseif ($dvlp_choice -ieq 'tw' ) {
                         start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
                     }
-                    elseif ($dvlp_choice -ieq 'cdw' ) {
+                    elseif ($dvlp_choice -ieq 'tdw' ) {
                         # one day might get the windows cdir working
                         # start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
                     }
@@ -1419,7 +1419,7 @@ function wsl_devel_spawn {
                         $dvlp_choice = 'refresh'
                     }
                     if ($dvlp_choice -ieq 'kl' ) {
-                        wsl.exe -d $wsl_distro_choice cd `$HOME `&`& bash ./setup.sh "$env:USERNAME"
+                        wsl.exe cd `$HOME `&`& bash ./setup.sh "$env:USERNAME"
                         $dvlp_choice = 'refresh'
 
                     }
