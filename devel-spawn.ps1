@@ -1340,10 +1340,10 @@ function wsl_devel_spawn {
                                 write-host "setting up $wsl_distro_selected ..."
                                 wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./setup.sh "$env:USERNAME"
                             }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'TERMINAL' ){
-                                write-host "type 'exit' to return to main menu"
+                                write-host "use 'exit' to exit terminal"
                                 wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash 
                             }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'GUI' ){
-                                write-host "type 'exit' to return to main menu"
+                                write-host "use 'exit' to exit terminal"
                                 try {
                                     wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
                                 } catch {
@@ -1523,7 +1523,7 @@ function wsl_devel_spawn {
                             # one day might get the windows cdir working
                             # start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
                         }
-                        # $dvlp_choice = 'screen'
+                        $dvlp_choice = 'screen'
 
                     }
                     elseif ($dvlp_choice -like 'k*') {
