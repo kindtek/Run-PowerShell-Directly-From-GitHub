@@ -1347,7 +1347,7 @@ function wsl_devel_spawn {
                                 wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
 
                             }
-                        } elseif ($wsl_action_choice -ceq 'BACKUP') {
+                        } elseif ($wsl_action_choice -ieq 'BACKUP') {
                             $base_distro = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-'))
                             $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
                             $base_distro_backup_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro)\$($base_distro_id)\backups"
@@ -1355,7 +1355,7 @@ function wsl_devel_spawn {
                             New-Item -ItemType Directory -Force -Path "$base_distro_backup_path" | Out-Null
                             write-host "backing up $wsl_distro_selected to $base_distro_backup_file_path ..."
                             wsl.exe --export $wsl_distro_selected "$base_distro_backup_file_path"
-                        } elseif ($wsl_action_choice -ceq 'RENAME') {
+                        } elseif ($wsl_action_choice -ieq 'RENAME') {
                             $filetime = "$((Get-Date).ToFileTime())"
                             $base_distro = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-'))
                             $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
