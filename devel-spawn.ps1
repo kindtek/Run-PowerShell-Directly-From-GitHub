@@ -1173,7 +1173,7 @@ function wsl_devel_spawn {
                             $dvlp_choice = 'screen'
                         }
                     }
-                    if ($dvlp_choice -ieq 'x'){
+                    if ($dvlp_choice -ieq 'x' -or $dvlp_choice -ieq 'exit' -or $dvlp_choice -ieq ''){
                         $dvlp_choice = 'exit'
                     }
                     if ($dvlp_choice -ieq 'refresh') {
