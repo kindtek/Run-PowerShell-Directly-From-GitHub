@@ -1233,9 +1233,9 @@ function wsl_devel_spawn {
                     if ($wsl_distro_choice){
                         write-host "`r`n`tpress ENTER to open terminal in $wsl_distro_choice`r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
-(OPEN $wsl_distro_choice)"
+(OPEN $wsl_distro_choice terminal)"
                         if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
-                            wsl --cd /hal --user agl -d $wsl_distro_choice -- bash source .bashrc
+                            wsl --cd /hal --user agl -d $wsl_distro_choice -- bash
                         }
                     } else {
                         write-host "no distro for ${wsl_choice} found"
@@ -1249,7 +1249,7 @@ function wsl_devel_spawn {
                     if ($wsl_distro_choice){
                         write-host "`r`n`tpress ENTER to open gui in $wsl_distro_choice`r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
-(OPEN $wsl_distro_choice)"
+(OPEN $wsl_distro_choice gui)"
                         if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
                             try {
                                 wsl --cd /hal --user agl -d $wsl_distro_choice -- bash ./start-kex.sh "$env:USERNAME"
