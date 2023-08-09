@@ -1361,14 +1361,60 @@ function wsl_devel_spawn {
                             $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
                             $new_distro_name = read-host "
 enter new name for $base_distro"
-                            $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)\$($base_distro_id)"
-                            $new_distro_file_path = "$($new_distro_root_path)\$($base_distro_id)-$filetime.tar"
+
+                            if ([string]::IsNullOrEmpty($base_distro_id)) {
+                                $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)"
+                                $new_distro_file_path = "$($new_distro_root_path)\$filetime.tar"
+                            } else {
+                                $new_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($new_distro_name)\$($base_distro_id)"
+                                $new_distro_file_path = "$($new_distro_root_path)\$($base_distro_id)-$filetime.tar"
+                            }
 
                             New-Item -ItemType Directory -Force -Path "$new_distro_root_path" | Out-Null
                             write-host "backing up $wsl_distro_selected to $new_distro_file_path ..."
                             if (!([string]::IsNullOrEmpty($new_distro_name)) -and $(wsl.exe --export "$wsl_distro_selected" "$new_distro_file_path")) {
                                 write-host "importing $new_distro_file_path as $new_distro_name ..."
-                                wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path"
+                                if (wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path") {
+                                    wsl.exe --unregister $wsl_distro_selected
+                                    $new_distro_diskman ="$($new_distro_root_path)\$(diskman.ps1)"
+                                    $new_distro_diskshrink ="$($new_distro_root_path)\$(diskshrink.ps1)"
+                                    New-Item -Path $new_distro_diskman -ItemType File -Force
+                                    Add-Content $new_distro_diskman $(Write-Host "select vdisk file=$new_distro_diskman\ext4.vhdx 
+                                    attach vdisk readonly 
+                                    compact vdisk 
+                                    detach vdisk ")
+                                    New-Item -Path $new_distro_diskshrink -ItemType File -Force
+                                    Add-Content $new_distro_diskshrink $(Write-Host "try { 
+                                        # Self-elevate the privileges 
+                                        if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) { 
+                                            if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) { 
+                                                `$CommandLine = -File `$MyInvocation.MyCommand.Path + ' ' + `$MyInvocation.UnboundArguments 
+                                                Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle 'Maximized' -ArgumentList `$CommandLine 
+                                                Exit 
+                                            } 
+                                        } 
+                                     }  catch {} 
+                                     docker system df 
+                                     docker builder prune -af --volumes 
+                                     docker system prune -af --volumes 
+                                     stop-service -name docker* -force;  
+                                     # wsl.exe -- sudo shutdown -h now; 
+                                     # wsl.exe -- sudo shutdown -r 0; 
+                                     wsl.exe --shutdown; 
+                                     stop-service -name wsl* -force -ErrorAction SilentlyContinue; 
+                                     stop-process -name docker* -force -ErrorAction SilentlyContinue; 
+                                     stop-process -name wsl* -force -ErrorAction SilentlyContinue; 
+                                     Invoke-Command -ScriptBlock { diskpart /s $new_distro_diskman } -ArgumentList '-Wait -Verbose'; 
+                                     start-service wsl*; 
+                                     start-service docker*; 
+                                     write-host 'done.'; 
+                                     read-host ")
+                                     $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro_name)\$($base_distro_id)"
+                                     Remove-Item  "$base_distro_root_path\$(diskshrink.ps1)"
+                                     Remove-Item  "$base_distro_root_path\$(diskman.ps1)"
+                                     Move-Item  "$base_distro_root_path\$(.container_id)" "$base_distro_root_path\$(.container_id)" -Force -ErrorAction SilentlyContinue
+                                     Move-Item  "$base_distro_root_path\$(.image_id)" "$base_distro_root_path\$(.image_id)" -Force -ErrorAction SilentlyContinue
+                                }
                             }
                         }
                     }
