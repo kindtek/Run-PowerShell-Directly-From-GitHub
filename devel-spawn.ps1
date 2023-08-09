@@ -1226,16 +1226,38 @@ function wsl_devel_spawn {
                     }
                     $dvlp_choice = 'screen'
                 }
-                elseif ($dvlp_choice -imatch "o\d"){
+                elseif ($dvlp_choice -imatch "t\d"){
                     [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
                     echo "wsl_choice: $wsl_choice"
                     $wsl_distro_choice = wsl_distro_list_select $wsl_distro_list $wsl_choice
                     if ($wsl_distro_choice){
-                        write-host "`r`n`tpress ENTER to open $wsl_distro_choice `r`n`t`t.. or enter any other key to skip "
+                        write-host "`r`n`tpress ENTER to open terminal in $wsl_distro_choice`r`n`t`t.. or enter any other key to skip "
                         $wsl_distro_choice_confirm = read-host "
 (OPEN $wsl_distro_choice)"
                         if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
                             wsl --cd /hal --user agl -d $wsl_distro_choice -- bash source .bashrc
+                        }
+                    } else {
+                        write-host "no distro for ${wsl_choice} found"
+                    }
+                    $dvlp_choice = 'screen'
+                }
+                elseif ($dvlp_choice -imatch "g\d"){
+                    [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
+                    echo "wsl_choice: $wsl_choice"
+                    $wsl_distro_choice = wsl_distro_list_select $wsl_distro_list $wsl_choice
+                    if ($wsl_distro_choice){
+                        write-host "`r`n`tpress ENTER to open gui in $wsl_distro_choice`r`n`t`t.. or enter any other key to skip "
+                        $wsl_distro_choice_confirm = read-host "
+(OPEN $wsl_distro_choice)"
+                        if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
+                            try {
+                                wsl --cd /hal --user agl -d $wsl_distro_choice -- bash ./start-kex.sh "$env:USERNAME"
+                            } catch {
+                                write-host 'cannot start kex. attempting to install'
+                                wsl --cd /hal --user agl -d $wsl_distro_choice -- bash ./build-kex.sh "$env:USERNAME"
+                                wsl --cd /hal --user agl -d $wsl_distro_choice -- bash ./start-kex.sh "$env:USERNAME"
+                            }
                         }
                     } else {
                         write-host "no distro for ${wsl_choice} found"
@@ -1254,7 +1276,7 @@ function wsl_devel_spawn {
                         }
                     }
                     else {
-                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter OPEN, DEFAULT, SETUP, KERNEL, DELETE`r`n`t ... or press ENTER to open"
+                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter TERMINAL, GUI, DEFAULT, SETUP, KERNEL, DELETE`r`n`t ... or press ENTER to open"
                         $wsl_action_choice = read-host "
 (open $wsl_distro_selected)"
                         if ($wsl_action_choice -ceq 'DELETE') {
@@ -1306,9 +1328,18 @@ function wsl_devel_spawn {
                         } elseif ($wsl_action_choice -ceq 'SETUP') {
                             write-host "setting up $wsl_distro_selected ..."
                             wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash ./setup.sh $env:USERNAME
-                        }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'open' ){
+                        }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'TERMINAL' ){
                             write-host "type 'exit' to return to main menu"
                             wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash
+                        }  elseif ([string]::IsNullOrEmpty($wsl_action_choice) -or $wsl_action_choice -ieq 'GUI' ){
+                            write-host "type 'exit' to return to main menu"
+                            try {
+                                wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash ./start-kex.sh "$env:USERNAME"
+                            } catch {
+                                wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash ./build-kex.sh "$env:USERNAME"
+                                wsl -d $wsl_distro_selected --user $(get_dvlp_env '_AGL') --cd /hal --exec bash ./start-kex.sh "$env:USERNAME"
+
+                            }
                         }
                     }
                     $dvlp_choice = 'screen'
