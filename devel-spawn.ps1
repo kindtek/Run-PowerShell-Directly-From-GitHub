@@ -1057,7 +1057,7 @@ function wsl_devel_spawn {
                         cmd.exe /c net stop LxssManager
                         cmd.exe /c net start LxssManager
                         # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
-                        if ((test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) -eq $true) {
+                        if ($(test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) -eq $true) {
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test passed"
                             Write-Host "docker devel installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed"
                         }
