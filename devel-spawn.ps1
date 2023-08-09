@@ -1366,7 +1366,7 @@ enter new name for $new_distro_name"
 
                             New-Item -ItemType Directory -Force -Path "$new_distro_root_path" | Out-Null
                             write-host "backing up $wsl_distro_selected to $new_distro_file_path ..."
-                            if (!([string]::IsNullOrEmpty($new_distro_name)) && $(wsl.exe --export "$wsl_distro_selected" "$new_distro_file_path")) {
+                            if (!([string]::IsNullOrEmpty($new_distro_name)) -and $(wsl.exe --export "$wsl_distro_selected" "$new_distro_file_path")) {
                                 write-host "importing $base_distro_backup_file_path as $new_distro_name ..."
                                 wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path"
                             }
