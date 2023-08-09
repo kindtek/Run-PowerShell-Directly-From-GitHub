@@ -1257,7 +1257,8 @@ function wsl_devel_spawn {
 (OPEN $wsl_distro_choice gui)"
                         if ([string]::IsNullOrEmpty($wsl_distro_choice_confirm)){
                             try {
-                                wsl.exe -d $wsl_distro_choice cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
+                                wsl.exe -d $wsl_distro_choice cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
+                                # wsl.exe -d $wsl_distro_choice cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
                                 # wsl --cd /hal --user agl -d $wsl_distro_choice -- bash ./start-kex.sh "$env:USERNAME"
                             } catch {
                                 write-host 'cannot start kex. attempting to install'
@@ -1282,7 +1283,7 @@ function wsl_devel_spawn {
                         }
                     }
                     else {
-                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter TERMINAL, GUI, DEFAULT, SETUP, KERNEL, DELETE`r`n`t ... or press ENTER to open"
+                        write-host "$wsl_distro_selected selected.`r`n`r`nEnter TERMINAL, GUI, DEFAULT, SETUP, KERNEL, BACKUP, RENAME, RESTORE, DELETE`r`n`t ... or press ENTER to open"
                         $wsl_action_choice = read-host "
 (open $wsl_distro_selected)"
                         if ($wsl_action_choice -ceq 'DELETE') {
@@ -1345,6 +1346,31 @@ function wsl_devel_spawn {
                                 wsl.exe -d $wsl_distro_choice cd `$HOME `&`& bash ./build-kex.sh "$env:USERNAME"
                                 wsl.exe -d $wsl_distro_choice cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
 
+                            }
+                        } elseif ($wsl_action_choice -ceq 'BACKUP') {
+                            $base_distro = $wsl_distro_choice.Substring($wsl_distro_choice.lastIndexOf('-'))
+                            $base_distro_id = $wsl_distro_choice.Substring($wsl_distro_choice.lastIndexOf('-') + 1)
+                            $base_distro_backup_path = "$env:USERPROFILE\kache\docker2wsl\$base_distro\$base_distro_id\backups"
+                            $base_distro_backup_file_path = "$base_distro_backup_root_path\$base_distro-$base_distro_id-$((Get-Date).ToFileTime())"
+                            New-Item -ItemType Directory -Force -Path "$base_distro_backup_path" | Out-Null
+                            write-host "backing up $wsl_distro_selected to $base_distro_backup_file_path ..."
+                            wsl.exe --export $wsl_distro_choice "$base_distro_backup_file_path"
+                        } elseif ($wsl_action_choice -ceq 'RENAME') {
+                            $filetime = "$((Get-Date).ToFileTime())"
+                            $new_distro_name = read-host "
+enter new name for $wsl_distro_choice"
+                            $base_distro = $wsl_distro_choice.Substring($wsl_distro_choice.lastIndexOf('-'))
+                            $base_distro_id = $wsl_distro_choice.Substring($wsl_distro_choice.lastIndexOf('-') + 1)
+                            $base_distro_backup_root_path = "$env:USERPROFILE\kache\docker2wsl\$base_distro\$base_distro_id\backups"
+                            $base_distro_backup_file_path = "$base_distro_backup_root_path\$base_distro-$base_distro_id-$filetime.tar"
+                            $new_distro_root_path = "$env:USERPROFILE\kache\docker2wsl\$new_distro_name\$base_distro_id"
+                            $new_distro_file_path = "$base_distro_backup_root_path\$base_distro_id-$filetime.tar"
+
+                            New-Item -ItemType Directory -Force -Path "$base_distro_root_path" | Out-Null
+                            New-Item -ItemType Directory -Force -Path "$new_distro_root_path" | Out-Null
+                            write-host "backing up $wsl_distro_selected to $new_distro_file_path ..."
+                            if (wsl.exe --export "$wsl_distro_choice" "$base_distro_backup_file_path") {
+                                wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path"
                             }
                         }
                     }
