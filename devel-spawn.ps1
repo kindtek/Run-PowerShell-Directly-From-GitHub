@@ -1456,8 +1456,11 @@ enter new name for $base_distro"
                                         wsl.exe --import "$new_distro_file_name" "$new_distro_root_path" "$new_distro_file_path"
                                     }
                                 }
-                            } catch {
+                                } else {
                                 write-host "no backups found for $wsl_distro_selected"
+                            }
+                            } catch {
+                                write-host "there was a problem retreiving backups found for $wsl_distro_selected"
                             }
                         }
                     }
