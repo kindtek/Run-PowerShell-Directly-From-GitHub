@@ -1366,10 +1366,11 @@ enter new name for $wsl_distro_selected"
                             $new_distro_root_path = "$env:USERPROFILE\kache\docker2wsl\$new_distro_name\$base_distro_id"
                             $new_distro_file_path = "$base_distro_backup_root_path\$base_distro_id-$filetime.tar"
 
-                            New-Item -ItemType Directory -Force -Path "$base_distro_root_path" | Out-Null
+                            New-Item -ItemType Directory -Force -Path "$base_distro_backup_root_path" | Out-Null
                             New-Item -ItemType Directory -Force -Path "$new_distro_root_path" | Out-Null
                             write-host "backing up $wsl_distro_selected to $new_distro_file_path ..."
                             if (wsl.exe --export "$wsl_distro_selected" "$base_distro_backup_file_path") {
+                                write-host "importing $wsl_distro_selected as $new_distro_name ..."
                                 wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path"
                             }
                         }
