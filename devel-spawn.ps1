@@ -1097,7 +1097,7 @@ function wsl_devel_spawn {
                 # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
                 New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
 
-                dvlp_boot_daemon
+                dvlp_boot
 
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 try {
