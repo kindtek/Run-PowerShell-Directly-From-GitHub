@@ -902,10 +902,10 @@ function run_dvlp_latest_kernel_installer {
 function devel_boot_safe {
     try {
         Set-PSDebug -Trace 2;
-        install_winget
-        install_git        
+        install_winget $true
+        install_git $true    
         sync_repo
-        install_dependencies
+        install_dependencies $true
         require_docker_online
         return $true
     } catch {return $false}
@@ -913,6 +913,7 @@ function devel_boot_safe {
 
 function devel_boot {
     Set-PSDebug -Trace 2;
+    $new_windowsfeatures_installed = $false
     try {
         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
         Write-Host "`r`n`r`ninitializing ..."
@@ -928,14 +929,17 @@ function devel_boot {
         # jump to bottom line without clearing scrollback
         # Write-Host "$([char]27)[2J" 
         if (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.windowsfeatures-installed" -PathType Leaf) {
-            $new_windowsfeatures_installed = $false
+            $windowsfeatures_installed = $false
         }
         else {
-            $new_windowsfeatures_installed = $true
+            $windowsfeatures_installed = $true
         }
         try {
             install_windows_features
             Write-Host "Windows features are installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
+            if ($windowsfeatures_installed -eq $false){
+                $new_windowsfeatures_installed = $true
+            }
         } catch { break }
         install_recommends
         $new_dependencies_installed = install_dependencies 
@@ -956,11 +960,18 @@ function devel_boot {
                     if ($new_windowsfeatures_installed) {
                         Write-Host "
                         
-            windows features and software installations complete! restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+            windows features and software installations complete! 
+            restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                     }
                     elseif ($new_dependencies_installed ) {
                         Write-Host "
-            software installations complete! restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+            software installations complete! 
+            restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                    }
+                    elseif ($new_dependencies_installed ) {
+                        Write-Host "
+            software installations complete! 
+            restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                     }
                     reboot_prompt
                 }
