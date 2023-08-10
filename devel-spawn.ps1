@@ -1697,20 +1697,22 @@ function wsl_devel_spawn {
 
 pull_dvlp_envs
 if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
-    # echo 'installing everything and setting envs ..'
+    echo 'installing everything and setting envs ..'
     set_dvlp_envs
-    if ($PSCommandPath -eq $env:KINDTEK_DEVEL_SPAWN){
-        wsl_devel_spawn $args[0]
-    }
+    wsl_devel_spawn $args[0]
+
+}
+elseif ($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1"){
+    wsl_devel_spawn $args[0]
 }
 elseif ($global:devel_tools -ne "sourced") {
-    # echo 'devel_tools not yet sourced'
+    echo 'devel_tools not yet sourced'
     if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
-        # echo 'now sourcing devel_tools ...'
+        echo 'now sourcing devel_tools ...'
         . $env:KINDTEK_DEVEL_TOOLS
     }
 }
 else {
-    # echo 'not installing anything ...'
+    echo 'not installing anything ...'
     # echo 'devel_tools already sourced'
 }
