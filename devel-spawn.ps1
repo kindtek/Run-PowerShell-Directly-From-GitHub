@@ -1044,15 +1044,21 @@ function wsl_devel_spawn {
     )
     $dvlp_choice = 'refresh'
     do {
-        
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
+
         $confirmation = ''    
-        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
-            if (!(dependencies_installed)){
+        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {          
+            try {
+                if (!(dependencies_installed)){
+                    $host.UI.RawUI.ForegroundColor = "Black"
+                    $host.UI.RawUI.BackgroundColor = "DarkRed"
+                }
+            } catch {
                 $host.UI.RawUI.ForegroundColor = "Black"
                 $host.UI.RawUI.BackgroundColor = "DarkRed"
             }
+
             Write-Host "$([char]27)[2J"
             # $confirmation = Read-Host "`r`nRestarts may be required as new applications are installed. Save your work now.`r`n`r`n`tHit ENTER to continue`r`n`r`n`tpowershell.exe -Command $file $args" 
             Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
