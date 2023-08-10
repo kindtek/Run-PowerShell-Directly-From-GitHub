@@ -910,7 +910,8 @@ function dvlp_boot {
                 . $env:KINDTEK_DEVEL_TOOLS
             }
             run_installer
-            require_docker_online_new_win
+            require_docker_online
+            # require_docker_online_new_win
         } catch {
             try {            
                 sync_repo
