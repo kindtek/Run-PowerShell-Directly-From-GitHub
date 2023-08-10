@@ -1703,7 +1703,9 @@ if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFIL
 
 }
 elseif ($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1"){
-    wsl_devel_spawn $args[0]
+    echo 'setting the envs ..'
+    set_dvlp_envs
+    # wsl_devel_spawn $args[0]
 }
 elseif ($global:devel_tools -ne "sourced") {
     echo 'devel_tools not yet sourced'
