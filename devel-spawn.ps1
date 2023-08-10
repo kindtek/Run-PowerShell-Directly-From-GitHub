@@ -850,7 +850,7 @@ function docker_devel_spawn {
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
-        require_docker_online | Out-Null
+        require_docker_online
         if (is_docker_desktop_online -eq $true) {
             # Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $env:img_name_tag"
