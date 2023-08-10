@@ -554,13 +554,13 @@ function set_dvlp_envs {
             set_dvlp_env "pathext" "$(get_dvlp_env 'pathext');.ps1"
         }
         if ($machine_ext -split ";" -notcontains ".ps1") {
-           set_dvlp_env "pathext" "$(get_dvlp_env 'pathext' 'machine');.ps1" "machine" 
+            set_dvlp_env "pathext" "$(get_dvlp_env 'pathext' 'machine');.ps1" "machine" 
         }
         if ($local_paths -split ";" -notcontains "$envKINDTEK_DEVEL_SPAWN" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
             set_dvlp_env "path" "$(get_dvlp_env 'path');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
         }
         if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
-         set_dvlp_env "path" "$(get_dvlp_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
+            set_dvlp_env "path" "$(get_dvlp_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
         }
 
     }
@@ -712,7 +712,8 @@ function install_winget {
         else {
             Write-Host "$software_name already installed" -ForegroundColor DarkCyan
         }
-    } catch { write-host 'error installing winget'; exit }
+    }
+    catch { write-host 'error installing winget'; exit }
 }
 
 function install_git {
@@ -739,7 +740,8 @@ function install_git {
         # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
         git config --global core.autocrlf input
         return
-    } catch { write-host 'error installing github and repos'; exit }
+    }
+    catch { write-host 'error installing github and repos'; exit }
 }
 
 function clone_repo {
@@ -897,39 +899,133 @@ function run_dvlp_latest_kernel_installer {
     pop-location
 }
 
-function dvlp_boot {
+function devel_boot_min {
+    try {
+        install_winget
+        install_git        
+        sync_repo
+        install_recommends
+        install_dependencies
+        require_docker_online
+        return $true
+    } catch {return $false}
+}
+
+function devel_boot {
     try {
         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+        Write-Host "`r`n`r`ninitializing ..."
         install_winget
         install_git
-        try {
-            start_dvlp_process_pop 'sync_repo'
-            # assuming the repos are now synced now is a good time to dot source devel-tools
-            if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-                # write-host 'dot sourcing devel tools'
-                . $env:KINDTEK_DEVEL_TOOLS
-            }
-            run_installer
-            require_docker_online
-            # require_docker_online_new_win
-        } catch {
-            try {            
-                sync_repo
-                # assuming the repos are now synced now is a good time to dot source devel-tools
-                if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-                    # write-host 'dot sourcing devel tools'
-                    . $env:KINDTEK_DEVEL_TOOLS
-                }
-                run_installer
-                require_docker_online
-            } catch {
-                return $false
-            }
+        if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
+            # write-host 'dot sourcing devel tools'
+            . $env:KINDTEK_DEVEL_TOOLS
         }
+        sync_repo
+        # log default distro
+        $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
+        # jump to bottom line without clearing scrollback
+        # Write-Host "$([char]27)[2J" 
+        if (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.windowsfeatures-installed" -PathType Leaf) {
+            $new_windowsfeatures_installed = $false
+        }
+        else {
+            $new_windowsfeatures_installed = $true
+        }
+        try {
+            install_windows_features
+            Write-Host "
+            windows features installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
+        }
+        catch { break }
+        install_recommends
+        $new_dependencies_installed = install_dependencies 
+        if ($new_windowsfeatures_installed -eq $true -or $new_dependencies_installed -eq $true) {
+            Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n
+            please wait for installation processes to complete ..." -ForegroundColor White -BackgroundColor Black
+            while (dependencies_installed -eq $false) {
+                Start-Sleep 10
+                Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
+                Start-Sleep 1
+                Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
+                Start-Sleep 1
+                Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
+            }
+            require_docker_online
+            if (!(is_docker_desktop_online)) {    
+                if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
+                    if ($new_windowsfeatures_installed) {
+                        Write-Host "
+                        
+            windows features and software installations complete! restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                    }
+                    elseif ($new_dependencies_installed ) {
+                        Write-Host "
+            software installations complete! restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                    }
+                    reboot_prompt
+                }
+            }
+        } else {
+            Write-Host "
+            success!
+            windows features and software are installed
+            " -ForegroundColor Magenta -BackgroundColor Yellow
+            write-host `r`n`r`n
+        }
+        
         return $true
-    } catch {
-        return $false
+    } catch { return $false }
+}
+
+function devel_daemon {
+    param (
+        $keep_running
+    )
+    [int]$devel_bootloop_count = 0
+    [int]$devel_bootloop_max = 10
+    $task1 = $false
+    $task2 = $false
+    do {
+        $devel_bootloop_count += 1 
+        try {  
+            return devel_boot
+        }
+        catch { 
+            try {
+                # try pulling envs first
+                pull_dvlp_envs
+                return devel_boot
+            }
+            catch { 
+                # try setting envs first then do bare minimum
+                set_dvlp_envs
+                return devel_boot_min
+                
+            }
+            reboot_prompt
+            
+            return $false 
+        }
+
+        return $true
+
+    } while ($devel_bootloop_count -lt $devel_bootloop_max -And $(devel_boot) -eq $false)
+
+    if ($keep_running) {       # daemon initialized ... now check periodically for problems
+        start_dvlp_process_popmin "while ($true){
+            if (dependencies_installed -eq $false){
+                # try setting envs first then do bare minimum
+                set_dvlp_envs
+                devel_boot_min 
+            }
+            start-sleep 60
+        }
+        "
     }
+    
+    return $true
+    
 }
 
 function wsl_devel_spawn {  
@@ -938,10 +1034,7 @@ function wsl_devel_spawn {
     )
     $dvlp_choice = 'refresh'
     do {
-        if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-            # write-host 'dot sourcing devel tools'
-            . $env:KINDTEK_DEVEL_TOOLS
-        }
+        
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
         $confirmation = ''    
@@ -992,11 +1085,11 @@ function wsl_devel_spawn {
                 # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
                 New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
                 
-                [int]$dvlp_bootloop_count=0
-                [int]$dvlp_bootloop_max=10
+                [int]$devel_bootloop_count = 0
+                [int]$devel_bootloop_max = 10
 
-                while ($dvlp_bootloop_count -lt $dvlp_bootloop_max -And $(dvlp_boot) -eq $false ){
-                    $dvlp_bootloop_count+=1
+                while ($devel_bootloop_count -lt $devel_bootloop_max -And $(devel_boot) -eq $false ) {
+                    $devel_bootloop_count += 1
                 }
 
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
@@ -1621,7 +1714,8 @@ function wsl_devel_spawn {
                     }
                 } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
             } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
-        } else {
+        }
+        else {
             $dvlp_choice = 'exit'
         }
     } while ($dvlp_choice -ieq 'kw' -Or $dvlp_choice -ieq 'refresh' -Or $dvlp_choice -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_choice -ine 'exit')
@@ -1637,7 +1731,7 @@ if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFIL
     wsl_devel_spawn $args[0]
 
 }
-elseif ($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1"){
+elseif ($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
     # echo 'setting the envs ..'
     set_dvlp_envs
     # wsl_devel_spawn $args[0]
