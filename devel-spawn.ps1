@@ -826,7 +826,9 @@ function install_git {
         # allow git to be used in same window immediately after installation
         powershell.exe -Command $refresh_envs | Out-Null
         ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-        start_dvlp_process_pop 'sync_repo' 'wait'
+        try {
+            start_dvlp_process_pop "try {sync_repo} catch {. $env:USERPROFILE/dvlp.ps1;sync_repo}"
+        } catch { sync_repo }
         # assuming the repos are now synced now is a good time to dot source devel-tools
         if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
             # write-host 'dot sourcing devel tools'
@@ -1056,7 +1058,7 @@ function wsl_devel_spawn {
                     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
                     if ((Test-Path -Path "$($env:KINDTEK_DEVEL_TOOLS)" -PathType Leaf)) {
                         # write-host 'dot sourcing devel tools'
-                        .$env:KINDTEK_DEVEL_TOOLS
+                        . $env:KINDTEK_DEVEL_TOOLS
                     } 
                     run_installer
                     require_docker_online_new_win
@@ -1697,7 +1699,9 @@ pull_dvlp_envs
 if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
     set_dvlp_envs
-    wsl_devel_spawn $args[0]
+    if ($PSCommandPath -eq $env:KINDTEK_DEVEL_SPAWN){
+        wsl_devel_spawn $args[0]
+    }
 }
 elseif ($global:devel_tools -ne "sourced") {
     # echo 'devel_tools not yet sourced'
