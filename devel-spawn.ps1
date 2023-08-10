@@ -1072,6 +1072,7 @@ function wsl_devel_spawn {
                 Write-Host ""
                 Start-Sleep 1
                 $host.UI.RawUI.BackgroundColor = "Black"
+                $host.UI.RawUI.BackgroundColor = "Gray"
                 Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
                 Start-Sleep 1
                 Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
@@ -1107,7 +1108,7 @@ function wsl_devel_spawn {
                                 $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
                                 New-Item -Path $profilePath -ItemType File -Force
                                 New-Item -Path $vmpPath -ItemType File -Force
-                                Add-Content $profilePath ".$vmpPath;Clear-Content $vmpPath;.$env:USERPROFILE/dvlp.ps1"
+                                Add-Content $profilePath ". $vmpPath;Clear-Content $vmpPath;cd $env:USERPROFILE;./dvlp.ps1"
                                 Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
                                 Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed"
                             }
@@ -1731,7 +1732,7 @@ elseif ($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1"){
 }
 elseif ($global:devel_tools -ne "sourced") {
     echo 'devel_tools not yet sourced'
-    if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
+    if (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf -and Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
         echo 'now sourcing devel_tools ...'
         . $env:KINDTEK_DEVEL_TOOLS
     }
