@@ -826,12 +826,6 @@ function install_git {
         # allow git to be used in same window immediately after installation
         powershell.exe -Command $refresh_envs | Out-Null
         ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-        sync_repo
-        # assuming the repos are now synced now is a good time to dot source devel-tools
-        if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-            # write-host 'dot sourcing devel tools'
-            . $env:KINDTEK_DEVEL_TOOLS
-        }
         # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
         git config --global core.autocrlf input
         return
@@ -1050,14 +1044,16 @@ function wsl_devel_spawn {
                 
                 # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
                 New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
-                try {
-                    install_winget $env:KINDTEK_WIN_GIT_PATH
-                    install_git
+                # try {
                     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-                    if ((Test-Path -Path "$($env:KINDTEK_DEVEL_TOOLS)" -PathType Leaf)) {
+                    install_winget
+                    install_git
+                    sync_repo
+                    # assuming the repos are now synced now is a good time to dot source devel-tools
+                    if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
                         # write-host 'dot sourcing devel tools'
                         . $env:KINDTEK_DEVEL_TOOLS
-                    } 
+                    }
                     run_installer
                     require_docker_online_new_win
 
@@ -1151,7 +1147,7 @@ function wsl_devel_spawn {
                             }
                         }
                     }
-                } catch { write-host 'oops.. software installation did not complete'}
+                # } catch { write-host 'oops.. software installation did not complete';install_git;sync_repo}
             }
             elseif ($dvlp_choice -eq 'screen') {
                 # do nothing but refresh screen
