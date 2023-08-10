@@ -876,9 +876,8 @@ function docker_devel_spawn {
         }
         else {
             Write-Host "`r`docker desktop failed to start. attempting to reinstall ... "
-            powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/reinstall-docker.ps1")
-
-            Write-Host "still not working? try: `r`n`t- restarting WSL`r`n`t- revert to failsafe distro your default distro (ie: wsl.exe -s kalilinux-kali-rolling-latest )`r`n`ttry removing/renaming $env:USERPROFILE/.wslconfig and restart wsl"
+            # powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/reinstall-docker.ps1")
+            Write-Host "still not working. try: `r`n`t- restarting WSL`r`n`t- revert to failsafe distro your default distro (ie: wsl.exe -s $env:KINDTEK_WSL_FAILSAFE_DISTRO )`r`n`ttry removing/renaming $env:USERPROFILE/.wslconfig and restart wsl"
         }
         
         # }
