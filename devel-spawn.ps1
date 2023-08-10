@@ -1559,16 +1559,16 @@ function wsl_devel_spawn {
                                     $dvlp_kindtek_options_win = Read-Host
                                 }
                             }
-                            $dvlp_choice = 'refresh'
                         }
                         if ($dvlp_choice -ieq 'kl' ) {
                             wsl.exe cd `$HOME `&`& bash ./setup.sh "$env:USERNAME"
-                            $dvlp_choice = 'refresh'
 
                         }
                         elseif ($dvlp_choice -ieq 'kw' ) {
                             Write-Host 'checking for updates ...'
                         }
+                        $dvlp_choice = 'screen'
+
                     }
                     elseif ($dvlp_choice -ieq 'r') {
                         if ($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO -ne "") {
