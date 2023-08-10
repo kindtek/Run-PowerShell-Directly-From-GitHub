@@ -899,12 +899,12 @@ function run_dvlp_latest_kernel_installer {
     pop-location
 }
 
-function devel_boot_min {
+function devel_boot_safe {
     try {
+        Set-PSDebug -Trace 2;
         install_winget
         install_git        
         sync_repo
-        install_recommends
         install_dependencies
         require_docker_online
         return $true
@@ -912,6 +912,7 @@ function devel_boot_min {
 }
 
 function devel_boot {
+    Set-PSDebug -Trace 2;
     try {
         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
         Write-Host "`r`n`r`ninitializing ..."
@@ -934,10 +935,8 @@ function devel_boot {
         }
         try {
             install_windows_features
-            Write-Host "
-            windows features installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
-        }
-        catch { break }
+            Write-Host "Windows features are installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
+        } catch { break }
         install_recommends
         $new_dependencies_installed = install_dependencies 
         if ($new_windowsfeatures_installed -eq $true -or $new_dependencies_installed -eq $true) {
@@ -1000,7 +999,7 @@ function devel_daemon {
             catch { 
                 # try setting envs first then do bare minimum
                 set_dvlp_envs
-                return devel_boot_min
+                return devel_boot_safe
                 
             }
             reboot_prompt
@@ -1017,7 +1016,7 @@ function devel_daemon {
             if (dependencies_installed -eq $false){
                 # try setting envs first then do bare minimum
                 set_dvlp_envs
-                devel_boot_min 
+                devel_boot_safe 
             }
             start-sleep 60
         }
