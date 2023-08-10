@@ -929,10 +929,10 @@ function devel_boot {
         # jump to bottom line without clearing scrollback
         # Write-Host "$([char]27)[2J" 
         if (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.windowsfeatures-installed" -PathType Leaf) {
-            $windowsfeatures_installed = $false
+            $windowsfeatures_installed = $true
         }
         else {
-            $windowsfeatures_installed = $true
+            $windowsfeatures_installed = $false
         }
         try {
             install_windows_features
