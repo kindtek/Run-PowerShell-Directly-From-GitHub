@@ -945,7 +945,7 @@ function wsl_devel_spawn {
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
         $confirmation = ''    
-        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
+        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
             $host.UI.RawUI.ForegroundColor = "Black"
             $host.UI.RawUI.BackgroundColor = "DarkRed"
             Write-Host "$([char]27)[2J"
@@ -970,10 +970,10 @@ function wsl_devel_spawn {
                 }
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
-            # if (($confirmation -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
-            if (($dvlp_choice -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
+            # if (($confirmation -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
+            if (($dvlp_choice -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                 # write-host "confirmation: $confirmation"
-                # write-host "test path $($env:KINDTEK_WIN_DVLW_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
+                # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 Start-Sleep 3
                 Write-Host ""
@@ -1001,28 +1001,28 @@ function wsl_devel_spawn {
 
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 try {
-                    if (!(Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.dvlp-installed" -PathType Leaf)) {
+                    if (!(Test-Path -Path "$($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed" -PathType Leaf)) {
                         docker_devel_spawn "default"
                         cmd.exe /c net stop LxssManager
                         cmd.exe /c net start LxssManager
                         # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
                         if ($(test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) -eq $true) {
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test passed"
-                            Write-Host "docker devel installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed"
+                            Write-Host "docker devel installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed"
                         }
                         else {
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test FAILED"
                         }
                         # install hypervm on next open
                         try {
-                            if (!(Test-Path "$env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed" -PathType Leaf)) {
+                            if (!(Test-Path "$env:KINDTEK_WIN_GIT_PATH/.hypervm-installed" -PathType Leaf)) {
                                 $profilePath = Join-Path $env:USERPROFILE 'Documents\PowerShell\Microsoft.PowerShell_profile.ps1'
                                 $vmpPath = Join-Path $env:USERPROFILE 'Documents\PowerShell\kindtek.Set-VMP.ps1'
                                 New-Item -Path $profilePath -ItemType File -Force
                                 New-Item -Path $vmpPath -ItemType File -Force
                                 Add-Content $profilePath ". $vmpPath;Clear-Content $vmpPath;cd $env:USERPROFILE;./dvlp.ps1"
                                 Add-Content $vmpPath "`nWrite-Host 'Preparing to set up HyperV VM Processor as kali-linux ...';Start-Sleep 10;Set-VMProcessor -VMName kali-linux -ExposeVirtualizationExtensions `$true -ErrorAction SilentlyContinue"        
-                                Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_DVLW_PATH/.hypervm-installed"
+                                Write-Host "$software_name installed`r`n" | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.hypervm-installed"
                             }
                         }
                         catch {}
@@ -1039,7 +1039,7 @@ function wsl_devel_spawn {
                         $host.UI.RawUI.BackgroundColor = "Black"
 
                         $old_wsl_default_distro = get_default_wsl_distro
-                        if ($dvlp_choice -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf)) {
+                        if ($dvlp_choice -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
                             # start_dvlp_process_pop "$(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default')" 'wait'
                             docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
                             run_dvlp_latest_kernel_installer
@@ -1098,7 +1098,7 @@ function wsl_devel_spawn {
                     # write-host 'dot sourcing devel tools'
                     . $env:KINDTEK_DEVEL_TOOLS
                 }
-                if (($dvlp_choice -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))) {
+                if (($dvlp_choice -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
                     $global:devel_spawn = $null
                     $global:devel_tools = $null
@@ -1112,7 +1112,7 @@ function wsl_devel_spawn {
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro 
             do {
-                if ((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag)))) {
+                if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag)))) {
                     $docker_devel_spawn_noninteractive = "`r`n`t  (use [d!] to import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
                 }
                 if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -And !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -And "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -And "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
