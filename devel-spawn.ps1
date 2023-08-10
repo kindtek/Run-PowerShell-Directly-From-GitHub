@@ -44,7 +44,7 @@ class dvlp_process {
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
             # echo testing path $env:KINDTEK_DEVEL_TOOLS
             if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
-                $this.proc_cmd = ".$env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
+                $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
                 # write-host 'dot sourcing devel tools'
                 # echo path $env:KINDTEK_DEVEL_TOOLS exists
             }
