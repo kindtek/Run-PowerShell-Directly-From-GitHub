@@ -1072,7 +1072,7 @@ function wsl_devel_spawn {
                 Write-Host ""
                 Start-Sleep 1
                 $host.UI.RawUI.BackgroundColor = "Black"
-                $host.UI.RawUI.BackgroundColor = "Gray"
+                $host.UI.RawUI.ForegroundColor = "DarkGray"
                 Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
                 Start-Sleep 1
                 Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
