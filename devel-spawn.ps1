@@ -549,112 +549,22 @@ function set_dvlp_envs {
         $machine_paths = get_dvlp_env 'path' 'machine'
         $local_ext = get_dvlp_env 'pathext'
         $machine_ext = get_dvlp_env 'pathext' 'machine'
-        
-        # $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
-        # $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
-        # $local_ext = [System.Environment]::GetEnvironmentVariable('pathext')
-        # $machine_ext = [string][System.Environment]::GetEnvironmentVariable('pathext', [System.EnvironmentVariableTarget]::Machine)
-        
+              
         if ($local_ext -split ";" -notcontains ".ps1") {
-            # $local_ext += ";.ps1"
             set_dvlp_env "pathext" "$(get_dvlp_env 'pathext');.ps1"
-            # $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('pathext', '$local_ext')"
-            # [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new("$cmd_str_local", 'wait')
         }
         if ($machine_ext -split ";" -notcontains ".ps1") {
-            # $machine_ext += ";.ps1"
-            # $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('pathext', '$machine_ext', '$([System.EnvironmentVariableTarget]::Machine)')"
-            set_dvlp_env "pathext" "$(get_dvlp_env 'pathext' 'machine');.ps1" "machine" 
-            # [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new("$cmd_str_machine")
+           set_dvlp_env "pathext" "$(get_dvlp_env 'pathext' 'machine');.ps1" "machine" 
         }
         if ($local_paths -split ";" -notcontains "$envKINDTEK_DEVEL_SPAWN" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
-            # $local_paths += ";$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
-            # $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
             set_dvlp_env "path" "$(get_dvlp_env 'path');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
         }
         if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
-            # $machine_paths += ";$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
-            # $cmd_str_machine = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths', '$([System.EnvironmentVariableTarget]::Machine)')"
-            set_dvlp_env "path" "$(get_dvlp_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
+         set_dvlp_env "path" "$(get_dvlp_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
         }
-        # Invoke-Expression("$cmd_str_local")
-        # Invoke-Expression("$cmd_str_machine")
-
-        # write-host "cmd_str_machine: $cmd_str_machine"
-        # write-host "cmd_str_local: $cmd_str_local"
 
     }
     catch {}
-
-    # $local_paths = [string][System.Environment]::GetEnvironmentVariable('path')
-    # if ($local_paths -split ";" -notcontains "devel-tools.ps1" ) {
-    #     if ($local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/"){
-    #         $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/"
-    #     }
-    #     if ($local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"){
-    #         $local_paths += ";$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"
-    #     }
-    #     $local_paths += ";$env:KINDTEK_DEVEL_TOOLS"
-        
-    #     if ($local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
-    #         $local_paths += ";$env:KINDTEK_WIN_DVLP_PATH/scripts/"
-    #     }
-    #     $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$local_paths')"
-    #     [dvlp_process_embed]$dvlp_proc_local_paths = [dvlp_process_embed]::new("$cmd_str_local", 'wait')
-    # }
-    # $machine_paths = [string][System.Environment]::GetEnvironmentVariable('path', [System.EnvironmentVariableTarget]::Machine)
-    # if ($machine_paths -split ";" -notcontains "devel-tools.ps1") {
-    #     if ($machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/"){
-    #         $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/scripts/"
-    #     }
-    #     if ($machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"){
-    #         $machine_paths += ";$env:KINDTEK_WIN_DVLW_PATH/powerhell/devel-spawn.ps1"
-    #     }
-    #     $machine_paths += ";$env:KINDTEK_DEVEL_TOOLS"
-        
-    #     if ($machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
-    #         $machine_paths += ";$env:KINDTEK_WIN_DVLP_PATH/scripts/"
-    #     }
-    #     $cmd_str_local = "[System.Environment]::SetEnvironmentVariable('path', '$machine_paths')"
-    #     [dvlp_process_embed]$dvlp_proc_machine_envs = [dvlp_process_embed]::new("$cmd_str_machine", 'wait')
-    # }
-    # while ([string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_DEBUG_MODE) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_DEVEL_TOOLS) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_FAILSAFE_WSL_DISTRO) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_OWNER) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_GIT_PATH) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_NAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_FULLNAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_BRANCH) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLW_PATH) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_NAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_FULLNAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLP_PATH) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_NAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_FULLNAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_POWERHELL_PATH) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_NAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_FULLNAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_DVLADV_PATH) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_NAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_FULLNAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_KERNELS_PATH) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_NAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_FULLNAME) `
-    #         -Or [string]::IsNullOrEmpty($env:KINDTEK_WIN_MNT_PATH) ) {
-    #     echo 'waiting for environment variables to update'
-    #     start-sleep 5
-
-    # }
-    # try {
-    #     write-host "dot sourcing devel-tools"
-    #     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-    #         write-host 'dot sourcing devel tools'
-    #         . $env:KINDTEK_DEVEL_TOOLS
-    #     }
-    # }catch{}
 
 }
 
@@ -965,8 +875,10 @@ function docker_devel_spawn {
             # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
         }
         else {
-            Write-Host "`r`nmake sure docker desktop is running"
-            Write-Host "still not working? try: `r`n`t- restart WSL`r`n`t- change your default distro (ie: wsl.exe -s kalilinux-kali-rolling-latest )"
+            Write-Host "`r`docker desktop failed to start. attempting to reinstall ... "
+            powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/reinstall-docker.ps1")
+
+            Write-Host "still not working? try: `r`n`t- restarting WSL`r`n`t- revert to failsafe distro your default distro (ie: wsl.exe -s kalilinux-kali-rolling-latest )`r`n`ttry removing/renaming $env:USERPROFILE/.wslconfig and restart wsl"
         }
         
         # }
@@ -1720,24 +1632,24 @@ function wsl_devel_spawn {
 
 pull_dvlp_envs
 if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
-    echo 'installing everything and setting envs ..'
+    # echo 'installing everything and setting envs ..'
     set_dvlp_envs
     wsl_devel_spawn $args[0]
 
 }
 elseif ($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1"){
-    echo 'setting the envs ..'
+    # echo 'setting the envs ..'
     set_dvlp_envs
     # wsl_devel_spawn $args[0]
 }
 elseif ($global:devel_tools -ne "sourced") {
-    echo 'devel_tools not yet sourced'
+    # echo 'devel_tools not yet sourced'
     if (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf -and Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
-        echo 'now sourcing devel_tools ...'
+        # echo 'now sourcing devel_tools ...'
         . $env:KINDTEK_DEVEL_TOOLS
     }
 }
 else {
-    echo 'not installing anything ...'
+    # echo 'not installing anything ...'
     # echo 'devel_tools already sourced'
 }
