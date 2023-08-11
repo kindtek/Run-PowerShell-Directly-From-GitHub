@@ -942,7 +942,7 @@ function devel_boot {
             }
         } catch { break }
         install_recommends
-        $new_dependencies_installed = install_dependencies 
+        $new_dependencies_installed = $(install_dependencies $true) 
         if ($new_windowsfeatures_installed -eq $true -or $new_dependencies_installed -eq $true) {
             Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n
             please wait for installation processes to complete ..." -ForegroundColor White -BackgroundColor Black
