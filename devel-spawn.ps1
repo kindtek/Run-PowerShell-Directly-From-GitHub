@@ -919,10 +919,7 @@ function devel_boot {
         Write-Host "`r`n`r`ninitializing ..."
         install_winget
         install_git
-        if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-            # write-host 'dot sourcing devel tools'
-            . $env:KINDTEK_DEVEL_TOOLS
-        }
+
         sync_repo
         # log default distro
         $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
@@ -935,12 +932,16 @@ function devel_boot {
             $windowsfeatures_installed = $false
         }
         try {
+            if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
+                # write-host 'dot sourcing devel tools'
+                . $env:KINDTEK_DEVEL_TOOLS
+            }
             install_windows_features
             Write-Host "Windows features are installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
             if ($windowsfeatures_installed -eq $false){
                 $new_windowsfeatures_installed = $true
             }
-        } catch { break }
+        } catch { throw "problems with installing windows features" }
         install_recommends
         $new_dependencies_installed = $(install_dependencies $true) 
         if ($($new_windowsfeatures_installed) -eq $true -or $($new_dependencies_installed) -eq $true) {
