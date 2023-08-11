@@ -1248,7 +1248,7 @@ function wsl_devel_spawn {
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                 } catch {
                     try {
-                        if (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf -and Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
+                        if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
                             # echo 'now sourcing devel_tools ...'
                             . $env:KINDTEK_DEVEL_TOOLS
                         }
