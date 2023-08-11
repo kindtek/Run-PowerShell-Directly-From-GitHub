@@ -594,9 +594,9 @@ function test_default_wsl_distro {
     )
     Write-Host "preparing to test wsl default distro $distro_name"
 
-    if ( test_wsl_distro $distro_name) {
+    if ( $(test_wsl_distro $distro_name)) {
         Write-Host "testing wsl default distro $distro_name"
-        if (get_default_wsl_distro -eq $distro_name -And require_docker_online) {
+        if ($(get_default_wsl_distro) -eq $distro_name -And $(require_docker_online)) {
             # Write-Host "$distro_name is valid default distro"
             return $true
         }
@@ -627,7 +627,7 @@ function revert_default_wsl_distro {
             return $false
         }
     }
-    if ( test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO ) {
+    if ( $(test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) ) {
         return $true
     }
     else {
@@ -665,7 +665,7 @@ function set_default_wsl_distro {
         set_dvlp_env 'KINDTEK_OLD_DEFAULT_WSL_DISTRO' $old_wsl_default_distro
         push_dvlp_envs
         # handle failed installations
-        if ( test_default_wsl_distro $new_wsl_default_distro -eq $false ) {
+        if ( $(test_default_wsl_distro $new_wsl_default_distro) -eq $false ) {
             # Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
             # Start-Sleep 3
             # Write-Host "reverting to $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro ..."
@@ -853,7 +853,7 @@ function docker_devel_spawn {
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
         require_docker_online
-        if (is_docker_desktop_online -eq $true) {
+        if ($(is_docker_desktop_online) -eq $true) {
             # Write-Host "now connected to docker desktop ...`r`n"
             # Write-Host "&$devs_playground $env:img_name_tag"
             # Write-Host "$([char]27)[2J"
@@ -893,7 +893,7 @@ function run_dvlp_latest_kernel_installer {
     )
     push-location $env:KINDTEK_WIN_DVLP_PATH/kernels/linux/kache
     require_docker_online_new_win
-    if (is_docker_desktop_online -eq $true) {
+    if ($(is_docker_desktop_online) -eq $true) {
         ./wsl-kernel-install.ps1 latest
     }    
     pop-location
@@ -943,7 +943,7 @@ function devel_boot {
         } catch { break }
         install_recommends
         $new_dependencies_installed = $(install_dependencies $true) 
-        if ($new_windowsfeatures_installed -eq $true -or $new_dependencies_installed -eq $true) {
+        if ($($new_windowsfeatures_installed) -eq $true -or $($new_dependencies_installed) -eq $true) {
             Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n
             please wait for installation processes to complete ..." -ForegroundColor White -BackgroundColor Black
             while ($(dependencies_installed $true) -eq $false) {
@@ -955,7 +955,7 @@ function devel_boot {
                 Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
             }
             require_docker_online
-            if (!(is_docker_desktop_online)) {    
+            if (!($(is_docker_desktop_online))) {    
                 if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
                     if ($new_windowsfeatures_installed) {
                         Write-Host "
@@ -1158,7 +1158,7 @@ function wsl_devel_spawn {
                         }
                         $new_wsl_default_distro = get_default_wsl_distro
                         
-                        if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And (is_docker_desktop_online -eq $false)) {
+                        if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
                             Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
                             # Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
                             # try {
