@@ -1239,11 +1239,11 @@ function wsl_devel_spawn {
                 if ($(get_default_wsl_distro) -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO") {
                     $wsl_distro_revert_options = $wsl_distro_revert_options + "- [revert] wsl to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`t"
                 }
-                write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                write-host "  WSL DEVEL"
-                write-host " --------------------------------------------------------------------------"
                 try {
                     $wsl_distro_list = get_wsl_distro_list
+                    write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
+                    write-host "  WSL DEVEL"
+                    write-host " --------------------------------------------------------------------------"
                     wsl_distro_list_display $wsl_distro_list
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                 } catch {
@@ -1253,9 +1253,19 @@ function wsl_devel_spawn {
                             . $env:KINDTEK_DEVEL_TOOLS
                         }
                         $wsl_distro_list = get_wsl_distro_list
+                        write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
+                        write-host "  WSL DEVEL"
+                        write-host " --------------------------------------------------------------------------"
                         wsl_distro_list_display $wsl_distro_list
-                    } catch {}
-                    $dvlp_options = "oops ..wsl devel install failed `r`n`r`n`r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
+                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
+                    } catch {
+                        write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
+                        write-host "  WSL DEVEL failed to load"
+                        write-host " --------------------------------------------------------------------------"
+                        write-host "`r`n :(`r`n`r`n"
+
+                        $dvlp_options = "oops ..wsl devel install failed `r`n`r`n`r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
+                    }
                 }
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
