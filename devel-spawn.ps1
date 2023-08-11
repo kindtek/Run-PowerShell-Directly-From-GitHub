@@ -1242,10 +1242,22 @@ function wsl_devel_spawn {
                 write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
                 write-host "  WSL DEVEL"
                 write-host " --------------------------------------------------------------------------"
-                $wsl_distro_list = get_wsl_distro_list
-                wsl_distro_list_display $wsl_distro_list
+                try {
+                    $wsl_distro_list = get_wsl_distro_list
+                    wsl_distro_list_display $wsl_distro_list
+                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
+                } catch {
+                    if (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf -and Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
+                        # echo 'now sourcing devel_tools ...'
+                        . $env:KINDTEK_DEVEL_TOOLS
+                    }
+                    try {
+                        $wsl_distro_list = get_wsl_distro_list
+                        wsl_distro_list_display $wsl_distro_list
+                    } catch {}
+                    $dvlp_options = "oops ..wsl devel install failed `r`n`r`n`r`nChoose from the one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
+                }
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
-                $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
