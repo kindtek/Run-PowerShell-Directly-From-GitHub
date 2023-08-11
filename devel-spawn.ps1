@@ -936,6 +936,7 @@ function devel_boot_safe {
         . include_devel_tools
         install_dependencies $true
         require_docker_online
+        Set-PSDebug -Trace "$env:KINDTEK_DEBUG_MODE"
         return $true
     }
     catch { return $false }
