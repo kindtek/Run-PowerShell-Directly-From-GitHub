@@ -2,8 +2,8 @@ $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
 
 $global:devel_spawn = 'sourced'
-export WSL_UTF8=1
-WSLENV="$WSLENV":WSL_UTF8
+# export WSL_UTF8=1
+# WSLENV="$WSLENV":WSL_UTF8
 
 function include_devel_tools {
     try {
