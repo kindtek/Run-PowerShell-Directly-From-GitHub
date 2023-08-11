@@ -1249,6 +1249,8 @@ function wsl_devel_spawn {
                 # do nothing but refresh screen
             }
             else {
+                write-host -nonewline"
+        =<=---=-======================="
                 . include_devel_tools
                 if (($dvlp_choice -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
@@ -1279,22 +1281,22 @@ function wsl_devel_spawn {
                 }
                 try {
                     $wsl_distro_list = get_wsl_distro_list
-                    write-host "
+                    write-host -nonewline "
         __-=||_=// e v e l"
-                    write-host " --------------------------------------------------------------------------"
+                    write-host -nonewline "`r`n--------------------------------------------------------------------------"
                     wsl_distro_list_display $wsl_distro_list
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                 } catch {
                     try {
                         . include_devel_tools
                         $wsl_distro_list = get_wsl_distro_list
-                    write-host "
+                    write-host -nonewline "
         __-=||_=// e v e l"
-                        write-host " --------------------------------------------------------------------------"
+                        write-host "`r`n--------------------------------------------------------------------------"
                         wsl_distro_list_display $wsl_distro_list
                         $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                     } catch {
-                        write-host "
+                        write-host -nonewline "
         __-=||_=// e v e l (SAFE MODE)"
 # write-host "
 # ___ ____
