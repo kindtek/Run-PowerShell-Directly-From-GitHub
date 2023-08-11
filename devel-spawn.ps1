@@ -1283,7 +1283,7 @@ function wsl_devel_spawn {
                     $wsl_distro_list = get_wsl_distro_list
                     write-host -nonewline "
         __-=||_=// e v e l"
-                    write-host -nonewline "`r`n--------------------------------------------------------------------------"
+                    write-host -nonewline "`r`n --------------------------------------------------------------------------"
                     wsl_distro_list_display $wsl_distro_list
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                 } catch {
@@ -1292,7 +1292,7 @@ function wsl_devel_spawn {
                         $wsl_distro_list = get_wsl_distro_list
                     write-host -nonewline "
         __-=||_=// e v e l"
-                        write-host "`r`n--------------------------------------------------------------------------"
+                        write-host "`r`n --------------------------------------------------------------------------"
                         wsl_distro_list_display $wsl_distro_list
                         $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                     } catch {
@@ -1302,7 +1302,7 @@ function wsl_devel_spawn {
 # ___ ____
 # __-=||-=\\_o_c_k_e_r____________
 # __-=||_=// e v e l (SAFE MODE)"
-                        write-host " --------------------------------------------------------------------------"
+                        write-host "`r`n --------------------------------------------------------------------------"
 
                         $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                     }
