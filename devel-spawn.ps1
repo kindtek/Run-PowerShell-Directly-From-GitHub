@@ -1402,8 +1402,8 @@ function wsl_devel_spawn {
                             $wsl_distro_selected_confirm = read-host "
     (OPEN $wsl_distro_selected terminal)"
                             if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                start_dvlp_process_pop "wsl.exe -d $wsl_distro_selected cd ```$HOME ```&```& bash " 'wait' 'noexit'
-                                # wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash
+                                start_dvlp_process_pop "wsl.exe -d '$wsl_distro_selected' cd ```$HOME ```&```& bash" 'wait' 'noexit'
+                                # wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& bash
                             }
                         }
                         else {
@@ -1421,14 +1421,14 @@ function wsl_devel_spawn {
     (OPEN $wsl_distro_selected gui)"
                             if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
                                 try {
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
-                                    # wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
+                                    wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
+                                    # wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
                                     # wsl --cd /hal --user agl -d $wsl_distro_selected -- bash ./start-kex.sh "$env:USERNAME"
                                 }
                                 catch {
                                     write-host 'cannot start kex. attempting to install'
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./build-kex.sh "$env:USERNAME"
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
+                                    wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& bash ./build-kex.sh "$env:USERNAME"
+                                    wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
                                 }
                             }
                         }
@@ -1508,20 +1508,20 @@ function wsl_devel_spawn {
                             }
                             elseif ($wsl_action_choice -ceq 'SETUP') {
                                 write-host "setting up $wsl_distro_selected ..."
-                                wsl.exe -d $wsl_distro_selected cd `$HOME `&`& ./setup.sh "$env:USERNAME"
+                                wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& ./setup.sh "$env:USERNAME"
                             }
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                                 write-host "use 'exit' to exit terminal"
-                                wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash 
+                                wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& bash 
                             }
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ) {
                                 write-host "use 'exit' to exit terminal"
                                 try {
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& ./start-kex.sh "$env:USERNAME"
+                                    wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& ./start-kex.sh "$env:USERNAME"
                                 }
                                 catch {
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& ./build-kex.sh "$env:USERNAME"
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& ./start-kex.sh "$env:USERNAME"
+                                    wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& ./build-kex.sh "$env:USERNAME"
+                                    wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& ./start-kex.sh "$env:USERNAME"
 
                                 }
                             }
