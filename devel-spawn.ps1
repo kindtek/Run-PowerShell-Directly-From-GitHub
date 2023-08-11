@@ -848,7 +848,7 @@ function docker_devel_spawn {
     param (
         $img_name_tag, $non_interactive, $default_distro
     )
-    try {
+    # try {
         $software_name = "docker devel"
         # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
         Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
@@ -883,8 +883,8 @@ function docker_devel_spawn {
         }
         
         # }
-    }
-    catch {}
+    # }
+    # catch {}
 }
 
 function run_dvlp_latest_kernel_installer {
@@ -1110,8 +1110,8 @@ function wsl_devel_spawn {
                 try {
                     if (!(Test-Path -Path "$($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed" -PathType Leaf)) {
                         docker_devel_spawn "default"
-                        cmd.exe /c net stop LxssManager
-                        cmd.exe /c net start LxssManager
+                        # cmd.exe /c net stop LxssManager
+                        # cmd.exe /c net start LxssManager
                         # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
                         if ($(test_default_wsl_distro $env:KINDTEK_FAILSAFE_WSL_DISTRO) -eq $true) {
                             # write-host "$env:KINDTEK_FAILSAFE_WSL_DISTRO test passed"
