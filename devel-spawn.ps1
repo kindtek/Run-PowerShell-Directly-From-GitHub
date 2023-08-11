@@ -1459,14 +1459,14 @@ function wsl_devel_spawn {
                                 $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
                                 $wsl_kernel_install_path = "$($env:USERPROFILE)/kache/wsl-kernel-install.ps1"
                                 if ($(get_default_wsl_distro $wsl_distro_selected)) {
-                                    if (Test-Path $wsl_kernel_install_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                                    if (Test-Path "$wsl_kernel_install_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                                         $kernel_choices += 'install'
                                     }
-                                    if (Test-Path $wsl_kernel_make_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                                    if (Test-Path "$wsl_kernel_make_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                                         $kernel_choices += 'make'
                                     }
                                 }
-                                if (Test-Path $wsl_kernel_rollback_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                                if (Test-Path "$wsl_kernel_rollback_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                                     $kernel_choices += 'rollback'
                                 }
                                 write-host 'enter one of the following:'
@@ -1608,7 +1608,7 @@ function wsl_devel_spawn {
                                     # $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro)\$($base_distro_id)"
                                 }                                                                   
                                 try {
-                                    if (!(Test-Path -Path $old_distro_backup_path -PathType Leaf)) {
+                                    if (!(Test-Path -Path "$old_distro_backup_path" -PathType Leaf)) {
                                         $backup_distro_files = Get-ChildItem -Path "$old_distro_backup_path" -File | Where-Object { $_ -And $_ -ne '' -And $_ -match '^(.*)\.tar$' } | Sort-Object
                                         $backup_distro_num = 0
                                         write-host "`r`n"
@@ -1755,7 +1755,7 @@ function wsl_devel_spawn {
                         $dvlp_choice = 'screen'
                     }
                     elseif ($dvlp_choice -ceq 'RESTART') {
-                        if (Test-Path $wsl_restart_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                        if (Test-Path "$wsl_restart_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                             powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                             require_docker_online_new_win
                         }
@@ -1763,7 +1763,7 @@ function wsl_devel_spawn {
                     }
                     elseif ($dvlp_choice -ieq 'rollback') {
                         $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
-                        if (Test-Path $wsl_kernel_rollback_path -PathType Leaf -ErrorAction SilentlyContinue ) {
+                        if (Test-Path "$wsl_kernel_rollback_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                             powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                             require_docker_online_new_win
                         }
