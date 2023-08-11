@@ -5,7 +5,7 @@ $global:devel_spawn = 'sourced'
 
 function include_devel_tools {
     if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-        # write-host 'dot sourcing devel tools'
+        write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
         . $env:KINDTEK_DEVEL_TOOLS
     }
 }
@@ -856,6 +856,7 @@ function require_devel_online {
         try {
             $docker_online = require_docker_online
         } catch {
+            . include_devel_tools
             devel_boot_safe
             $docker_online = require_docker_online
         }
@@ -923,10 +924,7 @@ function devel_boot_safe {
         install_winget $true
         install_git $true    
         sync_repo
-        if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-            # write-host 'dot sourcing devel tools'
-            . $env:KINDTEK_DEVEL_TOOLS
-        }
+        . include_devel_tools
         install_dependencies $true
         require_docker_online
         return $true
@@ -955,10 +953,7 @@ function devel_boot {
             $windowsfeatures_installed = $false
         }
         try {
-            if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-                # write-host 'dot sourcing devel tools'
-                . $env:KINDTEK_DEVEL_TOOLS
-            }
+            . include_devel_tools
             install_windows_features
             Write-Host "Windows features are installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
             if ($windowsfeatures_installed -eq $false) {
@@ -1231,10 +1226,7 @@ function wsl_devel_spawn {
                 # do nothing but refresh screen
             }
             else {
-                if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-                    # write-host 'dot sourcing devel tools'
-                    . $env:KINDTEK_DEVEL_TOOLS
-                }
+                . include_devel_tools
                 if (($dvlp_choice -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
                     $global:devel_spawn = $null
@@ -1270,10 +1262,7 @@ function wsl_devel_spawn {
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                 } catch {
                     try {
-                        if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
-                            # echo 'now sourcing devel_tools ...'
-                            . $env:KINDTEK_DEVEL_TOOLS
-                        }
+                        . include_devel_tools
                         $wsl_distro_list = get_wsl_distro_list
                         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
                         write-host "  WSL DEVEL"
@@ -1805,7 +1794,7 @@ elseif ($global:devel_tools -ne "sourced") {
     # echo 'devel_tools not yet sourced'
     if (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf -and Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
         # echo 'now sourcing devel_tools ...'
-        . $env:KINDTEK_DEVEL_TOOLS
+        . include_devel_tools
     }
 }
 else {
