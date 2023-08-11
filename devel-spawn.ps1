@@ -946,7 +946,7 @@ function devel_boot {
         if ($new_windowsfeatures_installed -eq $true -or $new_dependencies_installed -eq $true) {
             Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n
             please wait for installation processes to complete ..." -ForegroundColor White -BackgroundColor Black
-            while (dependencies_installed -eq $false) {
+            while ($(dependencies_installed $true) -eq $false) {
                 Start-Sleep 10
                 Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
                 Start-Sleep 1
@@ -1024,7 +1024,7 @@ function devel_daemon {
 
     if ($keep_running) {       # daemon initialized ... now check periodically for problems
         start_dvlp_process_popmin "while ($true){
-            if (dependencies_installed -eq $false){
+            if (`$(dependencies_installed `$true) -eq `$false){
                 # try setting envs first then do bare minimum
                 set_dvlp_envs
                 devel_boot_safe 
@@ -1050,7 +1050,7 @@ function wsl_devel_spawn {
         $confirmation = ''    
         if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {          
             try {
-                if (!(dependencies_installed)){
+                if (!($(dependencies_installed $true))){
                     $host.UI.RawUI.ForegroundColor = "Black"
                     $host.UI.RawUI.BackgroundColor = "DarkRed"
                 }
