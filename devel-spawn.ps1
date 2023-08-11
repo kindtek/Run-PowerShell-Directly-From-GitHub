@@ -1113,7 +1113,7 @@ function wsl_devel_spawn {
         else {
             Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
             write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-            write-host "
+            write-host -nonewline "
         ___ ____
         __-=||-=\\_o_c_k_e_r____________"
         }
