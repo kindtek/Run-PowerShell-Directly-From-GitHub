@@ -60,16 +60,19 @@ class dvlp_process {
         if (!([String]::IsNullOrEmpty($proc_cmd))) {
             # echo testing path $env:KINDTEK_DEVEL_TOOLS
             if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
-                $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
+                write-host "dvlp: $proc_cmd"
+                $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;write-host $proc_cmd;$proc_cmd"
                 # write-host 'dot sourcing devel tools'
                 # echo path $env:KINDTEK_DEVEL_TOOLS exists
             }
             elseif (Test-Path -Path "$env:KINDTEK_DEVEL_SPAWN" -PathType Leaf) {
                 # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
-                $this.proc_cmd = "try {$proc_cmd}catch{write-host 'retrying ...';. $env:KINDTEK_DEVEL_SPAWN;$proc_cmd}"
+                write-host "dvlp: $proc_cmd"
+                $this.proc_cmd = ". $env:KINDTEK_DEVEL_SPAWN;write-host $proc_cmd;$proc_cmd"
             }
             elseif (Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf) {
-                $this.proc_cmd = "try {$proc_cmd}catch{write-host 'retrying ...';. $env:USERPROFILE/dvlp.ps1;$proc_cmd}"
+                write-host "dvlp: $proc_cmd"
+                $this.proc_cmd = ". $env:USERPROFILE/dvlp.ps1;write-host $proc_cmd;$proc_cmd"
             }
             else {
                 $this.proc_cmd = "write-host 'could not source files but still continuing ...';$proc_cmd"
