@@ -845,7 +845,16 @@ function sync_repo {
     Pop-Location
     Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1 -Verbose
 }
-
+function require_devel_online {
+    do {
+        try {
+            $docker_online = require_docker_online
+        } catch {
+            devel_boot_safe
+            $docker_online = require_docker_online
+        }
+    } while ($docker_online -eq $false)
+}
 function docker_devel_spawn {
     param (
         $img_name_tag, $non_interactive, $default_distro
@@ -855,14 +864,7 @@ function docker_devel_spawn {
     # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
     Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
     $docker_online = $false
-    do {
-        try {
-            $docker_online = require_docker_online
-        } catch {
-            dvlp_boot_min
-            $docker_online = require_docker_online
-        }
-    } while ($docker_online -eq $false)
+    require_devel_online
     if ($(is_docker_desktop_online) -eq $true) {
         # Write-Host "now connected to docker desktop ...`r`n"
         # Write-Host "&$devs_playground $env:img_name_tag"
@@ -915,6 +917,10 @@ function devel_boot_safe {
         install_winget $true
         install_git $true    
         sync_repo
+        if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
+            # write-host 'dot sourcing devel tools'
+            . $env:KINDTEK_DEVEL_TOOLS
+        }
         install_dependencies $true
         require_docker_online
         return $true
