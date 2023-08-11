@@ -1409,7 +1409,7 @@ function wsl_devel_spawn {
                             if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
                                 wsl.exe -d "$($wsl_distro_selected)" cd `$HOME `&`& bash
                                 wsl.exe -d $($wsl_distro_selected) cd `$HOME `&`& bash
-                                start_dvlp_process_pop "wsl.exe -d ```"```'$([regex]::escape($wsl_distro_selected))```'```" cd ```$HOME ```&```& bash" 'wait' 'noexit'
+                                start_dvlp_process_pop "wsl.exe -d `"`'$([regex]::escape($wsl_distro_selected))`'`" cd ```$HOME ```&```& bash" 'wait' 'noexit'
 
                                 # wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& bash
                             }
