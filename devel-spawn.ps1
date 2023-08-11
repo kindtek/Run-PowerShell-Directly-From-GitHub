@@ -496,7 +496,7 @@ function set_dvlp_envs {
             set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' " " 'machine' 'both'
         }
         elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -Or $DEBUG_MODE -ne '0' -Or $DEBUG_MODE -eq 0) {
-            Set-PSDebug -Trace 2;
+            # Set-PSDebug -Trace 2;
             set_dvlp_env 'KINDTEK_DEBUG_MODE' '1' 'machine' 'both'
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
             set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
@@ -901,7 +901,7 @@ function run_dvlp_latest_kernel_installer {
 
 function devel_boot_safe {
     try {
-        Set-PSDebug -Trace 2;
+        # Set-PSDebug -Trace 2;
         install_winget $true
         install_git $true    
         sync_repo
@@ -912,7 +912,7 @@ function devel_boot_safe {
 }
 
 function devel_boot {
-    Set-PSDebug -Trace 2;
+    # Set-PSDebug -Trace 2;
     $new_windowsfeatures_installed = $false
     try {
         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
