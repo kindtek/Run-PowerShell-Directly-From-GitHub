@@ -1788,6 +1788,8 @@ function wsl_devel_spawn {
 }
 
 pull_dvlp_envs
+# remove auto intall script (optionally added when using restart prompt)
+Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
 if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
     $global:devel_spawn_args = "$($args[0])"
