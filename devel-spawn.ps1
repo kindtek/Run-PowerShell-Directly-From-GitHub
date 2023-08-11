@@ -1761,11 +1761,11 @@ function wsl_devel_spawn {
                         }
                         $dvlp_choice = 'screen'
                     }
-                    elseif ($dvlp_choice -ceq 'reboot') {
-                        reboot_prompt
+                    elseif ($dvlp_choice -ceq 'reboot' -or $dvlp_choice -ceq 'reboot now' -or $dvlp_choice -ceq 'reboot continue') {
+                        reboot_prompt 'reboot'
                         # elseif ($dvlp_choice -ieq 'v') {
                         #     wsl sh -c "cd /hel;. code"
-                        $dvlp_choice = 'screen'
+                        $dvlp_choice = "$dvlp_choice"
                     }
                     elseif (!([string]::isnullorempty($dvlp_choice)) -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'screen' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'KW' -And $(docker manifest inspect $dvlp_choice)) {
                         Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
