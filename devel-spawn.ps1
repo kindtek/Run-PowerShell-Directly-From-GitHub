@@ -1112,6 +1112,10 @@ function wsl_devel_spawn {
         }
         else {
             Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
+            write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
+            write-host "
+        ___ ____
+        __-=||-=\\_o_c_k_e_r____________"
         }
         if ($confirmation -eq '') {
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
@@ -1257,6 +1261,7 @@ function wsl_devel_spawn {
                     $global:devel_tools = $null
                 }
             }
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro 
             do {
@@ -1275,7 +1280,7 @@ function wsl_devel_spawn {
                 try {
                     $wsl_distro_list = get_wsl_distro_list
                     write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                    write-host "  WSL DEVEL"
+                    write-host "__-=||_=// e v e l"
                     write-host " --------------------------------------------------------------------------"
                     wsl_distro_list_display $wsl_distro_list
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
@@ -1284,13 +1289,17 @@ function wsl_devel_spawn {
                         . include_devel_tools
                         $wsl_distro_list = get_wsl_distro_list
                         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                        write-host "  WSL DEVEL"
+                    write-host "__-=||_=// e v e l"
                         write-host " --------------------------------------------------------------------------"
                         wsl_distro_list_display $wsl_distro_list
                         $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                     } catch {
                         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                        write-host "  WSL DEVEL (safe mode)"
+                    write-host "__-=||_=// e v e l (SAFE MODE)"
+# write-host "
+# ___ ____
+# __-=||-=\\_o_c_k_e_r____________
+# __-=||_=// e v e l (SAFE MODE)"
                         write-host " --------------------------------------------------------------------------"
 
                         $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
