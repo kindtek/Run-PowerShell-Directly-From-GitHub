@@ -3,6 +3,12 @@ $host.UI.RawUI.BackgroundColor = "Black"
 
 $global:devel_spawn = 'sourced'
 
+function include_devel_tools {
+    if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
+        # write-host 'dot sourcing devel tools'
+        . $env:KINDTEK_DEVEL_TOOLS
+    }
+}
 class dvlp_process {
     [String]$proc_cmd
     [String]$proc_wait
