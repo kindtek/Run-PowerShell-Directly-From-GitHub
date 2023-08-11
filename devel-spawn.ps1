@@ -601,7 +601,7 @@ function test_default_wsl_distro {
         $distro_name
     )
     Write-Host "preparing to test wsl default distro $distro_name"
-
+    . include_devel_tools
     if ( $(test_wsl_distro $distro_name)) {
         Write-Host "testing wsl default distro $distro_name"
         if ($(get_default_wsl_distro) -eq $distro_name -And $(require_docker_online)) {
@@ -880,7 +880,7 @@ function docker_devel_spawn {
             require_devel_online
         }
     }
-    
+
     if ($(is_docker_desktop_online) -eq $true) {
         # Write-Host "now connected to docker desktop ...`r`n"
         # Write-Host "&$devs_playground $env:img_name_tag"
@@ -1799,7 +1799,7 @@ elseif ($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
     set_dvlp_envs
     # wsl_devel_spawn $args[0]
 }
-elseif ($global:devel_tools -ne "sourced") {
+if ($global:devel_tools -ne "sourced") {
     # echo 'devel_tools not yet sourced'
     if (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf -and Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
         # echo 'now sourcing devel_tools ...'
