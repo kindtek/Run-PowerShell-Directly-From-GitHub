@@ -497,7 +497,7 @@ function set_dvlp_envs {
     }
     try {
         if ([string]::IsNullOrEmpty($DEBUG_MODE) -Or $DEBUG_MODE -eq '0' -Or $DEBUG_MODE -eq 0) {
-            Set-PSDebug -Trace 2;
+            Set-PSDebug -Trace 0;
             set_dvlp_env 'KINDTEK_DEBUG_MODE' '0' 'machine' 'both'
             $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Hidden;
             set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
@@ -943,7 +943,6 @@ function devel_boot_safe {
 }
 
 function devel_boot {
-    Set-PSDebug -Trace 2;
     $new_windowsfeatures_installed = $false
     try {
         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
