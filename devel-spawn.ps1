@@ -1249,7 +1249,7 @@ function wsl_devel_spawn {
                 # do nothing but refresh screen
             }
             else {
-                write-host -nonewline"
+                write-host -nonewline "
         =<=---=-======================="
                 . include_devel_tools
                 if (($dvlp_choice -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
