@@ -9,7 +9,7 @@ function include_devel_tools {
     } catch {
         try {
             if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-                write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
+                # write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
                 . $env:KINDTEK_DEVEL_TOOLS
             }
         } catch {}
@@ -1801,6 +1801,7 @@ Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\d
 if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
     $global:devel_spawn_args = "$($args[0])"
+    write-host ''
     set_dvlp_envs
     . include_devel_tools
     wsl_devel_spawn $args[0]
