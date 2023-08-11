@@ -1439,7 +1439,7 @@ function wsl_devel_spawn {
                             }
                         }
                         else {
-                            write-host "$wsl_distro_selected selected.`r`n`r`nEnter TERMINAL, GUI, DEFAULT, SETUP, KERNEL, BACKUP, RENAME, RESTORE, DELETE`r`n`t ... or press ENTER to open"
+                            write-host "`r`n`r`n$wsl_distro_selected selected.`r`n`r`nEnter TERMINAL, GUI, DEFAULT, SETUP, KERNEL, BACKUP, RENAME, RESTORE, DELETE`r`n`t ... or press ENTER to open"
                             $wsl_action_choice = read-host "
     (open $wsl_distro_selected)"
                             if ($wsl_action_choice -ceq 'DELETE') {
