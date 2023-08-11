@@ -559,6 +559,8 @@ function set_dvlp_envs {
     set_dvlp_env 'KINDTEK_WIN_MNT_PATH' "$git_path/$repo_dir_name6"
     set_dvlp_env 'WSL_UTF8' '1'
     push_dvlp_envs
+    set_dvlp_env 'WSL_UTF8' '1' 'machine'
+
 
     try {
         $local_paths = get_dvlp_env 'path'
