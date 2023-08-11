@@ -1495,7 +1495,7 @@ function wsl_devel_spawn {
                             }
                             elseif ($wsl_action_choice -ceq 'SETUP') {
                                 write-host "setting up $wsl_distro_selected ..."
-                                wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./setup.sh "$env:USERNAME"
+                                wsl.exe -d $wsl_distro_selected cd `$HOME `&`& ./setup.sh "$env:USERNAME"
                             }
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                                 write-host "use 'exit' to exit terminal"
@@ -1504,11 +1504,11 @@ function wsl_devel_spawn {
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ) {
                                 write-host "use 'exit' to exit terminal"
                                 try {
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
+                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& ./start-kex.sh "$env:USERNAME"
                                 }
                                 catch {
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./build-kex.sh "$env:USERNAME"
-                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& bash ./start-kex.sh "$env:USERNAME"
+                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& ./build-kex.sh "$env:USERNAME"
+                                    wsl.exe -d $wsl_distro_selected cd `$HOME `&`& ./start-kex.sh "$env:USERNAME"
 
                                 }
                             }
