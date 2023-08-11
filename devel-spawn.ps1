@@ -394,28 +394,27 @@ function unset_dvlp_envs {
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # write-host "$($_.name)"
     }
-    
-    get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
-        # echo "deleting local env $($_.name)"
-        set_dvlp_env "$($_.name)" "$null"
         try {
             env_refresh
         }
         catch {}
+    get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+        # echo "deleting local env $($_.name)"
+        set_dvlp_env "$($_.name)" "$null"
     }
     if (!([string]::IsNullOrEmpty($unset_machine_envs))) {
         [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
             # echo "deleting machine env $($_.name)"
             set_dvlp_env "$($_.name)" "$null" 'machine'
-            try {
-                env_refresh
             }
-            catch {} 
-        }
     }
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # write-host "$($_.name)"
     }
+    try {
+        env_refresh
+    }
+    catch {}
 }
 
 function pull_dvlp_envs {
@@ -448,13 +447,16 @@ function push_dvlp_envs {
     # get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
     #     write-host " $($_.name):  $($_.value)"
     # }
+    try {
+        env_refresh
+    } catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # "setting machine $($_.name) to $($_.value)" 
         set_dvlp_env "$($_.name)" "$($_.value)" 'machine'
+    }
         try {
             env_refresh
-        }
-        catch {} }
+    } catch {}
     # echo 'machine env'
     # [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
     #     write-host " $($_.name):  $($_.value)"
@@ -1200,7 +1202,7 @@ function wsl_devel_spawn {
                     }
                 }
                 catch {
-                    Write-Host "initial boot error occurred"
+                    Write-Host "initial boot error occurred" -ForegroundColor Magenta -BackgroundColor Yellow
                 }
                 # install distro requested in arg
                 
@@ -1260,11 +1262,10 @@ function wsl_devel_spawn {
                         $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                     } catch {
                         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                        write-host "  WSL DEVEL failed to load"
+                        write-host "  WSL DEVEL (safe mode)"
                         write-host " --------------------------------------------------------------------------"
-                        write-host "`r`n :(`r`n`r`n"
 
-                        $dvlp_options = "oops ..wsl devel install failed `r`n`r`n`r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
+                        $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                     }
                 }
                 # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
