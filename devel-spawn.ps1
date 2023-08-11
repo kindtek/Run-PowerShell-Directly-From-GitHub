@@ -1790,6 +1790,7 @@ function wsl_devel_spawn {
 pull_dvlp_envs
 if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
+    $global:devel_spawn_args = "$($args[0])"
     set_dvlp_envs
     . include_devel_tools
     wsl_devel_spawn $args[0]
