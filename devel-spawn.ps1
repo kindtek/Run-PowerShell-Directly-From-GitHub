@@ -857,10 +857,10 @@ function docker_devel_spawn {
     $docker_online = $false
     do {
         try {
-            require_docker_online
-            $docker_online = $true
+            $docker_online = require_docker_online
         } catch {
             dvlp_boot_min
+            $docker_online = require_docker_online
         }
     } while ($docker_online -eq $false)
     if ($(is_docker_desktop_online) -eq $true) {
