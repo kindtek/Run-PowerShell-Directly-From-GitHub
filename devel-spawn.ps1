@@ -1279,8 +1279,8 @@ function wsl_devel_spawn {
                 }
                 try {
                     $wsl_distro_list = get_wsl_distro_list
-                    write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                    write-host "__-=||_=// e v e l"
+                    write-host "
+        __-=||_=// e v e l"
                     write-host " --------------------------------------------------------------------------"
                     wsl_distro_list_display $wsl_distro_list
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
@@ -1288,14 +1288,14 @@ function wsl_devel_spawn {
                     try {
                         . include_devel_tools
                         $wsl_distro_list = get_wsl_distro_list
-                        write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                    write-host "__-=||_=// e v e l"
+                    write-host "
+        __-=||_=// e v e l"
                         write-host " --------------------------------------------------------------------------"
                         wsl_distro_list_display $wsl_distro_list
                         $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                     } catch {
-                        write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-                    write-host "__-=||_=// e v e l (SAFE MODE)"
+                        write-host "
+        __-=||_=// e v e l (SAFE MODE)"
 # write-host "
 # ___ ____
 # __-=||-=\\_o_c_k_e_r____________
