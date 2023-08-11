@@ -1402,8 +1402,8 @@ function wsl_devel_spawn {
                             $wsl_distro_selected_confirm = read-host "
     (OPEN $wsl_distro_selected terminal)"
                             if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                wsl.exe -d "$($wsl_distro_selected)" cd `$HOME `&`& bash 'wait' 'noexit'
-                                start_dvlp_process_pop "wsl.exe -d `'$($wsl_distro_selected)`' cd ``$HOME ``&``& bash" 'wait' 'noexit'
+                                wsl.exe -d "$($wsl_distro_selected)" cd `$HOME `&`& bash
+                                start_dvlp_process_pop "wsl.exe -d `'$([regex]::escape($wsl_distro_selected))`' cd ``$HOME ``&``& bash" 'wait' 'noexit'
 
                                 # wsl.exe -d "$wsl_distro_selected" cd `$HOME `&`& bash
                             }
