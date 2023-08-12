@@ -1724,20 +1724,19 @@ function wsl_devel_spawn {
                             if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
                                 $dvlp_choice = $dvlp_choice + $dvlp_kindtek_options
                                 if ($dvlp_kindtek_options -ieq 'w') {
-                                    Write-Host "`t-`t[d]ocker settings reset`r`n`t-`t[D]ocker re-install`r`n`t-`t[w]indows re-install`r`n"
+                                    Write-Host "`t-`t[d]ocker settings reset`r`n`t`t-`t[D]ocker re-install`r`n`t`t-`t[w]indows re-install`r`n`t-`t[W]indows uninstall"
                                     $dvlp_kindtek_options_win = Read-Host
                                     if ($dvlp_kindtek_options_win -ceq 'd') {
                                         reset_docker_settings_hard
                                         require_docker_online_new_win
                                     }
                                     if ($dvlp_kindtek_options_win -ceq 'D') {
-                                        powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/reinstall-docker.ps1")
+                                        reinstall_docker
                                         require_docker_online_new_win
                                     }
-                                    if ($dvlp_kindtek_options_win -ieq 'w') {
-                                        powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/add-windows-features.ps1")
-                                        powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/del-windows-features.ps1")
-                                        require_docker_online_new_win
+                                    if ($dvlp_kindtek_options_win -ceq 'w') {
+                                        uninstall_windows_features
+                                        reboot_prompt 'reboot continue'
                                     }
                                 }
                                 elseif ($dvlp_kindtek_options_win -ieq 'l') {
