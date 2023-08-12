@@ -1390,8 +1390,8 @@ function wsl_devel_spawn {
                                     write-host "replacing $wsl_distro_selected with $env:KINDTEK_FAILSAFE_WSL_DISTRO as default distro ..."
                                     revert_default_wsl_distro
                                 }
-                                write-host "executing: wsl --unregister $wsl_distro_selected"
-                                wsl --unregister $wsl_distro_selected
+                                write-host "executing: wsl.exe --unregister $wsl_distro_selected"
+                                wsl.exe --unregister $wsl_distro_selected
                             }
                         }
                         else {
@@ -1431,7 +1431,7 @@ function wsl_devel_spawn {
                                 try {
                                     wsl.exe -d $wsl_distro_selected cd `$HOME; bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
                                     # wsl.exe -d "$wsl_distro_selected" cd `$HOME;bash start-kex.sh "$env:USERNAME"
-                                    # wsl --cd /hal --user agl -d $wsl_distro_selected -- bash start-kex.sh "$env:USERNAME"
+                                    # wsl.exe --cd /hal --user agl -d $wsl_distro_selected -- bash start-kex.sh "$env:USERNAME"
                                 }
                                 catch {
                                     write-host 'cannot start kex. attempting to install'
@@ -1467,12 +1467,12 @@ function wsl_devel_spawn {
                                     revert_default_wsl_distro
                                 }
                                 write-host "deleting $wsl_distro_selected distro ..."
-                                wsl --unregister $wsl_distro_selected
+                                wsl.exe --unregister $wsl_distro_selected
                                 $dvlp_choice = 'screen'
                             }
                             elseif ($wsl_action_choice -ceq 'DEFAULT') {
                                 write-host "setting $wsl_distro_selected as default distro ..."
-                                wsl --set-default $wsl_distro_selected
+                                wsl.exe --set-default $wsl_distro_selected
                             }
                             elseif ($wsl_action_choice -ceq 'KERNEL') {
                                 $kernel_choices = @()
@@ -1705,7 +1705,7 @@ function wsl_devel_spawn {
                         }
                         elseif ($dvlp_choice -ieq 'tdl' ) {
                             # wsl.exe -d devels-playground-kali-git -- cd `$HOME/.local/bin; alias cdir`=`'source cdir.sh; alias grep=`'grep --color=auto`'; ls -al; cdir_cli
-                            # start_dvlp_process_pop "wsl --cd /hal --exec bash `$(cdir)" 'wait' 'noexit'
+                            # start_dvlp_process_pop "wsl.exe --cd /hal --exec bash `$(cdir)" 'wait' 'noexit'
                         }
                         elseif ($dvlp_choice -ieq 'tw' ) {
                             start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
@@ -1794,7 +1794,7 @@ function wsl_devel_spawn {
                         reboot_prompt "$dvlp_choice"
                         $dvlp_choice = 'screen'
                         # elseif ($dvlp_choice -ieq 'v') {
-                        #     wsl sh -c "cd /hel;. code"
+                        #     wsl.exe sh -c "cd /hel;. code"
                     }
                     elseif (!([string]::isnullorempty($dvlp_choice)) -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'screen' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'KW' -And $(docker manifest inspect $dvlp_choice)) {
                         Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
