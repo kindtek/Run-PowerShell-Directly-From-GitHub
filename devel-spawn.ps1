@@ -1810,6 +1810,13 @@ function wsl_devel_spawn {
                 } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
             } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
         }
+        elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
+            try {
+                Invoke-Expression $confirmation
+            } catch {
+                Write-Host "invalid command $confirmation"
+            }
+        }
         else {
             $dvlp_choice = 'exit'
         }
