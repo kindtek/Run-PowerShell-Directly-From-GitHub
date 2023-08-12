@@ -1738,6 +1738,10 @@ function wsl_devel_spawn {
                                         uninstall_windows_features
                                         reboot_prompt 'reboot continue'
                                     }
+                                    if ($dvlp_kindtek_options_win -ceq 'W') {
+                                        remove_installation
+                                        reboot_prompt 'reboot continue'
+                                    }
                                 }
                                 elseif ($dvlp_kindtek_options_win -ieq 'l') {
                                     $dvlp_kindtek_options_win = Read-Host
