@@ -1390,6 +1390,7 @@ function wsl_devel_spawn {
                                     write-host "replacing $wsl_distro_selected with $env:KINDTEK_FAILSAFE_WSL_DISTRO as default distro ..."
                                     revert_default_wsl_distro
                                 }
+                                write-host "executing: wsl --unregister $wsl_distro_selected"
                                 wsl --unregister $wsl_distro_selected
                             }
                         }
