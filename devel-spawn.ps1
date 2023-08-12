@@ -1070,7 +1070,7 @@ function devel_daemon {
 
     if ($keep_running) {
         # daemon initialized ... now check periodically for problems
-        start_dvlp_process_popmin "while ($true){
+        start_dvlp_process_popmin "while (`$true){
             if (`$(dependencies_installed `$true) -eq `$false){
                 # try setting envs first then do bare minimum
                 set_dvlp_envs
