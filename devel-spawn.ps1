@@ -634,7 +634,7 @@ function test_default_wsl_distro {
 function get_default_wsl_distro {
     $default_wsl_distro = (wsl.exe --list | Out-String).split("`n").trim() | Where-Object { $_ -And (!([string]::IsNullOrWhiteSpace($_))) -And $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
-    return $default_wsl_distro
+    return `' + $default_wsl_distro + `'
 }
 
 function revert_default_wsl_distro {
