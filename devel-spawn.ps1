@@ -632,7 +632,7 @@ function test_default_wsl_distro {
 }
 
 function get_default_wsl_distro {
-    $default_wsl_distro = wsl.exe --list | Where-Object { $_ -And $_ -ne '' -And $_ -match '(.*)\(' }
+    $default_wsl_distro = wsl.exe --list --quiet | Where-Object { $_ -And $_ -ne '' -And $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
     return $default_wsl_distro
 }
