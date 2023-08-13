@@ -1114,7 +1114,7 @@ function devel_daemon {
             }
             catch { 
                 # try setting envs first then do bare minimum
-                set_dvlp_envs
+                set_dvlp_envs 1
                 return devel_boot_safe
                 
             }
@@ -1132,7 +1132,7 @@ function devel_daemon {
         start_dvlp_process_popmin "while (`$true){
             if (`$(dependencies_installed `$true) -eq `$false){
                 # try setting envs first then do bare minimum
-                set_dvlp_envs
+                set_dvlp_envs 1
                 devel_boot_safe 
             }
             start-sleep 60
