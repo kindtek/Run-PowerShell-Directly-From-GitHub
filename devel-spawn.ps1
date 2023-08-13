@@ -992,7 +992,10 @@ function devel_boot {
             Write-Host "Windows features are installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
             if ($windowsfeatures_installed -eq $false) {
                 $new_windowsfeatures_installed = $true
-                reboot_prompt 'reboot continue'
+                wsl.exe --list | Out-Null
+                if (!($?)){
+                    reboot_prompt 'reboot continue'
+                }
             }
         }
         catch { throw "problems with installing windows features" }
