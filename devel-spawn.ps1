@@ -733,7 +733,11 @@ function install_winget {
             $network_err_msg = "`r`ncannot connect to the internet. retrying .."
             while ($network_connected -eq $false){
                 try {
-                    Invoke-RestMethod "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
+                    if (!(Test-Path $file)){
+                        # use cache
+                        Invoke-RestMethod "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
+                    }
+                    # not necessarily connected but if cache is used its good enough
                     $network_connected = $true
                 }
                 catch {
@@ -758,12 +762,7 @@ function install_winget {
 function install_git {
     try {
         $software_name = "Github CLI"
-        $refresh_envs = "$env:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
-        $global:progress_flag = 'silentlyContinue'
-        $orig_progress_flag = $progress_flag 
-        $progress_flag = 'SilentlyContinue'
-        Invoke-RestMethod "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $refresh_envs | Out-Null
-        $progress_flag = $orig_progress_flag
+        env_refresh
         if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
             Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
             start_dvlp_process_popmax "winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;" 'wait'
@@ -1052,7 +1051,7 @@ function devel_boot {
                 software installations complete! 
                 restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                         }
-                        reboot_prompt 'reboot continue'
+                        reboot_prompt 'reboot'
                     }
                 }
             } else {
@@ -1937,6 +1936,40 @@ function wsl_devel_spawn {
     
     
     Write-Host "`r`nGoodbye!`r`n"
+}
+
+function env_refresh {
+
+    $orig_progress_flag = $global:progress_flag 
+    $refresh_envs = "$env:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
+    $global:progress_flag = 'silentlyContinue'
+    $progress_flag = 'SilentlyContinue'
+    $global:progress_flag = $orig_progress_flag
+    $network_connected = $false
+    $network_err_msg = "`r`ncannot connect to the internet. retrying .."
+    # write-host 'checking network'
+    while ($network_connected -eq $false){
+        # write-host 'checking network'
+        try {
+            if (!(Test-Path $refresh_envs)){
+                Invoke-RestMethod "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $refresh_envs | Out-Null
+            }
+            # network not necessarily connected but found cached file
+            $network_connected = $true
+        }
+        catch {
+            start-sleep 1
+            write-host -NoNewline "$network_err_msg"
+            $network_err_msg = "."
+        }
+    }
+    .$refresh_envs
+
+}
+
+function env_refresh_new_win {
+    start_dvlp_process_popmin "wsl_docker_full_restart" 
+    # env_refresh
 }
 
 function start_countdown {
