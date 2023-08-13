@@ -1032,7 +1032,7 @@ function devel_boot {
                 }
             } else {
                 $skip_install = Read-Host "press ENTER to skip to menu and restart later
-                ...or press any key to continue to wait for installations to complete"
+                ...or entery any character to continue to wait for installations to complete"
                 while ($(dependencies_installed $true) -eq $false -and $skip_install -ine '') {
                     Write-Host "please wait for installation processes to complete "
                     for ($i = 0; $i -le 120; $i++) {
@@ -1796,12 +1796,12 @@ function wsl_devel_spawn {
                                         require_docker_online_new_win
                                     }
                                     if ($dvlp_kindtek_options_win -ceq 'w') {
-                                        uninstall_windows_features
+                                        remove_installation
                                         reboot_prompt 'reboot continue'
                                     }
                                     if ($dvlp_kindtek_options_win -ceq 'W') {
                                         remove_installation
-                                        reboot_prompt 'reboot continue'
+                                        reboot_prompt 'reboot'
                                     }
                                 }
                                 elseif ($dvlp_kindtek_options_win -ieq 'l') {
