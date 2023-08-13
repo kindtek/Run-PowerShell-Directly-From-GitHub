@@ -1182,14 +1182,7 @@ function wsl_devel_spawn {
                 # write-host "confirmation: $confirmation"
                 # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
-                Start-Sleep 3
-                Write-Host ""
-                Start-Sleep 1
-                Write-Host ""
-                Write-Host ""
-                Start-Sleep 1
-                Write-Host ""
-                Start-Sleep 1
+                start_countdown
                 $host.UI.RawUI.BackgroundColor = "Black"
                 $host.UI.RawUI.ForegroundColor = "DarkGray"
                 Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
