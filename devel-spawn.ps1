@@ -1926,7 +1926,7 @@ if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFIL
     Write-Host "`$PSCommandPath: $($PSCommandPath)"
     Write-Host "`$args[0]: $($args[0])"
     $global:devel_spawn_args = "$($args[0])"
-    set_dvlp_envs
+    set_dvlp_envs 1
     . include_devel_tools
     wsl_devel_spawn $args[0]
 
