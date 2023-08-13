@@ -1404,7 +1404,7 @@ function wsl_devel_spawn {
                             $dvlp_choice = 'screen'
 
                         } catch {
-                            $dvlp_choice = $confirmation
+                            # $dvlp_choice = $confirmation
                         }
                     }
                     if (!([string]::IsNullOrEmpty($dvlp_choice))) {
