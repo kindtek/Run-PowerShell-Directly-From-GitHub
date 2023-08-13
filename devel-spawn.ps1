@@ -1972,9 +1972,11 @@ function dvlp_set_debug_mode {
         [bool]$debug_mode_on
     )
     if ($debug_mode_on){
+        Set-PSDebug -Trace 2
         set_dvlp_env 'KINDTEK_DEBUG_MODE' '1'
         set_dvlp_env 'KINDTEK_DEBUG_MODE' '1' 'machine'
     } else {
+        Set-PSDebug -Trace 0
         set_dvlp_env 'KINDTEK_DEBUG_MODE' '0'
         set_dvlp_env 'KINDTEK_DEBUG_MODE' '0' 'machine'
     }
