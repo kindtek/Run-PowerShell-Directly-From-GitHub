@@ -1114,7 +1114,7 @@ function devel_daemon {
             }
             catch { 
                 # try setting envs first then do bare minimum
-                set_dvlp_envs 1
+                set_dvlp_envs
                 return devel_boot_safe
                 
             }
@@ -1132,7 +1132,7 @@ function devel_daemon {
         start_dvlp_process_popmin "while (`$true){
             if (`$(dependencies_installed `$true) -eq `$false){
                 # try setting envs first then do bare minimum
-                set_dvlp_envs 1
+                set_dvlp_envs
                 devel_boot_safe 
             }
             start-sleep 60
@@ -1931,7 +1931,7 @@ if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFIL
     Write-Host "`$PSCommandPath: $($PSCommandPath)"
     Write-Host "`$args[0]: $($args[0])"
     $global:devel_spawn_args = "$($args[0])"
-    set_dvlp_envs 1
+    set_dvlp_envs
     . include_devel_tools
     wsl_devel_spawn $args[0]
 
