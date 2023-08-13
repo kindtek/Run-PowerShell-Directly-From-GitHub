@@ -1732,7 +1732,7 @@ function wsl_devel_spawn {
                             if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
                                 $dvlp_choice = $dvlp_choice + $dvlp_kindtek_options
                                 if ($dvlp_kindtek_options -ieq 'w') {
-                                    Write-Host "`t-`t[d]ocker settings reset`r`n`t`t-`t[D]ocker re-install`r`n`t`t-`t[w]indows re-install`r`n`t-`t[W]indows uninstall"
+                                    Write-Host "`r`n`t`t-`t[d]ocker settings reset`r`n`t`t-`t[D]ocker re-install`r`n`t`t-`t[w]indows re-install`r`n`t`t-`t[W]indows uninstall"
                                     $dvlp_kindtek_options_win = Read-Host
                                     if ($dvlp_kindtek_options_win -ceq 'd') {
                                         reset_docker_settings_hard
