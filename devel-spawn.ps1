@@ -1281,12 +1281,17 @@ function wsl_devel_spawn {
                         }
                     }
                     try {
-                        # install complete .. try to remove install files
-                        Remove-Item -Path "$env:USERPROFILE/DockerDesktopInstaller"
+                        if (Test-Path "$env:USERPROFILE/DockerDesktopInstaller.exe"){
+                            # install complete .. try to remove install files
+                            Remove-Item -Path "$env:USERPROFILE/DockerDesktopInstaller.exe" -Confirm
+                        }
+
                     } catch {}
                     try {
-                        # install complete .. try to remove install files
-                        Remove-Item -Path "$env:USERPROFILE/DockerDesktopInstaller"
+                        if (Test-Path "$env:USERPROFILE/kali-linux.AppxBundle"){
+                            # install complete .. try to remove install files
+                            Remove-Item -Path "$env:USERPROFILE/kali-linux.AppxBundle" -Confirm
+                        }
                     } catch {}
                 }
                 catch {
