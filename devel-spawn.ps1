@@ -1036,7 +1036,7 @@ function devel_boot {
                     }                
                 }
 
-                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app"
+                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor White
                 start_docker_desktop
                 $docker_tries = 0
                 while (!$(is_docker_desktop_online) -or $docker_tries -gt 10){
@@ -1081,10 +1081,16 @@ function devel_boot {
                         Start-Sleep 5
                     }                
                 }
-                Start-Sleep 8
-                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app"
+                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor White
                 start_docker_desktop
-                Start-Sleep 8
+                $docker_tries = 0
+                wsl.exe --distribution 'docker-desktop' --version | out-null
+                while (!$(is_docker_desktop_online) -or !$($?) -or $docker_tries -gt 120){
+                    start_docker_desktop | Out-Null
+                    start-sleep 5
+                    $docker_tries+=1
+                    wsl.exe --distribution 'docker-desktop' --version | out-null
+                }
 
                 if ($continue_install -ieq '' -or $(dependencies_installed) -eq $false -or (!(is_docker_desktop_online))) {
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
@@ -1104,7 +1110,7 @@ function devel_boot {
                     software installations complete! 
                     restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                             }
-                            reboot_prompt 'reboot continue'
+                            reboot_prompt 'reboot'
                     }
                 }
                 
