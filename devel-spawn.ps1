@@ -1934,6 +1934,35 @@ function wsl_devel_spawn {
     Write-Host "`r`nGoodbye!`r`n"
 }
 
+function start_countdown {
+    Write-Host -NoNewline "`r`n`t3"
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline " 2"
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline " 1"
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline "."
+            Start-Sleep -Milliseconds 250
+            Write-Host -NoNewline " 0"
+            Start-Sleep -Milliseconds 100
+}
+
 pull_dvlp_envs
 # remove auto install script (optionally added when using restart prompt)
 Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
