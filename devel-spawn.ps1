@@ -1700,6 +1700,14 @@ function wsl_devel_spawn {
                         if ($dvlp_cli_options -ieq 'l' -Or $dvlp_cli_options -ieq 'w') {
                             $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                         }
+                        if ($dvlp_choice -ieq 't0' ) {
+                            Invoke-Expression "Start-Process -Filepath powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE "
+                            # $command_input = ''
+                            # while ($command_input -ne 'exit'){
+                            #     Invoke-Expression "`$command_input = Invoke-Expression `'`$command_input = `$`(Read-Host`)`'"
+                            # }
+                            
+                        }
                         if ($dvlp_choice -ieq 'tl' ) {
                             start_dvlp_process_pop "wsl.exe cd ```$HOME ```&```& bash " 'wait' 'noexit'
                         }
