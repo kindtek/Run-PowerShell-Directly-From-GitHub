@@ -1018,9 +1018,15 @@ function devel_boot {
                     }                
                 }
                 try {
+                    start-sleep 8
                     start_docker_desktop
                     start-sleep 8
                 } catch {}
+                Start-Sleep 8
+                Write-Host "docker desktop is starting`r`nyou will need to confirm their license agreements and other prompts"
+                start_docker_desktop
+                Start-Sleep 8
+                
                 if (!($(is_docker_desktop_online))) {    
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
                         if ($new_windowsfeatures_installed) {
@@ -1047,15 +1053,22 @@ function devel_boot {
                 if (($(dependencies_installed $true) -eq $false)){
                     $continue_install = Read-Host "press ENTER to continue to wait for installations to complete
                     ...or enter 'skip' (not recommended)"
+                } else {
+                    $continue_install = "continue"
                 }
-                while ($(dependencies_installed $true) -eq $false -and $continue_install -eq '') {
+                while ($(dependencies_installed) -eq $false -and $continue_install -eq '') {
                     Write-Host "please wait for installation processes to complete "
                     for ($i = 0; $i -le 120; $i++) {
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
                         Start-Sleep 5
                     }                
                 }
-                if ($continue_install -ieq '') {
+                Start-Sleep 8
+                Write-Host "docker desktop is starting`r`nyou will need to confirm their license agreements and other prompts"
+                start_docker_desktop
+                Start-Sleep 8
+
+                if ($continue_install -ieq '' -or $(dependencies_installed) -eq $false -or (!(is_docker_desktop_online))) {
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
                             if ($new_windowsfeatures_installed) {
                                 Write-Host "
