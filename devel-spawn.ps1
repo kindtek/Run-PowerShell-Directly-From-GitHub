@@ -1485,7 +1485,7 @@ function wsl_devel_spawn {
                     elseif ($dvlp_choice -imatch "t\d") {
                         [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
                         echo "wsl_choice: $wsl_choice"
-                        if ($dvlp_choice -ieq 't0' ) {
+                        if ($wsl_choice -ieq '0' ) {
                             # special case for windows terminal shortcut
                             Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" | Out-Null
                         } else {
