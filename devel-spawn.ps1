@@ -961,7 +961,10 @@ function devel_boot_safe {
         sync_repo
         . include_devel_tools
         install_dependencies $true
-        require_docker_online
+        try {
+            start_docker_desktop
+        } catch {}
+        
         Set-PSDebug -Trace "$env:KINDTEK_DEBUG_MODE"
         return $true
     }
@@ -993,6 +996,7 @@ function devel_boot {
             Write-Host "Windows features are installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
             if ($windowsfeatures_installed -eq $false) {
                 $new_windowsfeatures_installed = $true
+                reboot_prompt 'reboot continue'
             }
         }
         catch { throw "problems with installing windows features" }
@@ -1008,7 +1012,10 @@ function devel_boot {
                         Start-Sleep 5
                     }                
                 }
-                require_docker_online
+                try {
+                    start_docker_desktop
+                    start-sleep 8
+                } catch {}
                 if (!($(is_docker_desktop_online))) {    
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
                         if ($new_windowsfeatures_installed) {
@@ -1031,16 +1038,19 @@ function devel_boot {
                     }
                 }
             } else {
-                $skip_install = Read-Host "press ENTER to skip to menu and restart later
-                ...or entery any character to continue to wait for installations to complete"
-                while ($(dependencies_installed $true) -eq $false -and $skip_install -ine '') {
+                $continue_install = ''
+                if (($(dependencies_installed $true) -eq $false)){
+                    $continue_install = Read-Host "press ENTER to continue to wait for installations to complete
+                    ...or enter 'skip' (not recommended)"
+                }
+                while ($(dependencies_installed $true) -eq $false -and $continue_install -eq '') {
                     Write-Host "please wait for installation processes to complete "
                     for ($i = 0; $i -le 120; $i++) {
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
                         Start-Sleep 5
                     }                
                 }
-                if ($skip_install -ine '') {
+                if ($continue_install -ine '') {
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
                             if ($new_windowsfeatures_installed) {
                                 Write-Host "
