@@ -61,18 +61,30 @@ class dvlp_process {
             # echo testing path $env:KINDTEK_DEVEL_TOOLS
             if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
                 # write-host "dvl-tools: $proc_cmd"
-                $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;write-host $proc_cmd;$proc_cmd"
+                if (dvlp_get_debug_mode){
+                    $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;write-host $proc_cmd;$proc_cmd"
+                } else {
+                    $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
+                }
                 # write-host 'dot sourcing devel tools'
                 # echo path $env:KINDTEK_DEVEL_TOOLS exists
             }
             elseif (Test-Path -Path "$env:KINDTEK_DEVEL_SPAWN" -PathType Leaf -and $PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1" -and $PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN") {
                 # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
                 # write-host "dvl-spawn: $proc_cmd"
-                $this.proc_cmd = ". $env:KINDTEK_DEVEL_SPAWN;write-host $proc_cmd;$proc_cmd"
+                if (dvlp_get_debug_mode){
+                    $this.proc_cmd = ". $env:KINDTEK_DEVEL_SPAWN;write-host $proc_cmd;$proc_cmd"
+                } else {
+                    $this.proc_cmd = ". $env:KINDTEK_DEVEL_SPAWN;$proc_cmd"
+                }
             }
             elseif (Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf -and $PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1" -and $PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN") {
                 # write-host "dvlp: $proc_cmd"
-                $this.proc_cmd = ". $env:USERPROFILE/dvlp.ps1;write-host $proc_cmd;$proc_cmd"
+                if (dvlp_get_debug_mode){
+                    $this.proc_cmd = ". $env:USERPROFILE/dvlp.ps1;write-host $proc_cmd;$proc_cmd"
+                } else {
+                    $this.proc_cmd = ". $env:USERPROFILE/dvlp.ps1;$proc_cmd"
+                }
             }
             else {
                 $this.proc_cmd = "write-host 'could not source files but still continuing ...';$proc_cmd"
@@ -1940,6 +1952,28 @@ function wsl_devel_spawn {
     Write-Host "`r`nGoodbye!`r`n"
 }
 
+function dvlp_get_debug_mode {
+    $debug_mode = get_dvlp_env 'KINDTEK_DEBUG_MODE'
+    if ($debug_mode -eq '1' -Or $debug_mode -eq 1) {
+        return $true
+    } else {
+        return $false
+    }
+}
+
+function dvlp_set_debug_mode {
+    param (
+        [bool]$debug_mode_on
+    )
+    if ($debug_mode_on){
+        set_dvlp_env 'KINDTEK_DEBUG_MODE' '1'
+        set_dvlp_env 'KINDTEK_DEBUG_MODE' '1' 'machine'
+    } else {
+        set_dvlp_env 'KINDTEK_DEBUG_MODE' '0'
+        set_dvlp_env 'KINDTEK_DEBUG_MODE' '0' 'machine'
+    }
+}
+
 function env_refresh {
 
     $orig_progress_flag = $global:progress_flag 
@@ -2009,8 +2043,10 @@ pull_dvlp_envs
 Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
 if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
     # echo 'installing everything and setting envs ..'
-    Write-Host "`$PSCommandPath: $($PSCommandPath)"
-    Write-Host "`$args[0]: $($args[0])"
+    if (dvlp_get_debug_mode){
+        Write-Host "`$PSCommandPath: $($PSCommandPath)"
+        Write-Host "`$args[0]: $($args[0])"
+    }
     $global:devel_spawn_args = "$($args[0])"
     set_dvlp_envs
     . include_devel_tools
