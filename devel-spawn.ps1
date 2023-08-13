@@ -69,7 +69,7 @@ class dvlp_process {
                 # write-host 'dot sourcing devel tools'
                 # echo path $env:KINDTEK_DEVEL_TOOLS exists
             }
-            elseif (Test-Path -Path "$env:KINDTEK_DEVEL_SPAWN" -PathType Leaf -and $PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1" -and $PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN") {
+            elseif ((Test-Path -Path "$env:KINDTEK_DEVEL_SPAWN" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
                 # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
                 # write-host "dvl-spawn: $proc_cmd"
                 if (dvlp_get_debug_mode){
@@ -78,7 +78,7 @@ class dvlp_process {
                     $this.proc_cmd = ". $env:KINDTEK_DEVEL_SPAWN;$proc_cmd"
                 }
             }
-            elseif (Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf -and $PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1" -and $PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN") {
+            elseif ((Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
                 # write-host "dvlp: $proc_cmd"
                 if (dvlp_get_debug_mode){
                     $this.proc_cmd = ". $env:USERPROFILE/dvlp.ps1;write-host $proc_cmd;$proc_cmd"
