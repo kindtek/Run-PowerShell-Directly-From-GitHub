@@ -1276,6 +1276,14 @@ function wsl_devel_spawn {
                             }
                         }
                     }
+                    try {
+                        # install complete .. try to remove install files
+                        Remove-Item -Path "$env:USERPROFILE/DockerDesktopInstaller"
+                    } catch {}
+                    try {
+                        # install complete .. try to remove install files
+                        Remove-Item -Path "$env:USERPROFILE/DockerDesktopInstaller"
+                    } catch {}
                 }
                 catch {
                     Write-Host "initial boot error occurred" -ForegroundColor Magenta -BackgroundColor Yellow
