@@ -1486,8 +1486,8 @@ function wsl_devel_spawn {
                             else {
                                 write-host "no distro for ${wsl_choice} found"
                             }
-                            $dvlp_choice = 'screen'
                         }
+                        $dvlp_choice = 'screen'
                     }
                     elseif ($dvlp_choice -imatch "g\d") {
                         [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
