@@ -1396,7 +1396,6 @@ function wsl_devel_spawn {
                 do {
                     try {
                         Invoke-Expression $dvlp_choice | Out-Null
-                        $dvlp_choice = 'screen'
 
                     } catch {
                         # $dvlp_choice = $confirmation
@@ -1916,6 +1915,9 @@ function wsl_devel_spawn {
                             $confirmation"
                             $dvlp_choice = 'screen'
                         }
+                    } else {
+                        $dvlp_choice = 'screen'
+
                     }
                     
                 } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
