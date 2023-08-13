@@ -724,7 +724,18 @@ function install_winget {
         if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.winget-installed" -PathType Leaf)) {
             $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
             Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-            Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
+            $network_connected = $false
+            $network_err_msg = "`r`ncannot connect to the internet. retrying .."
+            while ($network_connected -eq $false){
+                try {
+                    Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
+                    $network_connected = $true
+                }
+                catch {
+                    write-host -NoNewline "$network_err_msg"
+                    $network_err_msg = "."
+                }
+            }
             start_dvlp_process_popmax "powershell.exe -executionpolicy remotesigned -File $file" 'wait'
             # install winget and use winget to install everything else
             # $p = Get-Process -Name "PackageManagement"
