@@ -978,7 +978,7 @@ function devel_boot {
         }
         try {
             . include_devel_tools
-            install_windows_features
+            install_windows_features 'skip reboot prompt'
             Write-Host "Windows features are installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
             if ($windowsfeatures_installed -eq $false) {
                 $new_windowsfeatures_installed = $true
