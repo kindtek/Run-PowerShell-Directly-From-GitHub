@@ -1396,16 +1396,11 @@ function wsl_devel_spawn {
                 $dvlp_choice = Read-Host $dvlp_options
                 do {
                     try {
-                        Invoke-Expression $confirmation | Out-Null
+                        Invoke-Expression $dvlp_choice | Out-Null
                         $dvlp_choice = 'screen'
-                    } catch {
-                        try {
-                            Invoke-Expression $dvlp_choice
-                            $dvlp_choice = 'screen'
 
-                        } catch {
-                            # $dvlp_choice = $confirmation
-                        }
+                    } catch {
+                        # $dvlp_choice = $confirmation
                     }
                     if (!([string]::IsNullOrEmpty($dvlp_choice))) {
                         # write-host "checking if $dvlp_choice is a docker image"
