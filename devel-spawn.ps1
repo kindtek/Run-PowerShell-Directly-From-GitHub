@@ -1161,7 +1161,7 @@ function devel_daemon {
     if ($keep_running) {
         # daemon initialized ... now check periodically for problems
         start_dvlp_process_popmin "while (`$true){
-            if (`$(dependencies_installed `$true) -eq `$false){
+            if (`$(dependencies_installed) -eq `$false){
                 # try setting envs first then do bare minimum
                 set_dvlp_envs
                 devel_boot_safe 
@@ -1187,7 +1187,7 @@ function wsl_devel_spawn {
         $confirmation = ''    
         if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {          
             try {
-                if (!($(dependencies_installed $true))) {
+                if (!($(dependencies_installed))) {
                     $host.UI.RawUI.ForegroundColor = "Black"
                     $host.UI.RawUI.BackgroundColor = "DarkRed"
                 }
