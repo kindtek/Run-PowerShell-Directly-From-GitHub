@@ -988,38 +988,71 @@ function devel_boot {
         install_recommends
         $new_dependencies_installed = $(install_dependencies $true) 
         if ($($new_windowsfeatures_installed) -eq $true -or $($new_dependencies_installed) -eq $true) {
-            Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n
-            please wait for installation processes to complete ..." -ForegroundColor White -BackgroundColor Black
-            while ($(dependencies_installed $true) -eq $false) {
-                Start-Sleep 10
-                Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
-                Start-Sleep 1
-                Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
-                Start-Sleep 1
-                Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
-            }
-            require_docker_online
-            if (!($(is_docker_desktop_online))) {    
-                if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
-                    if ($new_windowsfeatures_installed) {
-                        Write-Host "
-                        
-            windows features and software installations complete! 
-            restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
-                    }
-                    elseif ($new_dependencies_installed ) {
-                        Write-Host "
-            software installations complete! 
-            restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
-                    }
-                    elseif ($new_dependencies_installed ) {
-                        Write-Host "
-            software installations complete! 
-            restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
-                    }
-                    reboot_prompt
+            Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n" -ForegroundColor White -BackgroundColor Black
+            if (!([string]::isnullorempty($global:devel_spawn_args))){
+                while ($(dependencies_installed $true) -eq $false) {
+                    Write-Host "please wait for installation processes to complete "
+                    for ($i = 0; $i -le 120; $i++) {
+                        Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
+                        Start-Sleep 5
+                    }                
                 }
+                require_docker_online
+                if (!($(is_docker_desktop_online))) {    
+                    if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
+                        if ($new_windowsfeatures_installed) {
+                            Write-Host "
+                            
+                windows features and software installations complete! 
+                restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                        }
+                        elseif ($new_dependencies_installed ) {
+                            Write-Host "
+                software installations complete! 
+                restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                        }
+                        elseif ($new_dependencies_installed ) {
+                            Write-Host "
+                software installations complete! 
+                restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                        }
+                        reboot_prompt
+                    }
+                }
+            } else {
+                $skip_install = Read-Host "press ENTER to skip to menu and restart later
+                ...or press any key to continue to wait for installations to complete"
+                while ($(dependencies_installed $true) -eq $false -and $skip_install -ine '') {
+                    Write-Host "please wait for installation processes to complete "
+                    for ($i = 0; $i -le 120; $i++) {
+                        Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
+                        Start-Sleep 5
+                    }                
+                }
+                if ($skip_install -ine '') {
+                    if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
+                            if ($new_windowsfeatures_installed) {
+                                Write-Host "
+                                
+                    windows features and software installations complete! 
+                    restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                            }
+                            elseif ($new_dependencies_installed ) {
+                                Write-Host "
+                    software installations complete! 
+                    restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                            }
+                            elseif ($new_dependencies_installed ) {
+                                Write-Host "
+                    software installations complete! 
+                    restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                            }
+                            reboot_prompt
+                    }
+                }
+                
             }
+            
         }
         else {
             Write-Host "
