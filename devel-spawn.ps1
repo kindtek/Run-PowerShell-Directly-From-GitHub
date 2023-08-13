@@ -995,6 +995,7 @@ function devel_boot {
                 wsl.exe --list | Out-Null
                 if (!($?)){
                     reboot_prompt 'reboot continue'
+                    exit
                 }
             }
         }
