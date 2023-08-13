@@ -976,7 +976,14 @@ function devel_boot {
     $new_windowsfeatures_installed = $false
     try {
         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-        Write-Host "`r`n`r`ninitializing ..."
+        $host.UI.RawUI.BackgroundColor = "Black"
+        $host.UI.RawUI.ForegroundColor = "DarkGray"
+        Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
+        Start-Sleep 1
+        Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
+        
+        # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
+        New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
         install_winget
         install_git
 
@@ -1211,15 +1218,6 @@ function wsl_devel_spawn {
                 # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
                 start_countdown
-                $host.UI.RawUI.BackgroundColor = "Black"
-                $host.UI.RawUI.ForegroundColor = "DarkGray"
-                Write-Host "`r`n`r`nThese programs will be installed or updated:" -ForegroundColor Magenta
-                Start-Sleep 1
-                Write-Host "`r`n`t- WinGet`r`n`t- Github CLI`r`n`t- devels-workshop repo`r`n`t- devels-playground repo" -ForegroundColor Magenta
-                
-                # Write-Host "Creating path $env:USERPROFILE\repos\kindtek if it does not exist ... "  
-                New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
-
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 try {
                     devel_boot
