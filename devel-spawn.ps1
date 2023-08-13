@@ -1917,7 +1917,9 @@ function wsl_devel_spawn {
                             docker_devel_spawn "$dvlp_choice"
                             $dvlp_choice = 'screen'
                         } else {
-                            write-host 'invalid command'
+                            write-host "invalid command
+                            $dvlp_choice
+                            $confirmation"
                             $dvlp_choice = 'screen'
                         }
                     }
