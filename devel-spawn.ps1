@@ -73,17 +73,17 @@ class dvlp_process {
                 # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
                 # write-host "dvl-spawn: $proc_cmd"
                 if (dvlp_get_debug_mode){
-                    $this.proc_cmd = ". $env:KINDTEK_DEVEL_SPAWN;write-host $proc_cmd;$proc_cmd"
+                    $this.proc_cmd = "write-host $proc_cmd;$proc_cmd"
                 } else {
-                    $this.proc_cmd = ". $env:KINDTEK_DEVEL_SPAWN;$proc_cmd"
+                    $this.proc_cmd = "$proc_cmd"
                 }
             }
             elseif ((Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
                 # write-host "dvlp: $proc_cmd"
                 if (dvlp_get_debug_mode){
-                    $this.proc_cmd = ". $env:USERPROFILE/dvlp.ps1;write-host $proc_cmd;$proc_cmd"
+                    $this.proc_cmd = "write-host $proc_cmd;$proc_cmd"
                 } else {
-                    $this.proc_cmd = ". $env:USERPROFILE/dvlp.ps1;$proc_cmd"
+                    $this.proc_cmd = "$proc_cmd"
                 }
             }
             else {
@@ -2057,6 +2057,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or ($($PSCommandPath) -eq "$env:USER
     if ($(dvlp_get_debug_mode)){
         Write-Host "`$PSCommandPath: $($PSCommandPath)"
         Write-Host "`$args[0]: $($args[0])"
+        Set-PSDebug -Trace 2
     }
     $global:devel_spawn_args = "$($args[0])"
     set_dvlp_envs
@@ -2064,7 +2065,8 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or ($($PSCommandPath) -eq "$env:USER
     wsl_devel_spawn $args[0]
 
 }
-elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
+elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") 
+{
     # echo 'setting the envs ..'
     set_dvlp_envs 1
     # wsl_devel_spawn $args[0]
