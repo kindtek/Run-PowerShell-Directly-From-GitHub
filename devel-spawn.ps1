@@ -2049,9 +2049,9 @@ New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\repos\kindtek" | Out
 pull_dvlp_envs
 # remove auto install script (optionally added when using restart prompt)
 Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
-if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1") {
+if (!([string]::IsNullOrEmpty($args[0])) -Or $($PSCommandPath -eq "$env:USERPROFILE\dvlp.ps1")) {
     # echo 'installing everything and setting envs ..'
-    if (dvlp_get_debug_mode){
+    if ($(dvlp_get_debug_mode)){
         Write-Host "`$PSCommandPath: $($PSCommandPath)"
         Write-Host "`$args[0]: $($args[0])"
     }
