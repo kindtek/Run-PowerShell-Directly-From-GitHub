@@ -1931,7 +1931,7 @@ function wsl_devel_spawn {
             try {
                 Invoke-Expression $confirmation | Out-Null
             } catch {
-                $dvlp_choice = $confirmation
+                # $dvlp_choice = $confirmation
                 
             }
         }
