@@ -1034,7 +1034,7 @@ function devel_boot {
                 software installations complete! 
                 restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                         }
-                        reboot_prompt
+                        reboot_prompt 'reboot continue'
                     }
                 }
             } else {
@@ -1068,7 +1068,7 @@ function devel_boot {
                     software installations complete! 
                     restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                             }
-                            reboot_prompt
+                            reboot_prompt 'reboot continue'
                     }
                 }
                 
