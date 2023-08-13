@@ -896,16 +896,8 @@ function docker_devel_spawn {
     # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
     Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
     . include_devel_tools
-    try {
-        require_docker_online
-    } catch {
-        try {
-            . include_devel_tools
-            require_docker_online
-        } catch {
-            require_devel_online
-        }
-    }
+    start_docker_desktop
+    start-sleep 8
 
     if ($(is_docker_desktop_online) -eq $true) {
         # Write-Host "now connected to docker desktop ...`r`n"
@@ -931,9 +923,13 @@ function docker_devel_spawn {
         # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
     }
     else {
-        Write-Host "`r`docker desktop failed to start. attempting to reinstall ... "
-        # powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLADV_PATH')/reinstall-docker.ps1")
-        Write-Host "still not working. try: `r`n`t- restarting WSL`r`n`t- revert to failsafe distro your default distro (ie: wsl.exe -s $env:KINDTEK_WSL_FAILSAFE_DISTRO )`r`n`ttry removing/renaming $env:USERPROFILE/.wslconfig and restart wsl"
+        Write-Host "`r`docker desktop is not starting automatically"
+        $start_docker = Read-Host "press ENTER to force docker desktop to start
+    ... or enter any character to skip"
+        if ($start_docker -eq ""){
+            require_docker_online
+            docker_devel_spawn $img_name_tag $non_interactive $default_distro
+        }
     }
         
     # }
@@ -1244,12 +1240,10 @@ function wsl_devel_spawn {
                                 # start_dvlp_process_pop "$(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default')" 'wait'
                                 docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
                                 run_dvlp_latest_kernel_installer
-                                require_docker_online_new_win
                             }
                             else {
                                 docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
                                 run_dvlp_latest_kernel_installer
-                                require_docker_online | Out-Null
                             }
                             $new_wsl_default_distro = get_default_wsl_distro
                             
@@ -1409,7 +1403,6 @@ function wsl_devel_spawn {
                             docker_devel_spawn
                         }
                         else {
-                            require_docker_online;
                             docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
                         }
                         $dvlp_choice = 'screen'
