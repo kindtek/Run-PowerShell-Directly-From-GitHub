@@ -1122,7 +1122,7 @@ function wsl_devel_spawn {
          __ ____
         _<=||-=\\_o_c_k_e_r____________"
         }
-        if ($confirmation -eq '') {
+        if ($confirmation -eq '' -or $confirmation -eq 'skip') {
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
             # Self-elevate the script if required
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
@@ -1134,7 +1134,7 @@ function wsl_devel_spawn {
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
             # if (($confirmation -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
-            if (($dvlp_choice -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
+            if (($dvlp_choice -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -and (!($confirmation -eq 'skip'))) {
                 # write-host "confirmation: $confirmation"
                 # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
@@ -1701,7 +1701,7 @@ function wsl_devel_spawn {
                             $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                         }
                         if ($dvlp_choice -ieq 't0' ) {
-                            Invoke-Expression "Start-Process -Filepath powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE "
+                            Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'"
                             # $command_input = ''
                             # while ($command_input -ne 'exit'){
                             #     Invoke-Expression "`$command_input = Invoke-Expression `'`$command_input = `$`(Read-Host`)`'"
@@ -1842,7 +1842,6 @@ if (!([string]::IsNullOrEmpty($args[0])) -Or $PSCommandPath -eq "$env:USERPROFIL
     Write-Host "`$PSCommandPath: $($PSCommandPath)"
     Write-Host "`$args[0]: $($args[0])"
     $global:devel_spawn_args = "$($args[0])"
-    write-host ''
     set_dvlp_envs
     . include_devel_tools
     wsl_devel_spawn $args[0]
