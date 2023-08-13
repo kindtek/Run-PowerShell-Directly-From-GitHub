@@ -413,10 +413,10 @@ function unset_dvlp_envs {
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # write-host "$($_.name)"
     }
-        try {
-            env_refresh
-        }
-        catch {}
+    try {
+        env_refresh
+    }
+    catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # echo "deleting local env $($_.name)"
         set_dvlp_env "$($_.name)" "$null"
@@ -1965,7 +1965,7 @@ function env_refresh {
             $network_err_msg = "."
         }
     }
-    .$refresh_envs
+    .$refresh_envs | Out-Null
 
 }
 
