@@ -2003,7 +2003,7 @@ function start_countdown {
             Start-Sleep -Milliseconds 100
 }
 
-New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\kindtek\repos" | Out-Null
 pull_dvlp_envs
 # remove auto install script (optionally added when using restart prompt)
 Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
