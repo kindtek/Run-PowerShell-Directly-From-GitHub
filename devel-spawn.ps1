@@ -1288,19 +1288,22 @@ function wsl_devel_spawn {
                             }
                         }
                     }
-                    try {
-                        if (Test-Path "$env:USERPROFILE/DockerDesktopInstaller.exe"){
-                            # install complete .. try to remove install files
-                            Remove-Item -Path "$env:USERPROFILE/DockerDesktopInstaller.exe" -Confirm
-                        }
+                    if (Test-Path "$env:USERPROFILE/DockerDesktopInstaller.exe" -or Test-Path "$env:USERPROFILE/kali-linux.AppxBundle"){
+                        Write-Host 'optional: cleaning up downloaded installation files'
+                        try {
+                            if (Test-Path "$env:USERPROFILE/DockerDesktopInstaller.exe"){
+                                # install complete .. try to remove install files
+                                Remove-Item -Path "$env:USERPROFILE/DockerDesktopInstaller.exe" -Confirm
+                            }
 
-                    } catch {}
-                    try {
-                        if (Test-Path "$env:USERPROFILE/kali-linux.AppxBundle"){
-                            # install complete .. try to remove install files
-                            Remove-Item -Path "$env:USERPROFILE/kali-linux.AppxBundle" -Confirm
-                        }
-                    } catch {}
+                        } catch {}
+                        try {
+                            if (Test-Path "$env:USERPROFILE/kali-linux.AppxBundle"){
+                                # install complete .. try to remove install files
+                                Remove-Item -Path "$env:USERPROFILE/kali-linux.AppxBundle" -Confirm
+                            }
+                        } catch {}
+                    }
                 }
                 catch {
                     Write-Host "initial boot error occurred" -ForegroundColor Magenta -BackgroundColor Yellow
