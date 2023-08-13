@@ -1470,23 +1470,24 @@ function wsl_devel_spawn {
                         if ($dvlp_choice -ieq 't0' ) {
                             # special case for windows terminal shortcut
                             Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" | Out-Null
-                        }
-                        $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
-                        if ($wsl_distro_selected) {
-                            write-host "`r`n`tpress ENTER to open terminal in $wsl_distro_selected`r`n`t`t.. or enter any other key to skip "
-                            $wsl_distro_selected_confirm = read-host "
-    (OPEN $wsl_distro_selected terminal)"
-                            if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                wsl.exe -d $($wsl_distro_selected) -- cd `$HOME `&`& bash
-                                start_dvlp_process_pop "wsl.exe -d $([regex]::escape($wsl_distro_selected)) -- cd ```$HOME ```&```& write-host 'wsl.exe -d $([regex]::escape($wsl_distro_selected))' ```&```& bash" 'wait' 'noexit'
+                        } else {
+                            $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
+                            if ($wsl_distro_selected) {
+                                write-host "`r`n`tpress ENTER to open terminal in $wsl_distro_selected`r`n`t`t.. or enter any other key to skip "
+                                $wsl_distro_selected_confirm = read-host "
+        (OPEN $wsl_distro_selected terminal)"
+                                if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
+                                    wsl.exe -d $($wsl_distro_selected) -- cd `$HOME `&`& bash
+                                    start_dvlp_process_pop "wsl.exe -d $([regex]::escape($wsl_distro_selected)) -- cd ```$HOME ```&```& write-host 'wsl.exe -d $([regex]::escape($wsl_distro_selected))' ```&```& bash" 'wait' 'noexit'
 
-                                # wsl.exe -d "$wsl_distro_selected" -- cd `$HOME; bash
+                                    # wsl.exe -d "$wsl_distro_selected" -- cd `$HOME; bash
+                                }
                             }
+                            else {
+                                write-host "no distro for ${wsl_choice} found"
+                            }
+                            $dvlp_choice = 'screen'
                         }
-                        else {
-                            write-host "no distro for ${wsl_choice} found"
-                        }
-                        $dvlp_choice = 'screen'
                     }
                     elseif ($dvlp_choice -imatch "g\d") {
                         [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
