@@ -1868,14 +1868,24 @@ function wsl_devel_spawn {
                         # elseif ($dvlp_choice -ieq 'v') {
                         #     wsl.exe sh -c "cd /hel;. code"
                     }
-                    elseif (!([string]::isnullorempty($dvlp_choice)) -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'screen' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'KW' -And $(docker manifest inspect $dvlp_choice)) {
-                        Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
-                        docker_devel_spawn "$dvlp_choice"
-                        $dvlp_choice = 'screen'
+                    elseif (!([string]::isnullorempty($dvlp_choice)) -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'screen' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'KW') {
+                        try {
+                            $(docker manifest inspect $dvlp_choice) | Out-Null
+                        } catch {}
+                        if ($?){
+                            Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
+                            docker_devel_spawn "$dvlp_choice"
+                            $dvlp_choice = 'screen'
+                        } else {
+                            try {
+                                Invoke-Expression $confirmation
+                            } catch {
+                                $dvlp_choice = $confirmation
+                                
+                            }
+                        }
                     }
-                    else {
-                        # $dvlp_choice = ''
-                    }
+                    
                 } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
             } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
         }
@@ -1883,7 +1893,8 @@ function wsl_devel_spawn {
             try {
                 Invoke-Expression $confirmation
             } catch {
-                Write-Host "invalid command $confirmation"
+                $dvlp_choice = $confirmation
+                
             }
         }
         else {
