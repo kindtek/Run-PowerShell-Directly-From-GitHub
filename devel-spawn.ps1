@@ -728,7 +728,7 @@ function install_winget {
             $network_err_msg = "`r`ncannot connect to the internet. retrying .."
             while ($network_connected -eq $false){
                 try {
-                    Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
+                    Invoke-RestMethod "https://raw.githubusercontent.com/kindtek/dvl-adv/dvl-works/get-latest-winget.ps1" -OutFile $file;
                     $network_connected = $true
                 }
                 catch {
@@ -757,7 +757,7 @@ function install_git {
         $global:progress_flag = 'silentlyContinue'
         $orig_progress_flag = $progress_flag 
         $progress_flag = 'SilentlyContinue'
-        Invoke-WebRequest "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $refresh_envs | Out-Null
+        Invoke-RestMethod "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $refresh_envs | Out-Null
         $progress_flag = $orig_progress_flag
         if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
             Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
