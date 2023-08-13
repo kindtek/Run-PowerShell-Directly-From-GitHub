@@ -1036,13 +1036,14 @@ function devel_boot {
                     }                
                 }
 
-                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor White
-                start_docker_desktop
+                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
+                start_docker_desktop | Out-Null
                 $docker_tries = 0
-                while (!$(is_docker_desktop_online) -or $docker_tries -gt 10){
-                    start_docker_desktop | Out-Null
-                    start-sleep 6
+                wsl.exe --distribution 'docker-desktop' --version | out-null
+                while (!$($?) -or !$(is_docker_desktop_online)  -or $docker_tries -gt 120){
+                    start-sleep 5
                     $docker_tries+=1
+                    wsl.exe --distribution 'docker-desktop' --version | out-null
                 }
                 
                 if (!($(is_docker_desktop_online))) {    
@@ -1051,17 +1052,17 @@ function devel_boot {
                             Write-Host "
                             
                 windows features and software installations complete! 
-                restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                         }
                         elseif ($new_dependencies_installed ) {
                             Write-Host "
                 software installations complete! 
-                restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                         }
                         elseif ($new_dependencies_installed ) {
                             Write-Host "
                 software installations complete! 
-                restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                         }
                         reboot_prompt 'reboot'
                     }
@@ -1075,17 +1076,16 @@ function devel_boot {
                     $continue_install = "continue"
                 }
                 while ($(dependencies_installed) -eq $false -and $continue_install -eq '') {
-                    Write-Host "please wait for installation processes to complete "
                     for ($i = 0; $i -le 120; $i++) {
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
                         Start-Sleep 5
                     }                
                 }
-                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor White
-                start_docker_desktop
+                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
+                start_docker_desktop | Out-Null
                 $docker_tries = 0
                 wsl.exe --distribution 'docker-desktop' --version | out-null
-                while (!$(is_docker_desktop_online) -or !$($?) -or $docker_tries -gt 120){
+                while (!$($?) -or !$(is_docker_desktop_online)  -or $docker_tries -gt 120){
                     start_docker_desktop | Out-Null
                     start-sleep 5
                     $docker_tries+=1
@@ -1098,17 +1098,17 @@ function devel_boot {
                                 Write-Host "
                                 
                     windows features and software installations complete! 
-                    restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                    restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                             }
                             elseif ($new_dependencies_installed ) {
                                 Write-Host "
                     software installations complete! 
-                    restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                    restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                             }
                             elseif ($new_dependencies_installed ) {
                                 Write-Host "
                     software installations complete! 
-                    restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+                    restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                             }
                             reboot_prompt 'reboot'
                     }
