@@ -1035,15 +1035,15 @@ function devel_boot {
                         Start-Sleep 5
                     }                
                 }
-                try {
-                    start-sleep 8
-                    start_docker_desktop
-                    start-sleep 8
-                } catch {}
-                Start-Sleep 8
+
                 Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app"
                 start_docker_desktop
-                Start-Sleep 8
+                $docker_tries = 0
+                while (!$(is_docker_desktop_online) -or $docker_tries -gt 10){
+                    start_docker_desktop | Out-Null
+                    start-sleep 6
+                    $docker_tries+=1
+                }
                 
                 if (!($(is_docker_desktop_online))) {    
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
