@@ -924,9 +924,9 @@ function docker_devel_spawn {
     }
     else {
         Write-Host "`r`docker desktop is not starting automatically"
-        $start_docker = Read-Host "press ENTER to force docker desktop to start
-    ... or enter any character to skip"
-        if ($start_docker -eq ""){
+        $start_docker = Read-Host "press ENTER to skip
+    ... or enter 'force' to force docker to start"
+        if ($start_docker -eq "force"){
             require_docker_online
             docker_devel_spawn $img_name_tag $non_interactive $default_distro
         }
