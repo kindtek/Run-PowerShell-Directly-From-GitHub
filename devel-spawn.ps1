@@ -1895,9 +1895,9 @@ function wsl_devel_spawn {
                         } else {
                             try {
                                 Invoke-Expression $confirmation | Out-Null
+                                $dvlp_choice = 'screen'
                             } catch {
                                 $dvlp_choice = $confirmation
-                                
                             }
                         }
                     }
