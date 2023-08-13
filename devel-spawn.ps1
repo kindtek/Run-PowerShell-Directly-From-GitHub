@@ -2061,7 +2061,7 @@ if (!([string]::IsNullOrEmpty($args[0])) -Or $($PSCommandPath -eq "$env:USERPROF
     wsl_devel_spawn $args[0]
 
 }
-elseif ($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
+elseif ($($PSCommandPath -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1")) {
     # echo 'setting the envs ..'
     set_dvlp_envs 1
     # wsl_devel_spawn $args[0]
