@@ -1050,7 +1050,7 @@ function devel_boot {
                         Start-Sleep 5
                     }                
                 }
-                if ($continue_install -ine '') {
+                if ($continue_install -ieq '') {
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
                             if ($new_windowsfeatures_installed) {
                                 Write-Host "
