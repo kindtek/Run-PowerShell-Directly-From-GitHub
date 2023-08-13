@@ -1017,7 +1017,7 @@ function devel_boot {
                 $new_windowsfeatures_installed = $true
                 wsl.exe --list | Out-Null
                 if (!($?)){
-                    reboot_prompt 'reboot continue'
+                    reboot_prompt 'reboot'
                     exit
                 }
             }
