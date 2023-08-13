@@ -1395,6 +1395,18 @@ function wsl_devel_spawn {
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_choice = Read-Host $dvlp_options
                 do {
+                    try {
+                        Invoke-Expression $confirmation | Out-Null
+                        $dvlp_choice = 'screen'
+                    } catch {
+                        try {
+                            Invoke-Expression $dvlp_choice
+                            $dvlp_choice = 'screen'
+
+                        } catch {
+                            $dvlp_choice = $confirmation
+                        }
+                    }
                     if (!([string]::IsNullOrEmpty($dvlp_choice))) {
                         # write-host "checking if $dvlp_choice is a docker image"
                         if ( $dvlp_choice -Like 'kindtek/*:*') {
@@ -1905,12 +1917,8 @@ function wsl_devel_spawn {
                             docker_devel_spawn "$dvlp_choice"
                             $dvlp_choice = 'screen'
                         } else {
-                            try {
-                                Invoke-Expression $confirmation | Out-Null
-                                $dvlp_choice = 'screen'
-                            } catch {
-                                $dvlp_choice = $confirmation
-                            }
+                            write-host 'invalid command'
+                            $dvlp_choice = 'screen'
                         }
                     }
                     
