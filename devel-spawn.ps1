@@ -994,7 +994,7 @@ function devel_boot {
                 $new_windowsfeatures_installed = $true
                 wsl.exe --list | Out-Null
                 if (!($?)){
-                    reboot_prompt 'reboot continue'
+                    reboot_prompt_embedded 'reboot continue'
                     exit
                 }
             }
@@ -1034,7 +1034,7 @@ function devel_boot {
                 software installations complete! 
                 restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                         }
-                        reboot_prompt 'reboot continue'
+                        reboot_prompt_embedded 'reboot continue'
                     }
                 }
             } else {
@@ -1068,7 +1068,7 @@ function devel_boot {
                     software installations complete! 
                     restart(s) are needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                             }
-                            reboot_prompt 'reboot continue'
+                            reboot_prompt_embedded 'reboot continue'
                     }
                 }
                 
@@ -1113,7 +1113,7 @@ function devel_daemon {
                 return devel_boot_safe
                 
             }
-            reboot_prompt
+            reboot_prompt_embedded
             
             return $false 
         }
@@ -1809,11 +1809,11 @@ function wsl_devel_spawn {
                                     }
                                     if ($dvlp_kindtek_options_win -ceq 'w') {
                                         remove_installation
-                                        reboot_prompt 'reboot continue'
+                                        reboot_prompt_embedded 'reboot continue'
                                     }
                                     if ($dvlp_kindtek_options_win -ceq 'W') {
                                         remove_installation
-                                        reboot_prompt 'reboot'
+                                        reboot_prompt_embedded 'reboot'
                                     }
                                 }
                                 elseif ($dvlp_kindtek_options_win -ieq 'l') {
@@ -1867,7 +1867,7 @@ function wsl_devel_spawn {
                         $dvlp_choice = 'screen'
                     }
                     elseif ($dvlp_choice -ceq 'reboot' -or $dvlp_choice -ceq 'reboot now' -or $dvlp_choice -ceq 'reboot continue') {
-                        reboot_prompt "$dvlp_choice"
+                        reboot_prompt_embedded "$dvlp_choice"
                         $dvlp_choice = 'screen'
                         # elseif ($dvlp_choice -ieq 'v') {
                         #     wsl.exe sh -c "cd /hel;. code"
