@@ -1574,6 +1574,14 @@ function wsl_devel_spawn {
 
                                 }
                             }
+                            elseif ($wsl_action_choice -Ieq 'VERSION1') {
+                                write-host "setting up $wsl_distro_selected ..."
+                                wsl.exe -d $wsl_distro_selected --set-version 1
+                            }
+                            elseif ($wsl_action_choice -ieq 'VERSION2') {
+                                write-host "setting up $wsl_distro_selected ..."
+                                wsl.exe -d $wsl_distro_selected --set-version 2
+                            }
                             elseif ($wsl_action_choice -ieq 'BACKUP') {
                                 $base_distro = $wsl_distro_selected.Substring(0, $wsl_distro_selected.lastIndexOf('-'))
                                 $base_distro_id = $wsl_distro_selected.Substring($wsl_distro_selected.lastIndexOf('-') + 1)
