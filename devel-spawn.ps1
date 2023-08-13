@@ -1943,7 +1943,7 @@ function wsl_devel_spawn {
 function env_refresh {
 
     $orig_progress_flag = $global:progress_flag 
-    $refresh_envs = "$env:KINDTEK_WIN_GIT_PATH/RefreshEnv.cmd"
+    $refresh_envs = "$env:USERPROFILE/repos/$($env:KINDTEK_WIN_GIT_OWNER)/RefreshEnv.cmd"
     $global:progress_flag = 'silentlyContinue'
     $progress_flag = 'SilentlyContinue'
     $global:progress_flag = $orig_progress_flag
