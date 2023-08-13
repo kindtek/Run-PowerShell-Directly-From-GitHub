@@ -1042,7 +1042,7 @@ function devel_boot {
                 $docker_tries = 0
                 wsl.exe --distribution 'docker-desktop' --version | out-null
                 while (!$($?) -or !$(is_docker_desktop_online | Out-Null) -or $docker_tries -gt 3){
-                    start_docker_desktop | Out-Null
+                    start_docker_desktop
                     start-sleep 15
                     $docker_tries+=1
                     wsl.exe --distribution 'docker-desktop' --version | out-null
@@ -1089,7 +1089,7 @@ function devel_boot {
                 $docker_tries = 0
                 wsl.exe --distribution 'docker-desktop' --version | out-null
                 while (!$($?) -or !$(is_docker_desktop_online | Out-Null) -or $docker_tries -gt 3){
-                    start_docker_desktop | Out-Null
+                    start_docker_desktop
                     start-sleep 15
                     $docker_tries+=1
                     wsl.exe --distribution 'docker-desktop' --version | out-null
