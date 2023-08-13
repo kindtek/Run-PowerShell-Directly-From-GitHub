@@ -1036,12 +1036,14 @@ function devel_boot {
                     }                
                 }
 
-                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
-                start_docker_desktop | Out-Null
+                Write-Host "confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
+                start_dvlp_process_min "start_docker_desktop | Out-Null;exit;"
+                start-sleep 10
                 $docker_tries = 0
                 wsl.exe --distribution 'docker-desktop' --version | out-null
-                while (!$($?) -or !$(is_docker_desktop_online) -or $docker_tries -gt 8){
-                    start-sleep 5
+                while (!$($?) -or !$(is_docker_desktop_online | Out-Null) -or $docker_tries -gt 3){
+                    start_docker_desktop | Out-Null
+                    start-sleep 15
                     $docker_tries+=1
                     wsl.exe --distribution 'docker-desktop' --version | out-null
                 }
@@ -1081,13 +1083,14 @@ function devel_boot {
                         Start-Sleep 5
                     }                
                 }
-                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
-                start_docker_desktop | Out-Null
+                Write-Host "confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
+                start_dvlp_process_min "start_docker_desktop | Out-Null;exit;"
+                start-sleep 10
                 $docker_tries = 0
                 wsl.exe --distribution 'docker-desktop' --version | out-null
-                while (!$($?) -or !$(is_docker_desktop_online)  -or $docker_tries -gt 8){
+                while (!$($?) -or !$(is_docker_desktop_online | Out-Null) -or $docker_tries -gt 3){
                     start_docker_desktop | Out-Null
-                    start-sleep 5
+                    start-sleep 15
                     $docker_tries+=1
                     wsl.exe --distribution 'docker-desktop' --version | out-null
                 }
