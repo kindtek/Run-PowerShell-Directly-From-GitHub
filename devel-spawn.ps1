@@ -1006,7 +1006,7 @@ function devel_boot {
         }
         catch { throw "problems with installing windows features" }
         install_recommends
-        $new_dependencies_installed = $(install_dependencies $true) 
+        $new_dependencies_installed = $(install_dependencies) 
         if ($($new_windowsfeatures_installed) -eq $true -or $($new_dependencies_installed) -eq $true) {
             Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n" -ForegroundColor White -BackgroundColor Black
             if (!([string]::isnullorempty($global:devel_spawn_args))){
