@@ -1023,7 +1023,7 @@ function devel_boot {
                     start-sleep 8
                 } catch {}
                 Start-Sleep 8
-                Write-Host "docker desktop is starting`r`nyou will need to confirm their license agreements and other prompts"
+                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app"
                 start_docker_desktop
                 Start-Sleep 8
                 
@@ -1064,7 +1064,7 @@ function devel_boot {
                     }                
                 }
                 Start-Sleep 8
-                Write-Host "docker desktop is starting`r`nyou will need to confirm their license agreements and other prompts"
+                Write-Host "you will need to confirm the license agreements and other prompts in the docker desktop app"
                 start_docker_desktop
                 Start-Sleep 8
 
