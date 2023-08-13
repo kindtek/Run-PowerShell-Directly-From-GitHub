@@ -1467,6 +1467,10 @@ function wsl_devel_spawn {
                     elseif ($dvlp_choice -imatch "t\d") {
                         [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
                         echo "wsl_choice: $wsl_choice"
+                        if ($dvlp_choice -ieq 't0' ) {
+                            # special case for windows terminal shortcut
+                            Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" | Out-Null
+                        }
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                         if ($wsl_distro_selected) {
                             write-host "`r`n`tpress ENTER to open terminal in $wsl_distro_selected`r`n`t`t.. or enter any other key to skip "
@@ -1774,7 +1778,7 @@ function wsl_devel_spawn {
                             $dvlp_choice = $dvlp_choice + $dvlp_cli_options
                         }
                         if ($dvlp_choice -ieq 't0' ) {
-                            Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'"
+                            Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" | Out-Null
                             # $command_input = ''
                             # while ($command_input -ne 'exit'){
                             #     Invoke-Expression "`$command_input = Invoke-Expression `'`$command_input = `$`(Read-Host`)`'"
@@ -1890,7 +1894,7 @@ function wsl_devel_spawn {
                             $dvlp_choice = 'screen'
                         } else {
                             try {
-                                Invoke-Expression $confirmation
+                                Invoke-Expression $confirmation | Out-Null
                             } catch {
                                 $dvlp_choice = $confirmation
                                 
@@ -1903,7 +1907,7 @@ function wsl_devel_spawn {
         }
         elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
             try {
-                Invoke-Expression $confirmation
+                Invoke-Expression $confirmation | Out-Null
             } catch {
                 $dvlp_choice = $confirmation
                 
