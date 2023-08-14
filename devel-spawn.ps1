@@ -990,7 +990,8 @@ function dvlp_auto_boot_set {
         [bool]$auto_boot
     )
     if ($auto_boot){
-        set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 'machine' 'both'
+        set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 'machine'
+        set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 
         New-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Value "
         # PowerShell -Command `"Set-ExecutionPolicy Unrestricted`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
         start wt -p windows cmd.exe /c echo 'please confirm administrator access to launch wsl devel' & powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)' >> `"$env:TEMP\spawnlogs.txt`" 2>&1
@@ -998,7 +999,8 @@ function dvlp_auto_boot_set {
         # cmd /k
         " -Force | Out-Null
     } else {
-        set_dvlp_env 'KINDTEK_AUTO_BOOT' '0' 'machine' 'both'  
+        set_dvlp_env 'KINDTEK_AUTO_BOOT' '0' 'machine'
+        set_dvlp_env 'KINDTEK_AUTO_BOOT' '0'
         Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Confirm:$false -Force -ErrorAction SilentlyContinue | Out-Null   
     }
 }
