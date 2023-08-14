@@ -1432,7 +1432,7 @@ function wsl_devel_spawn {
                     try {
                         $dvlp_input_orig = $dvlp_input
                         $dvlp_input = 'screen'
-                        Invoke-Expression $dvlp_input | Out-Null
+                        Invoke-Expression $dvlp_input | Out-String
                     } catch {
                         $dvlp_input = $dvlp_input_orig
                     }
