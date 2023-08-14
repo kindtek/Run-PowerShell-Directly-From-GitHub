@@ -969,7 +969,7 @@ function docker_devel_spawn {
     }
     else {
         Write-Host "`r`docker desktop is not starting automatically"
-        $start_docker = Read-Host "press ENTER to skip
+        $start_docker = Read-Host "press ENTER to keep trying normally
     ... or enter 'force' to force docker to start"
         if ($start_docker -eq "force"){
             require_docker_online
