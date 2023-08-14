@@ -900,6 +900,10 @@ function get_repo_commit {
     return $git_commit
 }
 
+function reload_dvlp {
+    start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+}
+
 function update_dvlp {
     $git_commit_before = $(get_repo_commit)
     sync_repo
@@ -910,7 +914,7 @@ function update_dvlp {
 "
         $update_confirm = Read-Host
         if ([string]::isNullOrEmpty($update_confirm)){
-            start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+            reload_dvlp           
             return $true
         } else {
             return $false
@@ -1399,6 +1403,8 @@ function wsl_devel_spawn {
                 }
                 catch {
                     Write-Host "initial boot error occurred" -ForegroundColor Magenta -BackgroundColor Yellow
+                    reload_dvlp
+                    exit
                 }
                 # install distro requested in arg
                 
