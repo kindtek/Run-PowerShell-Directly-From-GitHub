@@ -2115,27 +2115,27 @@ function start_countdown {
     Write-Host -NoNewline "."
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
-    Write-Host ""
+    Write-Host "`t"
     Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "`r`n`t2"
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Write-Host ""
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "`r`n`t1"
+    Write-Host -NoNewline "2"
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
+    Write-Host "`t"
     Start-Sleep -Milliseconds 250
-    Write-Host ""
-    Write-Host -NoNewline "`r`n`t0"
+    Write-Host -NoNewline "1"
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host "`t"
+    Write-Host -NoNewline "0"
     Start-Sleep -Milliseconds 100
 }
 
