@@ -909,16 +909,8 @@ function update_dvlp {
     sync_repo
     $git_commit_after = $(get_repo_commit)
     if ($git_commit_before -ne $git_commit_after){
-        Write-Host "update found - press ENTER to reload
-(reload)
-"
-        $update_confirm = Read-Host
-        if ([string]::isNullOrEmpty($update_confirm)){
             reload_dvlp           
             return $true
-        } else {
-            return $false
-        }
     }
     return $false        
 }
