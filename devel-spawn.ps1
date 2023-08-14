@@ -985,6 +985,26 @@ function run_dvlp_latest_kernel_installer {
     pop-location
 }
 
+function dvlp_auto_boot {
+    param (
+        [bool]$auto_boot
+    )
+    if ($auto_boot){
+        set_dvlp_env 'KINDTEK_AUTO_BOOT' '1'
+        set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 'machine'
+        New-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Value "
+        # PowerShell -Command `"Set-ExecutionPolicy Unrestricted`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
+        start wt -p windows cmd.exe /c echo 'please confirm administrator access to launch wsl devel' & powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)' >> `"$env:TEMP\spawnlogs.txt`" 2>&1
+        # PowerShell -Command `"Set-ExecutionPolicy RemoteSigned`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
+        # cmd /k
+        " -Force | Out-Null
+    } else {
+        set_dvlp_env 'KINDTEK_AUTO_BOOT' '0'
+        set_dvlp_env 'KINDTEK_AUTO_BOOT' '0' 'machine'   
+        Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Confirm:$false -Force | Out-Null   
+    }
+}
+
 function devel_boot_safe {
     try {
         Set-PSDebug -Trace 2;
@@ -1942,6 +1962,16 @@ function wsl_devel_spawn {
                         # elseif ($dvlp_input -ieq 'v') {
                         #     wsl.exe sh -c "cd /hel;. code"
                     }
+                    elseif ($dvlp_input -ieq 'auto') {
+                        if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -eq '1') {
+                            dvlp_auto_boot $true
+                            write-host 'auto boot turned ON'
+                            start-sleep 3
+                        } else {
+                            dvlp_auto_boot $false
+                            write-host 'auto boot turned OFF'
+                        }
+                    }
                     elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
                         try {
                             $(docker manifest inspect $dvlp_input) | Out-Null
@@ -2070,7 +2100,9 @@ function start_countdown {
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\repos\kindtek" | Out-Null
 pull_dvlp_envs
 # remove auto install script (optionally added when using restart prompt)
-Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
+if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -ne '1'){
+    Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
+}
 if ((!([string]::IsNullOrEmpty($args[0]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
     # echo 'installing everything and setting envs ..'
     if ($(dvlp_get_debug_mode)){
