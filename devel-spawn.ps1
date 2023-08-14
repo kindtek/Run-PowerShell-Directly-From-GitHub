@@ -1428,14 +1428,11 @@ function wsl_devel_spawn {
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_input = Read-Host $dvlp_options
                 do {
+                    Set-PSDebug -trace 2
                     try {
                         $dvlp_input_orig = $dvlp_input
                         $dvlp_input = 'screen'
-                        $dvlp_output = $(Invoke-Expression $dvlp_input | Out-Null)
-                        if (!($dvlp_output)){
-                            $dvlp_input = $dvlp_input_orig
-                        }
-
+                        Invoke-Expression $confirmation | Out-Null
                     } catch {
                         $dvlp_input = $dvlp_input_orig
                     }
@@ -1524,7 +1521,7 @@ function wsl_devel_spawn {
                         echo "wsl_choice: $wsl_choice"
                         if ($wsl_choice -ieq '0' ) {
                             # special case for windows terminal shortcut
-                            Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" | Out-Null
+                            Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" 
                         } else {
                             $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                             if ($wsl_distro_selected) {
