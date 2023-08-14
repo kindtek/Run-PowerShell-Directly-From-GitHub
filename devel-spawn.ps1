@@ -894,13 +894,9 @@ function sync_repo {
 }
 
 function get_repo_commit {
-    if (Test-Path $env:KINDTEK_WIN_GIT_PATH ) {
-        Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        $git_commit = $(git rev-parse HEAD)
-        Pop-Location
-    } else {
-        $git_commit = 0
-    }
+    Push-Location $env:KINDTEK_WIN_DVLW_PATH
+    $git_commit = $(git rev-parse HEAD)
+    Pop-Location
     return $git_commit
 }
 
@@ -2119,27 +2115,27 @@ function start_countdown {
     Write-Host -NoNewline "."
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
-    Write-Host "`t"
+    Write-Host ""
     Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "2"
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Write-Host "`t"
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "1"
+    Write-Host -NoNewline "`r`n`t2"
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
+    Write-Host ""
     Start-Sleep -Milliseconds 250
-    Write-Host "`t"
-    Write-Host -NoNewline "0"
+    Write-Host -NoNewline "`r`n`t1"
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host ""
+    Write-Host -NoNewline "`r`n`t0"
     Start-Sleep -Milliseconds 100
 }
 
