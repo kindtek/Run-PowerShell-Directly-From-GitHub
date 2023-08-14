@@ -893,6 +893,26 @@ function sync_repo {
     Pop-Location
     Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1 -Verbose
 }
+
+function update_dvlp {
+        Push-Location $env:KINDTEK_WIN_DVLW_PATH
+        $git_commit_before = $(git rev-parse HEAD)
+        Pop-Location
+        sync_repo
+        Push-Location $env:KINDTEK_WIN_DVLW_PATH
+        $git_commit_after = $(git rev-parse HEAD)
+        Pop-Location
+        if ($git_commit_before -ne $git_commit_after){
+            Write-Host "update found - reload in new window?
+(reload)"
+            $update_confirm = Read-Host
+            if ([string]::isNullOrEmpty($update_confirm)){
+                start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+            }
+            return $true
+        }
+        reutrn $false
+}
 function require_devel_online {
     do {
         try {
@@ -997,21 +1017,9 @@ function devel_boot {
         New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
         install_winget
         install_git
-        Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        $git_commit_before = $(git rev-parse HEAD)
-        Pop-Location
-        sync_repo
-        Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        $git_commit_after = $(git rev-parse HEAD)
-        Pop-Location
-        if ($git_commit_before -ne $git_commit_after){
-            Write-Host "update found - open in new window?
-(complete update)"
-            $update_confirm = Read-Host
-            if ([string]::isNullOrEmpty($update_confirm)){
-                start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)" >> "$env:TEMP\spawnlogs.txt" 2>&1            }
-                exit
-            }
+        if ($(update_dvlp)){
+            exit
+        }
         # log default distro
         $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
         # jump to bottom line without clearing scrollback
@@ -1369,13 +1377,11 @@ function wsl_devel_spawn {
                 . include_devel_tools
                 if (($dvlp_input -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
-                    $global:devel_spawn = $null
-                    $global:devel_tools = $null
                 }
                 else {
-                    sync_repo
-                    $global:devel_spawn = $null
-                    $global:devel_tools = $null
+                    if ($(update_dvlp)){
+                        exit
+                    }
                 }
             }
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
