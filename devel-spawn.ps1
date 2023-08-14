@@ -1188,13 +1188,13 @@ function wsl_devel_spawn {
     param (
         $img_name_tag
     )
-    $dvlp_choice = 'refresh'
+    $dvlp_input = 'refresh'
     do {
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
 
         $confirmation = ''    
-        if (($dvlp_choice -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {          
+        if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {          
             try {
                 if (!($(dependencies_installed))) {
                     $host.UI.RawUI.ForegroundColor = "Black"
@@ -1225,8 +1225,8 @@ function wsl_devel_spawn {
             try {
                 Invoke-Expression $confirmation | Out-Null
             } catch {
-                $dvlp_choice = $confirmation
-                
+                $dvlp_input = $confirmation
+                $confirmation = 'skip'
             }
         }
         elseif ($confirmation -eq '' -or $confirmation -eq 'skip') {
@@ -1241,7 +1241,7 @@ function wsl_devel_spawn {
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
             # if (($confirmation -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
-            if (($dvlp_choice -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -and (!($confirmation -eq 'skip'))) {
+            if (($dvlp_input -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -and (!($confirmation -eq 'skip'))) {
                 # write-host "confirmation: $confirmation"
                 # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
@@ -1284,7 +1284,7 @@ function wsl_devel_spawn {
                             $host.UI.RawUI.BackgroundColor = "Black"
     
                             $old_wsl_default_distro = get_default_wsl_distro
-                            if ($dvlp_choice -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
+                            if ($dvlp_input -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
                                 # start_dvlp_process_pop "$(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default')" 'wait'
                                 docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
                                 run_dvlp_latest_kernel_installer
@@ -1355,14 +1355,14 @@ function wsl_devel_spawn {
                 # install distro requested in arg
                 
             }
-            elseif ($dvlp_choice -eq 'screen') {
+            elseif ($dvlp_input -eq 'screen') {
                 # do nothing but refresh screen
             }
             else {
                 write-host -nonewline "
         =<=---=-======================="
                 . include_devel_tools
-                if (($dvlp_choice -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
+                if (($dvlp_input -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
                     $global:devel_spawn = $null
                     $global:devel_tools = $null
@@ -1417,46 +1417,46 @@ function wsl_devel_spawn {
                         $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`r`n`r`n(exit)"
                     }
                 }
-                # $dvlp_choice = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
+                # $dvlp_input = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
-                $dvlp_choice = Read-Host $dvlp_options
+                $dvlp_input = Read-Host $dvlp_options
                 do {
                     try {
-                        $dvlp_choice_orig = $dvlp_choice
-                        $dvlp_choice = 'screen'
-                        Invoke-Expression $dvlp_choice | Out-Null
+                        $dvlp_input_orig = $dvlp_input
+                        $dvlp_input = 'screen'
+                        Invoke-Expression $dvlp_input | Out-Null
 
                     } catch {
-                        $dvlp_choice = $dvlp_choice_orig
+                        $dvlp_input = $dvlp_input_orig
                     }
-                    if (!([string]::IsNullOrEmpty($dvlp_choice))) {
-                        # write-host "checking if $dvlp_choice is a docker image"
-                        if ( $dvlp_choice -Like 'kindtek/*:*') {
-                            Write-Host "`r`n$dvlp_choice is a valid kindtek docker image"
-                            docker_devel_spawn "$dvlp_choice"
-                            $dvlp_choice = 'screen'
+                    if (!([string]::IsNullOrEmpty($dvlp_input))) {
+                        # write-host "checking if $dvlp_input is a docker image"
+                        if ( $dvlp_input -Like 'kindtek/*:*') {
+                            Write-Host "`r`n$dvlp_input is a valid kindtek docker image"
+                            docker_devel_spawn "$dvlp_input"
+                            $dvlp_input = 'screen'
                         }
-                        elseif ( $dvlp_choice -Like '*/*:*' -And $(docker manifest inspect $dvlp_choice)) {
-                            Write-Host "`r`n$dvlp_choice is a valid docker hub image"
-                            docker_devel_spawn "$dvlp_choice"
-                            $dvlp_choice = 'screen'
+                        elseif ( $dvlp_input -Like '*/*:*' -And $(docker manifest inspect $dvlp_input)) {
+                            Write-Host "`r`n$dvlp_input is a valid docker hub image"
+                            docker_devel_spawn "$dvlp_input"
+                            $dvlp_input = 'screen'
                         }
-                        elseif ( $dvlp_choice -Like '*:*' -Or $dvlp_choice -Like '*/*' -And $(docker manifest inspect $dvlp_choice) ) {
-                            Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
-                            docker_devel_spawn "$dvlp_choice"
-                            $dvlp_choice = 'screen'
+                        elseif ( $dvlp_input -Like '*:*' -Or $dvlp_input -Like '*/*' -And $(docker manifest inspect $dvlp_input) ) {
+                            Write-Host "`r`n$dvlp_input is a valid docker hub official image"
+                            docker_devel_spawn "$dvlp_input"
+                            $dvlp_input = 'screen'
                         }
                     }
-                    if ($dvlp_choice -ieq 'x' -Or $dvlp_choice -ieq 'exit' -Or $dvlp_choice -ieq '') {
-                        $dvlp_choice = 'exit'
+                    if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
+                        $dvlp_input = 'exit'
                     }
-                    elseif ($dvlp_choice -ieq 'refresh') {
+                    elseif ($dvlp_input -ieq 'refresh') {
                         # require_docker_online
                         # sync_repo
                     }
-                    elseif ($dvlp_choice -ieq 'd') {
+                    elseif ($dvlp_input -ieq 'd') {
                         # require_docker_online
                         if ([string]::IsNullOrEmpty($img_name_tag)) {
                             docker_devel_spawn
@@ -1464,16 +1464,16 @@ function wsl_devel_spawn {
                         else {
                             docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -ieq 'd!') {
+                    elseif ($dvlp_input -ieq 'd!') {
                         require_docker_online
 
                         docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -imatch "d\d") {
-                        [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
+                    elseif ($dvlp_input -imatch "d\d") {
+                        [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         write-host "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                         if ($wsl_distro_selected) {
@@ -1487,10 +1487,10 @@ function wsl_devel_spawn {
                         else {
                             write-host "no distro for ${wsl_choice} found"
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -imatch "x\d") {
-                        [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
+                    elseif ($dvlp_input -imatch "x\d") {
+                        [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         echo "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                         if ($wsl_distro_selected) {
@@ -1509,10 +1509,10 @@ function wsl_devel_spawn {
                         else {
                             write-host "no distro for ${wsl_choice} found"
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -imatch "t\d") {
-                        [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
+                    elseif ($dvlp_input -imatch "t\d") {
+                        [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         echo "wsl_choice: $wsl_choice"
                         if ($wsl_choice -ieq '0' ) {
                             # special case for windows terminal shortcut
@@ -1534,10 +1534,10 @@ function wsl_devel_spawn {
                                 write-host "no distro for ${wsl_choice} found"
                             }
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -imatch "g\d") {
-                        [int]$wsl_choice = [string]$dvlp_choice.Substring(1)
+                    elseif ($dvlp_input -imatch "g\d") {
+                        [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         echo "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                         if ($wsl_distro_selected) {
@@ -1560,19 +1560,19 @@ function wsl_devel_spawn {
                         else {
                             write-host "no distro for ${wsl_choice} found"
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     } 
-                    elseif ($dvlp_choice -match "\d") {
-                        $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_choice
+                    elseif ($dvlp_input -match "\d") {
+                        $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_input
                         if ([string]::IsNullOrEmpty($wsl_distro_selected)) {
-                            write-host "no distro found for $dvlp_choice`r`n`r`nEnter 'DELETE' for option to delete multiple distros"
+                            write-host "no distro found for $dvlp_input`r`n`r`nEnter 'DELETE' for option to delete multiple distros"
                             $wsl_action_choice = read-host 
                             if ($wsl_action_choice -ceq 'DELETE') {
                                 write-host $(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')
                                 write-host $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
                                 powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
                             }
-                            $dvlp_choice = 'screen'
+                            $dvlp_input = 'screen'
                         }
                         else {
                             write-host "`r`n`r`n$wsl_distro_selected selected.`r`n`r`nEnter TERMINAL, GUI, DEFAULT, SETUP, KERNEL, BACKUP, RENAME, RESTORE, DELETE`r`n`t ... or press ENTER to open"
@@ -1585,7 +1585,7 @@ function wsl_devel_spawn {
                                 }
                                 write-host "deleting $wsl_distro_selected distro ..."
                                 wsl.exe --unregister $wsl_distro_selected
-                                $dvlp_choice = 'screen'
+                                $dvlp_input = 'screen'
                             }
                             elseif ($wsl_action_choice -ceq 'DEFAULT') {
                                 write-host "setting $wsl_distro_selected as default distro ..."
@@ -1623,11 +1623,11 @@ function wsl_devel_spawn {
                                     powershell -File $wsl_kernel_rollback_path                                
                                 }
                                 if ($kernel_choice = '') {
-                                    $dvlp_choice = 'screen'
+                                    $dvlp_input = 'screen'
                                 }
                                 $kernel_choice = ''
                                 if ([string]::IsNullOrEmpty($kernel_choice)) {
-                                    $dvlp_choice = 'screen'
+                                    $dvlp_input = 'screen'
                                 }
 
                             }
@@ -1731,7 +1731,7 @@ function wsl_devel_spawn {
                                     }
                                 }
                                 else {
-                                    $dvlp_choice = 'screen'
+                                    $dvlp_input = 'screen'
                                 }
                             }
                             elseif ($wsl_action_choice -ieq 'RESTORE') {
@@ -1782,7 +1782,7 @@ function wsl_devel_spawn {
                                             }
                                         }
                                         else {
-                                            $dvlp_choice = 'screen'
+                                            $dvlp_input = 'screen'
                                         }
                                     }
                                     else {
@@ -1797,12 +1797,12 @@ function wsl_devel_spawn {
                                 }
                             }
                             else {
-                                $dvlp_choice = 'screen'
+                                $dvlp_input = 'screen'
                             }
                         }
-                        # $dvlp_choice = 'screen'
+                        # $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -ieq 'revert') {
+                    elseif ($dvlp_input -ieq 'revert') {
                         try {
                             set_default_wsl_distro
                             require_docker_online_new_win
@@ -1815,17 +1815,17 @@ function wsl_devel_spawn {
                                 Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
                             }
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -like 't**') {    
-                        if ($dvlp_choice -ieq 't') {
+                    elseif ($dvlp_input -like 't**') {    
+                        if ($dvlp_input -ieq 't') {
                             Write-Host "`r`n`t[l]inux or [w]indows"
                             $dvlp_cli_options = Read-Host
                         }
                         if ($dvlp_cli_options -ieq 'l' -Or $dvlp_cli_options -ieq 'w') {
-                            $dvlp_choice = $dvlp_choice + $dvlp_cli_options
+                            $dvlp_input = $dvlp_input + $dvlp_cli_options
                         }
-                        if ($dvlp_choice -ieq 't0' ) {
+                        if ($dvlp_input -ieq 't0' ) {
                             Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" | Out-Null
                             # $command_input = ''
                             # while ($command_input -ne 'exit'){
@@ -1833,29 +1833,29 @@ function wsl_devel_spawn {
                             # }
                             
                         }
-                        if ($dvlp_choice -ieq 'tl' ) {
+                        if ($dvlp_input -ieq 'tl' ) {
                             wsl.exe -- cd `$HOME `&`& bash
                         }
-                        elseif ($dvlp_choice -ieq 'tdl' ) {
+                        elseif ($dvlp_input -ieq 'tdl' ) {
                             # wsl.exe -d devels-playground-kali-git -- cd `$HOME/.local/bin; alias cdir`=`'source cdir.sh; alias grep=`'grep --color=auto`'; ls -al; cdir_cli
                             # start_dvlp_process_pop "wsl.exe --cd /hal --exec bash `$(cdir)" 'wait' 'noexit'
                         }
-                        elseif ($dvlp_choice -ieq 'tw' ) {
+                        elseif ($dvlp_input -ieq 'tw' ) {
                             start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
                         }
-                        elseif ($dvlp_choice -ieq 'tdw' ) {
+                        elseif ($dvlp_input -ieq 'tdw' ) {
                             # one day might get the windows cdir working
                             # start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
 
                     }
-                    elseif ($dvlp_choice -like 'k*') {
-                        if ($dvlp_choice -ieq 'k') {
+                    elseif ($dvlp_input -like 'k*') {
+                        if ($dvlp_input -ieq 'k') {
                             Write-Host "`r`n`t[l]inux or [w]indows"
                             $dvlp_kindtek_options = Read-Host
                             if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
-                                $dvlp_choice = $dvlp_choice + $dvlp_kindtek_options
+                                $dvlp_input = $dvlp_input + $dvlp_kindtek_options
                                 if ($dvlp_kindtek_options -ieq 'w') {
                                     Write-Host "`r`n`t`t-`t[d]ocker settings reset`r`n`t`t-`t[D]ocker re-install`r`n`t`t-`t[w]indows re-install`r`n`t`t-`t[W]indows uninstall"
                                     $dvlp_kindtek_options_win = Read-Host
@@ -1881,83 +1881,83 @@ function wsl_devel_spawn {
                                 }
                             }
                         }
-                        if ($dvlp_choice -ieq 'kl' ) {
+                        if ($dvlp_input -ieq 'kl' ) {
                             wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
 
                         }
-                        elseif ($dvlp_choice -ieq 'kw' ) {
+                        elseif ($dvlp_input -ieq 'kw' ) {
                             Write-Host 'checking for updates ...'
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
 
                     }
-                    elseif ($dvlp_choice -ieq 'r') {
+                    elseif ($dvlp_input -ieq 'r') {
                         if ($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO -ne "") {
                             # wsl.exe --set-default kalilinux-kali-rolling-latest
                             Write-Host "`r`n`r`nsetting $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO as default distro ..."
                             wsl.exe --set-default $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO
                             # wsl_docker_restart
                             wsl_docker_restart_new_win
-                            $dvlp_choice = 'screen'
+                            $dvlp_input = 'screen'
                         }
                     }
-                    elseif ($dvlp_choice -ceq 'restart') {
+                    elseif ($dvlp_input -ceq 'restart') {
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -ceq 'restart!') {
+                    elseif ($dvlp_input -ceq 'restart!') {
                         # wsl_docker_restart
                         wsl_docker_full_restart_new_win
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -ceq 'RESTART') {
+                    elseif ($dvlp_input -ceq 'RESTART') {
                         if (Test-Path "$wsl_restart_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                             powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                             require_docker_online_new_win
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -ieq 'rollback') {
+                    elseif ($dvlp_input -ieq 'rollback') {
                         $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
                         if (Test-Path "$wsl_kernel_rollback_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                             powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                             require_docker_online_new_win
                         }
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_choice -ceq 'reboot' -or $dvlp_choice -ceq 'reboot now' -or $dvlp_choice -ceq 'reboot continue') {
-                        reboot_prompt "$dvlp_choice"
-                        $dvlp_choice = 'screen'
-                        # elseif ($dvlp_choice -ieq 'v') {
+                    elseif ($dvlp_input -ceq 'reboot' -or $dvlp_input -ceq 'reboot now' -or $dvlp_input -ceq 'reboot continue') {
+                        reboot_prompt "$dvlp_input"
+                        $dvlp_input = 'screen'
+                        # elseif ($dvlp_input -ieq 'v') {
                         #     wsl.exe sh -c "cd /hel;. code"
                     }
-                    elseif (!([string]::isnullorempty($dvlp_choice)) -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'screen' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'KW') {
+                    elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
                         try {
-                            $(docker manifest inspect $dvlp_choice) | Out-Null
+                            $(docker manifest inspect $dvlp_input) | Out-Null
                         } catch {}
                         if ($?){
-                            Write-Host "`r`n$dvlp_choice is a valid docker hub official image"
-                            docker_devel_spawn "$dvlp_choice"
-                            $dvlp_choice = 'screen'
+                            Write-Host "`r`n$dvlp_input is a valid docker hub official image"
+                            docker_devel_spawn "$dvlp_input"
+                            $dvlp_input = 'screen'
                         } else {
                             write-host "invalid command
-                            $dvlp_choice
+                            $dvlp_input
                             $confirmation"
-                            $dvlp_choice = 'screen'
+                            $dvlp_input = 'screen'
                         }
                     } else {
-                        $dvlp_choice = 'screen'
+                        $dvlp_input = 'screen'
 
                     }
                     
-                } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
-            } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
+                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
+            } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
         }
         else {
-            $dvlp_choice = 'exit'
+            $dvlp_input = 'exit'
         }
-    } while ($dvlp_choice -ieq 'kw' -Or $dvlp_choice -ieq 'refresh' -Or $dvlp_choice -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_choice -ine 'exit')
+    } while ($dvlp_input -ieq 'kw' -Or $dvlp_input -ieq 'refresh' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
     
     
     Write-Host "`r`nGoodbye!`r`n"
