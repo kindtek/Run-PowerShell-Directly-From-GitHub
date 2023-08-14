@@ -1488,11 +1488,13 @@ function wsl_devel_spawn {
                             docker_devel_spawn "$dvlp_input"
                             $dvlp_input = 'screen'
                         }
+                        # elseif ( $dvlp_input -Like '*/*:*' -And $(docker manifest inspect $dvlp_input | Out-Null) -And $?) {
                         elseif ( $dvlp_input -Like '*/*:*' -And $(docker manifest inspect $dvlp_input)) {
                             Write-Host "`r`n$dvlp_input is a valid docker hub image"
                             docker_devel_spawn "$dvlp_input"
                             $dvlp_input = 'screen'
                         }
+                        # elseif ( $dvlp_input -Like '*:*' -Or $dvlp_input -Like '*/*' -And $(docker manifest inspect $dvlp_input | Out-Null) -and $?) {
                         elseif ( $dvlp_input -Like '*:*' -Or $dvlp_input -Like '*/*' -And $(docker manifest inspect $dvlp_input) ) {
                             Write-Host "`r`n$dvlp_input is a valid docker hub official image"
                             docker_devel_spawn "$dvlp_input"
