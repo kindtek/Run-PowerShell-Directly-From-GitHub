@@ -893,32 +893,30 @@ function sync_repo {
     Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1 -Verbose
 }
 
+function get_repo_commit {
+    Push-Location $env:KINDTEK_WIN_DVLW_PATH
+    $git_commit = $(git rev-parse HEAD)
+    Pop-Location
+    return $git_commit
+}
+
 function update_dvlp {
-    if ((Test-Path $env:KINDTEK_WIN_DVLW_PATH)){
-        Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        $git_commit_before = $(git rev-parse HEAD)
-        Pop-Location
-        sync_repo
-        Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        $git_commit_after = $(git rev-parse HEAD)
-        Pop-Location
-        if ($git_commit_before -ne $git_commit_after){
-            Write-Host "update found - reload in new window?
-(reload)"
-            $update_confirm = Read-Host
-            if ([string]::isNullOrEmpty($update_confirm)){
-                start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)" >> "$env:TEMP\spawnlogs.txt" 2>&1            
-                return $true
-            } else {
-                return $false
-            }
+    $git_commit_before = $(get_repo_commit)
+    sync_repo
+    $git_commit_after = $(get_repo_commit)
+    if ($git_commit_before -ne $git_commit_after){
+        Write-Host "update found - press ENTER to reload
+(reload)
+"
+        $update_confirm = Read-Host
+        if ([string]::isNullOrEmpty($update_confirm)){
+            start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+            return $true
+        } else {
+            return $false
         }
-        return $false
-    } else {
-        sync_repo
-        return $false
     }
-        
+    return $false        
 }
 function require_devel_online {
     do {
@@ -1051,7 +1049,7 @@ function devel_boot {
         New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
         install_winget
         install_git
-        if ($(update_dvlp)){
+        if ($(update_dvlp) -eq $true){
             exit
         }
         # log default distro
@@ -1413,7 +1411,7 @@ function wsl_devel_spawn {
                     start_dvlp_process_hide 'sync_repo'
                 }
                 else {
-                    if ($(update_dvlp)){
+                    if ($(update_dvlp) -eq $true){
                         exit
                     }
                 }
