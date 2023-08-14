@@ -1077,7 +1077,7 @@ function devel_boot {
         if ($($new_windowsfeatures_installed) -eq $true -or $($new_dependencies_installed) -eq $true) {
             Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n" -ForegroundColor White -BackgroundColor Black
             if (!([string]::isnullorempty($global:devel_spawn_args))){
-                while ($(dependencies_installed $true) -eq $false) {
+                while ($(dependencies_installed) -eq $false) {
                     Write-Host "please wait for installation processes to complete "
                     for ($i = 0; $i -le 120; $i++) {
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
@@ -1120,7 +1120,7 @@ function devel_boot {
                 }
             } else {
                 $continue_install = ''
-                if (($(dependencies_installed $true) -eq $false)){
+                if (($(dependencies_installed) -eq $false)){
                     $continue_install = Read-Host "press ENTER to continue to wait for installations to complete
                     ...or enter 'skip' (not recommended)"
                 } else {
