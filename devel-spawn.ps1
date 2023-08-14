@@ -999,7 +999,7 @@ function dvlp_auto_boot_set {
         " -Force | Out-Null
     } else {
         set_dvlp_env 'KINDTEK_AUTO_BOOT' '0' 'machine' 'both'  
-        Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Confirm:$false -Force | Out-Null   
+        Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Confirm:$false -Force -ErrorAction SilentlyContinue | Out-Null   
     }
 }
 
@@ -1967,11 +1967,11 @@ function wsl_devel_spawn {
                     }
                     elseif ($dvlp_input -ieq 'auto') {
                         if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -eq '1') {
-                            dvlp_auto_boot $true
+                            dvlp_auto_boot_set $true
                             write-host 'auto boot turned ON'
                             start-sleep 3
                         } else {
-                            dvlp_auto_boot $false
+                            dvlp_auto_boot_set $false
                             write-host 'auto boot turned OFF'
                         }
                         $dvlp_input = 'screen'
