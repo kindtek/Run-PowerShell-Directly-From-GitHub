@@ -1428,7 +1428,6 @@ function wsl_devel_spawn {
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_input = Read-Host $dvlp_options
                 do {
-                    Set-PSDebug -trace 2
                     try {
                         $dvlp_input_orig = $dvlp_input
                         $dvlp_input = 'screen'
