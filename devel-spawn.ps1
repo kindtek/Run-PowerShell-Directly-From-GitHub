@@ -908,8 +908,10 @@ function update_dvlp {
             $update_confirm = Read-Host
             if ([string]::isNullOrEmpty($update_confirm)){
                 start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+                return $true
+            } else {
+                return $false
             }
-            return $true
         }
         return $false
     } else {
