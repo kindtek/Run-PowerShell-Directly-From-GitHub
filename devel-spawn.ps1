@@ -1472,6 +1472,9 @@ function wsl_devel_spawn {
                     } catch {
                         $dvlp_input = $dvlp_input_orig
                     }
+                    if ($dvlp_input_orig -eq 'update_dvlp'){
+                        exit
+                    }
                     if (!([string]::IsNullOrEmpty($dvlp_input))) {
                         # write-host "checking if $dvlp_input is a docker image"
                         if ( $dvlp_input -Like 'kindtek/*:*') {
@@ -2018,8 +2021,12 @@ function wsl_devel_spawn {
         }
     } while ($dvlp_input -ieq 'kw' -Or $dvlp_input -ieq 'refresh' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
     
-    
-    Write-Host "`r`nGoodbye!`r`n"
+    if ($dvlp_input_orig -eq 'update_dvlp'){
+        Write-Host "`r`ndocker devel was updated and is now running in a new window"
+        Write-Host "`r`nyou can close this one`r`n"
+    } else {
+        Write-Host "`r`nGoodbye!`r`n"
+    }
 }
 
 function get_dvlp_debug_mode {
