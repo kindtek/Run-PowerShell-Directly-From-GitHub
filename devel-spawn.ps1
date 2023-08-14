@@ -1403,8 +1403,11 @@ function wsl_devel_spawn {
                 }
                 catch {
                     Write-Host "initial boot error occurred" -ForegroundColor Magenta -BackgroundColor Yellow
-                    reload_dvlp
-                    exit
+                    Write-Host "hit ENTER to reload `r`n`t..or enter any other character to continue"
+                    if ($(read-host) -eq ""){
+                        reload_dvlp
+                        exit
+                    }
                 }
                 # install distro requested in arg
                 
