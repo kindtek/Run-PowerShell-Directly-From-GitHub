@@ -985,7 +985,14 @@ function run_dvlp_latest_kernel_installer {
     pop-location
 }
 
-function dvlp_auto_boot_set {
+function get_dvlp_auto_boot {
+    if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -eq '1') {
+        return $true
+    } else {
+        return $false
+    }
+}
+function set_dvlp_auto_boot {
     param (
         [bool]$auto_boot
     )
@@ -1968,12 +1975,12 @@ function wsl_devel_spawn {
                         #     wsl.exe sh -c "cd /hel;. code"
                     }
                     elseif ($dvlp_input -ieq 'auto') {
-                        if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -eq '1') {
-                            dvlp_auto_boot_set $true
+                        if ($(get_dvlp_auto_boot)) {
+                            set_dvlp_auto_boot $false
                             write-host 'auto boot turned ON'
                             start-sleep 3
                         } else {
-                            dvlp_auto_boot_set $false
+                            set_dvlp_auto_boot $true
                             write-host 'auto boot turned OFF'
                         }
                         $dvlp_input = 'screen'
