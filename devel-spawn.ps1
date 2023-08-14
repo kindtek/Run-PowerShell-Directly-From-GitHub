@@ -61,7 +61,7 @@ class dvlp_process {
             # echo testing path $env:KINDTEK_DEVEL_TOOLS
             if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
                 # write-host "dvl-tools: $proc_cmd"
-                if (dvlp_get_debug_mode){
+                if (get_dvlp_debug_mode){
                     $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;write-host $proc_cmd;$proc_cmd"
                 } else {
                     $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
@@ -72,7 +72,7 @@ class dvlp_process {
             elseif ((Test-Path -Path "$env:KINDTEK_DEVEL_SPAWN" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
                 # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
                 # write-host "dvl-spawn: $proc_cmd"
-                if (dvlp_get_debug_mode){
+                if (get_dvlp_debug_mode){
                     $this.proc_cmd = "write-host $proc_cmd;$proc_cmd"
                 } else {
                     $this.proc_cmd = "$proc_cmd"
@@ -80,7 +80,7 @@ class dvlp_process {
             }
             elseif ((Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
                 # write-host "dvlp: $proc_cmd"
-                if (dvlp_get_debug_mode){
+                if (get_dvlp_debug_mode){
                     $this.proc_cmd = "write-host $proc_cmd;$proc_cmd"
                 } else {
                     $this.proc_cmd = "$proc_cmd"
@@ -2016,7 +2016,7 @@ function wsl_devel_spawn {
     Write-Host "`r`nGoodbye!`r`n"
 }
 
-function dvlp_get_debug_mode {
+function get_dvlp_debug_mode {
     $debug_mode = get_dvlp_env 'KINDTEK_DEBUG_MODE'
     if ($debug_mode -eq '1' -Or $debug_mode -eq 1) {
         return $true
@@ -2025,7 +2025,7 @@ function dvlp_get_debug_mode {
     }
 }
 
-function dvlp_set_debug_mode {
+function set_dvlp_debug_mode {
     param (
         [bool]$debug_mode_on
     )
@@ -2111,7 +2111,7 @@ if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -ne '1'){
 }
 if ((!([string]::IsNullOrEmpty($args[0]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
     # echo 'installing everything and setting envs ..'
-    if ($(dvlp_get_debug_mode)){
+    if ($(get_dvlp_debug_mode)){
         Write-Host "`$PSCommandPath: $($PSCommandPath)"
         Write-Host "`$args[0]: $($args[0])"
         Set-PSDebug -Trace 2
