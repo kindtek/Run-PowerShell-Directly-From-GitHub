@@ -425,10 +425,10 @@ function unset_dvlp_envs {
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # write-host "$($_.name)"
     }
-    try {
-        env_refresh
-    }
-    catch {}
+    # try {
+    #     env_refresh
+    # }
+    # catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # echo "deleting local env $($_.name)"
         set_dvlp_env "$($_.name)" "$null"
@@ -442,10 +442,10 @@ function unset_dvlp_envs {
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # write-host "$($_.name)"
     }
-    try {
-        env_refresh
-    }
-    catch {}
+    # try {
+    #     env_refresh
+    # }
+    # catch {}
 }
 
 function pull_dvlp_envs {
@@ -478,16 +478,16 @@ function push_dvlp_envs {
     # get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
     #     write-host " $($_.name):  $($_.value)"
     # }
-    try {
-        env_refresh
-    } catch {}
+    # try {
+    #     env_refresh
+    # } catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # "setting machine $($_.name) to $($_.value)" 
         set_dvlp_env "$($_.name)" "$($_.value)" 'machine'
     }
-        try {
-            env_refresh
-    } catch {}
+    # try {
+    #         env_refresh
+    # } catch {}
     # echo 'machine env'
     # [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
     #     write-host " $($_.name):  $($_.value)"
@@ -774,7 +774,6 @@ function install_winget {
 function install_git {
     try {
         $software_name = "Github CLI"
-        env_refresh
         if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
             Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
             start_dvlp_process_popmax "winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;" 'wait'
@@ -785,7 +784,7 @@ function install_git {
             Write-Host "$software_name already installed" -ForegroundColor DarkCyan
         }
         # allow git to be used in same window immediately after installation
-        powershell.exe -Command $refresh_envs | Out-Null
+        env_refresh
         ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
         # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
         git config --global core.autocrlf input
