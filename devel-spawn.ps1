@@ -894,6 +894,7 @@ function sync_repo {
 }
 
 function update_dvlp {
+    if ((Test-Path $env:KINDTEK_WIN_DVLW_PATH)){
         Push-Location $env:KINDTEK_WIN_DVLW_PATH
         $git_commit_before = $(git rev-parse HEAD)
         Pop-Location
@@ -910,7 +911,12 @@ function update_dvlp {
             }
             return $true
         }
-        reutrn $false
+        return $false
+    } else {
+        sync_repo
+        return $false
+    }
+        
 }
 function require_devel_online {
     do {
