@@ -2109,34 +2109,34 @@ function env_refresh_new_win {
 
 function start_countdown {
     Write-Host -NoNewline "`r`n`t3"
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Write-Host ""
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline " 2"
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Write-Host ""
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline " 1"
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Start-Sleep -Milliseconds 250
-            Write-Host -NoNewline "."
-            Start-Sleep -Milliseconds 250
-            Write-Host ""
-            Write-Host -NoNewline " 0"
-            Start-Sleep -Milliseconds 100
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Write-Host ""
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "`r`n`t2"
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Write-Host ""
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "`r`n`t1"
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host ""
+    Write-Host -NoNewline "`r`n`t0"
+    Start-Sleep -Milliseconds 100
 }
 
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\repos\kindtek" | Out-Null
