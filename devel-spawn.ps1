@@ -1068,7 +1068,7 @@ function devel_boot {
             Write-Host "Windows features are installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed"
             if ($windowsfeatures_installed -eq $false) {
                 $new_windowsfeatures_installed = $true
-                wsl.exe --list | Out-Null
+                wsl.exe --distribution kali-linux --status | Out-Null
                 if (!($?)){
                     reboot_prompt 'reboot' 'continue'
                     exit
@@ -1293,7 +1293,10 @@ function wsl_devel_spawn {
                 start_countdown
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 try {
-                    devel_boot
+                    $devel_booted = $(devel_boot)
+                    if ($devel_booted -eq $false){
+                        throw
+                    }
 
                     if (!(Test-Path -Path "$($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed" -PathType Leaf)) {
                         docker_devel_spawn "default"
@@ -1332,11 +1335,11 @@ function wsl_devel_spawn {
                             if ($dvlp_input -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
                                 # start_dvlp_process_pop "$(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default')" 'wait'
                                 docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
-                                run_dvlp_latest_kernel_installer
+                                # run_dvlp_latest_kernel_installer
                             }
                             else {
                                 docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
-                                run_dvlp_latest_kernel_installer
+                                # run_dvlp_latest_kernel_installer
                             }
                             $new_wsl_default_distro = get_default_wsl_distro
                             
