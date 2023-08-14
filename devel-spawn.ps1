@@ -2115,6 +2115,7 @@ function start_countdown {
             Write-Host -NoNewline "."
             Start-Sleep -Milliseconds 250
             Write-Host -NoNewline "."
+            Write-Host ""
             Start-Sleep -Milliseconds 250
             Write-Host -NoNewline " 2"
             Start-Sleep -Milliseconds 250
@@ -2123,6 +2124,7 @@ function start_countdown {
             Write-Host -NoNewline "."
             Start-Sleep -Milliseconds 250
             Write-Host -NoNewline "."
+            Write-Host ""
             Start-Sleep -Milliseconds 250
             Write-Host -NoNewline " 1"
             Start-Sleep -Milliseconds 250
@@ -2132,6 +2134,7 @@ function start_countdown {
             Start-Sleep -Milliseconds 250
             Write-Host -NoNewline "."
             Start-Sleep -Milliseconds 250
+            Write-Host ""
             Write-Host -NoNewline " 0"
             Start-Sleep -Milliseconds 100
 }
