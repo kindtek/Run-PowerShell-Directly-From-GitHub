@@ -408,7 +408,7 @@ function set_dvlp_envs_new_win {
     else {
         $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
     }
-    start_dvlp_process "set_dvlp_envs;exit;"
+    start_dvlp_process "set_dvlp_envs $env:KINDTEK_DEBUG_MODE;exit;"
 }
 
 
@@ -1167,7 +1167,7 @@ function devel_daemon {
             }
             catch { 
                 # try setting envs first then do bare minimum
-                set_dvlp_envs
+                set_dvlp_envs $env:KINDTEK_DEBUG_MODE
                 return devel_boot_safe
                 
             }
@@ -1185,7 +1185,7 @@ function devel_daemon {
         start_dvlp_process_popmin "while (`$true){
             if (`$(dependencies_installed) -eq `$false){
                 # try setting envs first then do bare minimum
-                set_dvlp_envs
+                set_dvlp_envs $env:KINDTEK_DEBUG_MODE
                 devel_boot_safe 
             }
             start-sleep 60
@@ -2074,7 +2074,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or ($($PSCommandPath) -eq "$env:USER
         Set-PSDebug -Trace 2
     }
     $global:devel_spawn_args = "$($args[0])"
-    set_dvlp_envs
+    set_dvlp_envs $env:KINDTEK_DEBUG_MODE
     . include_devel_tools
     wsl_devel_spawn $args[0]
 
@@ -2082,7 +2082,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or ($($PSCommandPath) -eq "$env:USER
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") 
 {
     # echo 'setting the envs ..'
-    set_dvlp_envs 1
+    set_dvlp_envs $env:KINDTEK_DEBUG_MODE
     # wsl_devel_spawn $args[0]
 }
 if ($global:devel_tools -ne "sourced") {
