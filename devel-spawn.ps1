@@ -1221,7 +1221,15 @@ function wsl_devel_spawn {
          __ ____
         _<=||-=\\_o_c_k_e_r____________"
         }
-        if ($confirmation -eq '' -or $confirmation -eq 'skip') {
+        if (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
+            try {
+                Invoke-Expression $confirmation | Out-Null
+            } catch {
+                $dvlp_choice = $confirmation
+                
+            }
+        }
+        elseif ($confirmation -eq '' -or $confirmation -eq 'skip') {
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
             # Self-elevate the script if required
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
@@ -1416,10 +1424,12 @@ function wsl_devel_spawn {
                 $dvlp_choice = Read-Host $dvlp_options
                 do {
                     try {
+                        $dvlp_choice_orig = $dvlp_choice
+                        $dvlp_choice = 'screen'
                         Invoke-Expression $dvlp_choice | Out-Null
 
                     } catch {
-                        # $dvlp_choice = $confirmation
+                        $dvlp_choice = $dvlp_choice_orig
                     }
                     if (!([string]::IsNullOrEmpty($dvlp_choice))) {
                         # write-host "checking if $dvlp_choice is a docker image"
@@ -1943,14 +1953,6 @@ function wsl_devel_spawn {
                     
                 } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
             } while ($dvlp_choice -ne '' -And $dvlp_choice -ine 'kw' -And $dvlp_choice -ine 'exit' -And $dvlp_choice -ine 'refresh' -And $dvlp_choice -ine 'rollback' -And $dvlp_choice -ine 'failsafe' -And $dvlp_choice -ine 'screen')
-        }
-        elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
-            try {
-                Invoke-Expression $confirmation | Out-Null
-            } catch {
-                # $dvlp_choice = $confirmation
-                
-            }
         }
         else {
             $dvlp_choice = 'exit'
