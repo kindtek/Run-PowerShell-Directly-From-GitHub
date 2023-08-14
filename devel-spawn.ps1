@@ -1094,12 +1094,12 @@ function devel_boot {
                 }
 
                 Write-Host "confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
-                start_dvlp_process_min "start_docker_desktop | Out-Null;exit;"
+                start_dvlp_process_popmin "start_docker_desktop | Out-Null;exit;"
                 start-sleep 10
                 $docker_tries = 0
                 wsl.exe --distribution 'docker-desktop' --version | out-null
                 while (!$($?) -or !$(is_docker_desktop_online | Out-Null) -or $docker_tries -gt 3){
-                    start_dvlp_process_min "start_docker_desktop;exit;" 'wait'
+                    start_dvlp_process_popmin "start_docker_desktop;exit;" 'wait'
                     start-sleep 15
                     $docker_tries+=1
                     wsl.exe --distribution 'docker-desktop' --version | out-null
@@ -1141,7 +1141,7 @@ function devel_boot {
                     }                
                 }
                 Write-Host "confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
-                start_dvlp_process_min "start_docker_desktop | Out-Null;exit;"
+                start_dvlp_process_popmin "start_docker_desktop | Out-Null;exit;"
                 start-sleep 10
                 $docker_tries = 0
                 wsl.exe --distribution 'docker-desktop' --version | out-null
