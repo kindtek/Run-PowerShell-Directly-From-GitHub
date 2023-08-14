@@ -1420,7 +1420,7 @@ function wsl_devel_spawn {
             }
             do {
                 if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag)))) {
-                    $docker_devel_spawn_noninteractive = "`r`n`t  (use [d!] to import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
+                    $docker_devel_spawn_noninteractive = "`r`n`t  (use [i!] to import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default)"
                 }
                 if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -And !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -And "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -And "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
                     $wsl_distro_revert_options = "- [r]evert wsl to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
@@ -1437,7 +1437,7 @@ function wsl_devel_spawn {
         _<=||_=// e v e l"
                     write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                     wsl_distro_list_display $wsl_distro_list
-                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
+                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                 } catch {
                     try {
                         . include_devel_tools
@@ -1446,7 +1446,7 @@ function wsl_devel_spawn {
         _<=||_=// e v e l"
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         wsl_distro_list_display $wsl_distro_list
-                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [d]ocker devel${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
+                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                     } catch {
                         write-host "
         _<=||_=// e v e l (SAFE MODE)"
@@ -1500,7 +1500,7 @@ function wsl_devel_spawn {
                         # require_docker_online
                         # sync_repo
                     }
-                    elseif ($dvlp_input -ieq 'd') {
+                    elseif ($dvlp_input -ieq 'i') {
                         # require_docker_online
                         if ([string]::IsNullOrEmpty($img_name_tag)) {
                             docker_devel_spawn
@@ -1510,7 +1510,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_input -ieq 'd!') {
+                    elseif ($dvlp_input -ieq 'i!') {
                         require_docker_online
 
                         docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
