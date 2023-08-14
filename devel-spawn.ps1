@@ -997,8 +997,21 @@ function devel_boot {
         New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
         install_winget
         install_git
-
+        Push-Location $env:KINDTEK_WIN_DVLW_PATH
+        $git_commit_before = $(git rev-parse HEAD)
+        Pop-Location
         sync_repo
+        Push-Location $env:KINDTEK_WIN_DVLW_PATH
+        $git_commit_after = $(git rev-parse HEAD)
+        Pop-Location
+        if ($git_commit_before -ne $git_commit_after){
+            Write-Host "update found - open in new window?
+(complete update)"
+            $update_confirm = Read-Host
+            if ([string]::isNullOrEmpty($update_confirm)){
+                start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 $($global:devel_spawn_args)" >> "$env:TEMP\spawnlogs.txt" 2>&1            }
+                exit
+            }
         # log default distro
         $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
         # jump to bottom line without clearing scrollback
@@ -1221,15 +1234,7 @@ function wsl_devel_spawn {
          __ ____
         _<=||-=\\_o_c_k_e_r____________"
         }
-        if (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
-            try {
-                Invoke-Expression $confirmation | Out-Null
-            } catch {
-                $dvlp_input = $confirmation
-                $confirmation = 'skip'
-            }
-        }
-        elseif ($confirmation -eq '' -or $confirmation -eq 'skip') {
+        if ($confirmation -eq '' -or $confirmation -eq 'skip') {
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
             # Self-elevate the script if required
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
@@ -1426,7 +1431,10 @@ function wsl_devel_spawn {
                     try {
                         $dvlp_input_orig = $dvlp_input
                         $dvlp_input = 'screen'
-                        Invoke-Expression $dvlp_input | Out-Null
+                        $dvlp_output = $(Invoke-Expression $dvlp_input | Out-Null)
+                        if (!($dvlp_output)){
+                            $dvlp_input = $dvlp_input_orig
+                        }
 
                     } catch {
                         $dvlp_input = $dvlp_input_orig
@@ -1953,6 +1961,13 @@ function wsl_devel_spawn {
                     
                 } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
             } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
+        }
+        elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
+            try {
+                Invoke-Expression $confirmation | Out-Null
+            } catch {
+                $dvlp_input = $confirmation
+            }
         }
         else {
             $dvlp_input = 'exit'
