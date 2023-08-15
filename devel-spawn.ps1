@@ -822,7 +822,6 @@ function sync_repo {
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
         write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
         Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        $global:dvlw_commit = $(git rev-parse HEAD)
         set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "$(git rev-parse HEAD)"
         set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "$(git rev-parse HEAD)" 'machine'
         Pop-Location
@@ -928,16 +927,15 @@ function update_dvlp {
     }
     $git_commit_after = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
     if ($git_commit_before -ne $git_commit_after){
-            $global:dvlw_commit = $(git rev-parse HEAD)
+            $global:dvlw_commit = $git_commit_after
             reload_dvlp           
             return $true
     }
     if ($git_commit_now -ne $git_commit_after){
-        $global:dvlw_commit = $(git rev-parse HEAD)
+        $global:dvlw_commit = $git_commit_after
         reload_dvlp           
         return $true
     }
-    $global:dvlw_commit = $(git rev-parse HEAD)
 
     return $false        
 }
@@ -1490,7 +1488,7 @@ function wsl_devel_spawn {
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                     }
                     wsl_distro_list_display $wsl_distro_list
-                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
                 } catch {
                     try {
                         . include_devel_tools
@@ -1501,7 +1499,7 @@ function wsl_devel_spawn {
                             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
                         wsl_distro_list_display $wsl_distro_list
-                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
                     } catch {
                         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))){
                             write-host "
@@ -1513,7 +1511,7 @@ function wsl_devel_spawn {
 #  <-=|!_=//  E  V  E  L"
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
-                        $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload] reload and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+                        $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update] reload`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
                     }
                 }
                 # $dvlp_input = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
@@ -1528,7 +1526,7 @@ function wsl_devel_spawn {
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
                         $dvlp_input = 'exit'
                     }
-                    elseif ($dvlp_input -ieq 'reload') {
+                    elseif ($dvlp_input -ieq 'update') {
                         if ($(update_dvlp $true) -eq $true) {
                             $dvlp_input = 'exit'
                         } else {
@@ -2026,7 +2024,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'noscreen'
                     }
-                    elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'KW') {
+                    elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'KW') {
                         try {
                             # disguise unavoidable error message
                             $orig_foreground = [System.Console]::ForegroundColor
@@ -2053,8 +2051,8 @@ function wsl_devel_spawn {
                     if ($dvlp_input -eq 'noscreen'){
                         $dvlp_prompt = "        >"
                     }
-                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
-            } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
+                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
+            } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
         }
         elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
             try {
@@ -2066,7 +2064,7 @@ function wsl_devel_spawn {
         else {
             $dvlp_input = 'exit'
         }
-    } while ($dvlp_input -ieq 'kw' -Or $dvlp_input -ieq 'reload' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
+    } while ($dvlp_input -ieq 'kw' -Or $dvlp_input -ieq 'update' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
     
     if ($dvlp_input_orig -eq 'update_dvlp'){
         Write-Host "`r`ndocker devel was updated and is now running in a new window"
