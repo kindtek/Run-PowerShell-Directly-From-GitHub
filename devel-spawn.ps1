@@ -1985,7 +1985,6 @@ function wsl_devel_spawn {
                                 Invoke-Expression $dvlp_input_orig | Out-Null
                             } catch {
                                 write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
-                                $dvlp_input = $dvlp_input_orig
                             }
                         }
                     } 
