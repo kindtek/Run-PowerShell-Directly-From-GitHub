@@ -822,8 +822,8 @@ function sync_repo {
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
         write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
         Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        set_dvlp_env 'KINDTEK_WIN_GIT_COMMIT' "$(git rev-parse HEAD)"
-        set_dvlp_env 'KINDTEK_WIN_GIT_COMMIT' "$(git rev-parse HEAD)" 'machine'
+        set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "$(git rev-parse HEAD)"
+        set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "$(git rev-parse HEAD)" 'machine'
         Pop-Location
         pull_repo
     }
@@ -917,13 +917,13 @@ function update_dvlp {
     param (
         [bool]$quiet
     )
-    $git_commit_before = $(get_dvlp_env 'KINDTEK_WIN_GIT_COMMIT')
+    $git_commit_before = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
     if ($quiet){
         start_dvlp_process_hide 'sync_repo;exit;' 'wait'
     } else {
         sync_repo
     }
-    $git_commit_after = $(get_dvlp_env 'KINDTEK_WIN_GIT_COMMIT')
+    $git_commit_after = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
     if ($git_commit_before -ne $git_commit_after){
             reload_dvlp           
             return $true
