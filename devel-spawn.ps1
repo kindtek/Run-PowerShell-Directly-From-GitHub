@@ -1965,7 +1965,7 @@ function wsl_devel_spawn {
                                     }
                                     if ($dvlp_kindtek_options_win -ceq 'W') {
                                         remove_installation
-                                        reboot_prompt 'reboot'
+                                        reboot_prompt
                                     }
                                 }
                                 elseif ($dvlp_kindtek_options_win -ieq 'l') {
