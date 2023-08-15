@@ -1087,7 +1087,7 @@ function devel_boot {
         install_recommends
         $new_dependencies_installed = $(install_dependencies) 
         if ($($new_windowsfeatures_installed) -eq $true -or $($new_dependencies_installed) -eq $true) {
-            Write-Host -NoNewline "`r`n`r`n" -ForegroundColor White -BackgroundColor Black
+            Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n" -ForegroundColor White -BackgroundColor Black
             if (!([string]::isnullorempty($global:dvlp_arg0))){
                 while ($(dependencies_installed) -eq $false) {
                     Write-Host "please wait for installation processes to complete "
@@ -1097,17 +1097,16 @@ function devel_boot {
                     }                
                 }
 
+                Write-Host "confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
                 start_dvlp_process_popmin "start_docker_desktop | Out-Null;exit;"
+                start-sleep 10
                 $docker_tries = 0
-                wsl.exe --distribution docker-desktop --version | out-null
-                if (!$($?)){
-                    Write-Host "confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
-                }
-                while (!$($?) -and $docker_tries -lt 5){
+                wsl.exe --distribution 'docker-desktop' --version | out-null
+                while (!$($?) -or !$(is_docker_desktop_online | Out-Null) -and $docker_tries -gt 3){
                     start_dvlp_process_popmin "start_docker_desktop;exit;" 'wait'
                     start-sleep 15
                     $docker_tries+=1
-                    wsl.exe --distribution docker-desktop --version | out-null
+                    wsl.exe --distribution 'docker-desktop' --version | out-null
                 }
                 
                 if (!($(is_docker_desktop_online))) {    
@@ -1145,17 +1144,16 @@ function devel_boot {
                         Start-Sleep 5
                     }                
                 }
+                Write-Host "confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
                 start_dvlp_process_popmin "start_docker_desktop | Out-Null;exit;"
+                start-sleep 10
                 $docker_tries = 0
-                wsl.exe --distribution docker-desktop --version | out-null
-                if (!$($?)){
-                    Write-Host "confirm the license agreements and other prompts in the docker desktop app" -ForegroundColor Yellow
-                }
-                while (!$($?) -and $docker_tries -lt 5){
-                    start_dvlp_process_popmin "start_docker_desktop;exit;" 'wait'
+                wsl.exe --distribution 'docker-desktop' --version | out-null
+                while (!$($?) -or !$(is_docker_desktop_online | Out-Null) -and $docker_tries -gt 3){
+                    start_docker_desktop
                     start-sleep 15
                     $docker_tries+=1
-                    wsl.exe --distribution docker-desktop --version | out-null
+                    wsl.exe --distribution 'docker-desktop' --version | out-null
                 }
 
                 if ($continue_install -ieq '' -or $(dependencies_installed) -eq $false -or (!(is_docker_desktop_online))) {
