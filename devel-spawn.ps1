@@ -1070,7 +1070,7 @@ function devel_boot {
         $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
         # jump to bottom line without clearing scrollback
         # Write-Host "$([char]27)[2J" 
-        if (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.windowsfeatures-installed" -PathType Leaf) {
+        if (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.windowsfeatures-installed" -PathType Leaf) {
             $windowsfeatures_installed = $true
         }
         else {
@@ -1118,7 +1118,7 @@ function devel_boot {
                     $docker_tries+=1
                     wsl.exe --distribution docker-desktop --version | out-null
                 }
-                
+                start_docker_desktop | out-null
                 if (!($(is_docker_desktop_online))) {    
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
                         if ($new_windowsfeatures_installed) {
@@ -1170,7 +1170,7 @@ function devel_boot {
                     $docker_tries+=1
                     wsl.exe --distribution docker-desktop --version | out-null
                 }
-
+                start_docker_desktop | out-null
                 if ($continue_install -ieq '' -or $(dependencies_installed) -eq $false -or (!(is_docker_desktop_online))) {
                     if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
                             if ($new_windowsfeatures_installed) {
