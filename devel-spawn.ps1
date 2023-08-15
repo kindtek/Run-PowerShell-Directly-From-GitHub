@@ -2013,7 +2013,7 @@ function wsl_devel_spawn {
                             }
                         }
                     } 
-                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And ($dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen'))
+                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
             } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
         }
         elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
