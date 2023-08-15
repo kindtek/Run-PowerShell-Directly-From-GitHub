@@ -1426,7 +1426,7 @@ function wsl_devel_spawn {
                 
             }
             else {
-                if ($dvlp_input -eq 'screen'){
+                if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))){
                     write-host -nonewline "
         <--=|!--=!====================="
                 }
@@ -1463,7 +1463,7 @@ function wsl_devel_spawn {
                 }
                 try {
                     $wsl_distro_list = get_wsl_distro_list
-                    if ($dvlp_input -eq 'screen'){
+                    if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))){
                         write-host -nonewline "
          <-=|!_=//  E  V  E  L"
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
@@ -1474,7 +1474,7 @@ function wsl_devel_spawn {
                     try {
                         . include_devel_tools
                         $wsl_distro_list = get_wsl_distro_list
-                        if ($dvlp_input -eq 'screen'){
+                        if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))){
                             write-host -nonewline "
          <-=|!_=//  E  V  E  L"
                             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
@@ -1482,7 +1482,7 @@ function wsl_devel_spawn {
                         wsl_distro_list_display $wsl_distro_list
                         $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
                     } catch {
-                        if ($dvlp_input -eq 'screen'){
+                        if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))){
                             write-host "
          <-=|!_=//  E  V  E  L (SAFE MODE)"
 # write-host "
@@ -1499,6 +1499,7 @@ function wsl_devel_spawn {
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
+                $global:dvlp_arg1 = ''
                 $dvlp_prompt = " (exit) >"
                 do {
                     $dvlp_input = Read-Host "$dvlp_options$dvlp_prompt"
