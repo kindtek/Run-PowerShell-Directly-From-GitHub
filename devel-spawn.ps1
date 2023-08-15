@@ -906,7 +906,7 @@ function get_repo_commit {
 }
 
 function reload_dvlp {
-    start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:devel_spawn_args)' 'skip prompt'" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+    start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip prompt'" >> "$env:TEMP\spawnlogs.txt" 2>&1            
 }
 
 function update_dvlp {
@@ -1014,7 +1014,7 @@ function set_dvlp_auto_boot {
         set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 
         New-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Value "
         # PowerShell -Command `"Set-ExecutionPolicy Unrestricted`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
-        start wt -p windows cmd.exe /c echo 'please confirm administrator access to launch wsl devel' & powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '$($env:USERPROFILE)\dvlp.ps1 `"$($global:devel_spawn_args)`" `"skip prompt`"' >> `"$env:TEMP\spawnlogs.txt`" 2>&1
+        start wt -p windows cmd.exe /c echo 'please confirm administrator access to launch wsl devel' & powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '$($env:USERPROFILE)\dvlp.ps1 `"$($global:dvlp_arg0)`" `"skip prompt`"' >> `"$env:TEMP\spawnlogs.txt`" 2>&1
         # PowerShell -Command `"Set-ExecutionPolicy RemoteSigned`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
         # cmd /k
         " -Force | Out-Null
@@ -1088,7 +1088,7 @@ function devel_boot {
         $new_dependencies_installed = $(install_dependencies) 
         if ($($new_windowsfeatures_installed) -eq $true -or $($new_dependencies_installed) -eq $true) {
             Write-Host -NoNewline "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n" -ForegroundColor White -BackgroundColor Black
-            if (!([string]::isnullorempty($global:devel_spawn_args))){
+            if (!([string]::isnullorempty($global:dvlp_arg0))){
                 while ($(dependencies_installed) -eq $false) {
                     Write-Host "please wait for installation processes to complete "
                     for ($i = 0; $i -le 120; $i++) {
@@ -1253,9 +1253,7 @@ function wsl_devel_spawn {
         $host.UI.RawUI.BackgroundColor = "Black"
 
         $confirmation = ''    
-        if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($args[1]))) {
-            write-host "args[0]: '$($args[1])'"          
-            write-host "args[1]: '$($args[1])'"          
+        if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($global:dvlp_arg1))) {  
             try {
                 if (!($(dependencies_installed))) {
                     $host.UI.RawUI.ForegroundColor = "Black"
@@ -2139,20 +2137,19 @@ function start_countdown {
 
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\repos\kindtek" | Out-Null
 pull_dvlp_envs
-write-host "args[0]: '$($args[1])'"          
-write-host "args[1]: '$($args[1])'" 
 # remove auto install script (optionally added when using restart prompt)
 if ($(get_dvlp_auto_boot) -ne $true){
     Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
 }
-if ((!([string]::IsNullOrEmpty($args[0]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
+if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[1]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
     # echo 'installing everything and setting envs ..'
     if ($(get_dvlp_debug_mode)){
         Write-Host "`$PSCommandPath: $($PSCommandPath)"
         Write-Host "`$args[0]: $($args[0])"
         Set-PSDebug -Trace 2
     }
-    $global:devel_spawn_args = "$($args[0])"
+    $global:dvlp_arg0 = "$($args[0])"
+    $global:dvlp_arg1 = "$($args[1])"
     set_dvlp_envs $env:KINDTEK_DEBUG_MODE
     . include_devel_tools
     wsl_devel_spawn $args[0]
