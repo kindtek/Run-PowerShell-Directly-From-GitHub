@@ -1110,7 +1110,7 @@ function devel_boot {
                 } else {
                     Write-Host "waiting for docker desktop to come online"
                 }
-                while (!$($?) -and $docker_tries -lt 5){
+                while (($docker_tries -lt 5) -and !$($?)){
                     start_dvlp_process_popmin "start_docker_desktop;exit;" 'wait'
                     start-sleep 15
                     $docker_tries+=1
@@ -1147,7 +1147,7 @@ function devel_boot {
                     $continue_install = "continue"
                 }
                 Write-Host "please wait for installation process(es) to complete "
-                while ($(dependencies_installed) -eq $false) {
+                while (($docker_tries -lt 5) -and !$($?)){
                     for ($i = 0; $i -le 15; $i++) {
                         Write-Host ""
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
