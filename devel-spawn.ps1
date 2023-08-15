@@ -901,7 +901,7 @@ function get_repo_commit {
 }
 
 function reload_dvlp {
-    start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:devel_spawn_args)' 'skip prompt'" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+    start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:devel_spawn_args)' 'skip prompt'" >> "$env:TEMP\spawnlogs.txt" 2>&1            
 }
 
 function update_dvlp {
