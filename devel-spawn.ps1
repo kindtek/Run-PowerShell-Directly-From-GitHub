@@ -2181,9 +2181,6 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
     . include_devel_tools
     $global:dvlw_commit = $(get_repo_commit)
     wsl_devel_spawn $args[0]
-    if ($(get_dvlp_auto_boot) -eq $true){
-        devel_daemon $true
-    }
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") 
 {
