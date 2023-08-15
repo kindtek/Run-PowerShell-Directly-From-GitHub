@@ -894,9 +894,14 @@ function sync_repo {
 }
 
 function get_repo_commit {
-    Push-Location $env:KINDTEK_WIN_DVLW_PATH
-    $git_commit = $(git rev-parse HEAD)
-    Pop-Location
+    if (Test-Path $env:KINDTEK_WIN_DVLW_PATH){
+        Push-Location $env:KINDTEK_WIN_DVLW_PATH
+        $git_commit = $(git rev-parse HEAD)
+        Pop-Location
+    } else {
+        $git_commit = 0
+    }
+
     return $git_commit
 }
 
