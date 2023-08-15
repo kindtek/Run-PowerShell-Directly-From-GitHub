@@ -1095,6 +1095,7 @@ function devel_boot {
             if (!([string]::isnullorempty($global:dvlp_arg0))){
                 Write-Host "please wait for installation process(es) to complete "
                 while ($(dependencies_installed) -eq $false) {
+                    Write-Host ""
                     for ($i = 0; $i -le 15; $i++) {
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
                         Start-Sleep 1
@@ -1148,6 +1149,7 @@ function devel_boot {
                 Write-Host "please wait for installation process(es) to complete "
                 while ($(dependencies_installed) -eq $false) {
                     for ($i = 0; $i -le 15; $i++) {
+                        Write-Host ""
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
                         Start-Sleep 1
                     }                
