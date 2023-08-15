@@ -426,7 +426,7 @@ function unset_dvlp_envs {
         # write-host "$($_.name)"
     }
     # try {
-    #     env_refresh
+    #     env_reload
     # }
     # catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
@@ -443,7 +443,7 @@ function unset_dvlp_envs {
         # write-host "$($_.name)"
     }
     # try {
-    #     env_refresh
+    #     env_reload
     # }
     # catch {}
 }
@@ -479,14 +479,14 @@ function push_dvlp_envs {
     #     write-host " $($_.name):  $($_.value)"
     # }
     # try {
-    #     env_refresh
+    #     env_reload
     # } catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # "setting machine $($_.name) to $($_.value)" 
         set_dvlp_env "$($_.name)" "$($_.value)" 'machine'
     }
     # try {
-    #         env_refresh
+    #         env_reload
     # } catch {}
     # echo 'machine env'
     # [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
@@ -784,7 +784,7 @@ function install_git {
             Write-Host "$software_name already installed" -ForegroundColor DarkCyan
         }
         # allow git to be used in same window immediately after installation
-        env_refresh
+        env_reload
         ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
         # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
         git config --global core.autocrlf input
@@ -1412,7 +1412,7 @@ function wsl_devel_spawn {
         =<=---=-======================="
                 }
                 . include_devel_tools
-                if ((($dvlp_input -ceq 'refresh') -or $dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
+                if ((($dvlp_input -ceq 'reload') -or $dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
                 }
                 else {
@@ -1450,7 +1450,7 @@ function wsl_devel_spawn {
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                     }
                     wsl_distro_list_display $wsl_distro_list
-                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
+                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                 } catch {
                     try {
                         . include_devel_tools
@@ -1461,7 +1461,7 @@ function wsl_devel_spawn {
                             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
                         wsl_distro_list_display $wsl_distro_list
-                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
+                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                     } catch {
                         if ($dvlp_input -eq 'screen'){
                             write-host "
@@ -1472,7 +1472,7 @@ function wsl_devel_spawn {
 # _<=||_=// e v e l (SAFE MODE)"
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
-                        $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
+                        $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload] reload and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                     }
                 }
                 # $dvlp_input = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
@@ -1484,7 +1484,7 @@ function wsl_devel_spawn {
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
                         $dvlp_input = 'exit'
                     }
-                    elseif ($dvlp_input -ieq 'refresh') {
+                    elseif ($dvlp_input -ieq 'reload') {
                         # require_docker_online
                         # sync_repo
                     }
@@ -1978,7 +1978,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'noscreen'
                     }
-                    elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
+                    elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'KW') {
                         try {
                             # disguise unavoidable error message
                             $orig_foreground = [System.Console]::ForegroundColor
@@ -2002,8 +2002,8 @@ function wsl_devel_spawn {
                             }
                         }
                     } 
-                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And ($dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen'))
-            } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
+                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And ($dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen'))
+            } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
         }
         elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
             try {
@@ -2015,7 +2015,7 @@ function wsl_devel_spawn {
         else {
             $dvlp_input = 'exit'
         }
-    } while ($dvlp_input -ieq 'kw' -Or $dvlp_input -ieq 'refresh' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
+    } while ($dvlp_input -ieq 'kw' -Or $dvlp_input -ieq 'reload' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
     
     if ($dvlp_input_orig -eq 'update_dvlp'){
         Write-Host "`r`ndocker devel was updated and is now running in a new window"
@@ -2049,10 +2049,10 @@ function set_dvlp_debug_mode {
     }
 }
 
-function env_refresh {
+function env_reload {
 
     $orig_progress_flag = $global:progress_flag 
-    $refresh_envs = "$env:USERPROFILE/repos/$($env:KINDTEK_WIN_GIT_OWNER)/RefreshEnv.cmd"
+    $reload_envs = "$env:USERPROFILE/repos/$($env:KINDTEK_WIN_GIT_OWNER)/RefreshEnv.cmd"
     $global:progress_flag = 'silentlyContinue'
     $progress_flag = 'SilentlyContinue'
     $global:progress_flag = $orig_progress_flag
@@ -2062,8 +2062,8 @@ function env_refresh {
     while ($network_connected -eq $false){
         # write-host 'checking network'
         try {
-            if (!(Test-Path $refresh_envs)){
-                Invoke-RestMethod "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $refresh_envs | Out-Null
+            if (!(Test-Path $reload_envs)){
+                Invoke-RestMethod "https://raw.githubusercontent.com/kindtek/choco/ac806ee5ce03dea28f01c81f88c30c17726cb3e9/src/chocolatey.resources/redirects/RefreshEnv.cmd" -OutFile $reload_envs | Out-Null
             }
             # network not necessarily connected but found cached file
             $network_connected = $true
@@ -2074,13 +2074,13 @@ function env_refresh {
             $network_err_msg = "."
         }
     }
-    .$refresh_envs | Out-Null
+    .$reload_envs | Out-Null
 
 }
 
-function env_refresh_new_win {
+function env_reload_new_win {
     start_dvlp_process_popmin "wsl_docker_full_restart" 
-    # env_refresh
+    # env_reload
 }
 
 function start_countdown {
