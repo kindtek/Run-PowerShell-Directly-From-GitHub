@@ -794,6 +794,14 @@ function install_git {
     catch { write-host 'error installing github and repos'; exit }
 }
 
+function uninstall_git {
+    Write-Host "please wait while git is uninstalled"
+    start-sleep 3
+    # docker builder prune -af 
+    # docker system prune -af --volumes 
+    Start-Process powershell.exe -Wait -Argumentlist '-Command', 'write-host "uninstalling git... ";winget uninstall --id=Git.Git;winget uninstall --id=Git.Git;' | Out-Null 
+    Remove-Item "$env:USERPROFILE/repos/kindtek/.git-installed" -Confirm:$false -Force -ErrorAction SilentlyContinue
+}
 function clone_repo {
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     write-host "cloning $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
