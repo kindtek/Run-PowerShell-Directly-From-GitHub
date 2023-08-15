@@ -928,7 +928,7 @@ function get_repo_commit {
 }
 
 function reload_dvlp {
-    start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip prompt'" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+    start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'" >> "$env:TEMP\spawnlogs.txt" 2>&1            
 }
 
 function update_dvlp {
@@ -988,6 +988,9 @@ function docker_devel_spawn {
         if ([string]::IsNullOrEmpty($img_name_tag)) {
             powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
         }
+        elseif ($img_name_tag -eq "skip") {
+            powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+        }
         else {
             # Write-Host powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
             powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
@@ -1039,7 +1042,7 @@ function set_dvlp_auto_boot {
         set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 
         New-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Value "
         # PowerShell -Command `"Set-ExecutionPolicy Unrestricted`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
-        start wt -p windows cmd.exe /c echo 'please confirm administrator access to launch wsl devel' & powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '$($env:USERPROFILE)\dvlp.ps1 `"$($global:dvlp_arg0)`" `"skip prompt`"' >> `"$env:TEMP\spawnlogs.txt`" 2>&1
+        start wt -p windows cmd.exe /c echo 'please confirm administrator access to launch wsl devel' & powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '$($env:USERPROFILE)\dvlp.ps1 `"$($global:dvlp_arg0)`" `"skip`"' >> `"$env:TEMP\spawnlogs.txt`" 2>&1
         # PowerShell -Command `"Set-ExecutionPolicy RemoteSigned`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
         # cmd /k
         " -Force | Out-Null
