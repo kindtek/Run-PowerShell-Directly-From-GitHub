@@ -1422,7 +1422,8 @@ function wsl_devel_spawn {
             }
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
-            $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro 
+            $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
+            $commit_orig = get_repo_commit 
             if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -eq '1'){
                 $auto_boot_status = 'ON'
             } else {
@@ -1483,7 +1484,10 @@ function wsl_devel_spawn {
                         $dvlp_input = $dvlp_input_orig
                     }
                     if ($dvlp_input_orig -eq 'update_dvlp'){
-                        exit
+                        $commit_new = get_repo_commit
+                        if ($commit_orig -ne $commit_new){
+                            exit
+                        }
                     }
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
                         $dvlp_input = 'exit'
