@@ -1963,10 +1963,11 @@ function wsl_devel_spawn {
                         if ($(get_dvlp_auto_boot)) {
                             set_dvlp_auto_boot $false
                             write-host 'auto boot turned OFF'
-                            start-sleep 3
+                            start-sleep 1
                         } else {
                             set_dvlp_auto_boot $true
                             write-host 'auto boot turned ON'
+                            start-sleep 1
                         }
                         $dvlp_input = 'screen'
                     }
