@@ -2110,8 +2110,8 @@ function start_countdown {
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\repos\kindtek" | Out-Null
 pull_dvlp_envs
 # remove auto install script (optionally added when using restart prompt)
-if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -ne '1'){
-    Remove-Item  -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
+if ($(get_dvlp_auto_boot) -ne $true){
+    Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
 }
 if ((!([string]::IsNullOrEmpty($args[0]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
     # echo 'installing everything and setting envs ..'
