@@ -1247,6 +1247,8 @@ function devel_daemon {
                 set_dvlp_envs $env:KINDTEK_DEBUG_MODE
                 devel_boot_safe 
             }
+            sync_repo
+            require_docker_online
             start-sleep 60
         }
         "
