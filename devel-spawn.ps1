@@ -1937,7 +1937,8 @@ function wsl_devel_spawn {
                             if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
                                 $dvlp_input = $dvlp_input + $dvlp_kindtek_options
                                 if ($dvlp_kindtek_options -ieq 'w') {
-                                    Write-Host "`r`n`t`t-[r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall"
+                                    $dvlp_input = 'noscreen'
+                                    Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall"
                                     $dvlp_kindtek_options_win = Read-Host
                                     if ($dvlp_kindtek_options_win -ceq 'r') {
                                         reset_docker_settings_hard
@@ -1961,12 +1962,10 @@ function wsl_devel_spawn {
                                     if ($dvlp_kindtek_options_win -ceq 'w') {
                                         remove_installation
                                         reboot_prompt 'reboot continue'
-                                        $dvlp_input = 'noscreen'
                                     }
                                     if ($dvlp_kindtek_options_win -ceq 'W') {
                                         remove_installation
                                         reboot_prompt 'reboot'
-                                        $dvlp_input = 'noscreen'
                                     }
                                 }
                                 elseif ($dvlp_kindtek_options_win -ieq 'l') {
