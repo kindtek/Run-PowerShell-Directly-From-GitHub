@@ -1275,8 +1275,8 @@ function wsl_devel_spawn {
                 Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
                 write-host "`r`n`r`n`r`n --------------------------------------------------------------------------`r`n"
                 write-host -nonewline "
-         __ ____
-        _<=||-=\\_o_c_k_e_r____________"
+           _____
+        <-=|!=-\\__O__C__K__E__R"
             }
         }
         if ($confirmation -eq '' -or $confirmation -eq 'skip') {
@@ -1416,7 +1416,7 @@ function wsl_devel_spawn {
             else {
                 if ($dvlp_input -eq 'screen'){
                     write-host -nonewline "
-        =<=---=-======================="
+        <--=|!--=!====================="
                 }
                 . include_devel_tools
                 if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
@@ -1453,7 +1453,7 @@ function wsl_devel_spawn {
                     $wsl_distro_list = get_wsl_distro_list
                     if ($dvlp_input -eq 'screen'){
                         write-host -nonewline "
-        _<=||_=// e v e l"
+         <-=|!_=//  E  V  E  L"
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                     }
                     wsl_distro_list_display $wsl_distro_list
@@ -1464,7 +1464,7 @@ function wsl_devel_spawn {
                         $wsl_distro_list = get_wsl_distro_list
                         if ($dvlp_input -eq 'screen'){
                             write-host -nonewline "
-        _<=||_=// e v e l"
+         <-=|!_=//  E  V  E  L"
                             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
                         wsl_distro_list_display $wsl_distro_list
@@ -1472,11 +1472,12 @@ function wsl_devel_spawn {
                     } catch {
                         if ($dvlp_input -eq 'screen'){
                             write-host "
-        _<=||_=// e v e l (SAFE MODE)"
+         <-=|!_=//  E  V  E  L (SAFE MODE)"
 # write-host "
-#  __ ____
-# _<=||-=\\_o_c_k_e_r____________
-# _<=||_=// e v e l (SAFE MODE)"
+#     _____
+#  <-=|!=-\\__O__C__K__E__R
+# <--=|!--=!=====================
+#  <-=|!_=//  E  V  E  L"
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
                         $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload] reload and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
