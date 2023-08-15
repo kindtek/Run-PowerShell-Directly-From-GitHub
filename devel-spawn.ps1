@@ -1254,6 +1254,7 @@ function wsl_devel_spawn {
 
         $confirmation = ''    
         if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($args[1]))) {
+            write-host "args[0]: '$($args[1])'"          
             write-host "args[1]: '$($args[1])'"          
             try {
                 if (!($(dependencies_installed))) {
@@ -2138,6 +2139,8 @@ function start_countdown {
 
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\repos\kindtek" | Out-Null
 pull_dvlp_envs
+write-host "args[0]: '$($args[1])'"          
+write-host "args[1]: '$($args[1])'" 
 # remove auto install script (optionally added when using restart prompt)
 if ($(get_dvlp_auto_boot) -ne $true){
     Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
