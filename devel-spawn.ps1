@@ -905,8 +905,15 @@ function reload_dvlp {
 }
 
 function update_dvlp {
+    param (
+        [bool]$quiet
+    )
     $git_commit_before = $(get_repo_commit)
-    sync_repo
+    if ($quiet){
+        start_dvlp_process_hide 'sync_repo;exit;' 'wait'
+    } else {
+        sync_repo
+    }
     $git_commit_after = $(get_repo_commit)
     if ($git_commit_before -ne $git_commit_after){
             reload_dvlp           
@@ -1412,7 +1419,7 @@ function wsl_devel_spawn {
         =<=---=-======================="
                 }
                 . include_devel_tools
-                if ((($dvlp_input -ceq 'reload') -or $dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
+                if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
                 }
                 else {
@@ -1450,7 +1457,7 @@ function wsl_devel_spawn {
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                     }
                     wsl_distro_list_display $wsl_distro_list
-                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
+                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                 } catch {
                     try {
                         . include_devel_tools
@@ -1461,7 +1468,7 @@ function wsl_devel_spawn {
                             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
                         wsl_distro_list_display $wsl_distro_list
-                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
+                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [reload]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                     } catch {
                         if ($dvlp_input -eq 'screen'){
                             write-host "
@@ -1485,8 +1492,12 @@ function wsl_devel_spawn {
                         $dvlp_input = 'exit'
                     }
                     elseif ($dvlp_input -ieq 'reload') {
-                        # require_docker_online
-                        # sync_repo
+                        if ($(update_dvlp $true) -eq $true) {
+                            $dvlp_input = 'exit'
+                        } else {
+                            write-host 'no updates found'
+                            $dvlp_input = 'screen'
+                        }
                     }
                     elseif ($dvlp_input -ieq 'i') {
                         # require_docker_online
