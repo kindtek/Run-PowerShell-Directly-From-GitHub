@@ -1195,8 +1195,6 @@ function devel_daemon {
     )
     [int]$devel_bootloop_count = 0
     [int]$devel_bootloop_max = 10
-    $task1 = $false
-    $task2 = $false
     do {
         $devel_bootloop_count += 1 
         try {  
