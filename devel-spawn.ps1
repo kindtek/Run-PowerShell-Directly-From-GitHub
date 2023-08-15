@@ -829,6 +829,8 @@ function sync_repo {
     }
     else {
         write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git NOT found" 
+        set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' ""
+        set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "" 'machine'
         clone_repo
     }
     try {
