@@ -1253,7 +1253,8 @@ function wsl_devel_spawn {
         $host.UI.RawUI.BackgroundColor = "Black"
 
         $confirmation = ''    
-        if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($args[1]))) {          
+        if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($args[1]))) {
+            write-host "args[1]: '$($args[1])'"          
             try {
                 if (!($(dependencies_installed))) {
                     $host.UI.RawUI.ForegroundColor = "Black"
