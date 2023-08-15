@@ -1412,7 +1412,7 @@ function wsl_devel_spawn {
         =<=---=-======================="
                 }
                 . include_devel_tools
-                if (($dvlp_input -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
+                if ((($dvlp_input -ceq 'refresh') -or $dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
                 }
                 else {
