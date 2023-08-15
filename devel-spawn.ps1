@@ -1276,7 +1276,7 @@ function wsl_devel_spawn {
         else {
             if ($dvlp_input -eq 'screen'){
                 Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
-                write-host "`r`n`r`n`r`n --------------------------------------------------------------------------`r`n"
+                write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
                 write-host -nonewline "
             _____
          <-=|!=-\\__O__C__K__E__R"
@@ -1285,6 +1285,7 @@ function wsl_devel_spawn {
                 write-host -nonewline "
         <--=|!--=!=====================
          <-=|!_=//  E  V  E  L"
+                write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                 # no need for this variable anymore - leaving will only make display look weird
             }
         }
