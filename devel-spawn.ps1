@@ -1297,8 +1297,10 @@ function wsl_devel_spawn {
             if (($dvlp_input -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -and (!($confirmation -eq 'skip'))) {
                 # write-host "confirmation: $confirmation"
                 # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
-                Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
-                start_countdown
+                if (([string]::IsNullOrEmpty($global:dvlp_arg1))){
+                    Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
+                    start_countdown
+                }
                 # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
                 try {
                     $devel_booted = $(devel_boot)
