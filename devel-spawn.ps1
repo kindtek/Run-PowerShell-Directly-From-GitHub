@@ -1281,6 +1281,14 @@ function wsl_devel_spawn {
             _____
          <-=|!=-\\__O__C__K__E__R"
             }
+            if (![string]::isnullorempty($global:dvlp_arg1)){
+                write-host -nonewline "
+            _____
+        <--=|!--=!=====================
+         <-=|!_=//  E  V  E  L"
+                # no need for this variable anymore - leaving will only make display look weird
+                $global:dvlp_arg1 = ''
+            }
         }
         if ($confirmation -eq '' -or $confirmation -eq 'skip') {
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
