@@ -919,6 +919,11 @@ function update_dvlp {
     param (
         [bool]$quiet
     )
+    write-output "
+    commit now: $git_commit_now
+    commit before: $git_commit_before
+    commit after: $git_commit_after" 
+    start-sleep 5
     $git_commit_before = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
     $git_commit_now = $global:dvlw_commit
 
