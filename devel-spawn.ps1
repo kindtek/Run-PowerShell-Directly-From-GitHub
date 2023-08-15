@@ -1246,14 +1246,14 @@ function devel_daemon {
         start_dvlp_process_popmin "while (`$true){
             if (`$(dependencies_installed) -eq `$false){
                 # try setting envs first then do bare minimum
-                set_dvlp_envs $env:KINDTEK_DEBUG_MODE
-                devel_boot_safe 
+                set_dvlp_envs $env:KINDTEK_DEBUG_MODE;
+                devel_boot_safe;
             }
-            sync_repo
-            require_docker_online
-            start-sleep 60
+            sync_repo;
+            require_docker_online;
+            start-sleep 60;
         }
-        "
+        " '' 'noexit'
     }
     
     return $true
@@ -2182,7 +2182,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
     $global:dvlw_commit = $(get_repo_commit)
     wsl_devel_spawn $args[0]
     if ($(get_dvlp_auto_boot) -eq $true){
-        devel_daemon
+        devel_daemon $true
     }
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") 
