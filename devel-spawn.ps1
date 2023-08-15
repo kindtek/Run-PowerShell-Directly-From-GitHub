@@ -926,6 +926,10 @@ function update_dvlp {
         sync_repo
     }
     $git_commit_after = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
+    write-output "
+    commit now: $git_commit_now
+    commit before: $git_commit_before
+    commit after: $git_commit_after" 
     if ($git_commit_before -ne $git_commit_after){
             $global:dvlw_commit = $git_commit_after
             reload_dvlp           
