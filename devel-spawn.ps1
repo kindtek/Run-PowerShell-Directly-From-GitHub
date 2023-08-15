@@ -1283,11 +1283,9 @@ function wsl_devel_spawn {
             }
             if (![string]::isnullorempty($global:dvlp_arg1)){
                 write-host -nonewline "
-            _____
         <--=|!--=!=====================
          <-=|!_=//  E  V  E  L"
                 # no need for this variable anymore - leaving will only make display look weird
-                $global:dvlp_arg1 = ''
             }
         }
         if ($confirmation -eq '' -or $confirmation -eq 'skip') {
