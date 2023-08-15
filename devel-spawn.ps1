@@ -932,6 +932,7 @@ function update_dvlp {
     commit now: $git_commit_now
     commit before: $git_commit_before
     commit after: $git_commit_after" 
+    start-sleep 5
     if ($git_commit_before -ne $git_commit_after){
             $global:dvlw_commit = $git_commit_after
             reload_dvlp           
