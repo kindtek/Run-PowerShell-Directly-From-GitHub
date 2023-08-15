@@ -1,5 +1,6 @@
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
+Write-Output ""
 
 $global:devel_spawn = 'sourced'
 # export WSL_UTF8=1
