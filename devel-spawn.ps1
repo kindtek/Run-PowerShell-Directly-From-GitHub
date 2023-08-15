@@ -1496,7 +1496,7 @@ function wsl_devel_spawn {
                             $dvlp_input = 'exit'
                         } else {
                             write-host 'no updates found'
-                            $dvlp_input = 'screen'
+                            $dvlp_input = 'noscreen'
                         }
                     }
                     elseif ($dvlp_input -ieq 'i') {
