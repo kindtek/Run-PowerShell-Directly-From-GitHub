@@ -1984,14 +1984,11 @@ function wsl_devel_spawn {
                                 $dvlp_input = 'screen'
                                 Invoke-Expression $dvlp_input_orig | Out-Null
                             } catch {
-                                write-host "invalid command`r`n$dvlp_input`r`n$confirmation"
+                                write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
                                 $dvlp_input = $dvlp_input_orig
                             }
                         }
-                    } else {
-                        
-                    }
-                    
+                    } 
                 } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
             } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
         }
