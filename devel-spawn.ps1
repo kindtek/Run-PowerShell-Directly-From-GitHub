@@ -1972,7 +1972,13 @@ function wsl_devel_spawn {
                     }
                     elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
                         try {
+                            # disguise unavoidable error message
+                            $orig_foreground = [System.Console]::ForegroundColor
+                            $temp_foreground = [System.Console]::BackgroundColor
+                            $host.UI.RawUI.ForegroundColor = $temp_foreground
                             $is_docker_image = $(docker manifest inspect $dvlp_input) 
+                            $host.UI.RawUI.ForegroundColor = $orig_foreground
+
                         } catch {}
                         if ($is_docker_image.count -ne 0){
                             Write-Host "`r`n$dvlp_input is a valid docker hub official image"
