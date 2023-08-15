@@ -1237,7 +1237,7 @@ function wsl_devel_spawn {
     param (
         $img_name_tag
     )
-    $dvlp_input = 'refresh'
+    $dvlp_input = 'screen'
     do {
         $host.UI.RawUI.ForegroundColor = "White"
         $host.UI.RawUI.BackgroundColor = "Black"
@@ -1264,11 +1264,13 @@ function wsl_devel_spawn {
     
         }
         else {
-            Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
-            write-host "`r`n`r`n`r`n --------------------------------------------------------------------------`r`n"
-            write-host -nonewline "
+            if ($dvlp_input -eq 'screen'){
+                Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
+                write-host "`r`n`r`n`r`n --------------------------------------------------------------------------`r`n"
+                write-host -nonewline "
          __ ____
         _<=||-=\\_o_c_k_e_r____________"
+            }
         }
         if ($confirmation -eq '' -or $confirmation -eq 'skip') {
             # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
@@ -1404,12 +1406,11 @@ function wsl_devel_spawn {
                 # install distro requested in arg
                 
             }
-            elseif ($dvlp_input -eq 'screen') {
-                # do nothing but refresh screen
-            }
             else {
-                write-host -nonewline "
+                if ($dvlp_input -eq 'screen'){
+                    write-host -nonewline "
         =<=---=-======================="
+                }
                 . include_devel_tools
                 if (($dvlp_input -ceq 'refresh') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
                     start_dvlp_process_hide 'sync_repo'
@@ -1423,7 +1424,6 @@ function wsl_devel_spawn {
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
             $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
             $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
-            $commit_orig = get_repo_commit 
             if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -eq '1'){
                 $auto_boot_status = 'ON'
             } else {
@@ -1444,29 +1444,34 @@ function wsl_devel_spawn {
                 }
                 try {
                     $wsl_distro_list = get_wsl_distro_list
-                    write-host -nonewline "
+                    if ($dvlp_input -eq 'screen'){
+                        write-host -nonewline "
         _<=||_=// e v e l"
-                    write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+                        write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+                    }
                     wsl_distro_list_display $wsl_distro_list
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                 } catch {
                     try {
                         . include_devel_tools
                         $wsl_distro_list = get_wsl_distro_list
-                    write-host -nonewline "
+                        if ($dvlp_input -eq 'screen'){
+                            write-host -nonewline "
         _<=||_=// e v e l"
-                        write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+                            write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+                        }
                         wsl_distro_list_display $wsl_distro_list
                         $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, docker image to import (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] screen/github`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                     } catch {
-                        write-host "
+                        if ($dvlp_input -eq 'screen'){
+                            write-host "
         _<=||_=// e v e l (SAFE MODE)"
 # write-host "
 #  __ ____
 # _<=||-=\\_o_c_k_e_r____________
 # _<=||_=// e v e l (SAFE MODE)"
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
-
+                        }
                         $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [refresh] refresh and retry install`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n(exit)"
                     }
                 }
@@ -1474,7 +1479,7 @@ function wsl_devel_spawn {
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
-                $dvlp_input = Read-Host $dvlp_options
+                $dvlp_input = Read-Host $dvlp_options ">"
                 do {
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
                         $dvlp_input = 'exit'
@@ -1514,7 +1519,7 @@ function wsl_devel_spawn {
                         else {
                             write-host "no distro for ${wsl_choice} found"
                         }
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -imatch "x\d") {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
@@ -1536,7 +1541,7 @@ function wsl_devel_spawn {
                         else {
                             write-host "no distro for ${wsl_choice} found"
                         }
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -imatch "t\d") {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
@@ -1599,7 +1604,7 @@ function wsl_devel_spawn {
                                 write-host $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
                                 powershell -File $("$(get_dvlp_env 'KINDTEK_WIN_DVLP_PATH')/scripts/wsl-remove-distros.ps1")
                             }
-                            $dvlp_input = 'screen'
+                            $dvlp_input = 'noscreen'
                         }
                         else {
                             write-host "`r`n`r`n$wsl_distro_selected selected.`r`n`r`nEnter TERMINAL, GUI, DEFAULT, SETUP, KERNEL, BACKUP, RENAME, RESTORE, DELETE`r`n`t ... or press ENTER to open"
@@ -1758,7 +1763,7 @@ function wsl_devel_spawn {
                                     }
                                 }
                                 else {
-                                    $dvlp_input = 'screen'
+                                    $dvlp_input = 'noscreen'
                                 }
                             }
                             elseif ($wsl_action_choice -ieq 'RESTORE') {
@@ -1809,7 +1814,7 @@ function wsl_devel_spawn {
                                             }
                                         }
                                         else {
-                                            $dvlp_input = 'screen'
+                                            $dvlp_input = 'noscreen'
                                         }
                                     }
                                     else {
@@ -1818,13 +1823,13 @@ function wsl_devel_spawn {
                                     }
                                 }
                                 catch {
-                                    write-host "there was a problem retreiving backups found for $wsl_distro_selected"
+                                    write-host "there was a problem retrieving backups found for $wsl_distro_selected"
                                     read-host "(main menu)"
 
                                 }
                             }
                             else {
-                                $dvlp_input = 'screen'
+                                $dvlp_input = 'noscreen'
                             }
                         }
                         # $dvlp_input = 'screen'
@@ -1842,7 +1847,7 @@ function wsl_devel_spawn {
                                 Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
                             }
                         }
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -like 't**' -and $dvlp_input -NotLike '*:*' -and $dvlp_input -NotLike '*/*') {    
                         if ($dvlp_input -ieq 't') {
@@ -1879,6 +1884,7 @@ function wsl_devel_spawn {
                     }
                     elseif ($dvlp_input -Like 'k*' -and $dvlp_input -NotLike '*:*' -and $dvlp_input -NotLike '*/*') {
                         if ($dvlp_input -ieq 'k') {
+                            $dvlp_input = 'screen'
                             Write-Host "`r`n`t[l]inux or [w]indows"
                             $dvlp_kindtek_options = Read-Host
                             if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
@@ -1897,10 +1903,12 @@ function wsl_devel_spawn {
                                     if ($dvlp_kindtek_options_win -ceq 'w') {
                                         remove_installation
                                         reboot_prompt 'reboot continue'
+                                        $dvlp_input = 'noscreen'
                                     }
                                     if ($dvlp_kindtek_options_win -ceq 'W') {
                                         remove_installation
                                         reboot_prompt 'reboot'
+                                        $dvlp_input = 'noscreen'
                                     }
                                 }
                                 elseif ($dvlp_kindtek_options_win -ieq 'l') {
@@ -1910,12 +1918,11 @@ function wsl_devel_spawn {
                         }
                         if ($dvlp_input -ieq 'kl' ) {
                             wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
-
                         }
                         elseif ($dvlp_input -ieq 'kw' ) {
                             Write-Host 'checking for updates ...'
                         }
-                        $dvlp_input = 'screen'
+                        
 
                     }
                     elseif ($dvlp_input -ieq 'r') {
@@ -1955,7 +1962,7 @@ function wsl_devel_spawn {
                     }
                     elseif ($dvlp_input -ceq 'reboot' -or $dvlp_input -ceq 'reboot now' -or $dvlp_input -ceq 'reboot continue') {
                         reboot_prompt "$dvlp_input"
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                         # elseif ($dvlp_input -ieq 'v') {
                         #     wsl.exe sh -c "cd /hel;. code"
                     }
@@ -1969,7 +1976,7 @@ function wsl_devel_spawn {
                             write-host 'auto boot turned ON'
                             start-sleep 1
                         }
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
                         try {
@@ -1988,14 +1995,14 @@ function wsl_devel_spawn {
                         } else {
                             try {
                                 $dvlp_input_orig = $dvlp_input
-                                $dvlp_input = 'screen'
+                                $dvlp_input = 'noscreen'
                                 Invoke-Expression $dvlp_input_orig | Out-Null
                             } catch {
                                 write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
                             }
                         }
                     } 
-                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
+                } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And ($dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen'))
             } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
         }
         elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
