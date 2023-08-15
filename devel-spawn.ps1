@@ -817,6 +817,8 @@ function sync_repo {
     New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
     echo "entering path $($env:KINDTEK_WIN_GIT_PATH)"
     Push-Location $env:KINDTEK_WIN_GIT_PATH
+    set_dvlp_env 'KINDTEK_WIN_GIT_COMMIT' "$(git rev-parse HEAD)"
+    set_dvlp_env 'KINDTEK_WIN_GIT_COMMIT' "$(git rev-parse HEAD)" 'machine'
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     write-host "testing path $($env:KINDTEK_WIN_DVLW_PATH)/.git" 
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
@@ -913,13 +915,13 @@ function update_dvlp {
     param (
         [bool]$quiet
     )
-    $git_commit_before = $(get_repo_commit)
+    $git_commit_before = $(get_dvlp_env 'KINDTEK_WIN_GIT_COMMIT')
     if ($quiet){
         start_dvlp_process_hide 'sync_repo;exit;' 'wait'
     } else {
         sync_repo
     }
-    $git_commit_after = $(get_repo_commit)
+    $git_commit_after = $(get_dvlp_env 'KINDTEK_WIN_GIT_COMMIT')
     if ($git_commit_before -ne $git_commit_after){
             reload_dvlp           
             return $true
