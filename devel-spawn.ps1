@@ -1972,9 +1972,9 @@ function wsl_devel_spawn {
                     }
                     elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
                         try {
-                            $is_docker_image = $(docker manifest inspect $dvlp_input) | Out-Null
+                            $is_docker_image = $(docker manifest inspect $dvlp_input) 
                         } catch {}
-                        if ($is_docker_image -eq $true){
+                        if ($is_docker_image.count -ne 0){
                             Write-Host "`r`n$dvlp_input is a valid docker hub official image"
                             docker_devel_spawn "$dvlp_input"
                             $dvlp_input = 'screen'
