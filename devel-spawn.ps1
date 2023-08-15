@@ -1078,7 +1078,7 @@ function devel_boot {
                 $new_windowsfeatures_installed = $true
                 wsl.exe --distribution kali-linux --status | Out-Null
                 if (!($?)){
-                    reboot_prompt 'reboot' 'continue'
+                    reboot_prompt 'reboot continue'
                     exit
                 }
             }
@@ -1127,7 +1127,7 @@ function devel_boot {
                 software installations complete! 
                 restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                         }
-                        reboot_prompt 'reboot'
+                        reboot_prompt
                     }
                 }
             } else {
@@ -1174,7 +1174,7 @@ function devel_boot {
                     software installations complete! 
                     restart(s) may be needed to start docker devel`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
                             }
-                            reboot_prompt 'reboot'
+                            reboot_prompt
                     }
                 }
                 
