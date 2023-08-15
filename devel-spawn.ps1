@@ -817,12 +817,14 @@ function sync_repo {
     New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
     echo "entering path $($env:KINDTEK_WIN_GIT_PATH)"
     Push-Location $env:KINDTEK_WIN_GIT_PATH
-    set_dvlp_env 'KINDTEK_WIN_GIT_COMMIT' "$(git rev-parse HEAD)"
-    set_dvlp_env 'KINDTEK_WIN_GIT_COMMIT' "$(git rev-parse HEAD)" 'machine'
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     write-host "testing path $($env:KINDTEK_WIN_DVLW_PATH)/.git" 
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
         write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
+        Push-Location $env:KINDTEK_WIN_DVLW_PATH
+        set_dvlp_env 'KINDTEK_WIN_GIT_COMMIT' "$(git rev-parse HEAD)"
+        set_dvlp_env 'KINDTEK_WIN_GIT_COMMIT' "$(git rev-parse HEAD)" 'machine'
+        Pop-Location
         pull_repo
     }
     else {
