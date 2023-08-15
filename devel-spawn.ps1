@@ -2178,6 +2178,9 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
     set_dvlp_envs $env:KINDTEK_DEBUG_MODE
     . include_devel_tools
     wsl_devel_spawn $args[0]
+    if ($(get_dvlp_auto_boot) -eq $true){
+        devel_daemon
+    }
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") 
 {
@@ -2191,8 +2194,5 @@ if ($global:devel_tools -ne "sourced") {
         # echo 'now sourcing devel_tools ...'
         . include_devel_tools
     }
-}
-if ($(get_dvlp_auto_boot) -eq $true){
-    devel_daemon
 }
 
