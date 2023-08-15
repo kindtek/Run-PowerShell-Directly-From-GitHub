@@ -822,6 +822,7 @@ function sync_repo {
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
         write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
         Push-Location $env:KINDTEK_WIN_DVLW_PATH
+        $global:dvlw_commit = $(git rev-parse HEAD)
         set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "$(git rev-parse HEAD)"
         set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "$(git rev-parse HEAD)" 'machine'
         Pop-Location
@@ -918,6 +919,8 @@ function update_dvlp {
         [bool]$quiet
     )
     $git_commit_before = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
+    $git_commit_now = $global:dvlw_commit
+
     if ($quiet){
         start_dvlp_process_hide 'sync_repo;exit;' 'wait'
     } else {
@@ -925,9 +928,17 @@ function update_dvlp {
     }
     $git_commit_after = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
     if ($git_commit_before -ne $git_commit_after){
+            $global:dvlw_commit = $(git rev-parse HEAD)
             reload_dvlp           
             return $true
     }
+    if ($git_commit_now -ne $git_commit_after){
+        $global:dvlw_commit = $(git rev-parse HEAD)
+        reload_dvlp           
+        return $true
+    }
+    $global:dvlw_commit = $(git rev-parse HEAD)
+
     return $false        
 }
 function require_devel_online {
@@ -1446,13 +1457,8 @@ function wsl_devel_spawn {
         <--=|!--=!====================="
                 }
                 . include_devel_tools
-                if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
-                    start_dvlp_process_hide 'sync_repo'
-                }
-                else {
-                    if ($(update_dvlp) -eq $true){
-                        exit
-                    }
+                if ($(update_dvlp) -eq $true){
+                    exit
                 }
             }
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
