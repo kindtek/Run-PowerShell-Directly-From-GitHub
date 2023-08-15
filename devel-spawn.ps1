@@ -1487,7 +1487,8 @@ function wsl_devel_spawn {
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 do {
-                    $dvlp_input = Read-Host -NoNewline $dvlp_options "(exit) >"
+                    $dvlp_input = Read-Host "$dvlp_options (exit) >"
+                    $dvlp_options = ''
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
                         $dvlp_input = 'exit'
                     }
