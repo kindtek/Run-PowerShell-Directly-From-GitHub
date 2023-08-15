@@ -1844,7 +1844,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_input -like 't**') {    
+                    elseif ($dvlp_input -like 't**' -and $dvlp_input -NotLike '*:*' -and $dvlp_input -NotLike '*/*') {    
                         if ($dvlp_input -ieq 't') {
                             Write-Host "`r`n`t[l]inux or [w]indows"
                             $dvlp_cli_options = Read-Host
@@ -1877,7 +1877,7 @@ function wsl_devel_spawn {
                         $dvlp_input = 'screen'
 
                     }
-                    elseif ($dvlp_input -like 'k*') {
+                    elseif ($dvlp_input -Like 'k*' -and $dvlp_input -NotLike '*:*' -and $dvlp_input -NotLike '*/*') {
                         if ($dvlp_input -ieq 'k') {
                             Write-Host "`r`n`t[l]inux or [w]indows"
                             $dvlp_kindtek_options = Read-Host
