@@ -1093,11 +1093,11 @@ function devel_boot {
         if ($($new_windowsfeatures_installed) -eq $true -or $($new_dependencies_installed) -eq $true) {
             Write-Host -NoNewline "`r`n`r`n" -ForegroundColor White -BackgroundColor Black
             if (!([string]::isnullorempty($global:dvlp_arg0))){
+                Write-Host "please wait for installation process(es) to complete "
                 while ($(dependencies_installed) -eq $false) {
-                    Write-Host "please wait for installation processes to complete "
-                    for ($i = 0; $i -le 120; $i++) {
+                    for ($i = 0; $i -le 15; $i++) {
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
-                        Start-Sleep 5
+                        Start-Sleep 1
                     }                
                 }
 
@@ -1145,10 +1145,11 @@ function devel_boot {
                 } else {
                     $continue_install = "continue"
                 }
-                while ($(dependencies_installed) -eq $false -and $continue_install -eq '') {
-                    for ($i = 0; $i -le 120; $i++) {
+                Write-Host "please wait for installation process(es) to complete "
+                while ($(dependencies_installed) -eq $false) {
+                    for ($i = 0; $i -le 15; $i++) {
                         Write-Host -NoNewline "." -ForegroundColor White -BackgroundColor Black
-                        Start-Sleep 5
+                        Start-Sleep 1
                     }                
                 }
                 start_dvlp_process_popmin "start_docker_desktop | Out-Null;exit;"
