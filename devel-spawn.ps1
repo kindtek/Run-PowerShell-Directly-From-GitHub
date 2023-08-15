@@ -1978,7 +1978,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'noscreen'
                     }
-                    elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
+                    elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
                         try {
                             # disguise unavoidable error message
                             $orig_foreground = [System.Console]::ForegroundColor
