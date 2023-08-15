@@ -2013,10 +2013,10 @@ function wsl_devel_spawn {
                                 write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
                             }
                         }
-                        if ($dvlp_input -eq 'noscreen'){
-                            $dvlp_prompt = "        >"
-                        }
                     } 
+                    if ($dvlp_input -eq 'noscreen'){
+                        $dvlp_prompt = "        >"
+                    }
                 } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
             } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
         }
