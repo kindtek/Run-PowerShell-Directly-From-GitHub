@@ -822,15 +822,11 @@ function sync_repo {
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
         write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
         Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "$(git rev-parse HEAD)"
-        set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "$(git rev-parse HEAD)" 'machine'
         Pop-Location
         pull_repo
     }
     else {
         write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git NOT found" 
-        set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' ""
-        set_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT' "" 'machine'
         clone_repo
     }
     try {
@@ -919,32 +915,16 @@ function update_dvlp {
     param (
         [bool]$quiet
     )
-    write-output "
-    commit now: $git_commit_now
-    commit before: $git_commit_before
-    commit after: $git_commit_after" 
-    start-sleep 5
-    $git_commit_before = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
-    $git_commit_now = $global:dvlw_commit
-
+    if ($global:dvlw_commit -ne $(get_repo_commit)){
+        reload_dvlp           
+        return $true
+    }
     if ($quiet){
         start_dvlp_process_hide 'sync_repo;exit;' 'wait'
     } else {
         sync_repo
     }
-    $git_commit_after = $(get_dvlp_env 'KINDTEK_WIN_DVLW_COMMIT')
-    write-output "
-    commit now: $git_commit_now
-    commit before: $git_commit_before
-    commit after: $git_commit_after" 
-    start-sleep 5
-    if ($git_commit_before -ne $git_commit_after){
-            $global:dvlw_commit = $git_commit_after
-            reload_dvlp           
-            return $true
-    }
-    if ($git_commit_now -ne $git_commit_after){
-        $global:dvlw_commit = $git_commit_after
+    if ($global:dvlw_commit -ne $(get_repo_commit)){
         reload_dvlp           
         return $true
     }
@@ -2193,6 +2173,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
     $global:dvlp_arg1 = "$($args[1])"
     set_dvlp_envs $env:KINDTEK_DEBUG_MODE
     . include_devel_tools
+    $global:dvlw_commit = $(get_repo_commit)
     wsl_devel_spawn $args[0]
     if ($(get_dvlp_auto_boot) -eq $true){
         devel_daemon
