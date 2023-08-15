@@ -1485,26 +1485,6 @@ function wsl_devel_spawn {
                     if ($dvlp_input_orig -eq 'update_dvlp'){
                         exit
                     }
-                    if (!([string]::IsNullOrEmpty($dvlp_input))) {
-                        # write-host "checking if $dvlp_input is a docker image"
-                        if ( $dvlp_input -Like 'kindtek/*:*') {
-                            Write-Host "`r`n$dvlp_input is a valid kindtek docker image"
-                            docker_devel_spawn "$dvlp_input"
-                            $dvlp_input = 'screen'
-                        }
-                        # elseif ( $dvlp_input -Like '*/*:*' -And $(docker manifest inspect $dvlp_input | Out-Null) -And $?) {
-                        elseif ( $dvlp_input -Like '*/*:*' -And $(docker manifest inspect $dvlp_input)) {
-                            Write-Host "`r`n$dvlp_input is a valid docker hub image"
-                            docker_devel_spawn "$dvlp_input"
-                            $dvlp_input = 'screen'
-                        }
-                        # elseif ( $dvlp_input -Like '*:*' -Or $dvlp_input -Like '*/*' -And $(docker manifest inspect $dvlp_input | Out-Null) -and $?) {
-                        elseif ( $dvlp_input -Like '*:*' -Or $dvlp_input -Like '*/*' -And $(docker manifest inspect $dvlp_input) ) {
-                            Write-Host "`r`n$dvlp_input is a valid docker hub official image"
-                            docker_devel_spawn "$dvlp_input"
-                            $dvlp_input = 'screen'
-                        }
-                    }
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
                         $dvlp_input = 'exit'
                     }
@@ -2001,16 +1981,14 @@ function wsl_devel_spawn {
                     }
                     elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'KW') {
                         try {
-                            $(docker manifest inspect $dvlp_input) | Out-Null
+                            $is_docker_image = $(docker manifest inspect $dvlp_input) | Out-Null
                         } catch {}
-                        if ($?){
+                        if ($is_docker_image -eq $true){
                             Write-Host "`r`n$dvlp_input is a valid docker hub official image"
                             docker_devel_spawn "$dvlp_input"
                             $dvlp_input = 'screen'
                         } else {
-                            write-host "invalid command
-                            $dvlp_input
-                            $confirmation"
+                            write-host "invalid command`r`n$dvlp_input`r`n$confirmation"
                             $dvlp_input = 'screen'
                         }
                     } else {
