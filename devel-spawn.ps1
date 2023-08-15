@@ -1975,25 +1975,25 @@ function wsl_devel_spawn {
                             wsl.exe --set-default $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO
                             # wsl_docker_restart
                             wsl_docker_restart_new_win
-                            $dvlp_input = 'screen'
+                            $dvlp_input = 'noscreen'
                         }
                     }
                     elseif ($dvlp_input -ceq 'restart') {
                         # wsl_docker_restart
                         wsl_docker_restart_new_win
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -ceq 'restart!') {
                         # wsl_docker_restart
                         wsl_docker_full_restart_new_win
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -ceq 'RESTART') {
                         if (Test-Path "$wsl_restart_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                             powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                             require_docker_online_new_win
                         }
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -ieq 'rollback') {
                         $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
@@ -2001,7 +2001,7 @@ function wsl_devel_spawn {
                             powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
                             require_docker_online_new_win
                         }
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -ceq 'reboot' -or $dvlp_input -ceq 'reboot now' -or $dvlp_input -ceq 'reboot continue') {
                         reboot_prompt "$dvlp_input"
