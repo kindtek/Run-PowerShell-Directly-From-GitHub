@@ -1486,8 +1486,9 @@ function wsl_devel_spawn {
                 # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
+                $dvlp_prompt = " (exit) >"
                 do {
-                    $dvlp_input = Read-Host "$dvlp_options (exit) >"
+                    $dvlp_input = Read-Host "$dvlp_options$dvlp_prompt"
                     $dvlp_options = ''
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
                         $dvlp_input = 'exit'
@@ -2012,6 +2013,9 @@ function wsl_devel_spawn {
                             } catch {
                                 write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
                             }
+                        }
+                        if ($dvlp_input -eq 'noscreen'){
+                            $dvlp_prompt = "        >"
                         }
                     } 
                 } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'reload' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
