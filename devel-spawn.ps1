@@ -2100,25 +2100,7 @@ function env_refresh_new_win {
 }
 
 function start_countdown {
-    Write-Host -NoNewline "`r`n`t3"
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Write-Host ""
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "`r`n`t2"
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "."
-    Write-Host ""
-    Start-Sleep -Milliseconds 250
-    Write-Host -NoNewline "`r`n`t1"
+    Write-Host -NoNewline "`t3"
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "."
     Start-Sleep -Milliseconds 250
@@ -2127,7 +2109,25 @@ function start_countdown {
     Write-Host -NoNewline "."
     Start-Sleep -Milliseconds 250
     Write-Host ""
-    Write-Host -NoNewline "`r`n`t0"
+    Write-Host -NoNewline "`t`t2"
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host ""
+    Write-Host -NoNewline "`t`t`t1"
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 250
+    Write-Host ""
+    Write-Host -NoNewline "`t`t`t`t0"
     Start-Sleep -Milliseconds 100
 }
 
