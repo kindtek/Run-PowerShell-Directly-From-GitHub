@@ -1476,13 +1476,6 @@ function wsl_devel_spawn {
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $dvlp_input = Read-Host $dvlp_options
                 do {
-                    try {
-                        $dvlp_input_orig = $dvlp_input
-                        $dvlp_input = 'screen'
-                        Invoke-Expression $dvlp_input_orig | Out-Null
-                    } catch {
-                        $dvlp_input = $dvlp_input_orig
-                    }
                     if ($dvlp_input_orig -eq 'update_dvlp'){
                         $commit_new = get_repo_commit
                         if ($commit_orig -ne $commit_new){
@@ -1996,8 +1989,13 @@ function wsl_devel_spawn {
                             $dvlp_input = 'screen'
                         }
                     } else {
-                        $dvlp_input = 'screen'
-
+                        try {
+                            $dvlp_input_orig = $dvlp_input
+                            $dvlp_input = 'screen'
+                            Invoke-Expression $dvlp_input_orig | Out-Null
+                        } catch {
+                            $dvlp_input = $dvlp_input_orig
+                        }
                     }
                     
                 } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'refresh' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
