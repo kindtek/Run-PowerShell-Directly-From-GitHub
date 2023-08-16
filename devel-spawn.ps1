@@ -2099,7 +2099,7 @@ function wsl_devel_spawn {
                     } 
                     if ($dvlp_input -eq 'noscreen'){
                         if ($dvlp_prompt -eq $dvlp_prompt1) {
-                            write-host "`r`ncommand line mode activated`r`n`tenter 'x' to exit"
+                            write-host "`r`ncommand line mode activated`r`n`tenter 'x' to exit`r`n"
                         }
                         $dvlp_prompt = $dvlp_prompt2
                     }
