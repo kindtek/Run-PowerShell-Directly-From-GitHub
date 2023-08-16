@@ -1588,7 +1588,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'noscreen'
                     }
-                    elseif ($dvlp_input -imatch "d\d") {
+                    elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "d\d")) {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         write-host "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
@@ -1605,7 +1605,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'noscreen'
                     }
-                    elseif ($dvlp_input -imatch "x\d") {
+                    elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "x\d")) {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         echo "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
@@ -1627,7 +1627,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'noscreen'
                     }
-                    elseif ($dvlp_input -imatch "t\d") {
+                    elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "t\d")) {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         echo "wsl_choice: $wsl_choice"
                         if ($wsl_choice -ieq '0' ) {
@@ -1652,7 +1652,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'screen'
                     }
-                    elseif ($dvlp_input -imatch "g\d") {
+                    elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "g\d")) {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         echo "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
@@ -1678,7 +1678,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'screen'
                     } 
-                    elseif ($dvlp_input -match "\d") {
+                    elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -match "\d")) {
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $dvlp_input
                         if ([string]::IsNullOrEmpty($wsl_distro_selected)) {
                             write-host "no distro found for $dvlp_input`r`n`r`nEnter 'DELETE' for option to delete multiple distros"
@@ -1933,7 +1933,7 @@ function wsl_devel_spawn {
                         }
                         $dvlp_input = 'noscreen'
                     }
-                    elseif ($dvlp_input -like 't**' -and $dvlp_input -NotLike '*:*' -and $dvlp_input -NotLike '*/*') {    
+                    elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -like 't**') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {    
                         if ($dvlp_input -ieq 't') {
                             Write-Host "`r`n`t[l]inux or [w]indows"
                             $dvlp_cli_options = Read-Host
@@ -1966,7 +1966,7 @@ function wsl_devel_spawn {
                         $dvlp_input = 'screen'
 
                     }
-                    elseif ($dvlp_input -Like 'k*' -and $dvlp_input -NotLike '*:*' -and $dvlp_input -NotLike '*/*') {
+                    elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -Like 'k*') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {
                         if ($dvlp_input -ieq 'k') {
                             $dvlp_input = 'screen'
                             Write-Host "`r`n`t[l]inux or [w]indows"
