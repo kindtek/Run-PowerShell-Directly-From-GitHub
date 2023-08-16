@@ -1531,9 +1531,11 @@ function wsl_devel_spawn {
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $global:dvlp_arg1 = ''
-                $dvlp_prompt = " (exit) >"
+                $dvlp_prompt = " (exit)
+>"
                 do {
-                    $dvlp_input = Read-Host "$dvlp_options$dvlp_prompt"
+                    Write-Host "$dvlp_options$dvlp_prompt"
+                    $dvlp_input = $Host.UI.ReadLine()
                     $dvlp_options = ''
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
                         $dvlp_input = 'exit'
@@ -2079,7 +2081,7 @@ function wsl_devel_spawn {
                         }
                     } 
                     if ($dvlp_input -eq 'noscreen'){
-                        $dvlp_prompt = "        >"
+                        $dvlp_prompt = ">"
                     }
                 } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
             } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
