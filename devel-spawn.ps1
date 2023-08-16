@@ -2084,7 +2084,8 @@ function wsl_devel_spawn {
                             try {
                                 $dvlp_input_orig = $dvlp_input
                                 $dvlp_input = 'noscreen'
-                                Invoke-Expression $dvlp_input_orig | Out-Null
+                                $dvlp_output = Invoke-Expression $dvlp_input_orig | Out-String
+                                Write-Host $dvlp_output
                             } catch {
                                 write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
                             }
