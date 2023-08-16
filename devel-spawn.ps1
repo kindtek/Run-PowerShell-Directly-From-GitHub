@@ -1533,7 +1533,7 @@ function wsl_devel_spawn {
                 $global:dvlp_arg1 = ''
                 $dvlp_prompt1 = "(exit) > "
                 $dvlp_prompt2 = "> "
-                if ($dvlp_prompt -eq $dvlp_prompt1){
+                if ($dvlp_prompt -eq $dvlp_prompt2){
                     # once activated, keep command line mode active 
                     $dvlp_prompt = $dvlp_prompt2
                 } else {
