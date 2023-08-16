@@ -1542,7 +1542,11 @@ function wsl_devel_spawn {
                     $dvlp_location = ''
                 }
                 do {
-                    Write-Host -nonewline "$dvlp_options$dvlp_location$dvlp_prompt"
+                    if ($dvlp_prompt -eq $dvlp_prompt2){
+                        # once activated, keep command line mode active 
+                        $dvlp_location = "DVL $(get-location)"
+                    }
+                    Write-Host -nonewline "${dvlp_options}${dvlp_location}${dvlp_prompt}"
                     $dvlp_input = $Host.UI.ReadLine()
                     $dvlp_options = ''
                     if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt1))) {
