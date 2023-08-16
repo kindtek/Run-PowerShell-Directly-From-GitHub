@@ -1531,7 +1531,7 @@ function wsl_devel_spawn {
                 # $current_process_object = Get-Process -id $current_process
                 # Set-ForegroundWindow $current_process_object.MainWindowHandle
                 $global:dvlp_arg1 = ''
-                $dvlp_prompt = " (exit)
+                $dvlp_prompt = "(exit)
 >"
                 do {
                     Write-Host -nonewline "$dvlp_options$dvlp_prompt"
