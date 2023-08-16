@@ -1533,7 +1533,12 @@ function wsl_devel_spawn {
                 $global:dvlp_arg1 = ''
                 $dvlp_prompt1 = "(exit) > "
                 $dvlp_prompt2 = "> "
-                $dvlp_prompt = $dvlp_prompt1
+                if ($dvlp_prompt -eq $dvlp_prompt1){
+                    # once activated, keep command line mode active 
+                    $dvlp_prompt = $dvlp_prompt2
+                } else {
+                    $dvlp_prompt = $dvlp_prompt1
+                }
                 do {
                     Write-Host -nonewline "$dvlp_options$dvlp_prompt"
                     $dvlp_input = $Host.UI.ReadLine()
