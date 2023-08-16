@@ -1480,7 +1480,7 @@ function wsl_devel_spawn {
                 $auto_boot_status = 'OFF'
             }
             do {
-                if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag)))) {
+                if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag))) -And ($img_name_tag -ne 'skip')) {
                     $docker_devel_spawn_noninteractive = "`r`n`t- [i!] import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default"
                 }
                 if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -And !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -And "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -And "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
@@ -1551,19 +1551,24 @@ function wsl_devel_spawn {
                     }
                     elseif ($dvlp_input -ieq 'i') {
                         # require_docker_online
-                        if ([string]::IsNullOrEmpty($img_name_tag)) {
-                            docker_devel_spawn
+                        require_docker_online_new_win
+                        if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
+                            start_dvlp_process_popmax "docker_devel_spawn"
                         }
                         else {
-                            docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
+                            start_dvlp_process_popmax "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' ''"
                         }
-                        $dvlp_input = 'screen'
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -ieq 'i!') {
-                        require_docker_online
-
-                        docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
-                        $dvlp_input = 'screen'
+                        require_docker_online_new_win
+                        if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
+                            start_dvlp_process_popmax "docker_devel_spawn"
+                        }
+                        else {
+                            start_dvlp_process_popmax "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag' 'default'"
+                        }
+                        $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -imatch "d\d") {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
