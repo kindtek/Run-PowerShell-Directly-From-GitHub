@@ -1542,6 +1542,9 @@ function wsl_devel_spawn {
                         # entering space the first time will exit - after that need x or exit to exit
                         $dvlp_input = 'exit'
                     }
+                    elseif ($dvlp_input -ieq '') {
+                        $dvlp_input = 'noscreen'
+                    }
                     elseif ($dvlp_input -ieq 'update') {
                         if ($(update_dvlp $true) -eq $true) {
                             $dvlp_input = 'exit'
@@ -2084,7 +2087,7 @@ function wsl_devel_spawn {
                     } 
                     if ($dvlp_input -eq 'noscreen'){
                         if ($dvlp_prompt -eq $dvlp_prompt1) {
-                            write-host "command prompt mode activated`r`n`ttype 'x' to exit"
+                            write-host "`r`ncommand prompt mode activated`r`n`ttype 'x' to exit"
                         }
                         $dvlp_prompt = $dvlp_prompt2
                     }
