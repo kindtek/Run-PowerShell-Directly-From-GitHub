@@ -785,8 +785,8 @@ function install_git {
             Write-Host "$software_name already installed" -ForegroundColor DarkCyan
         }
         # allow git to be used in same window immediately after installation
-        env_reload
         ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
+        env_reload
         # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
         git config --global core.autocrlf input
         return
@@ -916,13 +916,14 @@ function sync_repo {
 }
 
 function get_repo_commit {
-    if (Test-Path $env:KINDTEK_WIN_DVLW_PATH){
-        Push-Location $env:KINDTEK_WIN_DVLW_PATH
-        $git_commit = $(git rev-parse HEAD)
-        Pop-Location
-    } else {
-        $git_commit = 0
-    }
+    $git_commit = 0
+    try {
+        if (Test-Path $env:KINDTEK_WIN_DVLW_PATH){
+                Push-Location $env:KINDTEK_WIN_DVLW_PATH
+                $git_commit = $(git rev-parse HEAD)
+                Pop-Location
+        } 
+    } catch {}
 
     return $git_commit
 }
