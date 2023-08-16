@@ -1355,7 +1355,9 @@ function wsl_devel_spawn {
                     }
 
                     if (!(Test-Path -Path "$($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed" -PathType Leaf)) {
-                        docker_devel_spawn "default"
+                        start_dvlp_process_pop "
+                        docker_devel_spawn 'default';
+                        " 'wait'
                         # cmd.exe /c net stop LxssManager
                         # cmd.exe /c net start LxssManager
                         # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
@@ -1382,60 +1384,50 @@ function wsl_devel_spawn {
                             Write-Host "failed setting up hypervm in user profile"
                         }
                     }
-                    try {
-                        if (!([string]::IsNullOrEmpty($img_name_tag)) -and $img_name_tag -ne "skip") {
-                            $host.UI.RawUI.ForegroundColor = "White"
-                            $host.UI.RawUI.BackgroundColor = "Black"
-    
-                            $old_wsl_default_distro = get_default_wsl_distro
-                            if ($dvlp_input -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
-                                # start_dvlp_process_pop "$(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default')" 'wait'
-                                docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
-                                # run_dvlp_latest_kernel_installer
+                    if (!([string]::IsNullOrEmpty($img_name_tag)) -and $img_name_tag -ne "skip") {
+                        $host.UI.RawUI.ForegroundColor = "White"
+                        $host.UI.RawUI.BackgroundColor = "Black"
+
+                        $old_wsl_default_distro = get_default_wsl_distro
+                        if ($dvlp_input -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
+                            start_dvlp_process_pop "
+                            `$old_wsl_default_distro = $old_wsl_default_distro;
+                            `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' 'default');
+                            `$new_wsl_default_distro = get_default_wsl_distro;
+                            if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
+                                Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro'
                             }
-                            else {
-                                docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
-                                # run_dvlp_latest_kernel_installer
+                            "
+                            # docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
+                            # run_dvlp_latest_kernel_installer
+                        }
+                        else {
+                            start_dvlp_process_pop "
+                            `$old_wsl_default_distro = $old_wsl_default_distro;
+                            `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default');
+                            `$new_wsl_default_distro = get_default_wsl_distro;
+                            if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
+                                Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro'
                             }
-                            $new_wsl_default_distro = get_default_wsl_distro
-                            
-                            if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
-                                Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro"
-                                # Write-Host "reverting to $old_wsl_default_distro as default wsl distro ..."
-                                # try {
-                                #     wsl.exe -s $old_wsl_default_distro
-                                #     wsl_docker_restart_new_win
-                                #     # wsl_docker_restart
-                                #     require_docker_online_new_win
-                                # }
-                                # catch {
-                                #     try {
-                                #         revert_default_wsl_distro
-                                #         require_docker_online_new_win
-                                #     }
-                                #     catch {
-                                #         Write-Host "error setting failsafe as default wsl distro"
-                                #     }
-                                # }
-                            }
+                            " 'wait'
+                            # docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
+                            # run_dvlp_latest_kernel_installer
                         }
                     }
-                    catch {
-                        Write-Host "error setting "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" as default wsl distro"
-                        try {
-                            wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
-                            require_docker_online_new_win
-                        }
-                        catch {
-                            try {
-                                revert_default_wsl_distro
-                                require_docker_online_new_win
-                            }
-                            catch {
-                                Write-Host "error setting failsafe as default wsl distro"
-                            }
-                        }
-                    }
+                    # try {
+                    #     wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
+                    #     require_docker_online_new_win
+                    # }
+                    # catch {
+                    #     try {
+                    #         revert_default_wsl_distro
+                    #         require_docker_online_new_win
+                    #     }
+                    #     catch {
+                    #         Write-Host "error setting failsafe as default wsl distro"
+                    #     }
+                    # }
+                    
                     if (Test-Path "$env:USERPROFILE/DockerDesktopInstaller.exe" -or Test-Path "$env:USERPROFILE/kali-linux.AppxBundle"){
                         Write-Host 'optional: cleaning up downloaded installation files'
                         try {
