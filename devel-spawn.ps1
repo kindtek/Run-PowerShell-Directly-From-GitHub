@@ -1395,7 +1395,7 @@ function wsl_devel_spawn {
                             `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' 'default');
                             `$new_wsl_default_distro = get_default_wsl_distro;
                             if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
-                                Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro'
+                                Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
                             }
                             "
                             # docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
@@ -1407,7 +1407,7 @@ function wsl_devel_spawn {
                             `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default');
                             `$new_wsl_default_distro = get_default_wsl_distro;
                             if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
-                                Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro'
+                                Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
                             }
                             " 'wait'
                             # docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
@@ -1428,7 +1428,7 @@ function wsl_devel_spawn {
                     #     }
                     # }
                     
-                    if (Test-Path "$env:USERPROFILE/DockerDesktopInstaller.exe" -or Test-Path "$env:USERPROFILE/kali-linux.AppxBundle"){
+                    if ((Test-Path "$env:USERPROFILE/DockerDesktopInstaller.exe") -or (Test-Path "$env:USERPROFILE/kali-linux.AppxBundle")){
                         Write-Host 'optional: cleaning up downloaded installation files'
                         try {
                             if (Test-Path "$env:USERPROFILE/DockerDesktopInstaller.exe"){
