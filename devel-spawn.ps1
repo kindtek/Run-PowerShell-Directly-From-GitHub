@@ -1538,7 +1538,7 @@ function wsl_devel_spawn {
                     Write-Host -nonewline "$dvlp_options$dvlp_prompt"
                     $dvlp_input = $Host.UI.ReadLine()
                     $dvlp_options = ''
-                    if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt -ne $dvlp_prompt1))) {
+                    if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt1))) {
                         # entering space the first time will exit - after that need x or exit to exit
                         $dvlp_input = 'exit'
                     }
