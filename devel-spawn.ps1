@@ -1340,7 +1340,7 @@ function wsl_devel_spawn {
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
             # if (($confirmation -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
-            if (($dvlp_input -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -and (!($confirmation -eq 'skip'))) {
+            if (($dvlp_input -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -and ($confirmation -ne 'skip')) {
                 # write-host "confirmation: $confirmation"
                 # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
                 if (([string]::IsNullOrEmpty($global:dvlp_arg1))){
@@ -1383,7 +1383,7 @@ function wsl_devel_spawn {
                         }
                     }
                     try {
-                        if (!([string]::IsNullOrEmpty($img_name_tag))) {
+                        if (!([string]::IsNullOrEmpty($img_name_tag)) -and $img_name_tag -ne "skip") {
                             $host.UI.RawUI.ForegroundColor = "White"
                             $host.UI.RawUI.BackgroundColor = "Black"
     
