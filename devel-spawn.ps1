@@ -1534,7 +1534,7 @@ function wsl_devel_spawn {
                 $dvlp_prompt = " (exit)
 >"
                 do {
-                    Write-Host "$dvlp_options$dvlp_prompt"
+                    Write-Host -nonewline "$dvlp_options$dvlp_prompt"
                     $dvlp_input = $Host.UI.ReadLine()
                     $dvlp_options = ''
                     if ($dvlp_input -ieq 'x' -Or $dvlp_input -ieq 'exit' -Or $dvlp_input -ieq '') {
