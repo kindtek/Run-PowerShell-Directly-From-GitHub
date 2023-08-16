@@ -1021,7 +1021,8 @@ function run_dvlp_latest_kernel_installer {
     push-location $env:KINDTEK_WIN_DVLP_PATH/kernels/linux/kache
     require_docker_online_new_win
     if ($(is_docker_desktop_online) -eq $true) {
-        ./wsl-kernel-install.ps1 latest
+        ./wsl-kernel-install.ps1 latest latest
+        wsl_docker_restart | Out-Null
     }    
     pop-location
 }
