@@ -1542,7 +1542,7 @@ function wsl_devel_spawn {
                         # entering space the first time will exit - after that need x or exit to exit
                         $dvlp_input = 'exit'
                     }
-                    elseif ($dvlp_input -ieq '') {
+                    elseif (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt2)) {
                         $dvlp_input = 'noscreen'
                     }
                     elseif ($dvlp_input -ieq 'update') {
@@ -2087,7 +2087,7 @@ function wsl_devel_spawn {
                     } 
                     if ($dvlp_input -eq 'noscreen'){
                         if ($dvlp_prompt -eq $dvlp_prompt1) {
-                            write-host "`r`ncommand line activated`r`n`ttype 'x' to exit"
+                            write-host "`r`ncommand line mode activated`r`n`tenter 'x' to exit"
                         }
                         $dvlp_prompt = $dvlp_prompt2
                     }
