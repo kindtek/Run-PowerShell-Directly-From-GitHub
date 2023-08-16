@@ -1321,7 +1321,7 @@ function wsl_devel_spawn {
             _____
          <-=|!=-\\__O__C__K__E__R"
             }
-            if (![string]::isnullorempty($global:dvlp_arg1)){
+            if (![string]::isnullorempty($global:dvlp_arg1) -and (($confirmation -ne "skip"))){
                 write-host -nonewline "
         <--=|!--=!=====================
          <-=|!_=//  E  V  E  L"
