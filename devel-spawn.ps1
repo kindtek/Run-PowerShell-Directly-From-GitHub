@@ -62,8 +62,8 @@ class dvlp_process {
             # echo testing path $env:KINDTEK_DEVEL_TOOLS
             if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
                 # write-host "dvl-tools: $proc_cmd"
-                if (get_dvlp_debug_mode){
-                    $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;write-host $proc_cmd;$proc_cmd"
+                if ($(get_dvlp_debug_mode) -eq $true){
+                    $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;write-host '$proc_cmd';Set-PSDebug -Trace 2;$proc_cmd;"
                 } else {
                     $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
                 }
@@ -73,22 +73,22 @@ class dvlp_process {
             elseif ((Test-Path -Path "$env:KINDTEK_DEVEL_SPAWN" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
                 # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
                 # write-host "dvl-spawn: $proc_cmd"
-                if (get_dvlp_debug_mode){
-                    $this.proc_cmd = "write-host $proc_cmd;$proc_cmd"
+                if ($(get_dvlp_debug_mode) -eq $true){
+                    $this.proc_cmd = "write-host '$proc_cmd';Set-PSDebug -Trace 2;$proc_cmd;"
                 } else {
                     $this.proc_cmd = "$proc_cmd"
                 }
             }
             elseif ((Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
                 # write-host "dvlp: $proc_cmd"
-                if (get_dvlp_debug_mode){
-                    $this.proc_cmd = "write-host $proc_cmd;$proc_cmd"
+                if ($(get_dvlp_debug_mode) -eq $true){
+                    $this.proc_cmd = "write-host '$proc_cmd';Set-PSDebug -Trace 2;$proc_cmd;"
                 } else {
                     $this.proc_cmd = "$proc_cmd"
                 }
             }
             else {
-                $this.proc_cmd = "write-host 'could not source files but still continuing ...';$proc_cmd"
+                $this.proc_cmd = "write-host 'could not source files but still continuing ...';Set-PSDebug -Trace 2;$proc_cmd;"
                 $this.proc_wait = "wait"
                 $this.proc_noexit = '-noexit'
             }
@@ -2197,7 +2197,7 @@ if ($(get_dvlp_auto_boot) -ne $true){
 }
 if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[1]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
     # echo 'installing everything and setting envs ..'
-    if ($(get_dvlp_debug_mode)){
+    if ($(get_dvlp_debug_mode) -eq $true){
         Write-Host "`$PSCommandPath: $($PSCommandPath)"
         Write-Host "`$args[0]: $($args[0])"
         Set-PSDebug -Trace 2
