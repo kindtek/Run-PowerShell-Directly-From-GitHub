@@ -1466,7 +1466,7 @@ function wsl_devel_spawn {
                 
             }
             else {
-                if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))){
+                if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))){
                     write-host -nonewline "
         <--=|!--=!====================="
                 }
