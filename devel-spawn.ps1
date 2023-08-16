@@ -426,7 +426,7 @@ function unset_dvlp_envs {
         # write-host "$($_.name)"
     }
     # try {
-    #     env_reload
+    #     reload_envs
     # }
     # catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
@@ -443,7 +443,7 @@ function unset_dvlp_envs {
         # write-host "$($_.name)"
     }
     # try {
-    #     env_reload
+    #     reload_envs
     # }
     # catch {}
 }
@@ -479,14 +479,14 @@ function push_dvlp_envs {
     #     write-host " $($_.name):  $($_.value)"
     # }
     # try {
-    #     env_reload
+    #     reload_envs
     # } catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
         # "setting machine $($_.name) to $($_.value)" 
         set_dvlp_env "$($_.name)" "$($_.value)" 'machine'
     }
     # try {
-    #         env_reload
+    #         reload_envs
     # } catch {}
     # echo 'machine env'
     # [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
@@ -785,7 +785,7 @@ function install_git {
         }
         # allow git to be used in same window immediately after installation
         ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
-        env_reload
+        reload_envs
         # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
         git config --global core.autocrlf input
         return
@@ -2131,7 +2131,7 @@ function set_dvlp_debug_mode {
     }
 }
 
-function env_reload {
+function reload_envs {
 
     $orig_progress_flag = $global:progress_flag 
     $reload_envs = "$env:USERPROFILE/repos/$($env:KINDTEK_WIN_GIT_OWNER)/RefreshEnv.cmd"
@@ -2160,9 +2160,9 @@ function env_reload {
 
 }
 
-function env_reload_new_win {
+function reload_envs_new_win {
     start_dvlp_process_popmin "wsl_docker_full_restart" 
-    # env_reload
+    # reload_envs
 }
 
 function start_countdown {
