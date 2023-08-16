@@ -1536,7 +1536,7 @@ function wsl_devel_spawn {
                 if ($dvlp_prompt -eq $dvlp_prompt2){
                     # once activated, keep command line mode active 
                     $dvlp_prompt = $dvlp_prompt2
-                    $dvlp_location = "DVL $(get-location)"
+                    $dvlp_location = "DVL $("$(get-location)".tolower())"
                 } else {
                     $dvlp_prompt = $dvlp_prompt1
                     $dvlp_location = ''
@@ -1544,7 +1544,7 @@ function wsl_devel_spawn {
                 do {
                     if ($dvlp_prompt -eq $dvlp_prompt2){
                         # once activated, keep command line mode active 
-                        $dvlp_location = "DVL $(get-location)"
+                        $dvlp_location = "DVL $("$(get-location)".tolower())"
                     }
                     Write-Host -nonewline "${dvlp_options}${dvlp_location}${dvlp_prompt}"
                     $dvlp_input = $Host.UI.ReadLine()
