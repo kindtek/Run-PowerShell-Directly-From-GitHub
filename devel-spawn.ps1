@@ -2084,7 +2084,7 @@ function wsl_devel_spawn {
                     } 
                     if ($dvlp_input -eq 'noscreen'){
                         if ($dvlp_prompt -eq $dvlp_prompt1) {
-                            write-host "type 'x' to exit"
+                            write-host "command prompt mode activated`r`n`ttype 'x' to exit"
                         }
                         $dvlp_prompt = $dvlp_prompt2
                     }
