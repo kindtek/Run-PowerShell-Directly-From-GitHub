@@ -419,8 +419,7 @@ function unset_dvlp_envs {
     )
     if ([string]::IsNullOrEmpty([System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine))) {
         $dvlp_owner = 'kindtek'
-    }
-    else {
+    }    else {
         $dvlp_owner = [System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine)
     }
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
@@ -431,12 +430,12 @@ function unset_dvlp_envs {
     # }
     # catch {}
     get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
-        # echo "deleting local env $($_.name)"
+        echo "deleting local env $($_.name)"
         set_dvlp_env "$($_.name)" "$null"
     }
     if (!([string]::IsNullOrEmpty($unset_machine_envs))) {
         [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
-            # echo "deleting machine env $($_.name)"
+            echo "deleting machine env $($_.name)"
             set_dvlp_env "$($_.name)" "$null" 'machine'
             }
     }
