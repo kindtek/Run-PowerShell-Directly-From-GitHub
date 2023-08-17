@@ -651,6 +651,8 @@ function test_default_wsl_distro {
 function get_default_wsl_distro {
     $default_wsl_distro = (wsl.exe --list | Out-String).split("`r`n").trim() | Where-Object { $_ -And (!([string]::IsNullOrWhiteSpace($_))) -And $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
+    $replacements = "[^a-zA-Z0-9_-]" 
+    $default_wsl_distro = $default_wsl_distro -replace $replacements, ''
     return $default_wsl_distro
 }
 
