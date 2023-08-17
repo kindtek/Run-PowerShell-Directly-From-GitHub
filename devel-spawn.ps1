@@ -654,7 +654,7 @@ function get_default_wsl_distro {
     }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
     $default_wsl_distro = $default_wsl_distro -replace "[^a-zA-Z0-9_-]", ''
-    return "$default_wsl_distro".trim()
+    return $("$default_wsl_distro".trim())
 }
 
 function revert_default_wsl_distro {
