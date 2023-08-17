@@ -1561,8 +1561,10 @@ function wsl_devel_spawn {
                         $dvlp_input = 'exit'
                     }
                     elseif ($wsl_distro_list.contains($dvlp_input)){
+                        write-host "found $dvlp_input"
                         for ($i = 0; $i -le $wsl_distro_list.length - 1; $i++) {
                             if ($dvlp_input -eq $wsl_distro_list[$i]){
+                                write-host "found $($i + 1)"
                                 $dvlp_input = "$($i + 1)"
                             }
                         }
