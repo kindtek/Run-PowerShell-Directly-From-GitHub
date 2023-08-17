@@ -1403,7 +1403,7 @@ function wsl_devel_spawn {
                             if ('$img_name_tag' -like '*kernel' ){
                                 run_dvlp_latest_kernel_installer
                             }
-                            "
+                            " 'wait'
                         }
                         else {
                             start_dvlp_process_pop "
@@ -1586,10 +1586,10 @@ function wsl_devel_spawn {
                     elseif ($dvlp_input -ieq 'i!') {
                         require_docker_online_new_win
                         if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
-                            start_dvlp_process_popmax "docker_devel_spawn"
+                            start_dvlp_process_popmax "docker_devel_spawn" 'wait'
                         }
                         else {
-                            start_dvlp_process_popmax "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag' 'default'"
+                            start_dvlp_process_popmax "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag' 'default'" 'wait'
                         }
                         $dvlp_input = 'noscreen'
                     }
