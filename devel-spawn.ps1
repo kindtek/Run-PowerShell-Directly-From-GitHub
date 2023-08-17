@@ -1510,7 +1510,7 @@ function wsl_devel_spawn {
          <-=|!_=//  E  V  E  L"
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                     }
-                    wsl_distro_list_display $wsl_distro_list
+                    display_wsl_distro_list $wsl_distro_list
                     $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
                 } catch {
                     try {
@@ -1521,7 +1521,7 @@ function wsl_devel_spawn {
          <-=|!_=//  E  V  E  L"
                             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
-                        wsl_distro_list_display $wsl_distro_list
+                        display_wsl_distro_list $wsl_distro_list
                         $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
                     } catch {
                         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))){
@@ -1611,7 +1611,7 @@ function wsl_devel_spawn {
                     elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "d\d")) {
                       $dvlp_input = 'screen'
                       [int]$wsl_choice = [string]$dvlp_input.Substring(1)
-                      $wsl_distro_selected_name = wsl_distro_list_select_num $wsl_distro_list $wsl_choice
+                      $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
                       if ($wsl_distro_selected_name) {
                           set_default_wsl_distro $wsl_distro_selected_name
                       }
@@ -1623,7 +1623,7 @@ function wsl_devel_spawn {
                     elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "x\d")) {
                       $dvlp_input = 'screen'
                       [int]$wsl_choice = [string]$dvlp_input.Substring(1)
-                      $wsl_distro_selected_name = wsl_distro_list_select_num $wsl_distro_list $wsl_choice
+                      $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
                       if ($wsl_distro_selected_name) {
                           if ($wsl_distro_selected_name -eq $(get_default_wsl_distro)) {
                               write-host "replacing $wsl_distro_selected_name with $env:KINDTEK_FAILSAFE_WSL_DISTRO as default distro ..."
@@ -1640,7 +1640,7 @@ function wsl_devel_spawn {
                     elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "t\d")) {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
                         $dvlp_input = 'screen'
-                        $wsl_distro_selected_name = wsl_distro_list_select_num $wsl_distro_list $wsl_choice
+                        $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
                         if ($wsl_distro_selected_name) {
                             write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
                             wsl.exe --distribution "$($wsl_distro_selected_name)".trim() -- bash
@@ -1654,7 +1654,7 @@ function wsl_devel_spawn {
                     elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "g\d")) {
                       $dvlp_input = 'screen'
                       [int]$wsl_choice = [string]$dvlp_input.Substring(1)
-                      $wsl_distro_selected_name = wsl_distro_list_select_num $wsl_distro_list $wsl_choice
+                      $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
                       if ($wsl_distro_selected_name) {
                           try {
                               wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
@@ -1673,7 +1673,7 @@ function wsl_devel_spawn {
                         }
                     } 
                     elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -match "\d")) {
-                        $wsl_distro_selected_name = wsl_distro_list_select_num $wsl_distro_list $dvlp_input
+                        $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $dvlp_input
                         if ([string]::IsNullOrEmpty($wsl_distro_selected_name)) {
                             write-host "no distro found for $dvlp_input`r`n`r`n"
                             $dvlp_input = 'noscreen'
@@ -1689,7 +1689,7 @@ function wsl_devel_spawn {
                                 }
                                 write-host "deleting $wsl_distro_selected_name distro ..."
                                 wsl.exe --unregister $wsl_distro_selected_name
-                                $wsl_distro_selected_num = $(wsl_distro_list_select_name $wsl_distro_list $wsl_distro_selected_name)
+                                $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                                 write-host "pro tip: next time you can use x$wsl_distro_selected_num to delete a distro"
                                 start-sleep 3
                                 $dvlp_input = 'screen'
@@ -1697,7 +1697,7 @@ function wsl_devel_spawn {
                             elseif ($wsl_action_choice -ceq 'DEFAULT') {
                                 write-host "setting $wsl_distro_selected_name as default distro ..."
                                 wsl.exe --set-default "$wsl_distro_selected_name".trim()
-                                $wsl_distro_selected_num = $(wsl_distro_list_select_name $wsl_distro_list $wsl_distro_selected_name)
+                                $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                                 write-host "pro tip: next time use d$wsl_distro_selected_num to set $wsl_distro_selected_name as default"
                                 start-sleep 3
                                 $dvlp_input = 'screen'
@@ -1750,7 +1750,7 @@ function wsl_devel_spawn {
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                                 write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
                                 wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash
-                                $wsl_distro_selected_num = $(wsl_distro_list_select_name $wsl_distro_list $wsl_distro_selected_name)
+                                $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                                 write-host "pro tip: next time use t$wsl_distro_selected_num to open the terminal for $wsl_distro_selected_name"
                                 start-sleep 3
                             }
@@ -1764,7 +1764,7 @@ function wsl_devel_spawn {
                                     wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
 
                                 }
-                                $wsl_distro_selected_num = $(wsl_distro_list_select_name $wsl_distro_list $wsl_distro_selected_name)
+                                $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                                 write-host "pro tip: use g$wsl_distro_selected_num to open the gui for $wsl_distro_selected_name"
                                 start-sleep 3
                             }
