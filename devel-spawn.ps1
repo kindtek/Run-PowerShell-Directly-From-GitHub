@@ -610,11 +610,11 @@ function test_wsl_distro {
     if ([string]::IsNullOrEmpty($distro_name)) {
         return $false
     }
-    wsl.exe -d $distro_name --exec echo $test_string | out-null
+    wsl.exe --distribution "$distro_name".trim() --exec echo $test_string | out-null
     if ($?){
         # Write-Host "testing wsl distro $distro_name"
         $test_string = 'helloworld'
-        $test = wsl.exe -d $distro_name --exec echo $test_string
+        $test = wsl.exe --distribution "$distro_name".trim() --exec echo $test_string
         if ($test -eq $test_string) {
             # Write-Host "$distro_name is valid distro"
             return $true
@@ -656,7 +656,7 @@ function get_default_wsl_distro {
 
 function revert_default_wsl_distro {
     try {
-        wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
+        wsl.exe --set-default "$env:KINDTEK_FAILSAFE_WSL_DISTRO".trim()
     }
     catch {
         try {
@@ -689,15 +689,15 @@ function set_default_wsl_distro {
     try {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
-            write-host "wsl.exe -s $new_wsl_default_distro"
-            wsl.exe -s $new_wsl_default_distro
+            write-host "wsl.exe --set-default $new_wsl_default_distro"
+            wsl.exe --set-default "$($new_wsl_default_distro)".trim()
             $new_wsl_default_distro = get_default_wsl_distro
         }
         catch {
             Write-Host "error changing wsl default distro from $old_wsl_default_distro to $new_wsl_default_distro"
             $new_wsl_default_distro = $env:KINDTEK_FAILSAFE_WSL_DISTRO
             Write-Host "restoring default distro as $old_wsl_default_distro"
-            wsl.exe -s $old_wsl_default_distro
+            wsl.exe --set-default "$old_wsl_default_distro".trim()
             cmd.exe /c net stop LxssManager
             cmd.exe /c net start LxssManager
             $new_wsl_default_distro = $old_wsl_default_distro
@@ -711,7 +711,7 @@ function set_default_wsl_distro {
             # Start-Sleep 3
             # Write-Host "reverting to $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro ..."
             # try {
-            #     wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
+            #     wsl.exe --set-default "$env:KINDTEK_FAILSAFE_WSL_DISTRO".trim()
             # }
             # catch {
             #     try {
@@ -1419,7 +1419,7 @@ function wsl_devel_spawn {
                         }
                     }
                     # try {
-                    #     wsl.exe -s $env:KINDTEK_FAILSAFE_WSL_DISTRO
+                    #     wsl.exe --set-default "$env:KINDTEK_FAILSAFE_WSL_DISTRO".trim()
                     #     require_docker_online_new_win
                     # }
                     # catch {
@@ -1644,10 +1644,10 @@ function wsl_devel_spawn {
                                 $wsl_distro_selected_confirm = read-host "
         (OPEN $wsl_distro_selected terminal)"
                                 if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                    wsl.exe -d $($wsl_distro_selected) -- cd `$HOME `&`& bash
-                                    start_dvlp_process_pop "wsl.exe -d $([regex]::escape($wsl_distro_selected)) -- cd ```$HOME ```&```& write-host 'wsl.exe -d $([regex]::escape($wsl_distro_selected))' ```&```& bash" 'wait' 'noexit'
+                                    wsl.exe --distribution "$($wsl_distro_selected)".trim() -- cd `$HOME `&`& bash
+                                    start_dvlp_process_pop "wsl.exe --distribution $([regex]::escape("$wsl_distro_selected".trim())) -- cd ```$HOME ```&```& write-host 'wsl.exe --distribution $([regex]::escape("$wsl_distro_selected".trim()))' ```&```& bash" 'wait' 'noexit'
 
-                                    # wsl.exe -d "$wsl_distro_selected" -- cd `$HOME; bash
+                                    # wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME; bash
                                 }
                             }
                             else {
@@ -1666,14 +1666,14 @@ function wsl_devel_spawn {
     (OPEN $wsl_distro_selected gui)"
                             if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
                                 try {
-                                    wsl.exe -d $wsl_distro_selected -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
-                                    # wsl.exe -d "$wsl_distro_selected" cd `$HOME;bash start-kex.sh "$env:USERNAME"
+                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
+                                    # wsl.exe --distribution "$wsl_distro_selected".trim() cd `$HOME;bash start-kex.sh "$env:USERNAME"
                                     # wsl.exe --cd /hal --user agl -d $wsl_distro_selected -- bash start-kex.sh "$env:USERNAME"
                                 }
                                 catch {
                                     write-host 'cannot start kex. attempting to install'
-                                    wsl.exe -d "$wsl_distro_selected" -- cd `$HOME `&`& bash build-kex.sh "$env:USERNAME"
-                                    wsl.exe -d "$wsl_distro_selected" -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
+                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash build-kex.sh "$env:USERNAME"
+                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
                                 }
                             }
                         }
@@ -1753,30 +1753,30 @@ function wsl_devel_spawn {
                             }
                             elseif ($wsl_action_choice -ceq 'SETUP') {
                                 write-host "setting up $wsl_distro_selected ..."
-                                wsl.exe -d $wsl_distro_selected -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
+                                wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
                             }
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                                 write-host "use 'exit' to exit terminal"
-                                wsl.exe -d $wsl_distro_selected -- cd `$HOME `&`& bash
+                                wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash
                             }
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ) {
                                 write-host "use 'exit' to exit terminal"
                                 try {
-                                    wsl.exe -d "$wsl_distro_selected" -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
+                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
                                 }
                                 catch {
-                                    wsl.exe -d "$wsl_distro_selected" -- cd `$HOME `&`& bash build-kex.sh "$env:USERNAME"
-                                    wsl.exe -d "$wsl_distro_selected" -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
+                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash build-kex.sh "$env:USERNAME"
+                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
 
                                 }
                             }
                             elseif ($wsl_action_choice -Ieq 'VERSION1') {
                                 write-host "setting up $wsl_distro_selected ..."
-                                wsl.exe -d $wsl_distro_selected --set-version 1
+                                wsl.exe --distribution "$wsl_distro_selected".trim() --set-version 1
                             }
                             elseif ($wsl_action_choice -ieq 'VERSION2') {
                                 write-host "setting up $wsl_distro_selected ..."
-                                wsl.exe -d $wsl_distro_selected --set-version 2
+                                wsl.exe --distribution "$wsl_distro_selected".trim() --set-version 2
                             }
                             elseif ($wsl_action_choice -ieq 'BACKUP') {
                                 $base_distro = $wsl_distro_selected.Substring(0, $wsl_distro_selected.lastIndexOf('-'))
@@ -1957,7 +1957,7 @@ function wsl_devel_spawn {
                             wsl.exe -- cd `$HOME `&`& bash
                         }
                         elseif ($dvlp_input -ieq 'tdl' ) {
-                            # wsl.exe -d devels-playground-kali-git -- cd `$HOME/.local/bin; alias cdir`=`'source cdir.sh; alias grep=`'grep --color=auto`'; ls -al; cdir_cli
+                            # wsl.exe --distribution "devels-playground-kali-git".trim() -- cd `$HOME/.local/bin; alias cdir`=`'source cdir.sh; alias grep=`'grep --color=auto`'; ls -al; cdir_cli
                             # start_dvlp_process_pop "wsl.exe --cd /hal --exec bash `$(cdir)" 'wait' 'noexit'
                         }
                         elseif ($dvlp_input -ieq 'tw' ) {
