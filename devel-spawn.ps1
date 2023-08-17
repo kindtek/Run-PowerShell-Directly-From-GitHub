@@ -1339,7 +1339,7 @@ function wsl_devel_spawn {
             # Self-elevate the script if required
             if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
                 if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
-                    $command_line = "-NoExit -File '`"$($PSCommandPath)' '" + $global:dvlp_arg0  + "' '" + $global:dvlp_arg1 + "'`" " 
+                    $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0  + "`" `"" + $global:dvlp_arg1 + "'`" " 
                     Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
                     Write-Host "
                     Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList '$command_line'
