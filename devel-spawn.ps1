@@ -1341,10 +1341,10 @@ function wsl_devel_spawn {
                 if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
                     $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0  + "`" `"" + $global:dvlp_arg1 + "'`" " 
                     Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
-                    Write-Host "
-                    Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList '$command_line'
-                    "
-                    # Exit
+                    # Write-Host "
+                    # Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList '$command_line'
+                    # "
+                    Exit
                 }
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
@@ -2210,11 +2210,11 @@ if ($(get_dvlp_auto_boot) -ne $true){
 }
 if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[1]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
     # echo 'installing everything and setting envs ..'
-    # if ($(get_dvlp_debug_mode) -eq $true){
+    if ($(get_dvlp_debug_mode) -eq $true){
         Write-Host "`$PSCommandPath: $($PSCommandPath)"
         Write-Host "`$args[0]: $($args[0])"
-        # Set-PSDebug -Trace 2
-    # }
+        Set-PSDebug -Trace 2
+    }
     $global:dvlp_arg0 = "$($args[0])"
     $global:dvlp_arg1 = "$($args[1])"
     set_dvlp_envs $env:KINDTEK_DEBUG_MODE
