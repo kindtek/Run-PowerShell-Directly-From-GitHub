@@ -1598,12 +1598,7 @@ function wsl_devel_spawn {
                         write-host "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                         if ($wsl_distro_selected) {
-                            write-host "`r`n`tpress ENTER to set $wsl_distro_selected as default distro`r`n`t`t.. or enter any other key to skip "
-                            $wsl_distro_selected_confirm = read-host "
-    (set $wsl_distro_selected as default distro)"
-                            if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                set_default_wsl_distro $wsl_distro_selected
-                            }
+                            set_default_wsl_distro $wsl_distro_selected
                         }
                         else {
                             write-host "no distro for ${wsl_choice} found"
@@ -1615,17 +1610,12 @@ function wsl_devel_spawn {
                         echo "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                         if ($wsl_distro_selected) {
-                            write-host "`r`n`tpress ENTER to delete $wsl_distro_selected `r`n`t`t.. or enter any other key to skip "
-                            $wsl_distro_selected_confirm = read-host "
-    (DELETE $wsl_distro_selected)"
-                            if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                if ($wsl_distro_selected -eq $(get_default_wsl_distro)) {
-                                    write-host "replacing $wsl_distro_selected with $env:KINDTEK_FAILSAFE_WSL_DISTRO as default distro ..."
-                                    revert_default_wsl_distro
-                                }
-                                write-host "executing: wsl.exe --unregister $wsl_distro_selected"
-                                wsl.exe --unregister $wsl_distro_selected
+                            if ($wsl_distro_selected -eq $(get_default_wsl_distro)) {
+                                write-host "replacing $wsl_distro_selected with $env:KINDTEK_FAILSAFE_WSL_DISTRO as default distro ..."
+                                revert_default_wsl_distro
                             }
+                            write-host "executing: wsl.exe --unregister $wsl_distro_selected"
+                            wsl.exe --unregister $wsl_distro_selected
                         }
                         else {
                             write-host "no distro for ${wsl_choice} found"
@@ -1641,13 +1631,7 @@ function wsl_devel_spawn {
                         } else {
                             $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                             if ($wsl_distro_selected) {
-                                write-host "`r`n`tpress ENTER to open terminal in $wsl_distro_selected`r`n`t`t.. or enter any other key to skip "
-                                $wsl_distro_selected_confirm = read-host "
-        (OPEN $wsl_distro_selected terminal)"
-                                if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                    wsl.exe --distribution "$($wsl_distro_selected)".trim() -- bash
-                                    # wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME; bash
-                                }
+                                wsl.exe --distribution "$($wsl_distro_selected)".trim() -- bash
                             }
                             else {
                                 write-host "no distro for ${wsl_choice} found"
@@ -1660,20 +1644,15 @@ function wsl_devel_spawn {
                         echo "wsl_choice: $wsl_choice"
                         $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
                         if ($wsl_distro_selected) {
-                            write-host "`r`n`tpress ENTER to open gui in $wsl_distro_selected`r`n`t`t.. or enter any other key to skip "
-                            $wsl_distro_selected_confirm = read-host "
-    (OPEN $wsl_distro_selected gui)"
-                            if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                try {
-                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
-                                    # wsl.exe --distribution "$wsl_distro_selected".trim() cd `$HOME;bash start-kex.sh "$env:USERNAME"
-                                    # wsl.exe --cd /hal --user agl -d $wsl_distro_selected -- bash start-kex.sh "$env:USERNAME"
-                                }
-                                catch {
-                                    write-host 'cannot start kex. attempting to install'
-                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash build-kex.sh "$env:USERNAME"
-                                    wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
-                                }
+                            try {
+                                wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
+                                # wsl.exe --distribution "$wsl_distro_selected".trim() cd `$HOME;bash start-kex.sh "$env:USERNAME"
+                                # wsl.exe --cd /hal --user agl -d $wsl_distro_selected -- bash start-kex.sh "$env:USERNAME"
+                            }
+                            catch {
+                                write-host 'cannot start kex. attempting to install'
+                                wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash build-kex.sh "$env:USERNAME"
+                                wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
                             }
                         }
                         else {
