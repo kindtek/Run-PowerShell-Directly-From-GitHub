@@ -652,7 +652,7 @@ function get_default_wsl_distro {
     $default_wsl_distro = (wsl.exe --list | Out-String).split("`r`n").trim() | Where-Object { $_ -And (!([string]::IsNullOrWhiteSpace($_))) -And $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
     $default_wsl_distro = $default_wsl_distro -replace "[^a-zA-Z0-9_-]", ''
-    return $default_wsl_distro
+    return "$default_wsl_distro".trim()
 }
 
 function revert_default_wsl_distro {
@@ -1624,20 +1624,17 @@ function wsl_devel_spawn {
                     }
                     elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "t\d")) {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
-                        echo "wsl_choice: $wsl_choice"
-                        if ($wsl_choice -ieq '0' ) {
-                            # special case for windows terminal shortcut
-                            Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" 
-                        } else {
-                            $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
-                            if ($wsl_distro_selected) {
-                                wsl.exe --distribution "$($wsl_distro_selected)".trim() -- bash
-                            }
-                            else {
-                                write-host "no distro for ${wsl_choice} found"
-                            }
-                        }
                         $dvlp_input = 'screen'
+                        $wsl_distro_selected = wsl_distro_list_select $wsl_distro_list $wsl_choice
+                        if ($wsl_distro_selected) {
+                            write-host "use 'exit' to exit $wsl_distro_selected terminal"
+                            wsl.exe --distribution "$($wsl_distro_selected)".trim() -- bash
+                        }
+                        else {
+                            $dvlp_input = 'noscreen'
+                            write-host "no distro for ${wsl_choice} found"
+                        }
+                    
                     }
                     elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "g\d")) {
                         [int]$wsl_choice = [string]$dvlp_input.Substring(1)
@@ -1734,11 +1731,11 @@ function wsl_devel_spawn {
                                 wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
                             }
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
-                                write-host "use 'exit' to exit terminal"
+                                write-host "use 'exit' to exit $wsl_distro_selected terminal"
                                 wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash
                             }
                             elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ) {
-                                write-host "use 'exit' to exit terminal"
+                                write-host "use 'exit' to exit $wsl_distro_selected terminal"
                                 try {
                                     wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
                                 }
