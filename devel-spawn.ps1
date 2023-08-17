@@ -690,7 +690,7 @@ function set_default_wsl_distro {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
             write-host "wsl.exe --set-default $new_wsl_default_distro"
-            $wsl_output = $(wsl.exe --set-default "$($new_wsl_default_distro)".trim()) | Out-String
+            $wsl_output = Invoke-Expression "wsl.exe --set-default ($($($new_wsl_default_distro).trim())"  | Out-String
             write-host $wsl_output
             $new_wsl_default_distro = get_default_wsl_distro
         }
