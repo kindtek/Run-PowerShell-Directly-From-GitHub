@@ -1337,14 +1337,14 @@ function wsl_devel_spawn {
     
     }
     else {
-      if ($dvlp_input -eq 'screen') {
+      if (($dvlp_input -eq 'screen') -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator') -and ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -lt 6000)) {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
         write-host -nonewline "
             _____
          <-=|!=-\\__O__C__K__E__R"
       }
-      if (![string]::isnullorempty($global:dvlp_arg1) -and (($confirmation -ne "skip"))) {
+      if (![string]::isnullorempty($global:dvlp_arg1) -and (($confirmation -ne "skip")) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator') -and ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -lt 6000)) {
         write-host -nonewline "
         <--=|!--=!=====================
          <-=|!_=//  E  V  E  L"
