@@ -1341,7 +1341,7 @@ function wsl_devel_spawn {
                 if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
                     $CommandLine = "-NoExit -File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
                     Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList $CommandLine
-                    Exit
+                    # Exit
                 }
             }
             # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
