@@ -689,6 +689,7 @@ function set_default_wsl_distro {
     try {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
+            write-host "wsl.exe -s $new_wsl_default_distro"
             wsl.exe -s $new_wsl_default_distro
             $new_wsl_default_distro = get_default_wsl_distro
         }
