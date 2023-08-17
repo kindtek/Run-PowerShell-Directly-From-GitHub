@@ -2205,6 +2205,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
     set_dvlp_envs $env:KINDTEK_DEBUG_MODE
     . include_devel_tools
     $global:dvlw_commit = $(get_repo_commit)
+    set-location $env:USERPROFILE
     wsl_devel_spawn $args[0]
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") 
