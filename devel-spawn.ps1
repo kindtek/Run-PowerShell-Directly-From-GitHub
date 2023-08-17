@@ -1337,14 +1337,14 @@ function wsl_devel_spawn {
     
     }
     else {
-      if (($dvlp_input -eq 'screen') -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator') -and ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -lt 6000)) {
+      if (($dvlp_input -eq 'screen') -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
         write-host -nonewline "
             _____
          <-=|!=-\\__O__C__K__E__R"
       }
-      if (![string]::isnullorempty($global:dvlp_arg1) -and (($confirmation -ne "skip")) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator') -and ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -lt 6000)) {
+      if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         write-host -nonewline "
         <--=|!--=!=====================
          <-=|!_=//  E  V  E  L"
@@ -1357,7 +1357,7 @@ function wsl_devel_spawn {
       # Self-elevate the script if required
       if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
-          $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0 + "`" `"" + $global:dvlp_arg1 + "'`" " 
+          $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0 + "`" `"skip`" " 
           Write-Host "please confirm admin access in prompt that appears" -ForegroundColor Magenta -BackgroundColor Yellow
           Write-Host "..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors" -ForegroundColor Yellow
           Start-Sleep 6
