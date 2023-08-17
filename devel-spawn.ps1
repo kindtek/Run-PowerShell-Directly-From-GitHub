@@ -1684,7 +1684,7 @@ function wsl_devel_spawn {
                         }
                     } 
                     elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -match "\d")) {
-                        $wsl_distro_selected_name = wsl_distro_list_select $wsl_distro_list $dvlp_input
+                        $wsl_distro_selected_name = wsl_distro_selected_name $wsl_distro_list $dvlp_input
                         if ([string]::IsNullOrEmpty($wsl_distro_selected_name)) {
                             write-host "no distro found for $dvlp_input`r`n`r`n"
                             $dvlp_input = 'noscreen'
