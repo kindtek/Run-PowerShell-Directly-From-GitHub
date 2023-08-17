@@ -649,7 +649,9 @@ function test_default_wsl_distro {
 }
 
 function get_default_wsl_distro {
-    $default_wsl_distro = (wsl.exe --list | Out-String).split("`r`n").trim() | Where-Object { $_ -And (!([string]::IsNullOrWhiteSpace($_))) -And $_ -match '(.*)\(' }
+    $default_wsl_distro =  wsl.exe --list | where-object { 
+        ($_ -ne 'Windows Subsystem for Linux Distributions:') -and ($_ -ne "docker-desktop") -and ($_ -ne "docker-desktop-data") -and ($_ -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO") -and ($_ -ne '') -And $_ -match '(.*)\(' 
+    }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
     $default_wsl_distro = $default_wsl_distro -replace "[^a-zA-Z0-9_-]", ''
     return "$default_wsl_distro".trim()
