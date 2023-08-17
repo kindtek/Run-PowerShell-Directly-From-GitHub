@@ -1560,6 +1560,13 @@ function wsl_devel_spawn {
                         # entering space the first time will exit - after that need x or exit to exit
                         $dvlp_input = 'exit'
                     }
+                    elseif ($wsl_distro_list.contains($dvlp_input)){
+                        for ($i = 0; $i -le $wsl_distro_list.length - 1; $i++) {
+                            if ($dvlp_input -eq $wsl_distro_list[$i]){
+                                $dvlp_input = "$($i + 1)"
+                            }
+                        }
+                    }
                     elseif (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt2)) {
                         $dvlp_input = 'noscreen'
                     }
