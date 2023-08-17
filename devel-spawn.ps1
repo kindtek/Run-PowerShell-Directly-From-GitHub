@@ -651,8 +651,7 @@ function test_default_wsl_distro {
 function get_default_wsl_distro {
     $default_wsl_distro = (wsl.exe --list | Out-String).split("`r`n").trim() | Where-Object { $_ -And (!([string]::IsNullOrWhiteSpace($_))) -And $_ -match '(.*)\(' }
     $default_wsl_distro = $default_wsl_distro -replace '^(.*)\s.*$', '$1'
-    $replacements = "[^a-zA-Z0-9_-]" 
-    $default_wsl_distro = $default_wsl_distro -replace $replacements, ''
+    $default_wsl_distro = $default_wsl_distro -replace "[^a-zA-Z0-9_-]", ''
     return $default_wsl_distro
 }
 
@@ -691,8 +690,7 @@ function set_default_wsl_distro {
     try {
         $old_wsl_default_distro = get_default_wsl_distro
         try {
-            write-host "wsl.exe --set-default $new_wsl_default_distro"
-            $wsl_output = Invoke-Expression "wsl.exe --set-default ($($($new_wsl_default_distro).trim())"  | Out-String
+            wsl.exe --set-default "$($new_wsl_default_distro)".trim()
             write-host $wsl_output
             $new_wsl_default_distro = get_default_wsl_distro
         }
@@ -1647,9 +1645,7 @@ function wsl_devel_spawn {
                                 $wsl_distro_selected_confirm = read-host "
         (OPEN $wsl_distro_selected terminal)"
                                 if ([string]::IsNullOrEmpty($wsl_distro_selected_confirm)) {
-                                    wsl.exe --distribution "$($wsl_distro_selected)".trim() -- cd `$HOME `&`& bash
-                                    start_dvlp_process_pop "wsl.exe --distribution $([regex]::escape("$wsl_distro_selected".trim())) -- cd ```$HOME ```&```& write-host 'wsl.exe --distribution $([regex]::escape("$wsl_distro_selected".trim()))' ```&```& bash" 'wait' 'noexit'
-
+                                    wsl.exe --distribution "$($wsl_distro_selected)".trim() -- bash
                                     # wsl.exe --distribution "$wsl_distro_selected".trim() -- cd `$HOME; bash
                                 }
                             }
@@ -1712,7 +1708,7 @@ function wsl_devel_spawn {
                             }
                             elseif ($wsl_action_choice -ceq 'DEFAULT') {
                                 write-host "setting $wsl_distro_selected as default distro ..."
-                                wsl.exe --set-default $wsl_distro_selected
+                                wsl.exe --set-default "$wsl_distro_selected".trim()
                             }
                             elseif ($wsl_action_choice -ceq 'KERNEL') {
                                 $kernel_choices = @()
@@ -1948,14 +1944,6 @@ function wsl_devel_spawn {
                         if ($dvlp_cli_options -ieq 'l' -Or $dvlp_cli_options -ieq 'w') {
                             $dvlp_input = $dvlp_input + $dvlp_cli_options
                         }
-                        if ($dvlp_input -ieq 't0' ) {
-                            Invoke-Expression "Start-Process -File powershell.exe -LoadUserProfile -NoNewWindow -WorkingDirectory $env:USERPROFILE -ArgumentList '/nologo'" | Out-Null
-                            # $command_input = ''
-                            # while ($command_input -ne 'exit'){
-                            #     Invoke-Expression "`$command_input = Invoke-Expression `'`$command_input = `$`(Read-Host`)`'"
-                            # }
-                            
-                        }
                         if ($dvlp_input -ieq 'tl' ) {
                             wsl.exe -- cd `$HOME `&`& bash
                         }
@@ -2030,7 +2018,7 @@ function wsl_devel_spawn {
                         if ($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO -ne "") {
                             # wsl.exe --set-default kalilinux-kali-rolling-latest
                             Write-Host "`r`n`r`nsetting $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO as default distro ..."
-                            wsl.exe --set-default $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO
+                            wsl.exe --set-default "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO".trim()
                             # wsl_docker_restart
                             wsl_docker_restart_new_win
                             $dvlp_input = 'noscreen'
