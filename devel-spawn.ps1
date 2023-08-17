@@ -1507,7 +1507,7 @@ function wsl_devel_spawn {
                         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                     }
                     wsl_distro_list_display $wsl_distro_list
-                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+                    $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
                 } catch {
                     try {
                         . include_devel_tools
@@ -1518,7 +1518,7 @@ function wsl_devel_spawn {
                             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
                         }
                         wsl_distro_list_display $wsl_distro_list
-                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+                        $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
                     } catch {
                         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))){
                             write-host "
@@ -1556,13 +1556,15 @@ function wsl_devel_spawn {
                     Write-Host -nonewline "${dvlp_options}${dvlp_location}${dvlp_prompt}"
                     $dvlp_input = $Host.UI.ReadLine()
                     $dvlp_options = ''
-                    if ($wsl_distro_list.contains($dvlp_input)){
-                        for ($i = 0; $i -le $wsl_distro_list.length - 1; $i++) {
-                            if ($dvlp_input -eq $wsl_distro_list[$i]){
-                                $dvlp_input = "$($i + 1)"
+                    try {    
+                        if ($wsl_distro_list.contains($dvlp_input)){
+                            for ($i = 0; $i -le $wsl_distro_list.length - 1; $i++) {
+                                if ($dvlp_input -eq $wsl_distro_list[$i]){
+                                    $dvlp_input = "$($i + 1)"
+                                }
                             }
                         }
-                    }
+                    } catch {}
                     if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt1))) {
                         # entering space the first time will exit - after that need x or exit to exit
                         $dvlp_input = 'exit'
