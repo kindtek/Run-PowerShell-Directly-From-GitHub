@@ -1392,15 +1392,16 @@ function wsl_devel_spawn {
                         $old_wsl_default_distro = get_default_wsl_distro
                         if ($dvlp_input -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
                             start_dvlp_process_pop "
-                            `$old_wsl_default_distro = $old_wsl_default_distro;
+                            `$old_wsl_default_distro = '$old_wsl_default_distro';
                             `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' 'default');
                             `$new_wsl_default_distro = get_default_wsl_distro;
                             if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
                                 Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
                             }
+                            if ('$img_name_tag' -like '*kernel' ){
+                                run_dvlp_latest_kernel_installer
+                            }
                             "
-                            # docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default'
-                            # run_dvlp_latest_kernel_installer
                         }
                         else {
                             start_dvlp_process_pop "
@@ -1410,9 +1411,10 @@ function wsl_devel_spawn {
                             if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
                                 Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
                             }
+                            if ('$img_name_tag' -like '*kernel' ){
+                                run_dvlp_latest_kernel_installer
+                            }
                             " 'wait'
-                            # docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" "default"
-                            # run_dvlp_latest_kernel_installer
                         }
                     }
                     # try {
