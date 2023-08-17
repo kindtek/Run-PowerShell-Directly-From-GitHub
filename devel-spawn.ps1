@@ -1358,6 +1358,9 @@ function wsl_devel_spawn {
       if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
           $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0 + "`" `"" + $global:dvlp_arg1 + "'`" " 
+          Write-Host "please confirm admin access in prompt that appears" -ForegroundColor Magenta -BackgroundColor Yellow
+          Write-Host "..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors" -ForegroundColor Yellow
+          Start-Sleep 6
           Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
           # Write-Host "
           # Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList '$command_line'
