@@ -732,8 +732,8 @@ function set_default_wsl_distro {
       #         Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
       #     }
       # }
-      # # wsl_docker_restart
-      # wsl_docker_restart_new_win
+      # # restart_wsl_docker
+      # restart_wsl_docker_new_win
       # require_docker_online_new_win
       # $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = $old_wsl_default_distro
       return $false
@@ -1040,7 +1040,7 @@ function run_dvlp_latest_kernel_installer {
   require_docker_online_new_win
   if ($(is_docker_desktop_online) -eq $true) {
     ./wsl-kernel-install.ps1 latest latest
-    wsl_docker_restart | Out-Null
+    restart_wsl_docker | Out-Null
   }    
   pop-location
 }
@@ -2022,7 +2022,7 @@ function wsl_devel_spawn {
                   }
                   if ($dvlp_kindtek_options_win -ceq 'R') {
                     Remove-Item "$env:USERPROFILE/.wslconfig" -Confirm:$false -Force -ErrorAction SilentlyContinue
-                    restart_docker_wsl
+                    restart_wsl_docker
                     $revert_failsafe = Read-Host "revert to $env:KINDTEK_FAILSAFE_WSL_DISTRO ? (Y/n)"
                     if (($revert_failsafe -eq '') -or ($revert_failsafe -ieq 'y') -or ($revert_failsafe -eq 'yes')) {
                       revert_default_wsl_distro
@@ -2064,19 +2064,19 @@ function wsl_devel_spawn {
               # wsl.exe --set-default kalilinux-kali-rolling-latest
               Write-Host "`r`n`r`nsetting $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO as default distro ..."
               wsl.exe --set-default "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO".trim()
-              # wsl_docker_restart
-              wsl_docker_restart_new_win
+              # restart_wsl_docker
+              restart_wsl_docker_new_win
               $dvlp_input = 'noscreen'
             }
           }
           elseif ($dvlp_input -ceq 'restart') {
-            # wsl_docker_restart
-            wsl_docker_restart_new_win
+            # restart_wsl_docker
+            restart_wsl_docker_new_win
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ceq 'restart!') {
-            # wsl_docker_restart
-            wsl_docker_full_restart_new_win
+            # restart_wsl_docker
+            hard_restart_wsl_docker_new_win
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ceq 'RESTART') {
@@ -2241,7 +2241,7 @@ function reload_envs {
 }
 
 function reload_envs_new_win {
-  start_dvlp_process_popmin "wsl_docker_full_restart" 
+  start_dvlp_process_popmin "hard_restart_wsl_docker" 
   # reload_envs
 }
 
