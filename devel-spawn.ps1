@@ -1074,7 +1074,7 @@ function set_dvlp_auto_boot {
   }
 }
 
-function boot_devel_safe {
+function safe_boot_devel {
   try {
     Set-PSDebug -Trace 2;
     install_winget $true
