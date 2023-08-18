@@ -1325,13 +1325,14 @@ function wsl_devel_spawn {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
         write-host -nonewline "
-            _____
-         <W=|!=-\\__O__C__K__E__R"
+           \___ ____
+               W    \\ O C K E R"
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         write-host -nonewline "
-        <-S=-!--=!=====================
-         <L=|!_=//  E  V  E  L"
+        <----- S ++++++=======================|======|
+            ___L____// E V E L
+           /  "
         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
         # no need for this variable anymore - leaving will only make display look weird
       }
@@ -1509,7 +1510,7 @@ function wsl_devel_spawn {
       else {
         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
           write-host -nonewline "
-        <-S=-!--=!====================="
+          <----- S ++++++=======================|======|"
         }
         . include_devel_tools
         if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
@@ -1547,7 +1548,8 @@ function wsl_devel_spawn {
           $wsl_distro_list = get_wsl_distro_list
           if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             write-host -nonewline "
-         <L=|!_=//  E  V  E  L"
+            ___L____// E V E L (safe mode)
+           /  "
             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
           }
           display_wsl_distro_list $wsl_distro_list
@@ -1559,12 +1561,14 @@ function wsl_devel_spawn {
             $wsl_distro_list = get_wsl_distro_list
             if ($global:dvlp_safe_mode -eq $true) {
               write-host -nonewline "
-         <L=|!_=//  E  V  E  L (SAFE MODE)"
+            ___L____// E V E L (safe mode)
+            /  "
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host -nonewline "
-         <L=|!_=//  E  V  E  L"
+            ___L____// E V E L
+            /  "
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             display_wsl_distro_list $wsl_distro_list
@@ -1573,12 +1577,14 @@ function wsl_devel_spawn {
           catch {
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host "
-         <L=|!_=//  E  V  E  L (SAFE MODE)"
+            ___L____// E V E L
+            /  "
               # write-host "
-              #     _____
-              #  <W=|!=-\\__O__C__K__E__R
-              # <-S=-!--=!=====================
-              #  <L=|!_=//  E  V  E  L"
+              #    \___ ____
+              #        W    \\ O C K E R
+              # <----- S ++++++=======================|======|
+              #     ___L____// E V E L"
+              #    /  
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update] reload`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
