@@ -1623,6 +1623,11 @@ function wsl_devel_spawn {
           Write-Host -nonewline "${dvlp_options}${dvlp_location}${dvlp_prompt}"
           $dvlp_input = $Host.UI.ReadLine()
           $dvlp_options = ''
+          
+          if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt1))) {
+            # entering space the first time will exit - after that need x or exit to exit
+            $dvlp_input = 'exit'
+          }
           try {    
             if ($wsl_distro_list.contains($dvlp_input)) {
               for ($i = 0; $i -le $wsl_distro_list.length - 1; $i++) {
@@ -1633,11 +1638,7 @@ function wsl_devel_spawn {
             }
           }
           catch {}
-          if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt1))) {
-            # entering space the first time will exit - after that need x or exit to exit
-            $dvlp_input = 'exit'
-          }
-          elseif (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt2)) {
+          if (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt2)) {
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ieq 'update') {
