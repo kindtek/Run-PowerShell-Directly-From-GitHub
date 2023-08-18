@@ -1568,7 +1568,7 @@ function wsl_devel_spawn {
             elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host -nonewline "
              ___L____// E V E L
-            /  " -ForegroundColor Red
+            /  "
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             display_wsl_distro_list $wsl_distro_list
@@ -1578,7 +1578,7 @@ function wsl_devel_spawn {
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host "
              ___L____// E V E L
-            /  " -ForegroundColor Red
+            /  "
               # write-host "
               #    \________
               #        W    \\ O C K E R
@@ -1962,7 +1962,7 @@ function wsl_devel_spawn {
             }
             # $dvlp_input = 'screen'
           }
-          elseif ($dvlp_input -ieq 'revert') {
+          elseif ($dvlp_input -ieq 'revert' -or $dvlp_input -ieq 'failsafe') {
             try {
               set_default_wsl_distro
               require_docker_online_new_win
@@ -2144,8 +2144,8 @@ function wsl_devel_spawn {
             }
             $dvlp_prompt = $dvlp_prompt2
           }
-        } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
-      } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -And $dvlp_input -ine 'screen')
+        } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
+      } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
     }
     elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
       try {
