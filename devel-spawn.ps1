@@ -1379,8 +1379,8 @@ function wsl_devel_spawn {
         }
         # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
         try {
-          $boot_develed = $(boot_devel)
-          if ($boot_develed -eq $false) {
+          $devel_booted = $(boot_devel)
+          if ($devel_booted -eq $false) {
             throw
           }
 
