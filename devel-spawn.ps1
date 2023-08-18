@@ -1379,7 +1379,12 @@ function wsl_devel_spawn {
         }
         # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
         try {
+          if ($global:dvlp_arg0 -eq 'safe' -or $global:dvlp_arg1 -eq 'safe' -or $confirmation -eq 'safe' -or $dvlp_input -eq 'safe'){
+            $devel_booted = $(safe_boot_devel)
+          } else {
           $devel_booted = $(boot_devel)
+          }
+          
           if ($devel_booted -eq $false) {
             throw
           }
