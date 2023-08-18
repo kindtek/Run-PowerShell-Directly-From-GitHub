@@ -983,25 +983,11 @@ function docker_devel_spawn {
   param (
     $img_name_tag, $non_interactive, $default_distro
   )
-  # try {
-  # if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
   Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
   . include_devel_tools
-  start_docker_desktop
-  start-sleep 8
+  start_docker_desktop | out-null
 
   if ($(is_docker_desktop_online) -eq $true) {
-    # Write-Host "now connected to docker desktop ...`r`n"
-    # Write-Host "&$devs_playground $env:img_name_tag"
-    # Write-Host "$([char]27)[2J"
-    # Write-Host "`r`npowershell.exe -Command `"$env:"$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd`" $img_name_tag`r`n"
-    # write-host `$img_name_tag $img_name_tag
-    # write-host `$non_interactive $non_interactive
-    # write-host `$default_distro $default_distro
-    # $current_process = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
-    # $current_process_object = Get-Process -id $current_process
-    # Set-ForegroundWindow $current_process_object.MainWindowHandle
-    # Set-ForegroundWindow ($current_process_object).MainWindowHandle
     if ([string]::IsNullOrEmpty($img_name_tag)) {
       powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
     }
@@ -1009,26 +995,25 @@ function docker_devel_spawn {
       powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
     }
     else {
-      # Write-Host powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
       powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
     }
-
-    # powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd" "$img_name_tag" "$non_interactive" "$default_distro"
-    # &$devs_playground = "$env:KINDTEK_WIN_GIT_PATH/dvlp/scripts/wsl-docker-import.cmd $env:img_tag"
   }
   else {
     Write-Host "`r`docker desktop is not starting automatically"
     $start_docker = Read-Host "press ENTER to keep trying normally
     ... or enter 'force' to force docker to start"
     if ($start_docker -eq "force") {
-      require_docker_online
-      docker_devel_spawn $img_name_tag $non_interactive $default_distro
+      if ([string]::IsNullOrEmpty($img_name_tag)) {
+        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+      }
+      elseif ($img_name_tag -eq "skip") {
+        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+      }
+      else {
+        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
+      }
     }
   }
-        
-  # }
-  # }
-  # catch {}
 }
 
 function run_dvlp_latest_kernel_installer {
