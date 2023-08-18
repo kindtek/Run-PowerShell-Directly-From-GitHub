@@ -1259,10 +1259,10 @@ function devel_daemon {
   param (
     $keep_running
   )
-  [int]$boot_develloop_count = 0
-  [int]$boot_develloop_max = 10
+  [int]$boot_devel_loop_count = 0
+  [int]$boot_devel_loop_max = 10
   do {
-    $boot_develloop_count += 1 
+    $boot_devel_loop_count += 1 
     try {  
       return boot_devel
     }
@@ -1285,7 +1285,7 @@ function devel_daemon {
 
     return $true
 
-  } while ($boot_develloop_count -lt $boot_develloop_max -And $(boot_devel) -eq $false)
+  } while ($boot_devel_loop_count -lt $boot_devel_loop_max -And $(boot_devel) -eq $false)
 
   if ($keep_running) {
     # daemon initialized ... now check periodically for problems
