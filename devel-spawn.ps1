@@ -975,7 +975,7 @@ function require_devel_online {
     }
     catch {
       . include_devel_tools
-      boot_devel_safe
+      safe_boot_devel
       $docker_online = require_docker_online
     }
   } while ($docker_online -eq $false)
@@ -1275,7 +1275,7 @@ function devel_daemon {
       catch { 
         # try setting envs first then do bare minimum
         set_dvlp_envs $env:KINDTEK_DEBUG_MODE
-        return boot_devel_safe
+        return safe_boot_devel
                 
       }
       reboot_prompt
@@ -1293,7 +1293,7 @@ function devel_daemon {
             if (`$(dependencies_installed) -eq `$false){
                 # try setting envs first then do bare minimum
                 set_dvlp_envs $env:KINDTEK_DEBUG_MODE;
-                boot_devel_safe;
+                safe_boot_devel;
             }
             sync_repo;
             require_docker_online;
