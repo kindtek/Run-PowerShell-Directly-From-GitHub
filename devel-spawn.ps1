@@ -942,7 +942,9 @@ function get_repo_commit {
 }
 
 function reload_dvlp {
-  start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'" >> "$env:TEMP\spawnlogs.txt" 2>&1            
+  write-host "reloading $($env:USERPROFILE)\dvlp.ps1`r`n"
+  cmd /c powershell.exe -Command "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"
+  # start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'" >> "$env:TEMP\spawnlogs.txt" 2>&1            
 }
 
 function update_dvlp {
