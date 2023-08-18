@@ -1387,7 +1387,8 @@ function wsl_devel_spawn {
           }
 
           if (!(Test-Path -Path "$($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed" -PathType Leaf)) {
-            docker_devel_spawn 'default';
+            docker_devel_spawn 'default'
+            $dvlp_input = 'screen'
             # cmd.exe /c net stop LxssManager
             # cmd.exe /c net start LxssManager
             # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
@@ -1431,6 +1432,7 @@ function wsl_devel_spawn {
               #     run_dvlp_latest_kernel_installer
               # }
               # " 'wait'
+              $dvlp_input = 'screen'
               $old_wsl_default_distro = $old_wsl_default_distro;
               $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
@@ -1442,6 +1444,7 @@ function wsl_devel_spawn {
               }                 
             }
             else {
+              $dvlp_input = 'screen'
               $old_wsl_default_distro = $old_wsl_default_distro;
               $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
@@ -1644,7 +1647,7 @@ function wsl_devel_spawn {
             else {
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
             }
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'screen'
           }
           elseif ($dvlp_input -ieq 'i!') {
             require_docker_online_new_win
@@ -1654,7 +1657,7 @@ function wsl_devel_spawn {
             else {
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default' 'wait'
             }
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'screen'
           }
           elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "d\d")) {
             [int]$wsl_choice = $("$dvlp_input".Substring(1))
