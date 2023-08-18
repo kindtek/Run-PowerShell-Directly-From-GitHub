@@ -1325,14 +1325,14 @@ function wsl_devel_spawn {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
         write-host -nonewline "
-           \___ ____
-               W    \\ O C K E R"
+            \___ ____
+                W    \\ O C K E R"
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         write-host -nonewline "
-        <----- S ++++++=======================|======|
-            ___L____// E V E L
-           /  "
+         <----- S ++++++=======================|======|
+             ___L____// E V E L
+            /  "
         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
         # no need for this variable anymore - leaving will only make display look weird
       }
@@ -1510,7 +1510,7 @@ function wsl_devel_spawn {
       else {
         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
           write-host -nonewline "
-          <----- S ++++++=======================|======|"
+          <---- S ++++++=======================|======|"
         }
         . include_devel_tools
         if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
@@ -1548,8 +1548,8 @@ function wsl_devel_spawn {
           $wsl_distro_list = get_wsl_distro_list
           if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             write-host -nonewline "
-            ___L____// E V E L (safe mode)
-           /  "
+             ___L____// E V E L
+            /  "
             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
           }
           display_wsl_distro_list $wsl_distro_list
@@ -1561,13 +1561,13 @@ function wsl_devel_spawn {
             $wsl_distro_list = get_wsl_distro_list
             if ($global:dvlp_safe_mode -eq $true) {
               write-host -nonewline "
-            ___L____// E V E L (safe mode)
+             ___L____// E V E L (safe mode)
             /  "
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host -nonewline "
-            ___L____// E V E L
+             ___L____// E V E L
             /  "
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
@@ -1577,7 +1577,7 @@ function wsl_devel_spawn {
           catch {
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host "
-            ___L____// E V E L
+             ___L____// E V E L
             /  "
               # write-host "
               #    \___ ____
