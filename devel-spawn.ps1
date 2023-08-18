@@ -1379,7 +1379,7 @@ function wsl_devel_spawn {
         }
         # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
         try {
-          if ($global:dvlp_arg0 -eq 'safe' -or $global:dvlp_arg1 -eq 'safe' -or $confirmation -eq 'safe' -or $dvlp_input -eq 'safe'){
+          if ($global:dvlp_safe_mode -eq $true){
             $devel_booted = $(safe_boot_devel)
           } else {
             $devel_booted = $(boot_devel)
@@ -1573,7 +1573,12 @@ function wsl_devel_spawn {
           try {
             . include_devel_tools
             $wsl_distro_list = get_wsl_distro_list
-            if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
+            if ($global:dvlp_safe_mode) {
+              write-host -nonewline "
+         <L=|!_=//  E  V  E  L (SAFE MODE)"
+              write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+            }
+            elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host -nonewline "
          <L=|!_=//  E  V  E  L"
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
@@ -2292,6 +2297,9 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   }
   $global:dvlp_arg0 = "$($args[0])"
   $global:dvlp_arg1 = "$($args[1])"
+  if ($global:dvlp_arg0 -eq 'safe' -or $global:dvlp_arg1 -eq 'safe' -or $confirmation -eq 'safe' -or $dvlp_input -eq 'safe'){
+    $global:dvlp_safe_mode = $true
+  }
   set_dvlp_envs $env:KINDTEK_DEBUG_MODE
   . include_devel_tools
   $global:dvlw_commit = $(get_repo_commit)
