@@ -1563,7 +1563,7 @@ function wsl_devel_spawn {
           $wsl_distro_list = get_wsl_distro_list
           if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             write-host -nonewline "
-         <-=|!_=//  E  V  E  L"
+         <L=|!_=//  E  V  E  L"
             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
           }
           display_wsl_distro_list $wsl_distro_list
