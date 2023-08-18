@@ -9,7 +9,7 @@ $global:devel_spawn = 'sourced'
 
 function include_devel_tools {
   try {
-    devel_test
+    test_devel
   }
   catch {
     try {
