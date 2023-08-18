@@ -2209,14 +2209,10 @@ function gui_launch {
   param (
     $distro_name
   )
-  try {
-    Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
-  }
-  catch {
     # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
     wsl.exe --distribution "$distro_name".trim() -- cd `$HOME `&`& bash start-kex.sh $env:USERNAME
     Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
-  }
+
 }
 function reload_envs {
 
