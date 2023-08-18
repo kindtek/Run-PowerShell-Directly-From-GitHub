@@ -1441,7 +1441,15 @@ function wsl_devel_spawn {
               }
               if ($img_name_tag -like '*kernel' ){
                   run_dvlp_latest_kernel_installer
-              }                 
+              }
+              $start_gui = Read-Host "start gui?
+
+      continue or skip
+
+      (continue)
+      "   if ($start_gui -eq "" || $start_gui -ieq "continue"){
+                start_gui $new_default_distro
+              }                
             }
             else {
               $dvlp_input = 'screen'
@@ -1707,14 +1715,7 @@ function wsl_devel_spawn {
             $dvlp_input = 'screen'
             $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
             if ($wsl_distro_selected_name) {
-              try {
-                Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
-              }
-              catch {
-                # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
-                wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh $env:USERNAME
-                Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
-              }
+              gui_launch $wsl_distro_selected_name
             }
             else {
               $dvlp_input = 'noscreen'
@@ -1804,15 +1805,7 @@ function wsl_devel_spawn {
                 start-sleep 3
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ) {
-                try {
-                  Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
-                }
-                catch {
-                  # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
-                  wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh $env:USERNAME
-                  Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
-                }
-
+                gui_launch $wsl_distro_selected_name
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: use g$wsl_distro_selected_num to open the gui for $wsl_distro_selected_name"
                 start-sleep 3
@@ -2201,6 +2194,19 @@ function set_dvlp_debug_mode {
   }
 }
 
+function gui_launch {
+  param (
+    $distro_name
+  )
+  try {
+    Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
+  }
+  catch {
+    # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
+    wsl.exe --distribution "$distro_name".trim() -- cd `$HOME `&`& bash start-kex.sh $env:USERNAME
+    Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
+  }
+}
 function reload_envs {
 
   $orig_progress_flag = $global:progress_flag 
