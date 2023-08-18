@@ -1360,7 +1360,7 @@ function wsl_devel_spawn {
         # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
         if (([string]::IsNullOrEmpty($global:dvlp_arg1))) {
           Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
-          start_countdown
+          start_countdown "starting " "in 3" "in 2" "in 1" "now"
         }
         # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
         try {
@@ -2243,34 +2243,54 @@ function reload_envs_new_win {
 }
 
 function start_countdown {
-  Write-Host -NoNewline "`t3"
+  param (
+    $countdown_msg,
+    $countdown_msg3,
+    $countdown_msg2,
+    $countdown_msg1,
+    $countdown_msg0
+  )
+  if ([string]::IsNullOrEmpty(($countdown_msg3))){
+    $countdown_msg3 = '3'
+  }
+  if ([string]::IsNullOrEmpty(($countdown_msg2))){
+    $countdown_msg2 = '2'
+  }
+  if ([string]::IsNullOrEmpty(($countdown_msg1))){
+    $countdown_msg1 = '1'
+  }
+  if ([string]::IsNullOrEmpty(($countdown_msg1))){
+    $countdown_msg0 = '0'
+  }
+  write-host ""
+  Write-Host -NoNewline "`r`t`t`t${countdown_msg}${countdown_msg3}" -foregroundcolor yellow
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor yellow
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor yellow
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor yellow
   Start-Sleep -Milliseconds 250
-  Write-Host ""
-  Write-Host -NoNewline "`t`t2"
+  Write-Host -NoNewline "`r                                                                      "
+  Write-Host -NoNewline "`r`t`t`t${countdown_msg}${countdown_msg2}" -foregroundcolor darkyellow
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor darkyellow
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor darkyellow
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor darkyellow
   Start-Sleep -Milliseconds 250
-  Write-Host ""
-  Write-Host -NoNewline "`t`t`t1"
+  Write-Host -NoNewline "`r                                                                      "
+  Write-Host -NoNewline "`r`t`t`t${countdown_msg}${countdown_msg1}" -foregroundcolor red
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor red
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor red
   Start-Sleep -Milliseconds 250
-  Write-Host -NoNewline "."
+  Write-Host -NoNewline "." -foregroundcolor red
   Start-Sleep -Milliseconds 250
-  Write-Host ""
-  Write-Host -NoNewline "`t`t`t`t0"
+  Write-Host -NoNewline "`r                                                                      "
+  Write-Host -NoNewline "`r`t`t`t${countdown_msg}${countdown_msg0}" -foregroundcolor darkred
   Start-Sleep -Milliseconds 100
 }
 
