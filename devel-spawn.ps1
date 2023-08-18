@@ -1687,8 +1687,7 @@ function wsl_devel_spawn {
             $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
             if ($wsl_distro_selected_name) {
               try {
-                # wsl.exe --distribution "$wsl_distro_selected_name".trim() cd `$HOME;bash start-kex.sh "$env:USERNAME"
-                # wsl.exe --cd /hal --user agl -d $wsl_distro_selected_name -- bash start-kex.sh "$env:USERNAME"
+                Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
               }
               catch {
                 # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
