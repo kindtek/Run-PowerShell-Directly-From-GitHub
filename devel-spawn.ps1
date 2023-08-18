@@ -1524,7 +1524,7 @@ function wsl_devel_spawn {
       else {
         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
           write-host -nonewline "
-        <--=|!--=!====================="
+        <-S=|!--=!====================="
         }
         . include_devel_tools
         if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
