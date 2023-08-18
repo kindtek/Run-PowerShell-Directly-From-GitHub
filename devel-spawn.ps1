@@ -2017,6 +2017,7 @@ function wsl_devel_spawn {
                   }
                   if ($dvlp_kindtek_options_win -ceq 'R') {
                     Remove-Item "$env:USERPROFILE/.wslconfig" -Confirm:$false -Force -ErrorAction SilentlyContinue
+                    restart_wsl_docker
                     $revert_failsafe = Read-Host "revert to $env:KINDTEK_FAILSAFE_WSL_DISTRO ? (Y/n)"
                     if (($revert_failsafe -eq '') -or ($revert_failsafe -ieq 'y') -or ($revert_failsafe -eq 'yes')) {
                       revert_default_wsl_distro
