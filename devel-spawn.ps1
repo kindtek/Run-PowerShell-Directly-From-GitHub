@@ -1082,10 +1082,8 @@ function boot_devel_safe {
     sync_repo
     . include_devel_tools
     install_dependencies $true
-    try {
-      start_docker_desktop
-    }
-    catch {}
+    start_docker_desktop_new_win
+
         
     Set-PSDebug -Trace "$env:KINDTEK_DEBUG_MODE"
     return $true
