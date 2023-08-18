@@ -1425,19 +1425,8 @@ function wsl_devel_spawn {
               $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
-                  Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
-              }
-              if ($img_name_tag -like '*kernel' ){
-                  run_dvlp_latest_kernel_installer
-              }
-              $start_gui = Read-Host "start gui?
-
-      continue or skip
-
-      (continue)
-      "   if ($start_gui -eq "" -or $start_gui -ieq "continue"){
-                start_gui $new_default_distro
-              }                
+                  Write-Host "ERROR: docker desktop failed to start with `$new_wsl_default_distro distro";
+              }              
             }
             else {
               $dvlp_input = 'screen'
@@ -1461,6 +1450,20 @@ function wsl_devel_spawn {
               #                   run_dvlp_latest_kernel_installer
               #               }
               #               " 'wait'
+            }
+            if ($img_name_tag -like '*kernel' ){
+              run_dvlp_latest_kernel_installer
+            }
+            if ($img_name_tag -like '*gui*' ){
+              $start_gui = Read-Host "start gui?
+
+continue or skip
+
+(continue)
+" 
+              if ($start_gui -eq "" -or $start_gui -ieq "continue"){
+                start_gui $new_default_distro
+              }  
             }
           }
           # try {
