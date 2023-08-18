@@ -1447,7 +1447,7 @@ function wsl_devel_spawn {
       continue or skip
 
       (continue)
-      "   if ($start_gui -eq "" || $start_gui -ieq "continue"){
+      "   if ($start_gui -eq "" -or $start_gui -ieq "continue"){
                 start_gui $new_default_distro
               }                
             }
