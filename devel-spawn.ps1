@@ -1687,14 +1687,13 @@ function wsl_devel_spawn {
             $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
             if ($wsl_distro_selected_name) {
               try {
-                wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
                 # wsl.exe --distribution "$wsl_distro_selected_name".trim() cd `$HOME;bash start-kex.sh "$env:USERNAME"
                 # wsl.exe --cd /hal --user agl -d $wsl_distro_selected_name -- bash start-kex.sh "$env:USERNAME"
               }
               catch {
-                write-host 'cannot start kex. attempting to install'
-                wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash build-kex.sh "$env:USERNAME"
-                wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
+                # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
+                wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh $env:USERNAME
+                Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
               }
             }
             else {
@@ -1789,11 +1788,9 @@ function wsl_devel_spawn {
                 try {
                   wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
                 }
-                catch {
-                  wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash build-kex.sh "$env:USERNAME"
-                  wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
+                catch {  }
+                Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"
 
-                }
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: use g$wsl_distro_selected_num to open the gui for $wsl_distro_selected_name"
                 start-sleep 3
