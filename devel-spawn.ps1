@@ -1,11 +1,10 @@
-#`Requires -RunAsAdministrator
 $host.UI.RawUI.ForegroundColor = "White"
 $host.UI.RawUI.BackgroundColor = "Black"
-Write-Output ""
 
 $global:devel_spawn = 'sourced'
-# export WSL_UTF8=1
-# WSLENV="$WSLENV":WSL_UTF8
+
+
+# # # # # # # # # # # # # # functions # # # # # # # # # # # # # # # # # # 
 
 function include_devel_tools {
   try {
@@ -1573,7 +1572,7 @@ function wsl_devel_spawn {
           try {
             . include_devel_tools
             $wsl_distro_list = get_wsl_distro_list
-            if ($global:dvlp_safe_mode) {
+            if ($global:dvlp_safe_mode -eq $true) {
               write-host -nonewline "
          <L=|!_=//  E  V  E  L (SAFE MODE)"
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
@@ -2282,6 +2281,9 @@ function start_countdown {
   Start-Sleep -Milliseconds 100
 }
 
+
+# # # # # # # # # # # # # driver # # # # # # # # # # # # # # # # # 
+
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\repos\kindtek" | Out-Null
 pull_dvlp_envs
 # remove auto install script (optionally added when using restart prompt)
@@ -2295,11 +2297,12 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
     Write-Host "`$args[0]: $($args[0])"
     Set-PSDebug -Trace 2
   }
-  $global:dvlp_arg0 = "$($args[0])"
-  $global:dvlp_arg1 = "$($args[1])"
-  if ($global:dvlp_arg0 -eq 'safe' -or $global:dvlp_arg1 -eq 'safe' -or $confirmation -eq 'safe' -or $dvlp_input -eq 'safe'){
+
+  if (($($args[0]) -eq 'safe') -or ($($args[1]) -eq 'safe') -or ($confirmation -eq 'safe') -or ($dvlp_input -eq 'safe')){
     $global:dvlp_safe_mode = $true
   }
+  $global:dvlp_arg0 = "$($args[0])"
+  $global:dvlp_arg1 = "$($args[1])"
   set_dvlp_envs $env:KINDTEK_DEBUG_MODE
   . include_devel_tools
   $global:dvlw_commit = $(get_repo_commit)
