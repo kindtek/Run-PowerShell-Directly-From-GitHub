@@ -1023,7 +1023,7 @@ function run_dvlp_latest_kernel_installer {
   push-location $env:KINDTEK_WIN_DVLP_PATH/kernels/linux/kache
   require_docker_online_new_win
   if ($(is_docker_desktop_online) -eq $true) {
-    ./wsl-kernel-install.ps1 latest latest
+    ./wsl-kernel-install.ps1 latest latest $distro
     restart_wsl_docker | Out-Null
   }    
   pop-location
@@ -1435,9 +1435,6 @@ function wsl_devel_spawn {
               $new_wsl_default_distro = get_default_wsl_distro;
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
                   Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro";
-              }
-              if ($img_name_tag -like '*kernel' ){
-                  run_dvlp_latest_kernel_installer
               }
               # start_dvlp_process_pop "
               #               `$old_wsl_default_distro = $old_wsl_default_distro;
