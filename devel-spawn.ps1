@@ -1783,12 +1783,14 @@ function wsl_devel_spawn {
                 start-sleep 3
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ) {
-                write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
                 try {
-                  wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh "$env:USERNAME"
+                  Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
                 }
-                catch {  }
-                Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"
+                catch {
+                  # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
+                  wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash start-kex.sh $env:USERNAME
+                  Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
+                }
 
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: use g$wsl_distro_selected_num to open the gui for $wsl_distro_selected_name"
