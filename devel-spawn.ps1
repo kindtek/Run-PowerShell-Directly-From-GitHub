@@ -975,7 +975,7 @@ function require_devel_online {
     }
     catch {
       . include_devel_tools
-      devel_boot_safe
+      boot_devel_safe
       $docker_online = require_docker_online
     }
   } while ($docker_online -eq $false)
@@ -1074,7 +1074,7 @@ function set_dvlp_auto_boot {
   }
 }
 
-function devel_boot_safe {
+function boot_devel_safe {
   try {
     Set-PSDebug -Trace 2;
     install_winget $true
@@ -1093,7 +1093,7 @@ function devel_boot_safe {
   catch { return $false }
 }
 
-function devel_boot {
+function boot_devel {
   $new_windowsfeatures_installed = $false
   try {
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -1261,23 +1261,23 @@ function devel_daemon {
   param (
     $keep_running
   )
-  [int]$devel_bootloop_count = 0
-  [int]$devel_bootloop_max = 10
+  [int]$boot_develloop_count = 0
+  [int]$boot_develloop_max = 10
   do {
-    $devel_bootloop_count += 1 
+    $boot_develloop_count += 1 
     try {  
-      return devel_boot
+      return boot_devel
     }
     catch { 
       try {
         # try pulling envs first
         pull_dvlp_envs
-        return devel_boot
+        return boot_devel
       }
       catch { 
         # try setting envs first then do bare minimum
         set_dvlp_envs $env:KINDTEK_DEBUG_MODE
-        return devel_boot_safe
+        return boot_devel_safe
                 
       }
       reboot_prompt
@@ -1287,7 +1287,7 @@ function devel_daemon {
 
     return $true
 
-  } while ($devel_bootloop_count -lt $devel_bootloop_max -And $(devel_boot) -eq $false)
+  } while ($boot_develloop_count -lt $boot_develloop_max -And $(boot_devel) -eq $false)
 
   if ($keep_running) {
     # daemon initialized ... now check periodically for problems
@@ -1295,7 +1295,7 @@ function devel_daemon {
             if (`$(dependencies_installed) -eq `$false){
                 # try setting envs first then do bare minimum
                 set_dvlp_envs $env:KINDTEK_DEBUG_MODE;
-                devel_boot_safe;
+                boot_devel_safe;
             }
             sync_repo;
             require_docker_online;
@@ -1381,8 +1381,8 @@ function wsl_devel_spawn {
         }
         # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
         try {
-          $devel_booted = $(devel_boot)
-          if ($devel_booted -eq $false) {
+          $boot_develed = $(boot_devel)
+          if ($boot_develed -eq $false) {
             throw
           }
 
