@@ -1342,12 +1342,12 @@ function wsl_devel_spawn {
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
         write-host -nonewline "
             _____
-         <-=|!=-\\__O__C__K__E__R"
+         <W=|!=-\\__O__C__K__E__R"
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         write-host -nonewline "
-        <--=|!--=!=====================
-         <-=|!_=//  E  V  E  L"
+        <-S=-!--=!=====================
+         <L=|!_=//  E  V  E  L"
         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
         # no need for this variable anymore - leaving will only make display look weird
       }
@@ -1570,7 +1570,7 @@ function wsl_devel_spawn {
             $wsl_distro_list = get_wsl_distro_list
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host -nonewline "
-         <-=|!_=//  E  V  E  L"
+         <L=|!_=//  E  V  E  L"
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             display_wsl_distro_list $wsl_distro_list
@@ -1579,12 +1579,12 @@ function wsl_devel_spawn {
           catch {
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host "
-         <-=|!_=//  E  V  E  L (SAFE MODE)"
+         <L=|!_=//  E  V  E  L (SAFE MODE)"
               # write-host "
               #     _____
-              #  <-=|!=-\\__O__C__K__E__R
-              # <--=|!--=!=====================
-              #  <-=|!_=//  E  V  E  L"
+              #  <W=|!=-\\__O__C__K__E__R
+              # <-S=-!--=!=====================
+              #  <L=|!_=//  E  V  E  L"
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update] reload`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
