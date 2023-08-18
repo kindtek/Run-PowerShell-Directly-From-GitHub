@@ -1385,9 +1385,7 @@ function wsl_devel_spawn {
           }
 
           if (!(Test-Path -Path "$($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed" -PathType Leaf)) {
-            start_dvlp_process_pop "
-                        docker_devel_spawn 'default';
-                        " 'wait'
+            docker_devel_spawn 'default';
             # cmd.exe /c net stop LxssManager
             # cmd.exe /c net start LxssManager
             # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
@@ -1420,30 +1418,48 @@ function wsl_devel_spawn {
 
             $old_wsl_default_distro = get_default_wsl_distro
             if ($dvlp_input -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
-              start_dvlp_process_pop "
-                            `$old_wsl_default_distro = '$old_wsl_default_distro';
-                            `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' 'default');
-                            `$new_wsl_default_distro = get_default_wsl_distro;
-                            if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
-                                Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
-                            }
-                            if ('$img_name_tag' -like '*kernel' ){
-                                run_dvlp_latest_kernel_installer
-                            }
-                            " 'wait'
+              # start_dvlp_process_pop "
+              # `$old_wsl_default_distro = '$old_wsl_default_distro';
+              # `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' 'default');
+              # `$new_wsl_default_distro = get_default_wsl_distro;
+              # if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
+              #     Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
+              # }
+              # if ('$img_name_tag' -like '*kernel' ){
+              #     run_dvlp_latest_kernel_installer
+              # }
+              # " 'wait'
+              $old_wsl_default_distro = $old_wsl_default_distro;
+              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default');
+              $new_wsl_default_distro = get_default_wsl_distro;
+              if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
+                  Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
+              }
+              if ($img_name_tag -like '*kernel' ){
+                  run_dvlp_latest_kernel_installer
+              }                 
             }
             else {
-              start_dvlp_process_pop "
-                            `$old_wsl_default_distro = $old_wsl_default_distro;
-                            `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default');
-                            `$new_wsl_default_distro = get_default_wsl_distro;
-                            if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
-                                Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
-                            }
-                            if ('$img_name_tag' -like '*kernel' ){
-                                run_dvlp_latest_kernel_installer
-                            }
-                            " 'wait'
+              $old_wsl_default_distro = $old_wsl_default_distro;
+              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default');
+              $new_wsl_default_distro = get_default_wsl_distro;
+              if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
+                  Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro";
+              }
+              if ($img_name_tag -like '*kernel' ){
+                  run_dvlp_latest_kernel_installer
+              }
+              # start_dvlp_process_pop "
+              #               `$old_wsl_default_distro = $old_wsl_default_distro;
+              #               `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default');
+              #               `$new_wsl_default_distro = get_default_wsl_distro;
+              #               if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
+              #                   Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
+              #               }
+              #               if ('$img_name_tag' -like '*kernel' ){
+              #                   run_dvlp_latest_kernel_installer
+              #               }
+              #               " 'wait'
             }
           }
           # try {
@@ -1621,20 +1637,20 @@ function wsl_devel_spawn {
             # require_docker_online
             require_docker_online_new_win
             if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
-              start_dvlp_process_popmax "docker_devel_spawn"
+              docker_devel_spawn
             }
             else {
-              start_dvlp_process_popmax "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' ''"
+              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
             }
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ieq 'i!') {
             require_docker_online_new_win
             if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
-              start_dvlp_process_popmax "docker_devel_spawn" 'wait'
+              docker_devel_spawn 'wait'
             }
             else {
-              start_dvlp_process_popmax "docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag' 'default'" 'wait'
+              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default' 'wait'
             }
             $dvlp_input = 'noscreen'
           }
