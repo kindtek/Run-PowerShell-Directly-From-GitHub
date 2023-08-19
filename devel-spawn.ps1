@@ -1,5 +1,24 @@
-$host.UI.RawUI.ForegroundColor = "White"
-$host.UI.RawUI.BackgroundColor = "Black"
+# set regular console colors
+[console]::backgroundcolor = "White"
+[console]::foregroundcolor = "Black"
+
+# set special colors
+
+$p = $host.privatedata
+
+$p.ErrorForegroundColor    = "Gray"
+$p.ErrorBackgroundColor    = "Black"
+$p.WarningForegroundColor  = "White"
+$p.WarningBackgroundColor  = "Black"
+$p.DebugForegroundColor    = "Gray"
+$p.DebugBackgroundColor    = "Black"
+$p.VerboseForegroundColor  = "Gray"
+$p.VerboseBackgroundColor  = "Black"
+$p.ProgressForegroundColor = "Red"
+$p.ProgressBackgroundColor = "White"
+
+# clear screen
+clear-host
 
 $global:devel_spawn = 'sourced'
 
@@ -1303,13 +1322,13 @@ function wsl_devel_spawn {
     if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($global:dvlp_arg1))) {  
       try {
         if (!($(dependencies_installed))) {
-          $host.UI.RawUI.ForegroundColor = "Black"
-          $host.UI.RawUI.BackgroundColor = "DarkRed"
+          $host.UI.RawUI.ForegroundColor = "Red"
+          $host.UI.RawUI.BackgroundColor = "White"
         }
       }
       catch {
-        $host.UI.RawUI.ForegroundColor = "Black"
-        $host.UI.RawUI.BackgroundColor = "DarkRed"
+        $host.UI.RawUI.ForegroundColor = "Red"
+        $host.UI.RawUI.BackgroundColor = "White"
       }
 
       Write-Host "$([char]27)[2J"
