@@ -1307,8 +1307,8 @@ function wsl_devel_spawn {
   )
   $dvlp_input = 'screen'
   do {
-    $host.UI.RawUI.ForegroundColor = "Black"
-    $host.UI.RawUI.BackgroundColor = "White"
+    $host.UI.RawUI.ForegroundColor = "White"
+    $host.UI.RawUI.BackgroundColor = "Black"
 
     $confirmation = ''    
     if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($global:dvlp_arg1))) {  
