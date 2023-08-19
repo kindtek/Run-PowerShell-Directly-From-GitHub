@@ -18,7 +18,11 @@ $p.ProgressForegroundColor = "Red"
 $p.ProgressBackgroundColor = "White"
 
 # clear screen
-clear-host
+if ($global:screen_cleared -ne $true){
+  clear-host
+}
+$global:screen_cleared = $true
+
 
 $global:devel_spawn = 'sourced'
 
