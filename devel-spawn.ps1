@@ -1,6 +1,6 @@
 # set regular console colors
-[console]::backgroundcolor = "White"
-[console]::foregroundcolor = "Black"
+[console]::backgroundcolor = "Black"
+[console]::foregroundcolor = "White"
 
 # set special colors
 
