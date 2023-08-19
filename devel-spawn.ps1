@@ -6,11 +6,11 @@
 
 $p = $host.privatedata
 
-$p.ErrorForegroundColor    = "Gray"
+$p.ErrorForegroundColor    = "DarkGray"
 $p.ErrorBackgroundColor    = "Black"
 $p.WarningForegroundColor  = "White"
 $p.WarningBackgroundColor  = "Black"
-$p.DebugForegroundColor    = "Gray"
+$p.DebugForegroundColor    = "DarkGray"
 $p.DebugBackgroundColor    = "Black"
 $p.VerboseForegroundColor  = "Gray"
 $p.VerboseBackgroundColor  = "Black"
@@ -1315,8 +1315,8 @@ function wsl_devel_spawn {
   )
   $dvlp_input = 'screen'
   do {
-    $host.UI.RawUI.ForegroundColor = "White"
-    $host.UI.RawUI.BackgroundColor = "Black"
+    $host.UI.RawUI.ForegroundColor = "Black"
+    $host.UI.RawUI.BackgroundColor = "White"
 
     $confirmation = ''    
     if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($global:dvlp_arg1))) {  
