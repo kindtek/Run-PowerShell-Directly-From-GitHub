@@ -753,7 +753,7 @@ function install_winget {
       $file = "$env:KINDTEK_WIN_GIT_PATH/get-latest-winget.ps1"
       Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
       $network_connected = $false
-      $network_err_msg = "`r`ncannot connect to the internet. retrying .."
+      $network_err_msg = "`r`ncannot connect to github. retrying .."
       while ($network_connected -eq $false) {
         try {
           if (!(Test-Path $file)) {
