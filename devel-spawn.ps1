@@ -954,7 +954,7 @@ function reload_dvlp {
   # powershell.exe -Command "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"
   $global:devel_spawn = $false
   . include_devel_tools
-  start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"           
+  # start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"           
 }
 
 function update_dvlp {
@@ -1512,7 +1512,6 @@ continue or skip
           Write-Host "hit ENTER to reload `r`n`t..or enter any other character to continue"
           if ($(read-host) -eq "") {
             reload_dvlp
-            exit
           }
         }
         # install distro requested in arg
@@ -1660,7 +1659,6 @@ continue or skip
             }
             elseif (($dependencies_installed -eq $false) -or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
               reload_dvlp
-              $dvlp_input = 'exit'
             }
             else {
               write-host 'no updates found'
