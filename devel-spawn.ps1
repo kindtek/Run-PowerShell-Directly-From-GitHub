@@ -1805,11 +1805,11 @@ continue or skip
               }
               elseif ($wsl_action_choice -ceq 'SETUP') {
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
-                wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                 write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
-                wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: next time use t$wsl_distro_selected_num to open the terminal for $wsl_distro_selected_name"
                 start-sleep 3
@@ -1822,11 +1822,11 @@ continue or skip
               }
               elseif ($wsl_action_choice -Ieq 'VERSION1') {
                 write-host "`r`nsetting $wsl_distro_selected_name to wsl version 1..."
-                wsl.exe --distribution "$wsl_distro_selected_name".trim() --set-version 1
+                wsl.exe --distribution $wsl_distro_selected_name --set-version 1
               }
               elseif ($wsl_action_choice -ieq 'VERSION2') {
                 write-host "`r`nsetting up $wsl_distro_selected_name to wsl version 2..."
-                wsl.exe --distribution "$wsl_distro_selected_name".trim() --set-version 2
+                wsl.exe --distribution $wsl_distro_selected_name --set-version 2
               }
               elseif ($wsl_action_choice -ieq 'BACKUP') {
                 $base_distro = $wsl_distro_selected_name.Substring(0, $wsl_distro_selected_name.lastIndexOf('-'))
