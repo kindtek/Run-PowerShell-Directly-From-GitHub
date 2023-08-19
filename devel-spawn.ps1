@@ -1666,7 +1666,7 @@ continue or skip
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ieq 'update') {
-            update_dvlp
+            update_dvlp $true
             if (($dependencies_installed -eq $false) -or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
               reload_dvlp
             }
