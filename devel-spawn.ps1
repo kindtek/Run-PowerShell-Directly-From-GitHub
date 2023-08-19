@@ -1109,9 +1109,7 @@ function boot_devel {
     New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
     install_winget
     install_git
-    if ($(update_dvlp) -eq $true) {
-      exit
-    }
+    update_dvlp
     # log default distro
     $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
     # jump to bottom line without clearing scrollback
@@ -1536,9 +1534,7 @@ continue or skip
           start_dvlp_process_hide 'sync_repo'
         }
         else {
-          if ($(update_dvlp) -eq $true) {
-            exit
-          }
+          update_dvlp
         }
       }
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
@@ -1666,9 +1662,7 @@ continue or skip
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ieq 'update') {
-            if ($(update_dvlp $true) -eq $true) {
-              reload_dvlp
-            }
+            update_dvlp
             elseif (($dependencies_installed -eq $false) -or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
               reload_dvlp
             }
