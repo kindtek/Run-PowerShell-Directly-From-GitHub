@@ -26,20 +26,10 @@ $global:devel_spawn = 'sourced'
 # # # # # # # # # # # # # # functions # # # # # # # # # # # # # # # # # # 
 
 function include_devel_tools {
-  try {
-    test_devel
-  }
-  catch {
-    try {
-      if ((Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf)) {
-        # write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
-        . $env:KINDTEK_DEVEL_TOOLS
-      }
-    }
-    catch {}
-        
-  }
-    
+    if (($global:devel_tools -ne 'sourced')) {
+      # write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
+      . $env:KINDTEK_DEVEL_TOOLS
+    } 
 }
 class dvlp_process {
   [String]$proc_cmd
@@ -962,6 +952,8 @@ function get_repo_commit {
 function reload_dvlp {
   write-host "reloading $($env:USERPROFILE)\dvlp.ps1`r`n"
   # powershell.exe -Command "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"
+  $global:devel_spawn = $false
+  . include_devel_tools
   start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"           
 }
 
