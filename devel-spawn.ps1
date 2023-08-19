@@ -1666,7 +1666,7 @@ continue or skip
           }
           elseif ($dvlp_input -ieq 'update') {
             if ($(update_dvlp $true) -eq $true) {
-              $dvlp_input = 'exit'
+              reload_dvlp
             }
             elseif (($dependencies_installed -eq $false) -or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
               reload_dvlp
