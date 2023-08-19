@@ -1562,7 +1562,7 @@ continue or skip
         if ($(get_default_wsl_distro) -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO") {
           $wsl_distro_revert_options = $wsl_distro_revert_options + "- [revert] wsl to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`t"
         }
-        if ($(find_update) -eq $true) {
+        if ($(update_found) -eq $true) {
           $update_found = ' (available)'
         }
         try {
