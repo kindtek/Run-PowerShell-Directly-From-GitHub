@@ -973,7 +973,7 @@ function update_dvlp {
   param (
     [bool]$quiet
   )
-  if ($(update_found) -eq $true) {
+  if (($(update_found) -eq $true)) {
     $global:dvlw_commit = $(get_repo_commit)
     reload_dvlp           
     return $true
