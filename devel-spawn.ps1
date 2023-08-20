@@ -850,7 +850,7 @@ function sync_repo_new_win {
   if (($wait -eq $true) -or (!([string]::isnullorempty($wait)))){
     $wait = 'wait'
   }
-  start_dvlp_process_popmin "sync_repo" "$wait" 'noexit'
+  start_dvlp_process_popmin "sync_repo;exit" "$wait" ''
 
 }
 function sync_repo {
