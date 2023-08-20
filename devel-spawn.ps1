@@ -1742,7 +1742,7 @@ continue or skip
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
           Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
-          Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor DarkRed
+          Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor Red
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
           $dvlp_input = $Host.UI.ReadLine()
