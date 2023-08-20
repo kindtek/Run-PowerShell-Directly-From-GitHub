@@ -1016,9 +1016,6 @@ function update_dvlp {
   if (($(update_found) -eq $true)) {
     $global:dvlw_commit = $(get_latest_commit)
     reload_dvlp           
-    return $true
-  } else {
-    return $false        
   }
 }
 function require_devel_online {
