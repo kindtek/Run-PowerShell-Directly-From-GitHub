@@ -954,6 +954,8 @@ function sync_repos {
       git submodule update --init --remote --progress -- $env:KINDTEK_WIN_POWERHELL_NAME
       write-host "$env:KINDTEK_WIN_POWERHELL_NAME pulled" -ForegroundColor DarkCyan
     }
+    Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1
+    
     Push-Location $env:KINDTEK_WIN_DVLP_NAME
     if ((Test-Path -Path "$($env:KINDTEK_WIN_KERNELS_PATH)/.git")) {
       write-host "pulling $env:KINDTEK_WIN_KERNELS_NAME ..." -ForegroundColor DarkCyan
@@ -965,6 +967,7 @@ function sync_repos {
       git submodule update --init --remote --progress -- $env:KINDTEK_WIN_KERNELS_NAME
       write-host "$env:KINDTEK_WIN_KERNELS_NAME pulled" -ForegroundColor DarkCyan
     }
+  
     if ((Test-Path -Path "$($env:KINDTEK_WIN_MNT_PATH)/.git")) {
       write-host "pulling $env:KINDTEK_WIN_MNT_NAME" -ForegroundColor DarkCyan
       git submodule update --remote --progress -- $env:KINDTEK_WIN_MNT_NAME
@@ -1065,6 +1068,7 @@ function update_dvlp {
   if (($(update_found) -eq $true)) {
     $global:dvlw_commit = $(get_latest_commit)
     $global:update_dvlw = $true
+    sync_repos_new_win $true
     reload_dvlp           
   }
 }
