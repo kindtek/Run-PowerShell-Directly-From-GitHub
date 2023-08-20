@@ -860,14 +860,14 @@ function pull_repos {
   return $clone_result
 }
 
-function quick_sync_repos_new_win {
+function quick_sync_repo_new_win {
   param (
     [bool]$wait
   )
   if ($wait -eq $true){
     $wait = 'wait'
   }
-  start_dvlp_process_popmin "quick_sync_repos;exit" "$wait" ''
+  start_dvlp_process_popmin "quick_sync_repo;exit" "$wait" ''
 }
 
 function quick_sync_repo {
@@ -915,7 +915,7 @@ function sync_repos {
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     write-host "testing path $($env:KINDTEK_WIN_DVLW_PATH)/.git" 
-    quick_sync_repos
+    quick_sync_repo
     try {
       write-host "entering path $($env:KINDTEK_WIN_DVLW_PATH)"
       Push-Location $env:KINDTEK_WIN_DVLW_PATH
@@ -1016,13 +1016,13 @@ function get_latest_commit {
     # we have an update  
     if($(get_local_commit) -ne $(get_remote_commit)){
       # try sync to get latest commit available since local head might be ahead of remote head
-      quick_sync_repos $true
+      quick_sync_repo $true
   } else{
       # local head is current with remote - no need to sync
     } 
   } elseif ($(update_found_remote)) {
     # sync to get latest commit from local
-    quick_sync_repos $true
+    quick_sync_repo $true
 
   } 
     
