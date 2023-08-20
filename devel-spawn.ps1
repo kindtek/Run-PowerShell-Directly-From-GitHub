@@ -1628,7 +1628,7 @@ continue or skip
         }
         else {
           update_dvlp
-          if ($global:update_dvlw -eq $true){
+          if ($global:update_dvlw){
             return
           }
         }
@@ -1766,6 +1766,9 @@ continue or skip
           }
           elseif ($dvlp_input -ieq 'update') {
             update_dvlp
+            if ($global:update_dvlw){
+              return
+            }
             if (($dependencies_installed -eq $false) -or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
               reload_dvlp
             }
