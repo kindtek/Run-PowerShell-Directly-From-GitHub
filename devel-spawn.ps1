@@ -1744,7 +1744,7 @@ continue or skip
           Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor Red
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
-          $dvlp_input = $Host.UI.ReadLine()
+          $dvlp_input = $Host.UI.ReadLine().trim()
           $dvlp_options = ''
           
           if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1))) {
