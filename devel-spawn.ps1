@@ -955,8 +955,7 @@ function get_local_commit {
 
 function get_remote_commit {
   $remote_commit_raw = $(git ls-remote https://github.com/kindtek/devels-workshop HEAD)
-  $remote_commit_pos = $remote_commit_raw.IndexOf(" ")
-  $remote_commit = $remote_commit_raw.Substring(0, $remote_commit_pos)
+  $remote_commit = $remote_commit_raw -creplace "[^a-z0-9]" , ''
   return $remote_commit
 }
 
