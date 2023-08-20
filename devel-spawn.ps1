@@ -1724,18 +1724,19 @@ continue or skip
         $dvlp_prompt_cursor1 = "(exit) > "
         $dvlp_prompt_cursor2 = "> "
         $dvlp_prompt_prefix = ""
-        if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
-          # once activated, keep command line mode active 
-          $dvlp_prompt_cursor = $dvlp_prompt_cursor2
-          $dvlp_prompt_location = "$("$(get-location)".tolower())"
-          $dvlp_prompt_prefix = 'DVL'
-        }
-        else {
-          $dvlp_prompt_cursor = $dvlp_prompt_cursor1
-          $dvlp_prompt_location = ''
-          $dvlp_prompt_prefix = ''
-        }
+
         do {
+          if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
+            # once activated, keep command line mode active 
+            $dvlp_prompt_cursor = $dvlp_prompt_cursor2
+            $dvlp_prompt_location = "$("$(get-location)".tolower())"
+            $dvlp_prompt_prefix = 'DVL'
+          }
+          else {
+            $dvlp_prompt_cursor = $dvlp_prompt_cursor1
+            $dvlp_prompt_location = ''
+            $dvlp_prompt_prefix = ''
+          }
           if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
             # once activated, keep command line mode active 
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
