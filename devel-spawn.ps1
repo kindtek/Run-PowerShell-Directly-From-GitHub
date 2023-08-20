@@ -2391,6 +2391,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   . include_devel_tools
   $global:dvlw_commit = $(get_local_commit)
   set-location $env:USERPROFILE
+  $global:update_dvlw = $false
   do {
     $global:update_dvlw = $false
     wsl_devel_spawn $args[0]
