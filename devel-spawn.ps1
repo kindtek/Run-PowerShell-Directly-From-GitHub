@@ -656,7 +656,7 @@ function test_default_wsl_distro {
   . include_devel_tools
   if ( $(test_wsl_distro $distro_name)) {
     Write-Host "testing wsl default distro $distro_name"
-    if ($(get_default_wsl_distro) -eq $distro_name -And $(require_docker_online)) {
+    if ($(get_default_wsl_distro) -eq $distro_name -And $(require_docker_desktop_online)) {
       # Write-Host "$distro_name is valid default distro"
       return $true
     }
@@ -746,7 +746,7 @@ function set_default_wsl_distro {
       # }
       # # restart_wsl_docker
       # restart_wsl_docker_new_win
-      # require_docker_online_new_win
+      # require_docker_desktop_online_new_win
       # $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = $old_wsl_default_distro
       return $false
     }
@@ -1032,12 +1032,12 @@ function update_dvlp {
 function require_devel_online {
   do {
     try {
-      $docker_online = require_docker_online
+      $docker_online = require_docker_desktop_online
     }
     catch {
       . include_devel_tools
       safe_boot_devel
-      $docker_online = require_docker_online
+      $docker_online = require_docker_desktop_online
     }
   } while ($docker_online -eq $false)
 }
@@ -1083,7 +1083,7 @@ function run_dvlp_latest_kernel_installer {
     $distro
   )
   push-location $env:KINDTEK_WIN_DVLP_PATH/kernels/linux/kache
-  require_docker_online_new_win
+  require_docker_desktop_online_new_win
   if ($(is_docker_desktop_online) -eq $true) {
     ./wsl-kernel-install.ps1 latest latest $distro
     restart_wsl_docker | Out-Null
@@ -1323,7 +1323,6 @@ function devel_daemon {
         # try setting envs first then do bare minimum
         set_dvlp_envs $env:KINDTEK_DEBUG_MODE
         return safe_boot_devel
-                
       }
       reboot_prompt
             
@@ -1336,17 +1335,24 @@ function devel_daemon {
 
   if ($keep_running) {
     # daemon initialized ... now check periodically for problems
-    start_dvlp_process_popmin "while (`$true){
-            if (`$(dependencies_installed) -eq `$false){
-                # try setting envs first then do bare minimum
-                set_dvlp_envs $env:KINDTEK_DEBUG_MODE;
-                safe_boot_devel;
-            }
-            sync_repo;
-            require_docker_online;
-            start-sleep 60;
+    start_dvlp_process_popmin "
+      while (`$true){
+        if (`$(dependencies_installed) -eq `$false){
+            # try setting envs first then do bare minimum
+            pull_dvlp_envs $env:KINDTEK_DEBUG_MODE;
+            safe_boot_devel;
         }
-        " '' 'noexit'
+        if (updates_found_local){
+          update_dvlp;
+          start-sleep 60;
+        } elseif (updates_found){
+          update_dvlp
+        }
+        sync_repo;
+        require_docker_desktop_online;
+      start-sleep 60;
+    }
+    " '' 'noexit'
   }
     
   return $true
@@ -1363,7 +1369,7 @@ function wsl_devel_spawn {
     $host.UI.RawUI.BackgroundColor = "Black"
 
     $confirmation = ''    
-    if (($dvlp_input -ine 'kw') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($global:dvlp_arg1))) {  
+    if (($dvlp_input -ine 'daemon') -And (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -And ([string]::IsNullOrEmpty($global:dvlp_arg1))) {  
       try {
         if (!($(dependencies_installed))) {
           $host.UI.RawUI.ForegroundColor = "Red"
@@ -1416,9 +1422,9 @@ function wsl_devel_spawn {
           Exit
         }
       }
-      # if confirmation is kw or (img_tag must not empty ... OR dvlp must not installed)
-      # if (($confirmation -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
-      if (($dvlp_input -eq 'kw') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -and ($confirmation -ne 'skip')) {
+      # if confirmation is daemon or (img_tag must not empty ... OR dvlp must not installed)
+      # if (($confirmation -eq 'daemon') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
+      if (($dvlp_input -eq 'daemon') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -and ($confirmation -ne 'skip')) {
         # write-host "confirmation: $confirmation"
         # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
         if (([string]::IsNullOrEmpty($global:dvlp_arg1))) {
@@ -1471,7 +1477,7 @@ function wsl_devel_spawn {
             $host.UI.RawUI.BackgroundColor = "Black"
 
             $old_wsl_default_distro = get_default_wsl_distro
-            if ($dvlp_input -ieq 'kw' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
+            if ($dvlp_input -ieq 'daemon' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
               # start_dvlp_process_pop "
               # `$old_wsl_default_distro = '$old_wsl_default_distro';
               # `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' 'default');
@@ -1528,12 +1534,12 @@ continue or skip
           }
           # try {
           #     wsl.exe --set-default "$env:KINDTEK_FAILSAFE_WSL_DISTRO".trim()
-          #     require_docker_online_new_win
+          #     require_docker_desktop_online_new_win
           # }
           # catch {
           #     try {
           #         revert_default_wsl_distro
-          #         require_docker_online_new_win
+          #         require_docker_desktop_online_new_win
           #     }
           #     catch {
           #         Write-Host "error setting failsafe as default wsl distro"
@@ -1619,7 +1625,7 @@ continue or skip
             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
           }
           display_wsl_distro_list $wsl_distro_list
-          $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+          $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [c]ustomize`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
         }
         catch {
           try {
@@ -1638,7 +1644,7 @@ continue or skip
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             display_wsl_distro_list $wsl_distro_list
-            $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+            $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [c]ustomize`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
           }
           catch {
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
@@ -1664,7 +1670,7 @@ continue or skip
               #     
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
-            $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [k]indtek setup`r`n`t- [update]$update_found`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+            $dvlp_options = "`r`noops ..wsl devel install failed :( `r`nChoose from the one of the following:`r`n`r`n`t- [t]erminal`r`n`t- [c]ustomize`r`n`t- [update]$update_found`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
           }
         }
         # $dvlp_input = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
@@ -1719,8 +1725,8 @@ continue or skip
             }
           }
           elseif ($dvlp_input -ieq 'i') {
-            # require_docker_online
-            require_docker_online_new_win
+            # require_docker_desktop_online
+            require_docker_desktop_online_new_win
             if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
               docker_devel_spawn
             }
@@ -1730,7 +1736,7 @@ continue or skip
             $dvlp_input = 'screen'
           }
           elseif ($dvlp_input -ieq 'i!') {
-            require_docker_online_new_win
+            require_docker_desktop_online_new_win
             if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
               docker_devel_spawn 'wait'
             }
@@ -2041,7 +2047,7 @@ continue or skip
           elseif ($dvlp_input -ieq 'revert' -or $dvlp_input -ieq 'failsafe') {
             try {
               set_default_wsl_distro
-              require_docker_online_new_win
+              require_docker_desktop_online_new_win
             }
             catch {
               try {
@@ -2091,7 +2097,7 @@ continue or skip
                   $dvlp_kindtek_options_win = Read-Host
                   if ($dvlp_kindtek_options_win -ceq 'r') {
                     reset_docker_settings_hard
-                    require_docker_online_new_win
+                    require_docker_desktop_online_new_win
                   }
                   if ($dvlp_kindtek_options_win -ceq 'R') {
                     Remove-Item "$env:USERPROFILE/.wslconfig" -Confirm:$false -Force -ErrorAction SilentlyContinue
@@ -2100,11 +2106,11 @@ continue or skip
                     if (($revert_failsafe -eq '') -or ($revert_failsafe -ieq 'y') -or ($revert_failsafe -eq 'yes')) {
                       revert_default_wsl_distro
                     }
-                    require_docker_online_new_win
+                    require_docker_desktop_online_new_win
                   }
                   if ($dvlp_kindtek_options_win -ceq 'd') {
                     reinstall_docker
-                    require_docker_online_new_win
+                    require_docker_desktop_online_new_win
                   }
                   if ($dvlp_kindtek_options_win -ceq 'D') {
                     uninstall_docker
@@ -2155,7 +2161,7 @@ continue or skip
           elseif ($dvlp_input -ceq 'RESTART') {
             if (Test-Path "$wsl_restart_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
               powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
-              require_docker_online_new_win
+              require_docker_desktop_online_new_win
             }
             $dvlp_input = 'noscreen'
           }
@@ -2163,7 +2169,7 @@ continue or skip
             $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
             if (Test-Path "$wsl_kernel_rollback_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
               powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
-              require_docker_online_new_win
+              require_docker_desktop_online_new_win
             }
             $dvlp_input = 'noscreen'
           }
@@ -2186,7 +2192,7 @@ continue or skip
             }
             $dvlp_input = 'noscreen'
           }
-          elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'KW') {
+          elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon') {
             try {
               # disguise unavoidable error message
               $orig_foreground = [System.Console]::ForegroundColor
@@ -2220,8 +2226,8 @@ continue or skip
             }
             $dvlp_prompt = $dvlp_prompt2
           }
-        } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
-      } while ($dvlp_input -ne '' -And $dvlp_input -ine 'kw' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
+        } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
+      } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
     }
     elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
       try {
@@ -2234,7 +2240,7 @@ continue or skip
     else {
       $dvlp_input = 'exit'
     }
-  } while ($dvlp_input -ieq 'kw' -Or $dvlp_input -ieq 'update' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
+  } while ($dvlp_input -ieq 'daemon' -Or $dvlp_input -ieq 'update' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
     
   if ($dvlp_input_orig -eq 'update_dvlp') {
     Write-Host "`r`ndocker devel was updated and is now running in a new window"
