@@ -1736,7 +1736,8 @@ continue or skip
             # once activated, keep command line mode active 
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
-          Write-Host -nonewline "${dvlp_options}" -ForegroundColor DarkRed
+          Write-Host -nonewline "${dvlp_prompt_prefix}" -ForegroundColor DarkRed
+          Write-Host -nonewline "${dvlp_options}" 
           write-host -nonewline " ${dvlp_prompt_location}" -ForegroundColor White
           write-host -nonewline "${dvlp_prompt_cursor}" -ForegroundColor DarkYellow
           $dvlp_input = $Host.UI.ReadLine()
