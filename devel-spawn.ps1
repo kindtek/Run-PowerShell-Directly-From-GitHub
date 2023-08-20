@@ -1196,7 +1196,7 @@ function boot_devel {
     install_git
     update_dvlp
     if ($global:update_dvlw){
-      return $true
+      return
     }
     # log default distro
     $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
@@ -1629,7 +1629,7 @@ continue or skip
         }
         else {
           update_dvlp
-          if ($global:update_dvlw){
+          if ($global:update_dvlw -eq $true){
             return
           }
         }
@@ -2454,14 +2454,15 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   $global:dvlp_arg0 = "$($args[0])"
   $global:dvlp_arg1 = "$($args[1])"
   set_dvlp_envs $env:KINDTEK_DEBUG_MODE
-  . include_devel_tools
   $global:dvlw_commit = $(get_local_commit)
   set-location $env:USERPROFILE
   $global:update_dvlw = $true
   do {
+    . include_devel_tools
     $global:update_dvlw = $false
     wsl_devel_spawn $args[0]
   } while ($global:update_dvlw -eq $true)
+  $global:devel_tools = "sourced"
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
   # echo 'setting the envs ..'
