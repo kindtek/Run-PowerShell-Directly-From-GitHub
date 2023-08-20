@@ -810,7 +810,7 @@ function install_git {
     # allow git to be used in same window immediately after installation
         ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
     reload_envs
-    # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repo;exit;}" -Wait
+    # Start-Process powershell -LoadUserProfile $env:KINDTEK_NEW_PROC_STYLE -ArgumentList [string]$env:KINDTEK_NEW_PROC_NOEXIT "-Command &{sync_repos;exit;}" -Wait
     git config --global core.autocrlf input
     return
   }
@@ -825,35 +825,82 @@ function uninstall_git {
   Start-Process powershell.exe -Wait -Argumentlist '-Command', 'write-host "uninstalling git... ";winget uninstall --id=Git.Git;winget uninstall --id=Git.Git;' | Out-Null 
   Remove-Item "$env:USERPROFILE/repos/kindtek/.git-installed" -Confirm:$false -Force -ErrorAction SilentlyContinue
 }
-function clone_repo {
-  Push-Location $env:KINDTEK_WIN_GIT_PATH
-  write-host "cloning $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
-  $clone_result = git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
-  write-host "$env:KINDTEK_WIN_DVLW_NAME cloned" -ForegroundColor DarkCyan
-  Pop-Location
-  return $clone_result
-}
 
-function pull_repo {
-  Push-Location $env:KINDTEK_WIN_GIT_PATH
-  write-host "pulling $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
-  $clone_result = git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
-  write-host "$env:KINDTEK_WIN_DVLW_NAME pulled" -ForegroundColor DarkCyan
-  Pop-Location
-  return $clone_result
-}
-
-function sync_repo_new_win {
+# TODO: refactor/modularize git functions
+function clone_repos {
   param (
-    $wait
+    [bool]$quiet
   )
-  if (($wait -eq $true) -or (!([string]::isnullorempty($wait)))){
+
+  Push-Location $env:KINDTEK_WIN_GIT_PATH
+  if ($quiet -eq $false) {
+    write-host "cloning $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
+  }
+  $clone_result = git clone "https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME" --branch $env:KINDTEK_WIN_DVLW_BRANCH --progress -- $env:KINDTEK_WIN_DVLW_NAME
+  if ($quiet -eq $false) {
+    write-host "$env:KINDTEK_WIN_DVLW_NAME cloned" -ForegroundColor DarkCyan
+  }
+  Pop-Location
+  return $clone_result
+}
+
+function pull_repos {
+  param (
+    [bool]$quiet
+  )
+  Push-Location $env:KINDTEK_WIN_GIT_PATH
+  if ($quiet -eq $false) {
+    write-host "pulling $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
+  }
+  $clone_result = git -C $env:KINDTEK_WIN_DVLW_NAME pull --progress
+  if ($quiet -eq $false) {
+    write-host "$env:KINDTEK_WIN_DVLW_NAME pulled" -ForegroundColor DarkCyan
+  }
+  Pop-Location
+  return $clone_result
+}
+
+function quick_sync_repos_new_win {
+  param (
+    [bool]$wait
+  )
+  if ($wait -eq $true){
     $wait = 'wait'
   }
-  start_dvlp_process_popmin "sync_repo;exit" "$wait" ''
-
+  start_dvlp_process_popmin "quick_sync_repos;exit" "$wait" ''
 }
-function sync_repo {
+
+function quick_sync_repo {
+  param (
+    [bool]$quiet
+  )
+  if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
+    if ($quiet -eq $false) {
+      write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
+    }
+    Push-Location $env:KINDTEK_WIN_DVLW_PATH
+    Pop-Location
+    return pull_repos
+  }
+  else {
+    if ($quiet -eq $false) {
+      write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git NOT found" 
+    }
+    return clone_repos
+  }
+}
+
+function sync_repos_new_win {
+  param (
+    [bool]$wait
+  )
+  if ($wait -eq $true){
+    $wait = 'wait'
+  }
+  start_dvlp_process_popmin "sync_repos;exit" "$wait" ''
+}
+
+function sync_repos {
   Write-Host "testing git command ..." -ForegroundColor DarkCyan
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
   try {
@@ -868,22 +915,13 @@ function sync_repo {
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     write-host "testing path $($env:KINDTEK_WIN_DVLW_PATH)/.git" 
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
-      write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
-      Push-Location $env:KINDTEK_WIN_DVLW_PATH
-      Pop-Location
-      pull_repo
-    }
-    else {
-      write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git NOT found" 
-      clone_repo
-    }
+    quick_sync_repos
     try {
       write-host "entering path $($env:KINDTEK_WIN_DVLW_PATH)"
       Push-Location $env:KINDTEK_WIN_DVLW_PATH
     }
     catch {
-      clone_repo
+      clone_repos
       Push-Location $env:KINDTEK_WIN_DVLW_PATH
     }
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLP_PATH)/.git")) {
@@ -941,7 +979,7 @@ function sync_repo {
   catch {
     install_winget
     install_git
-    sync_repo
+    sync_repos
   }
     
   Pop-Location
@@ -975,13 +1013,14 @@ function get_latest_commit {
     # we have an update  
     if($(get_local_commit) -ne $(get_remote_commit)){
       # try sync to get latest commit available since local head might be ahead of remote head
-      sync_repo_new_win $true
+      quick_sync_repos $true
   } else{
       # local head is current with remote - no need to sync
     } 
   } elseif ($(update_found_remote)) {
     # sync to get latest commit from local
-    sync_repo_new_win $true
+    quick_sync_repos $true
+
   } 
     
   return $(get_local_commit)
@@ -1125,7 +1164,7 @@ function safe_boot_devel {
     Set-PSDebug -Trace 2;
     install_winget $true
     install_git $true    
-    sync_repo
+    sync_repos
     . include_devel_tools
     install_dependencies $true
     start_docker_desktop_new_win
@@ -1348,7 +1387,7 @@ function devel_daemon {
         } elseif (updates_found){
           update_dvlp
         }
-        sync_repo;
+        sync_repos;
         require_docker_desktop_online;
       start-sleep 60;
     }
@@ -1582,7 +1621,7 @@ continue or skip
         }
         . include_devel_tools
         if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
-          start_dvlp_process_hide 'sync_repo'
+          start_dvlp_process_hide 'sync_repos'
         }
         else {
           update_dvlp
@@ -1678,32 +1717,27 @@ continue or skip
         # $current_process_object = Get-Process -id $current_process
         # Set-ForegroundWindow $current_process_object.MainWindowHandle
         $global:dvlp_arg1 = ''
-        $dvlp_prompt_cursor1 = "(exit) > "
-        $dvlp_prompt_cursor2 = "> "
-        $dvlp_prompt_prefix = ""
-        if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
+        $dvlp_prompt1 = "(exit) > "
+        $dvlp_prompt2 = "> "
+        if ($dvlp_prompt -eq $dvlp_prompt2) {
           # once activated, keep command line mode active 
-          $dvlp_prompt_cursor = $dvlp_prompt_cursor2
-          $dvlp_prompt_location = "$("$(get-location)".tolower())"
-          $dvlp_prompt_prefix = 'DVL'
+          $dvlp_prompt = $dvlp_prompt2
+          $dvlp_location = "DVL $("$(get-location)".tolower())"
         }
         else {
-          $dvlp_prompt_cursor = $dvlp_prompt_cursor1
-          $dvlp_prompt_location = ''
-          $dvlp_prompt_prefix = ''
+          $dvlp_prompt = $dvlp_prompt1
+          $dvlp_location = ''
         }
         do {
-          if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
+          if ($dvlp_prompt -eq $dvlp_prompt2) {
             # once activated, keep command line mode active 
-            $dvlp_prompt_location = "$("$(get-location)".tolower())"
+            $dvlp_location = "DVL $("$(get-location)".tolower())"
           }
-          Write-Host -nonewline "${dvlp_options}" -ForegroundColor DarkRed
-          write-host -nonewline " ${dvlp_prompt_location}" -ForegroundColor White
-          write-host -nonewline "${dvlp_prompt_cursor}" -ForegroundColor DarkYellow
+          Write-Host -nonewline "${dvlp_options}${dvlp_location}${dvlp_prompt}"
           $dvlp_input = $Host.UI.ReadLine()
           $dvlp_options = ''
           
-          if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1))) {
+          if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt1))) {
             # entering space the first time will exit - after that need x or exit to exit
             $dvlp_input = 'exit'
           }
@@ -1717,7 +1751,7 @@ continue or skip
             }
           }
           catch {}
-          if (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2)) {
+          if (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt2)) {
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ieq 'update') {
@@ -2137,17 +2171,8 @@ continue or skip
             if ($dvlp_input -ieq 'kl' ) {
               wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
             }
-            elseif ($dvlp_input -ieq 'daemon' ) {
-              Write-Host "spawning daemon with $(get_default_wsl_distro)"
-              return devel_daemon
-            }
-            elseif ($dvlp_input -ieq 'devel' ){
-              $debug_mode = get_dvlp_debug_mode
-              if ($debug_mode -eq $true){
-                set_dvlp_debug_mode $false
-              } else {
-                set_dvlp_debug_mode $true
-              }
+            elseif ($dvlp_input -ieq 'kw' ) {
+              Write-Host 'checking for updates ...'
             }
                         
 
@@ -2235,10 +2260,10 @@ continue or skip
             }
           } 
           if ($dvlp_input -eq 'noscreen') {
-            if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1) {
+            if ($dvlp_prompt -eq $dvlp_prompt1) {
               write-host "`r`ncommand line mode activated`r`n`tenter 'x' to exit`r`n"
             }
-            $dvlp_prompt_cursor = $dvlp_prompt_cursor2
+            $dvlp_prompt = $dvlp_prompt2
           }
         } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
       } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
