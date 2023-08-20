@@ -31,7 +31,7 @@ $global:devel_spawn = 'sourced'
 
 function include_devel_tools {
     if (($global:devel_tools -ne 'sourced')) {
-      # write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
+      write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
       . $env:KINDTEK_DEVEL_TOOLS
     } 
 }
@@ -2137,7 +2137,7 @@ continue or skip
 
           }
           elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -Like 'k*') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {
-            if ($dvlp_input -ieq 'k') {
+            if ($dvlp_input -ieq 'c') {
               $dvlp_input = 'screen'
               Write-Host "`r`n`t[l]inux or [w]indows"
               $dvlp_kindtek_options = Read-Host
@@ -2180,8 +2180,8 @@ continue or skip
                   $dvlp_kindtek_options_win = Read-Host
                 }
               }
-            }
-            if ($dvlp_input -ieq 'kl' ) {
+            }                        
+            if ($dvlp_input -ieq 't' ) {
               wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
             }
             elseif ($dvlp_input -ieq 'daemon' ) {
@@ -2196,8 +2196,6 @@ continue or skip
                 set_dvlp_debug_mode $true
               }
             }
-                        
-
           }
           elseif ($dvlp_input -ieq 'r') {
             if ($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO -ne "") {
