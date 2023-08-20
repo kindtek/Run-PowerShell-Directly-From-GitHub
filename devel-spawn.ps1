@@ -2259,7 +2259,7 @@ continue or skip
               $orig_foreground = [System.Console]::ForegroundColor
               $temp_foreground = [System.Console]::BackgroundColor
               $host.UI.RawUI.ForegroundColor = $temp_foreground
-              $is_docker_image = $(docker manifest inspect $dvlp_input) 
+              $is_docker_image = $(docker manifest inspect $dvlp_input) | Out-String
               $host.UI.RawUI.ForegroundColor = $orig_foreground
 
             }
