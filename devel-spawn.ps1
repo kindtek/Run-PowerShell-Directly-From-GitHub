@@ -939,7 +939,7 @@ function sync_repo {
   Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1
 }
 
-function get_repo_commit {
+function get_local_commit {
   $git_commit = 0
   try {
     if (Test-Path $env:KINDTEK_WIN_DVLW_PATH) {
@@ -953,6 +953,57 @@ function get_repo_commit {
   return $git_commit
 }
 
+function get_remote_commit {
+  $remote_commit_raw = $(git ls-remote https://github.com/kindtek/devels-workshop HEAD)
+  $remote_commit_pos = $remote_commit_raw.IndexOf(" ")
+  $remote_commit = $remote_commit_raw.Substring(0, $remote_commit_pos)
+  return $remote_commit
+}
+
+function get_latest_commit {
+  if ($(update_found_local)){
+    # we have an update  
+    if($(get_local_commit) -ne $(get_remote_commit)){
+      # try sync to get latest commit available since local head might be ahead of remote head
+      sync_repo $true
+    } else{
+      # local head is current with remote - no need to sync
+    } 
+  } elseif ($(update_found_remote)) {
+    # sync to get latest commit from local
+    sync_repo $true
+  } 
+    
+  return $(get_local_commit)
+  
+  
+}
+function update_found_local {
+  $local_commit = $(get_local_commit)
+  if ($global:dvlw_commit -ne $local_commit) {
+    return $true
+  } else {
+    return $false
+  }
+}
+
+function update_found_remote {
+  $remote_commit = $(get_remote_commit)
+  if ($global:dvlw_commit -ne $remote_commit) {
+    return $true
+  } else {
+    return $false
+  }
+}
+
+function update_found {
+  if($(get_latest_commit) -ne $global:dvlw_commit){
+    return $true
+  } else {
+    return $false
+  }
+}
+
 function reload_dvlp {
   write-host "reloading $($env:USERPROFILE)\dvlp.ps1`r`n"
   # powershell.exe -Command "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"
@@ -961,35 +1012,14 @@ function reload_dvlp {
   # start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"           
 }
 
-function update_found {
-  if ($global:dvlw_commit -ne $(get_repo_commit)) {
+function update_dvlp {
+  if (($(update_found) -eq $true)) {
+    $global:dvlw_commit = $(get_latest_commit)
+    reload_dvlp           
     return $true
   } else {
-    return $false
+    return $false        
   }
-}
-
-function update_dvlp {
-  param (
-    [bool]$quiet
-  )
-  if (($(update_found) -eq $true)) {
-    $global:dvlw_commit = $(get_repo_commit)
-    reload_dvlp           
-    return $true
-  }
-  if ($quiet) {
-    start_dvlp_process_hide 'sync_repo;exit;' 'wait'
-  }
-  else {
-    sync_repo
-  }
-  if ($(update_found) -eq $true) {
-    reload_dvlp           
-    return $true
-  }
-
-  return $false        
 }
 function require_devel_online {
   do {
@@ -1666,7 +1696,7 @@ continue or skip
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ieq 'update') {
-            update_dvlp $true
+            update_dvlp
             if (($dependencies_installed -eq $false) -or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
               reload_dvlp
             }
@@ -2343,7 +2373,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   $global:dvlp_arg1 = "$($args[1])"
   set_dvlp_envs $env:KINDTEK_DEBUG_MODE
   . include_devel_tools
-  $global:dvlw_commit = $(get_repo_commit)
+  $global:dvlw_commit = $(get_local_commit)
   set-location $env:USERPROFILE
   wsl_devel_spawn $args[0]
 }
