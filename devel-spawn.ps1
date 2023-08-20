@@ -1701,7 +1701,6 @@ continue or skip
               reload_dvlp
             }
             else {
-              write-host 'no updates found'
               $dvlp_input = 'noscreen'
             }
           }
