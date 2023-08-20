@@ -2391,10 +2391,10 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   . include_devel_tools
   $global:dvlw_commit = $(get_local_commit)
   set-location $env:USERPROFILE
-  while ($global:update_dvlw -eq $true){
+  do {
     $global:update_dvlw = $false
     wsl_devel_spawn $args[0]
-  }
+  } while ($global:update_dvlw -eq $true)
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
   # echo 'setting the envs ..'
