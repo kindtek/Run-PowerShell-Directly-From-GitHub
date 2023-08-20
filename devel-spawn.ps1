@@ -842,6 +842,17 @@ function pull_repo {
   Pop-Location
   return $clone_result
 }
+
+function sync_repo_new_win {
+  param (
+    $wait
+  )
+  if (($wait -eq $true) -or (!([string]::isnullorempty($wait)))){
+    $wait = 'wait'
+  }
+  start_dvlp_process_popmin "sync_repo" "$wait" 'noexit'
+
+}
 function sync_repo {
   Write-Host "testing git command ..." -ForegroundColor DarkCyan
     ([void]( New-Item -path alias:git -Value 'C:\Program Files\Git\bin\git.exe' -ErrorAction SilentlyContinue | Out-Null ))
@@ -964,13 +975,13 @@ function get_latest_commit {
     # we have an update  
     if($(get_local_commit) -ne $(get_remote_commit)){
       # try sync to get latest commit available since local head might be ahead of remote head
-      sync_repo $true
-    } else{
+      sync_repo_new_win $true
+  } else{
       # local head is current with remote - no need to sync
     } 
   } elseif ($(update_found_remote)) {
     # sync to get latest commit from local
-    sync_repo $true
+    sync_repo_new_win $true
   } 
     
   return $(get_local_commit)
