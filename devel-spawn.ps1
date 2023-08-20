@@ -1025,6 +1025,7 @@ function reload_dvlp {
 function update_dvlp {
   if (($(update_found) -eq $true)) {
     $global:dvlw_commit = $(get_latest_commit)
+    $global:update_dvlw = $true
     reload_dvlp           
   }
 }
@@ -1151,6 +1152,9 @@ function boot_devel {
     install_winget
     install_git
     update_dvlp
+    if ($global:update_dvlw){
+      return $true
+    }
     # log default distro
     $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
     # jump to bottom line without clearing scrollback
@@ -1576,6 +1580,9 @@ continue or skip
         }
         else {
           update_dvlp
+          if ($global:update_dvlw){
+            return
+          }
         }
       }
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
@@ -1843,7 +1850,7 @@ continue or skip
                 if ($kernel_choice = 'install') {
                   push-location "$env:USERPROFILE/kache"
                   write-host "powershell.exe -File $wsl_kernel_install_path '' '' $wsl_distro_selected"
-                  powershell.exe -File $wsl_kernel_install_path 
+                  powershell.exe -File $wsl_kernel_install_path '' '' $wsl_distro_selected
                   pop-location                              
                 }
                 if ($kernel_choice = 'make') {
@@ -2384,7 +2391,10 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   . include_devel_tools
   $global:dvlw_commit = $(get_local_commit)
   set-location $env:USERPROFILE
-  wsl_devel_spawn $args[0]
+  while ($global:update_dvlw -eq $true){
+    $global:update_dvlw = $false
+    wsl_devel_spawn $args[0]
+  }
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
   # echo 'setting the envs ..'
