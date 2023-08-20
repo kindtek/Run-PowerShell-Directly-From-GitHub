@@ -1794,7 +1794,7 @@ continue or skip
               $dvlp_input = 'noscreen'
             }
             else {
-              write-host "`r`n`r`n$wsl_distro_selected_name selected.`r`n`r`nEnter terminal, gui, DEFAULT, SETUP, KERNEL, DELETE, backup, rename, restore`r`n`t ... or press ENTER to open"
+              write-host "`r`n`r`n$wsl_distro_selected_name selected.`r`n`r`nEnter terminal, gui, DEFAULT, DELETE, setup, kernel, backup, rename, restore`r`n`t ... or press ENTER to open"
               $wsl_action_choice = read-host "
     (open $wsl_distro_selected_name)"
               if ($wsl_action_choice -ceq 'DELETE') {
@@ -1818,7 +1818,7 @@ continue or skip
                 $dvlp_input = 'screen'
 
               }
-              elseif ($wsl_action_choice -ceq 'KERNEL') {
+              elseif ($wsl_action_choice -ieq 'kernel') {
                 $kernel_choices = @()
                 $wsl_kernel_make_path = "$($env:USERPROFILE)/kache/wsl-kernel-make.ps1"
                 $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
@@ -1841,7 +1841,10 @@ continue or skip
                 $kernel_choice = read-host "
     (main menu)"
                 if ($kernel_choice = 'install') {
-                  powershell -File $wsl_kernel_install_path                               
+                  push-location "$env:USERPROFILE/kache"
+                  write-host "powershell.exe -File $wsl_kernel_install_path"
+                  powershell.exe -File $wsl_kernel_install_path 
+                  pop-location                              
                 }
                 if ($kernel_choice = 'make') {
                   powershell -File $wsl_kernel_make_path                                
@@ -1858,7 +1861,7 @@ continue or skip
                 }
 
               }
-              elseif ($wsl_action_choice -ceq 'SETUP') {
+              elseif ($wsl_action_choice -ieq 'setup') {
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
                 wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
               }
