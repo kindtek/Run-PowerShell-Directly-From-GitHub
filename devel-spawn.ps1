@@ -1060,7 +1060,6 @@ function reload_dvlp {
   write-host "reloading $($env:USERPROFILE)\dvlp.ps1`r`n"
   # powershell.exe -Command "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"
   $global:devel_spawn = $false
-  . include_devel_tools
   # start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"           
 }
 
@@ -2301,7 +2300,7 @@ continue or skip
     }
   } while ($dvlp_input -ieq 'daemon' -Or $dvlp_input -ieq 'update' -Or $dvlp_input -ieq 'screen' -Or "$confirmation" -ieq "" -And $dvlp_input -ine 'exit')
     
-  if ($dvlp_input_orig -eq 'update_dvlp') {
+  if ($dvlp_input_orig -eq 'update') {
     Write-Host "`r`ndocker devel was updated and is now running in a new window"
     Write-Host "`r`nyou can close this one`r`n"
   }
