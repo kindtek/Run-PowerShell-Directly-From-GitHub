@@ -1434,13 +1434,13 @@ function wsl_devel_spawn {
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
         write-host -nonewline "
             \________
-                W    \\ O C K E R" -ForegroundColor Red
+                W    \\ O C K E R" -ForegroundColor DarkRed
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         write-host -nonewline "
          <------S----+++=======================|======|
              ___L____// E V E L
-            /  " -ForegroundColor Red
+            /  " -ForegroundColor DarkRed
         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
         # no need for this variable anymore - leaving will only make display look weird
       }
@@ -1617,7 +1617,7 @@ continue or skip
       else {
         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
           write-host -nonewline "
-          <-----S----+++=======================|======|" -ForegroundColor Red
+          <-----S----+++=======================|======|" -ForegroundColor DarkRed
         }
         . include_devel_tools
         if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
@@ -1660,7 +1660,7 @@ continue or skip
           if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             write-host -nonewline "
              ___L____// E V E L
-            /  " -ForegroundColor Red
+            /  " -ForegroundColor DarkRed
             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
           }
           display_wsl_distro_list $wsl_distro_list
@@ -1673,7 +1673,7 @@ continue or skip
             if ($global:dvlp_safe_mode -eq $true) {
               write-host -nonewline "
              ___L____// E V E L (safe mode)
-            /  " -ForegroundColor Red
+            /  " -ForegroundColor DarkRed
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
@@ -1736,8 +1736,8 @@ continue or skip
             # once activated, keep command line mode active 
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
+          Write-Host -nonewline "${dvlp_options}" -ForegroundColor Gray
           Write-Host -nonewline "${dvlp_prompt_prefix}" -ForegroundColor DarkRed
-          Write-Host -nonewline "${dvlp_options}" 
           write-host -nonewline " ${dvlp_prompt_location}" -ForegroundColor White
           write-host -nonewline "${dvlp_prompt_cursor}" -ForegroundColor DarkYellow
           $dvlp_input = $Host.UI.ReadLine()
