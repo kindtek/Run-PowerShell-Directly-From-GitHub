@@ -1722,7 +1722,7 @@ continue or skip
         # Set-ForegroundWindow $current_process_object.MainWindowHandle
         $global:dvlp_arg1 = ''
         $dvlp_prompt_cursor1 = "(exit) > "
-        $dvlp_prompt_cursor2 = "> "
+        $dvlp_prompt_cursor2 = " > "
         $dvlp_prompt_prefix = ""
 
         do {
