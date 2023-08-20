@@ -1842,7 +1842,7 @@ continue or skip
     (main menu)"
                 if ($kernel_choice = 'install') {
                   push-location "$env:USERPROFILE/kache"
-                  write-host "powershell.exe -File $wsl_kernel_install_path"
+                  write-host "powershell.exe -File $wsl_kernel_install_path '' '' $wsl_distro_selected"
                   powershell.exe -File $wsl_kernel_install_path 
                   pop-location                              
                 }
