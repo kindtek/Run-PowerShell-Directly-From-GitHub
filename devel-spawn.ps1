@@ -1678,27 +1678,32 @@ continue or skip
         # $current_process_object = Get-Process -id $current_process
         # Set-ForegroundWindow $current_process_object.MainWindowHandle
         $global:dvlp_arg1 = ''
-        $dvlp_prompt1 = "(exit) > "
-        $dvlp_prompt2 = "> "
-        if ($dvlp_prompt -eq $dvlp_prompt2) {
+        $dvlp_prompt_cursor1 = "(exit) > "
+        $dvlp_prompt_cursor2 = "> "
+        $dvlp_prompt_prefix = ""
+        if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
           # once activated, keep command line mode active 
-          $dvlp_prompt = $dvlp_prompt2
-          $dvlp_location = "DVL $("$(get-location)".tolower())"
+          $dvlp_prompt_cursor = $dvlp_prompt_cursor2
+          $dvlp_prompt_location = "$("$(get-location)".tolower())"
+          $dvlp_prompt_prefix = 'DVL'
         }
         else {
-          $dvlp_prompt = $dvlp_prompt1
-          $dvlp_location = ''
+          $dvlp_prompt_cursor = $dvlp_prompt_cursor1
+          $dvlp_prompt_location = ''
+          $dvlp_prompt_prefix = ''
         }
         do {
-          if ($dvlp_prompt -eq $dvlp_prompt2) {
+          if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
             # once activated, keep command line mode active 
-            $dvlp_location = "DVL $("$(get-location)".tolower())"
+            $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
-          Write-Host -nonewline "${dvlp_options}${dvlp_location}${dvlp_prompt}"
+          Write-Host -nonewline "${dvlp_options}" -ForegroundColor DarkRed
+          write-host -nonewline " ${dvlp_prompt_location}" -ForegroundColor White
+          write-host -nonewline "${dvlp_prompt_cursor}" -ForegroundColor DarkYellow
           $dvlp_input = $Host.UI.ReadLine()
           $dvlp_options = ''
           
-          if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt1))) {
+          if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1))) {
             # entering space the first time will exit - after that need x or exit to exit
             $dvlp_input = 'exit'
           }
@@ -1712,7 +1717,7 @@ continue or skip
             }
           }
           catch {}
-          if (($dvlp_input -ieq '') -and ($dvlp_prompt -eq $dvlp_prompt2)) {
+          if (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2)) {
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ieq 'update') {
@@ -2132,8 +2137,17 @@ continue or skip
             if ($dvlp_input -ieq 'kl' ) {
               wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
             }
-            elseif ($dvlp_input -ieq 'kw' ) {
-              Write-Host 'checking for updates ...'
+            elseif ($dvlp_input -ieq 'daemon' ) {
+              Write-Host "spawning daemon with $(get_default_wsl_distro)"
+              return devel_daemon
+            }
+            elseif ($dvlp_input -ieq 'devel' ){
+              $debug_mode = get_dvlp_debug_mode
+              if ($debug_mode -eq $true){
+                set_dvlp_debug_mode $false
+              } else {
+                set_dvlp_debug_mode $true
+              }
             }
                         
 
@@ -2221,10 +2235,10 @@ continue or skip
             }
           } 
           if ($dvlp_input -eq 'noscreen') {
-            if ($dvlp_prompt -eq $dvlp_prompt1) {
+            if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1) {
               write-host "`r`ncommand line mode activated`r`n`tenter 'x' to exit`r`n"
             }
-            $dvlp_prompt = $dvlp_prompt2
+            $dvlp_prompt_cursor = $dvlp_prompt_cursor2
           }
         } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
       } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
