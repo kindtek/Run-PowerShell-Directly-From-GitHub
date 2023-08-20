@@ -2171,8 +2171,17 @@ continue or skip
             if ($dvlp_input -ieq 'kl' ) {
               wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
             }
-            elseif ($dvlp_input -ieq 'kw' ) {
-              Write-Host 'checking for updates ...'
+            elseif ($dvlp_input -ieq 'daemon' ) {
+              Write-Host "spawning daemon with $(get_default_wsl_distro)"
+              return devel_daemon
+            }
+            elseif ($dvlp_input -ieq 'devel' ){
+              $debug_mode = get_dvlp_debug_mode
+              if ($debug_mode -eq $true){
+                set_dvlp_debug_mode $false
+              } else {
+                set_dvlp_debug_mode $true
+              }
             }
                         
 
