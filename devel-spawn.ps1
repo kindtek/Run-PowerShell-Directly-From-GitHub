@@ -35,7 +35,9 @@ function include_devel_tools {
       # write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
       . $env:KINDTEK_DEVEL_TOOLS
     } 
-  } catch {}
+  } catch {
+    Remove-Item "$env:USERPROFILE/repos/$($git_owner)/.github-installed" -Confirm:$false -Force -ErrorAction SilentlyContinue
+  }
 }
 class dvlp_process {
   [String]$proc_cmd
