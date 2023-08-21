@@ -1142,6 +1142,7 @@ function get_dvlp_auto_boot {
     return $false
   }
 }
+
 function set_dvlp_auto_boot {
   param (
     [bool]$auto_boot
