@@ -19,7 +19,7 @@ $p.ProgressBackgroundColor = "White"
 
 # clear screen
 if ($global:screen_cleared -ne $true){
-  clear-host
+  echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
 }
 $global:screen_cleared = $true
 
