@@ -2182,21 +2182,6 @@ continue or skip
                 }
               }
             }                        
-            if ($dvlp_input -ieq 't' ) {
-              wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
-            }
-            elseif ($dvlp_input -ieq 'daemon' ) {
-              Write-Host "spawning daemon with $(get_default_wsl_distro)"
-              return devel_daemon
-            }
-            elseif ($dvlp_input -ieq 'devel' ){
-              $debug_mode = get_dvlp_debug_mode
-              if ($debug_mode -eq $true){
-                set_dvlp_debug_mode $false
-              } else {
-                set_dvlp_debug_mode $true
-              }
-            }
           }
           elseif ($dvlp_input -ieq 'r') {
             if ($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO -ne "") {
@@ -2251,6 +2236,21 @@ continue or skip
               start-sleep 1
             }
             $dvlp_input = 'noscreen'
+          }
+          elseif ($dvlp_input -ieq 't' ) {
+            wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
+          }
+          elseif ($dvlp_input -ieq 'daemon' ) {
+            Write-Host "spawning daemon with $(get_default_wsl_distro)"
+            return devel_daemon
+          }
+          elseif ($dvlp_input -ieq 'devel' ){
+            $debug_mode = get_dvlp_debug_mode
+            if ($debug_mode -eq $true){
+              set_dvlp_debug_mode $false
+            } else {
+              set_dvlp_debug_mode $true
+            }
           }
           elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon') {
             try {
