@@ -2248,6 +2248,7 @@ continue or skip
             $debug_mode = get_dvlp_debug_mode
             if ($debug_mode -eq $true){
               set_dvlp_debug_mode $false
+              $dvlp_input = screen
             } else {
               set_dvlp_debug_mode $true
             }
