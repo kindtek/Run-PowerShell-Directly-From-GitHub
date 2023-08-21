@@ -919,7 +919,17 @@ function sync_repos {
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     write-host "testing path $($env:KINDTEK_WIN_DVLW_PATH)/.git" 
-    quick_sync_repo
+    # quick_sync_repo
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
+      write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
+      Push-Location $env:KINDTEK_WIN_DVLW_PATH
+      Pop-Location
+      pull_repo
+    }
+    else {
+      write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git NOT found" 
+      clone_repo
+    }
     try {
       write-host "entering path $($env:KINDTEK_WIN_DVLW_PATH)"
       Push-Location $env:KINDTEK_WIN_DVLW_PATH
