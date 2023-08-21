@@ -2490,7 +2490,7 @@ elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1")
 }
 if ($global:devel_tools -ne "sourced") {
   # echo 'devel_tools not yet sourced'
-  if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS") {
+  if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
     # echo 'now sourcing devel_tools ...'
     . include_devel_tools
   }
