@@ -18,10 +18,10 @@ $p.ProgressForegroundColor = "Red"
 $p.ProgressBackgroundColor = "White"
 
 # clear screen
-if ($global:screen_cleared -ne $true){
-  clear-host
+if ($global:jump_screen -eq $true){
+  echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
 }
-$global:screen_cleared = $true
+$global:jump_screen = $false
 
 
 $global:devel_spawn = 'sourced'
@@ -829,13 +829,8 @@ function uninstall_git {
 # TODO: refactor/modularize git functions
 function clone_repos {
   param (
-    [string]$quiet
+    [bool]$quiet
   )
-  if ([string]::isNullOrEmpty($quiet)){
-    [bool]$quiet = $false
-  } else {
-    [bool]$quiet = $true
-  }
 
   Push-Location $env:KINDTEK_WIN_GIT_PATH
   if ($quiet -eq $false) {
@@ -851,13 +846,8 @@ function clone_repos {
 
 function pull_repos {
   param (
-    [string]$quiet
+    [bool]$quiet
   )
-  if ([string]::isNullOrEmpty($quiet)){
-    [bool]$quiet = $false
-  } else {
-    [bool]$quiet = $true
-  }
   Push-Location $env:KINDTEK_WIN_GIT_PATH
   if ($quiet -eq $false) {
     write-host "pulling $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
@@ -872,13 +862,8 @@ function pull_repos {
 
 function quick_sync_repo_new_win {
   param (
-    [string]$wait
+    [bool]$wait
   )
-  if ([string]::isNullOrEmpty($wait)){
-    [bool]$wait = $false
-  } else {
-    [bool]$wait = $true
-  }
   if ($wait -eq $true){
     $wait = 'wait'
   }
@@ -887,13 +872,8 @@ function quick_sync_repo_new_win {
 
 function quick_sync_repo {
   param (
-    [string]$quiet
+    [bool]$quiet
   )
-  if ([string]::isNullOrEmpty($quiet)){
-    [bool]$quiet = $false
-  } else {
-    [bool]$quiet = $true
-  }
   if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
     if ($quiet -eq $false) {
       write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
@@ -912,13 +892,8 @@ function quick_sync_repo {
 
 function sync_repos_new_win {
   param (
-    [string]$wait
+    [bool]$wait
   )
-  if ([string]::isNullOrEmpty($wait)){
-    [bool]$wait = $false
-  } else {
-    [bool]$wait = $true
-  }
   if ($wait -eq $true){
     $wait = 'wait'
   }
@@ -1082,10 +1057,10 @@ function update_found {
 }
 
 function reload_dvlp {
-  # write-host "reloading $($env:USERPROFILE)\dvlp.ps1`r`n"
-  # powershell.exe -Command "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"
+  # set global variables and let the conditional loops do the rest 
   $global:devel_spawn = $false
   $global:devel_tools = $false
+  $global:jump_screen = $true
   # start-process -filepath powershell.exe -Verb RunAs -ArgumentList '-Command', "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"           
 }
 
@@ -1170,13 +1145,8 @@ function get_dvlp_auto_boot {
 
 function set_dvlp_auto_boot {
   param (
-    [string]$auto_boot
+    [bool]$auto_boot
   )
-  if ([string]::isNullOrEmpty($auto_boot)){
-    [bool]$auto_boot = $false
-  } else {
-    [bool]$auto_boot = $true
-  }
   if ($auto_boot) {
     set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 'machine'
     set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 
@@ -2355,13 +2325,8 @@ function get_dvlp_debug_mode {
 
 function set_dvlp_debug_mode {
   param (
-    [string]$debug_mode_on
+    [bool]$debug_mode_on
   )
-  if ([string]::isNullOrEmpty($quiet)){
-    [bool]$debug_mode_on = $false
-  } else {
-    [bool]$debug_mode_on = $true
-  }
   if ($debug_mode_on) {
     Set-PSDebug -Trace 2
     set_dvlp_env 'KINDTEK_DEBUG_MODE' '1'
@@ -2497,6 +2462,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   $global:update_dvlw = $true
   do {
     . include_devel_tools
+    $global:jump_screen = $false
     $global:update_dvlw = $false
     wsl_devel_spawn $args[0]
   } while ($global:update_dvlw -eq $true)
