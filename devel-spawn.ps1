@@ -2260,12 +2260,12 @@ continue or skip
               $orig_foreground = [System.Console]::ForegroundColor
               $temp_foreground = [System.Console]::BackgroundColor
               $host.UI.RawUI.ForegroundColor = $temp_foreground
-              $is_docker_image = $(docker manifest inspect $dvlp_input) | Out-String
+              $is_docker_image = $(docker manifest inspect $dvlp_input) 2> $null
               $host.UI.RawUI.ForegroundColor = $orig_foreground
 
             }
             catch {}
-            if ($is_docker_image.count -ne 0) {
+            if ($null -eq $is_docker_image ) {
               Write-Host "`r`n$dvlp_input is a valid docker hub official image"
               docker_devel_spawn "$dvlp_input"
               $dvlp_input = 'screen'
