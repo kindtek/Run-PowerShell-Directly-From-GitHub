@@ -1474,11 +1474,24 @@ function wsl_devel_spawn {
           Write-Host "please confirm admin access in prompt that appears" -ForegroundColor Magenta -BackgroundColor Yellow
           Write-Host "..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors" -ForegroundColor Yellow
           Start-Sleep 6
-          Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
+          try {
+            Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
+          } catch {
+            $continue_no_admin = Read-Host "
+            could not acquire admin access
+            the program may not function as expected
+
+            continue? (y/N)"
+            if (($continue_no_admin -ieq "") -or ($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
+              Exit
+            } else {
+              start_countdown "good luck!" "3" "2" "1" "go"
+            }
+          }
           # Write-Host "
           # Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList '$command_line'
           # "
-          Exit
+          
         }
       }
       # if confirmation is daemon or (img_tag must not empty ... OR dvlp must not installed)
