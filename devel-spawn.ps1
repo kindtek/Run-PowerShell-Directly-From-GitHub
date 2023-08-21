@@ -874,10 +874,10 @@ function quick_sync_repo_new_win {
   param (
     [string]$wait
   )
-  if ([string]::isNullOrEmpty($quiet)){
-    [bool]$quiet = $false
+  if ([string]::isNullOrEmpty($wait)){
+    [bool]$wait = $false
   } else {
-    [bool]$quiet = $true
+    [bool]$wait = $true
   }
   if ($wait -eq $true){
     $wait = 'wait'
@@ -1172,7 +1172,7 @@ function set_dvlp_auto_boot {
   param (
     [string]$auto_boot
   )
-  if ([string]::isNullOrEmpty($quiet)){
+  if ([string]::isNullOrEmpty($auto_boot)){
     [bool]$auto_boot = $false
   } else {
     [bool]$auto_boot = $true
