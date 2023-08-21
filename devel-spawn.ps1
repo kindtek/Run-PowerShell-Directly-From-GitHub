@@ -1483,9 +1483,9 @@ function wsl_devel_spawn {
 
             continue? (y/N)"
             if (($continue_no_admin -ieq "") -or ($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
-              Exit
-            } else {
               start_countdown "good luck!" "3" "2" "1" "go"
+            } else {
+              exit
             }
           }
           # Write-Host "
