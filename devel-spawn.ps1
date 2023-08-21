@@ -1057,7 +1057,7 @@ function update_found {
 }
 
 function reload_dvlp {
-  write-host "reloading $($env:USERPROFILE)\dvlp.ps1`r`n"
+  # write-host "reloading $($env:USERPROFILE)\dvlp.ps1`r`n"
   # powershell.exe -Command "$($env:USERPROFILE)\dvlp.ps1 '$($global:dvlp_arg0)' 'skip'"
   $global:devel_spawn = $false
   $global:devel_tools = $false
