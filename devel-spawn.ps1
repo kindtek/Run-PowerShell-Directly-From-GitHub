@@ -2293,7 +2293,7 @@ continue or skip
 
             }
             catch {}
-            if ($null -eq $is_docker_image ) {
+            if ($null -ne $is_docker_image ) {
               Write-Host "`r`n$dvlp_input is a valid docker hub official image"
               docker_devel_spawn "$dvlp_input"
               $dvlp_input = 'screen'
