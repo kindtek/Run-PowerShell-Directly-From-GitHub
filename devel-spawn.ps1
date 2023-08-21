@@ -880,7 +880,7 @@ function quick_sync_repo {
   )
   if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
     if ($quiet -eq $false) {
-      write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
+      # write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
     }
     Push-Location $env:KINDTEK_WIN_DVLW_PATH
     Pop-Location
@@ -888,7 +888,7 @@ function quick_sync_repo {
   }
   else {
     if ($quiet -eq $false) {
-      write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git NOT found" 
+      # write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git NOT found" 
     }
     return clone_repo
   }
