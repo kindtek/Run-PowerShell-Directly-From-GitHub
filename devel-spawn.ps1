@@ -30,10 +30,12 @@ $global:devel_spawn = 'sourced'
 # # # # # # # # # # # # # # functions # # # # # # # # # # # # # # # # # # 
 
 function include_devel_tools {
+  try {
     if (($global:devel_tools -ne 'sourced')) {
       # write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
       . $env:KINDTEK_DEVEL_TOOLS
     } 
+  } catch {}
 }
 class dvlp_process {
   [String]$proc_cmd
@@ -1683,7 +1685,7 @@ continue or skip
             }
             elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host -nonewline "
-             ___L____// E V E L
+             ___L____// E V E L      SAFE MODE
             /  "
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
