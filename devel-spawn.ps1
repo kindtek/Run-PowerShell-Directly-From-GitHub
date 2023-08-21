@@ -831,7 +831,7 @@ function uninstall_git {
 }
 
 # TODO: refactor/modularize git functions
-function clone_repos {
+function clone_repo {
   param (
     [bool]$quiet
   )
@@ -848,7 +848,7 @@ function clone_repos {
   return $clone_result
 }
 
-function pull_repos {
+function pull_repo {
   param (
     [bool]$quiet
   )
@@ -884,13 +884,13 @@ function quick_sync_repo {
     }
     Push-Location $env:KINDTEK_WIN_DVLW_PATH
     Pop-Location
-    return pull_repos
+    return pull_repo
   }
   else {
     if ($quiet -eq $false) {
       write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git NOT found" 
     }
-    return clone_repos
+    return clone_repo
   }
 }
 
@@ -935,7 +935,7 @@ function sync_repos {
       Push-Location $env:KINDTEK_WIN_DVLW_PATH
     }
     catch {
-      clone_repos
+      clone_repo
       Push-Location $env:KINDTEK_WIN_DVLW_PATH
     }
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLP_PATH)/.git")) {
