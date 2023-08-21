@@ -1478,7 +1478,7 @@ function wsl_devel_spawn {
           try {
             Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
           } catch {
-            echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+            write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
 
             $continue_no_admin = Read-Host "
             could not acquire admin access
@@ -1486,10 +1486,15 @@ function wsl_devel_spawn {
 
             continue? (y/N)"
             if (($continue_no_admin -ieq "") -or ($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
+              $admin_bypass = $true
               start_countdown "good luck! " "3" "2" "1" ""
             } else {
               exit
             }
+            if ($admin_bypass -ne $true){
+              exit
+            }
+            
           }
           # Write-Host "
           # Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList '$command_line'
