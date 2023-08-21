@@ -2315,6 +2315,9 @@ continue or skip
               write-host "`r`ncommand line mode activated`r`n`tenter 'x' to exit`r`n"
             }
             $dvlp_prompt_cursor = $dvlp_prompt_cursor2
+            if ($dvlp_input -eq 'screen' ){
+              write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
+            }
           }
         } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
       } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
