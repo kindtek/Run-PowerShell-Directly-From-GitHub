@@ -1209,10 +1209,11 @@ function boot_devel {
     New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
     install_winget
     install_git
-    update_dvlp
-    if ($global:update_dvlw){
-      return
-    }
+    # update_dvlp
+    # if ($global:update_dvlw){
+    #   return
+    # }
+    sync_repos
     # log default distro
     $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO = get_default_wsl_distro
     # jump to bottom line without clearing scrollback
@@ -1671,7 +1672,7 @@ continue or skip
         if ($(get_default_wsl_distro) -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO") {
           $wsl_distro_revert_options = $wsl_distro_revert_options + "- [revert] wsl to $env:KINDTEK_FAILSAFE_WSL_DISTRO`r`n`t"
         }
-        if ($(update_found) -eq $true) {
+        if ($(update_found) -eq $true -and (Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.git" -PathType Leaf) ) {
           $update_found = ' (available)'
         }
         try {
