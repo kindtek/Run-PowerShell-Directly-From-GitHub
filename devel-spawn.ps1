@@ -31,7 +31,7 @@ $global:devel_spawn = 'sourced'
 
 function include_devel_tools {
     if (($global:devel_tools -ne 'sourced')) {
-      write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
+      # write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
       . $env:KINDTEK_DEVEL_TOOLS
     } 
 }
