@@ -1669,7 +1669,7 @@ continue or skip
             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
           }
           display_wsl_distro_list $wsl_distro_list
-          $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [c]ustomize`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+          $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
         }
         catch {
           try {
@@ -1688,7 +1688,7 @@ continue or skip
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             display_wsl_distro_list $wsl_distro_list
-            $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [c]ustomize`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+            $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
           }
           catch {
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
@@ -2138,8 +2138,8 @@ continue or skip
             $dvlp_input = 'screen'
 
           }
-          elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -Like 'k*') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {
-            if ($dvlp_input -ieq 'c') {
+          elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -Like 'm*') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {
+            if ($dvlp_input -ieq 'm') {
               $dvlp_input = 'screen'
               Write-Host "`r`n`t[l]inux or [w]indows"
               $dvlp_kindtek_options = Read-Host
