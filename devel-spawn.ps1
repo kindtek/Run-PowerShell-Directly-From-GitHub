@@ -1628,7 +1628,7 @@ continue or skip
           start_dvlp_process_hide 'sync_repos'
         }
         else {
-          update_dvlp
+          update_dvlp $true
           if ($global:update_dvlw){
             return
           }
@@ -1766,7 +1766,7 @@ continue or skip
             $dvlp_input = 'noscreen'
           }
           elseif ($dvlp_input -ieq 'update') {
-            update_dvlp
+            update_dvlp $true
             if ($global:update_dvlw){
               return
             }
