@@ -633,7 +633,7 @@ function test_wsl_distro {
   if ([string]::IsNullOrEmpty($distro_name)) {
     return $false
   }
-  wsl.exe --distribution "$distro_name".trim() --exec echo $test_string | out-null
+  wsl.exe --distribution "$distro_name".trim() --exec echo $test_string | out-null 2>$null
   if ($?) {
     # Write-Host "testing wsl distro $distro_name"
     $test_string = 'helloworld'
