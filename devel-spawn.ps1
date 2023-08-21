@@ -1471,19 +1471,22 @@ function wsl_devel_spawn {
       if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
           $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0 + "`" `"skip`" " 
+          write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
           Write-Host "please confirm admin access in prompt that appears" -ForegroundColor Magenta -BackgroundColor Yellow
           Write-Host "..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors" -ForegroundColor Yellow
           Start-Sleep 6
           try {
             Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
           } catch {
+            echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+
             $continue_no_admin = Read-Host "
             could not acquire admin access
             the program may not function as expected
 
             continue? (y/N)"
             if (($continue_no_admin -ieq "") -or ($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
-              start_countdown "good luck!" "3" "2" "1" "go"
+              start_countdown "good luck! " "3" "2" "1" ""
             } else {
               exit
             }
