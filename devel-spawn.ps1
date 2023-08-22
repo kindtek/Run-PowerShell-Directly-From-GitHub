@@ -1475,7 +1475,7 @@ function wsl_devel_spawn {
       # Self-elevate the script if required
       if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
-          $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0 + "`" `"skip`" " 
+          # $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0 + "`" `"skip`" " 
           write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
           Write-Host "`r`n`r`nplease confirm admin access in prompt that appears`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
           Write-Host "`r`n`r`n`r`n`r`n..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors
@@ -1483,7 +1483,7 @@ function wsl_devel_spawn {
           cmd.exe /c timeout 3
           try {
             cmd.exe /c "
-            powershell.exe /nologo start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $command_line' > NUL
+            powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
             IF errorlevel 1 ( 
               $(
               write-host "
