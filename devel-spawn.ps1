@@ -439,29 +439,29 @@ function unset_kindtek_envs {
     $unset_machine_envs
   )
   if ([string]::IsNullOrEmpty([System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine))) {
-    $dvlp_owner = 'kindtek'
+    $git_repo_owner = 'kindtek'
   }
   else {
-    $dvlp_owner = [System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine)
+    $git_repo_owner = [System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine)
   }
-  get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  get-childitem env: | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
     # write-host "$($_.name)"
   }
   # try {
   #     reload_envs
   # }
   # catch {}
-  get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  get-childitem env: | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
     echo "deleting local env $($_.name)"
     set_kindtek_env "$($_.name)" "$null"
   }
   if (!([string]::IsNullOrEmpty($unset_machine_envs))) {
-    [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+    [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
       echo "deleting machine env $($_.name)"
       set_kindtek_env "$($_.name)" "$null" 'machine'
     }
   }
-  get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  get-childitem env: | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
     # write-host "$($_.name)"
   }
   # try {
@@ -472,18 +472,18 @@ function unset_kindtek_envs {
 
 function pull_kindtek_envs {
   if ([string]::IsNullOrEmpty([System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine))) {
-    $dvlp_owner = 'kindtek'
+    $git_repo_owner = 'kindtek'
   }
   else {
-    $dvlp_owner = [System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine)
+    $git_repo_owner = [System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine)
   }
-  [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
     # write-host " $($_.name):  $($_.value)"
   }
-  [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
     set_kindtek_env "$($_.name)" "$($_.value)"
   }
-  get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  get-childitem env: | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
     # write-host " $($_.name):  $($_.value)"
   }
 }
@@ -491,19 +491,19 @@ function pull_kindtek_envs {
 # push local envs to machine
 function push_kindtek_envs {
   if ([string]::IsNullOrEmpty([System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER'))) {
-    $dvlp_owner = 'kindtek'
+    $git_repo_owner = 'kindtek'
   }
   else {
-    $dvlp_owner = [System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER')
+    $git_repo_owner = [System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER')
   }
   # echo 'local env'
-  # get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  # get-childitem env: | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
   #     write-host " $($_.name):  $($_.value)"
   # }
   # try {
   #     reload_envs
   # } catch {}
-  get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  get-childitem env: | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
     # "setting machine $($_.name) to $($_.value)" 
     set_kindtek_env "$($_.name)" "$($_.value)" 'machine'
   }
@@ -511,7 +511,7 @@ function push_kindtek_envs {
   #         reload_envs
   # } catch {}
   # echo 'machine env'
-  # [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
+  # [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
   #     write-host " $($_.name):  $($_.value)"
   # }
 }
