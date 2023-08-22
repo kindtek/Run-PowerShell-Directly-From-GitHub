@@ -1482,8 +1482,7 @@ function wsl_devel_spawn {
           " -ForegroundColor Yellow
           cmd.exe /c timeout 3
           try {
-            echo $command_line
-            cmd.exe /c start wt.exe /p cmd.exe powershell.exe Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
+            cmd.exe /c "powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($command_line)' > NUL"
             # try {
             #   wt.exe /p cmd.exe powershell.exe -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', "$env:USERPROFILE\dvlp.ps1" "$env:KINDTEK_AUTO_BOOT"  "skip"
             # } catch {
