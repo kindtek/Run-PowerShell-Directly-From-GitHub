@@ -1483,6 +1483,11 @@ function wsl_devel_spawn {
           cmd.exe /c timeout 3
           try {
             cmd.exe /c "powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($command_line)' > NUL"
+            if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+              if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
+                throw
+              }
+            }
             # try {
             #   wt.exe /p cmd.exe powershell.exe -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', "$env:USERPROFILE\dvlp.ps1" "$env:KINDTEK_AUTO_BOOT"  "skip"
             # } catch {
