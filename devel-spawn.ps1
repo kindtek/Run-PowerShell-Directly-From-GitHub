@@ -1484,8 +1484,7 @@ function wsl_devel_spawn {
             Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
           } catch {
             write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
-
-            $continue_no_admin = Read-Host "
+            write-host"
             
             WARNING: could not acquire admin access" -foregroundcolor darkred
             
@@ -1497,7 +1496,8 @@ function wsl_devel_spawn {
 
 
 
-            continue anyways? (y/N)"
+            continue anyways? (y/N)"            
+            $continue_no_admin = Read-Host
             if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
               $admin_bypass = $true
               write-host "
