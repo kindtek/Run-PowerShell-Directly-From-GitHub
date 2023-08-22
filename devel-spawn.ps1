@@ -23,6 +23,9 @@ if ($global:jump_screen -eq $true){
 }
 $global:jump_screen = $false
 
+if (get_dvlp_auto_boot -eq $true){
+  set_dvlp_env ("KINDTEK_AUTO_BOOT", "$($args[0])")
+}
 
 $global:devel_spawn = 'sourced'
 
@@ -1149,11 +1152,20 @@ function run_dvlp_latest_kernel_installer {
 }
 
 function get_dvlp_auto_boot {
-  if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -eq '1') {
+  if ([string]::isNullOrEmpty("$(get_dvlp_env 'KINDTEK_AUTO_BOOT')")) {
     return $true
   }
   else {
     return $false
+  }
+}
+
+function get_dvlp_auto_boot_arg {
+  if ($(get_dvlp_auto_boot) -eq $true) {
+    return "$(get_dvlp_env 'KINDTEK_AUTO_BOOT')"
+  }
+  else {
+    return ""
   }
 }
 
@@ -1162,14 +1174,17 @@ function set_dvlp_auto_boot {
     [bool]$auto_boot
   )
   if ($auto_boot) {
-    set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 'machine'
-    set_dvlp_env 'KINDTEK_AUTO_BOOT' '1' 
+    set_dvlp_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 'machine'
+    set_dvlp_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 
     New-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Value "
         # PowerShell -Command `"Set-ExecutionPolicy Unrestricted`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
         start wt -p windows cmd.exe /c echo 'please confirm administrator access to launch wsl devel' & powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '$($env:USERPROFILE)\dvlp.ps1 `"$($global:dvlp_arg0)`" `"skip`"' >> `"$env:TEMP\spawnlogs.txt`" 2>&1
         # PowerShell -Command `"Set-ExecutionPolicy RemoteSigned`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
         # cmd /k
+        # echo: & echo: & echo: & echo please confirm admin access & timeout /t 3 & start wt /p cmd.exe powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '%USERPROFILE%\dvlp.ps1 `"$($global:dvlp_arg0)`  `"skip`"" `""' & IF errorlevel 1 ( ECHO  & ECHO trying again without them ) ELSE ( ECHO successfully launched wsl docker devel & echo: & echo this window will close)
         " -Force | Out-Null
+        # might be useful for later: 
+        # start wt -pipelinevariable windows cmd.exe -c "$env:USERNAME"; 'echo "hiworld"'
   }
   else {
     set_dvlp_env 'KINDTEK_AUTO_BOOT' '0' 'machine'
@@ -1492,7 +1507,7 @@ function wsl_devel_spawn {
               exit
             }
             if ($admin_bypass -ne $true){
-              exit
+              exit 1
             }
             
           }
