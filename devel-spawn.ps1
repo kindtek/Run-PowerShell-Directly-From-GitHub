@@ -1483,7 +1483,7 @@ function wsl_devel_spawn {
           cmd.exe /c timeout 3
           try {
             cmd.exe /c "
-            powershell.exe /nologo start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`"' > NUL
+            powershell.exe /nologo start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $command_line' > NUL
             IF errorlevel 1 ( 
               $(
               write-host "
