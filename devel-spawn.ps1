@@ -1477,9 +1477,10 @@ function wsl_devel_spawn {
         if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
           $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0 + "`" `"skip`" " 
           write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
-          Write-Host "`r`n`r`nplease confirm admin access in prompt that appears" -ForegroundColor Magenta -BackgroundColor Yellow
-          Write-Host "..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors" -ForegroundColor Yellow
-          Start-Sleep 6
+          Write-Host "`r`n`r`nplease confirm admin access in prompt that appears`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
+          Write-Host "`r`n`r`n`r`n`r`n..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors
+          " -ForegroundColor Yellow
+          cmd.exe /c timeout 3
           try {
             Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
           } catch {
@@ -1488,7 +1489,8 @@ function wsl_devel_spawn {
             
             WARNING: could not acquire admin access" -foregroundcolor darkred
             
-            write-host "expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
+            write-host "
+            expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
             write-host "
 
 
@@ -1497,7 +1499,7 @@ function wsl_devel_spawn {
 
 
             continue anyways? (y/N)"            
-            $continue_no_admin = Read-Host
+            $continue_no_admin = Read-Host -nonewline
             if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
               $admin_bypass = $true
               write-host "
