@@ -1485,22 +1485,6 @@ function wsl_devel_spawn {
             cmd.exe /c "
             powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
             IF errorlevel 1 ( 
-              $(
-              write-host "
-              
-              WARNING: could not acquire admin access" -foregroundcolor darkred
-              
-              write-host "
-              expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
-              write-host -nonewline "
-  
-  
-  
-  
-  
-  
-              continue anyways? (y/N)
-              ")
               exit /b
             ) ELSE (
               exit 0
@@ -1514,21 +1498,21 @@ function wsl_devel_spawn {
             # Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
 
           } catch {
-            # write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
-            # write-host "
+            write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
+            write-host "
             
-            # WARNING: could not acquire admin access" -foregroundcolor darkred
+            WARNING: could not acquire admin access" -foregroundcolor darkred
             
-            # write-host "
-            # expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
-            # write-host -nonewline "
+            write-host "
+            expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
+            write-host -nonewline "
 
 
 
 
 
 
-            # continue anyways? (y/N)"            
+            continue anyways? (y/N)"            
             $continue_no_admin = Read-Host
             if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
               $admin_bypass = $true
