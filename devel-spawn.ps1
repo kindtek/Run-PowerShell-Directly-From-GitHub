@@ -23,10 +23,6 @@ if ($global:jump_screen -eq $true){
 }
 $global:jump_screen = $false
 
-if ($(get_dvlp_auto_boot) -eq $true){
-  set_dvlp_env ("KINDTEK_AUTO_BOOT", "$($args[0])")
-}
-
 $global:devel_spawn = 'sourced'
 
 
@@ -1498,7 +1494,7 @@ function wsl_devel_spawn {
             $continue_no_admin = Read-Host "
             
             WARNING: could not acquire admin access" -foregroundcolor darkred
-
+            
             write-host "expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
             write-host "
 
@@ -1546,7 +1542,7 @@ function wsl_devel_spawn {
         # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
         if (([string]::IsNullOrEmpty($global:dvlp_arg1))) {
           Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
-          start_countdown "starting " "in 3" "in 2" "in 1" "now"
+          start_countdown_321_liftoff "starting " "in 3" "in 2" "in 1" "now"
         }
         # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
         try {
@@ -2458,13 +2454,35 @@ function reload_envs_new_win {
   # reload_envs
 }
 
-function start_countdown {
+function start_countdown_dynamic {
+  param (
+    [string]$countdown_msg,
+    [array]$countdown_msgs,
+    [string]$liftoff_msg
+  )
+  for ($i = 0; $i -le $countdown_msgs.length - 4; $i++) {
+    Write-Host -NoNewline "`r`t`t`t$($countdown_msgs[$($i)])"
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "." 
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "." 
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "." 
+    Start-Sleep -Milliseconds 250
+    Write-Host -NoNewline "`r"  
+    if ($i -eq $($countdown_msgs.length - 3)){
+      start_countdown_321_liftoff "$countdown_msg " "$($countdown_msgs[$($i+1)])" "$($countdown_msgs[$($i+2)])" "$($countdown_msgs[$($i+3)])" "$liftoff_msg"
+    }
+  }
+}
+
+function start_countdown_321_liftoff {
   param (
     $countdown_msg,
     $countdown_msg3,
     $countdown_msg2,
     $countdown_msg1,
-    $countdown_msg0
+    $countdown_liftoff
   )
   if ([string]::IsNullOrEmpty(($countdown_msg3))){
     $countdown_msg3 = '3'
@@ -2476,7 +2494,7 @@ function start_countdown {
     $countdown_msg1 = '1'
   }
   if ([string]::IsNullOrEmpty(($countdown_msg1))){
-    $countdown_msg0 = '0'
+    $countdown_liftoff = '0'
   }
   write-host ""
   Write-Host -NoNewline "`r`t`t`t${countdown_msg}${countdown_msg3}" -foregroundcolor yellow
@@ -2506,7 +2524,7 @@ function start_countdown {
   Write-Host -NoNewline "." -foregroundcolor red
   Start-Sleep -Milliseconds 250
   Write-Host -NoNewline "`r                                                                      "
-  Write-Host -NoNewline "`r`t`t`t${countdown_msg}${countdown_msg0}" -foregroundcolor darkred
+  Write-Host -NoNewline "`r`t`t`t${countdown_msg}${countdown_liftoff}" -foregroundcolor darkred
   Start-Sleep -Milliseconds 100
 }
 
@@ -2533,10 +2551,14 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   $global:dvlp_arg0 = "$($args[0])"
   $global:dvlp_arg1 = "$($args[1])"
   set_dvlp_envs $env:KINDTEK_DEBUG_MODE
+  if ($(get_dvlp_auto_boot) -eq $true){
+    set_dvlp_env ("KINDTEK_AUTO_BOOT", "$($args[0])")
+  }
   $global:dvlw_commit = $(get_local_commit)
   set-location $env:USERPROFILE
   $global:update_dvlw = $true
   do {
+    # use include_devel_tools if user requests update
     . include_devel_tools
     $global:jump_screen = $false
     $global:update_dvlw = $false
