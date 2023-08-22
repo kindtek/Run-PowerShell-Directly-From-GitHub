@@ -80,7 +80,7 @@ class dvlp_process {
       # echo testing path $env:KINDTEK_DEVEL_TOOLS
       if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
         # write-host "dvl-tools: $proc_cmd"
-        if ($(get_dvlp_debug_mode) -eq $true) {
+        if ($(get_kindtek_debug_mode) -eq $true) {
           $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;write-host '$proc_cmd';Set-PSDebug -Trace 2;$proc_cmd;"
         }
         else {
@@ -92,7 +92,7 @@ class dvlp_process {
       elseif ((Test-Path -Path "$env:KINDTEK_DEVEL_SPAWN" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
         # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
         # write-host "dvl-spawn: $proc_cmd"
-        if ($(get_dvlp_debug_mode) -eq $true) {
+        if ($(get_kindtek_debug_mode) -eq $true) {
           $this.proc_cmd = "write-host '$proc_cmd';Set-PSDebug -Trace 2;$proc_cmd;"
         }
         else {
@@ -101,7 +101,7 @@ class dvlp_process {
       }
       elseif ((Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
         # write-host "dvlp: $proc_cmd"
-        if ($(get_dvlp_debug_mode) -eq $true) {
+        if ($(get_kindtek_debug_mode) -eq $true) {
           $this.proc_cmd = "write-host '$proc_cmd';Set-PSDebug -Trace 2;$proc_cmd;"
         }
         else {
@@ -321,48 +321,48 @@ class dvlp_process_pop : dvlp_process {
 }
 # [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
 
-function start_dvlp_process {
+function start_kindtek_process {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
   [dvlp_process]$dvlp_proc = [dvlp_process]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
-function start_dvlp_process_pop {
+function start_kindtek_process_pop {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
   [dvlp_process_pop]$dvlp_proc = [dvlp_process_pop]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
-function start_dvlp_process_popmin {
+function start_kindtek_process_popmin {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
   [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
-function start_dvlp_process_popmax {
+function start_kindtek_process_popmax {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
   [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
-function start_dvlp_process_hide {
+function start_kindtek_process_hide {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
   [dvlp_process_hide]$dvlp_proc = [dvlp_process_hide]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
-function start_dvlp_process_embed {
+function start_kindtek_process_embed {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
   [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
-function get_dvlp_env {
+function get_kindtek_env {
   param (
     $dvlp_env_var, $set_machine_env_flag
   )
@@ -387,7 +387,7 @@ function get_dvlp_env {
   }
 
 }
-function set_dvlp_env {
+function set_kindtek_env {
   param (
     $dvlp_env_var, $dvlp_env_val, $set_machine_env_flag, $set_both_env_flag
   )
@@ -399,17 +399,17 @@ function set_dvlp_env {
         # write-host "setting local env $dvlp_env_var to $dvlp_env_val"
         [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
       }
-      elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val)) {
+      elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_kindtek_env "$dvlp_env_var" "machine") -ne $dvlp_env_val)) {
         # write-host "setting machine env $dvlp_env_var to $dvlp_env_val"
         [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
       }
-      elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_dvlp_env "$dvlp_env_var" "machine") -ne $dvlp_env_val) -Or ($(get_dvlp_env "$dvlp_env_var") -ne $dvlp_env_val))) {
+      elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_kindtek_env "$dvlp_env_var" "machine") -ne $dvlp_env_val) -Or ($(get_kindtek_env "$dvlp_env_var") -ne $dvlp_env_val))) {
         # write-host "setting local and machine env $dvlp_env_var to $dvlp_env_val"
         [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
         [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
       }
       else {
-        # write-host "not setting $dvlp_env_var to $dvlp_env_val with $($set_machine_env_flag) $($set_both_env_flag) ( currently: $(get_dvlp_env "$dvlp_env_var"), $(get_dvlp_env "$dvlp_env_var" 'machine')) "
+        # write-host "not setting $dvlp_env_var to $dvlp_env_val with $($set_machine_env_flag) $($set_both_env_flag) ( currently: $(get_kindtek_env "$dvlp_env_var"), $(get_kindtek_env "$dvlp_env_var" 'machine')) "
       }
     }
   }
@@ -422,7 +422,7 @@ function set_dvlp_env {
   return $null
 }
 
-function set_dvlp_envs_new_win {
+function set_kindtek_envs_new_win {
   if ([string]::IsNullOrEmpty($env:KINDTEK_NEW_PROC_STYLE)) {
     $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Minimized
     $this_proc_style = "-WindowStyle $this_proc_style"
@@ -430,11 +430,11 @@ function set_dvlp_envs_new_win {
   else {
     $this_proc_style = $env:KINDTEK_NEW_PROC_STYLE
   }
-  start_dvlp_process "set_dvlp_envs $env:KINDTEK_DEBUG_MODE;exit;"
+  start_kindtek_process "set_kindtek_envs $env:KINDTEK_DEBUG_MODE;exit;"
 }
 
 
-function unset_dvlp_envs {
+function unset_kindtek_envs {
   param (
     $unset_machine_envs
   )
@@ -453,12 +453,12 @@ function unset_dvlp_envs {
   # catch {}
   get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
     echo "deleting local env $($_.name)"
-    set_dvlp_env "$($_.name)" "$null"
+    set_kindtek_env "$($_.name)" "$null"
   }
   if (!([string]::IsNullOrEmpty($unset_machine_envs))) {
     [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
       echo "deleting machine env $($_.name)"
-      set_dvlp_env "$($_.name)" "$null" 'machine'
+      set_kindtek_env "$($_.name)" "$null" 'machine'
     }
   }
   get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
@@ -470,7 +470,7 @@ function unset_dvlp_envs {
   # catch {}
 }
 
-function pull_dvlp_envs {
+function pull_kindtek_envs {
   if ([string]::IsNullOrEmpty([System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER', [System.EnvironmentVariableTarget]::Machine))) {
     $dvlp_owner = 'kindtek'
   }
@@ -481,7 +481,7 @@ function pull_dvlp_envs {
     # write-host " $($_.name):  $($_.value)"
   }
   [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
-    set_dvlp_env "$($_.name)" "$($_.value)"
+    set_kindtek_env "$($_.name)" "$($_.value)"
   }
   get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
     # write-host " $($_.name):  $($_.value)"
@@ -489,7 +489,7 @@ function pull_dvlp_envs {
 }
 
 # push local envs to machine
-function push_dvlp_envs {
+function push_kindtek_envs {
   if ([string]::IsNullOrEmpty([System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER'))) {
     $dvlp_owner = 'kindtek'
   }
@@ -505,7 +505,7 @@ function push_dvlp_envs {
   # } catch {}
   get-childitem env: | where-object name -match "^$([regex]::escape($dvlp_owner)).*$" | foreach-object {
     # "setting machine $($_.name) to $($_.value)" 
-    set_dvlp_env "$($_.name)" "$($_.value)" 'machine'
+    set_kindtek_env "$($_.name)" "$($_.value)" 'machine'
   }
   # try {
   #         reload_envs
@@ -516,7 +516,7 @@ function push_dvlp_envs {
   # }
 }
 
-function set_dvlp_envs {
+function set_kindtek_envs {
   param (
     $DEBUG_MODE
   )  
@@ -536,8 +536,8 @@ function set_dvlp_envs {
   $repo_dir_name6 = 'mnt'  
   $git_parent_path = "$env:USERPROFILE/repos/$repo_src_owner"
   $git_path = "$git_parent_path/$repo_dir_name"
-  set_dvlp_env '_AGL' 'agl'
-  set_dvlp_env '_AGL' 'agl' 'machine'
+  set_kindtek_env '_AGL' 'agl'
+  set_kindtek_env '_AGL' 'agl' 'machine'
   if ($env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner" -Or $env:KINDTEK_WIN_GIT_OWNER -ne "$repo_src_owner") {
     write-host "setting global environment variables ..."
     start-sleep 1
@@ -545,21 +545,21 @@ function set_dvlp_envs {
   try {
     if ([string]::IsNullOrEmpty($DEBUG_MODE) -Or $DEBUG_MODE -eq '0' -Or $DEBUG_MODE -eq 0) {
       Set-PSDebug -Trace 0;
-      set_dvlp_env 'KINDTEK_DEBUG_MODE' '0' 'machine' 'both'
+      set_kindtek_env 'KINDTEK_DEBUG_MODE' '0' 'machine' 'both'
       $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Hidden;
-      set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
-      set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' " " 'machine' 'both'
+      set_kindtek_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
+      set_kindtek_env 'KINDTEK_NEW_PROC_NOEXIT' " " 'machine' 'both'
     }
     elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -Or $DEBUG_MODE -ne '0' -Or $DEBUG_MODE -eq 0) {
       Set-PSDebug -Trace 2;
-      set_dvlp_env 'KINDTEK_DEBUG_MODE' '1' 'machine' 'both'
+      set_kindtek_env 'KINDTEK_DEBUG_MODE' '1' 'machine' 'both'
       $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
-      set_dvlp_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
-      set_dvlp_env 'KINDTEK_NEW_PROC_NOEXIT' "-noexit" 'machine' 'both'
+      set_kindtek_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
+      set_kindtek_env 'KINDTEK_NEW_PROC_NOEXIT' "-noexit" 'machine' 'both'
       write-host "debug = true"
     }
     if ($DEBUG_MODE -ne '0' -And $DEBUG_MODE -ne 0 -And !([string]::IsNullOrEmpty($DEBUG_MODE))) {        
-      Write-Host "debug mode $(get_dvlp_env 'KINDTEK_DEBUG_MODE', 'machine')"
+      Write-Host "debug mode $(get_kindtek_env 'KINDTEK_DEBUG_MODE', 'machine')"
       # Write-Host "$cmd_str_dbg"
     }
     else {
@@ -571,53 +571,53 @@ function set_dvlp_envs {
     Write-Host "$cmd_str_dbg"
   }
   # }
-  set_dvlp_env 'KINDTEK_FAILSAFE_WSL_DISTRO' "kalilinux-kali-rolling-latest"
-  set_dvlp_env 'KINDTEK_DEFAULT_WSL_DISTRO' "kalilinux-kali-rolling-latest"
-  set_dvlp_env 'KINDTEK_DEVEL_TOOLS' "$git_path/scripts/devel-tools.ps1"
-  set_dvlp_env 'KINDTEK_DEVEL_SPAWN' "$git_path/powerhell/devel-spawn.ps1"
-  set_dvlp_env 'KINDTEK_WIN_GIT_OWNER' "$repo_src_owner"
-  set_dvlp_env 'KINDTEK_WIN_GIT_PATH' "$git_parent_path"
-  set_dvlp_env 'KINDTEK_WIN_DVLW_PATH' "$git_path"
-  set_dvlp_env 'KINDTEK_WIN_DVLW_FULLNAME' "$repo_src_name"
-  set_dvlp_env 'KINDTEK_WIN_DVLW_NAME' "$repo_dir_name"
-  set_dvlp_env 'KINDTEK_WIN_DVLW_BRANCH' "$repo_src_branch"
-  set_dvlp_env 'KINDTEK_WIN_DVLP_PATH' "$git_path/$repo_dir_name2"
-  set_dvlp_env 'KINDTEK_WIN_DVLP_FULLNAME' "$repo_src_name2"
-  set_dvlp_env 'KINDTEK_WIN_DVLP_NAME' "$repo_dir_name2"
-  set_dvlp_env 'KINDTEK_WIN_POWERHELL_FULLNAME' "$repo_dir_name3"
-  set_dvlp_env 'KINDTEK_WIN_POWERHELL_NAME' "$repo_dir_name3"
-  set_dvlp_env 'KINDTEK_WIN_POWERHELL_PATH' "$git_path/$repo_dir_name3"
-  set_dvlp_env 'KINDTEK_WIN_DVLADV_FULLNAME' "$repo_dir_name4"
-  set_dvlp_env 'KINDTEK_WIN_DVLADV_NAME' "$repo_dir_name4"
-  set_dvlp_env 'KINDTEK_WIN_DVLADV_PATH' "$git_path/$repo_dir_name4"
-  set_dvlp_env 'KINDTEK_WIN_KERNELS_FULLNAME' "$repo_dir_name5"
-  set_dvlp_env 'KINDTEK_WIN_KERNELS_NAME' "$repo_dir_name5"
-  set_dvlp_env 'KINDTEK_WIN_KERNELS_PATH' "$repo_dir_name5"
-  set_dvlp_env 'KINDTEK_WIN_MNT_FULLNAME' "$repo_dir_name6"
-  set_dvlp_env 'KINDTEK_WIN_MNT_NAME' "$repo_dir_name6"
-  set_dvlp_env 'KINDTEK_WIN_MNT_PATH' "$git_path/$repo_dir_name6"
-  set_dvlp_env 'WSL_UTF8' '1'
-  push_dvlp_envs
-  set_dvlp_env 'WSL_UTF8' '1' 'machine'
+  set_kindtek_env 'KINDTEK_FAILSAFE_WSL_DISTRO' "kalilinux-kali-rolling-latest"
+  set_kindtek_env 'KINDTEK_DEFAULT_WSL_DISTRO' "kalilinux-kali-rolling-latest"
+  set_kindtek_env 'KINDTEK_DEVEL_TOOLS' "$git_path/scripts/devel-tools.ps1"
+  set_kindtek_env 'KINDTEK_DEVEL_SPAWN' "$git_path/powerhell/devel-spawn.ps1"
+  set_kindtek_env 'KINDTEK_WIN_GIT_OWNER' "$repo_src_owner"
+  set_kindtek_env 'KINDTEK_WIN_GIT_PATH' "$git_parent_path"
+  set_kindtek_env 'KINDTEK_WIN_DVLW_PATH' "$git_path"
+  set_kindtek_env 'KINDTEK_WIN_DVLW_FULLNAME' "$repo_src_name"
+  set_kindtek_env 'KINDTEK_WIN_DVLW_NAME' "$repo_dir_name"
+  set_kindtek_env 'KINDTEK_WIN_DVLW_BRANCH' "$repo_src_branch"
+  set_kindtek_env 'KINDTEK_WIN_KINDTEK_PATH' "$git_path/$repo_dir_name2"
+  set_kindtek_env 'KINDTEK_WIN_KINDTEK_FULLNAME' "$repo_src_name2"
+  set_kindtek_env 'KINDTEK_WIN_KINDTEK_NAME' "$repo_dir_name2"
+  set_kindtek_env 'KINDTEK_WIN_POWERHELL_FULLNAME' "$repo_dir_name3"
+  set_kindtek_env 'KINDTEK_WIN_POWERHELL_NAME' "$repo_dir_name3"
+  set_kindtek_env 'KINDTEK_WIN_POWERHELL_PATH' "$git_path/$repo_dir_name3"
+  set_kindtek_env 'KINDTEK_WIN_DVLADV_FULLNAME' "$repo_dir_name4"
+  set_kindtek_env 'KINDTEK_WIN_DVLADV_NAME' "$repo_dir_name4"
+  set_kindtek_env 'KINDTEK_WIN_DVLADV_PATH' "$git_path/$repo_dir_name4"
+  set_kindtek_env 'KINDTEK_WIN_KERNELS_FULLNAME' "$repo_dir_name5"
+  set_kindtek_env 'KINDTEK_WIN_KERNELS_NAME' "$repo_dir_name5"
+  set_kindtek_env 'KINDTEK_WIN_KERNELS_PATH' "$repo_dir_name5"
+  set_kindtek_env 'KINDTEK_WIN_MNT_FULLNAME' "$repo_dir_name6"
+  set_kindtek_env 'KINDTEK_WIN_MNT_NAME' "$repo_dir_name6"
+  set_kindtek_env 'KINDTEK_WIN_MNT_PATH' "$git_path/$repo_dir_name6"
+  set_kindtek_env 'WSL_UTF8' '1'
+  push_kindtek_envs
+  set_kindtek_env 'WSL_UTF8' '1' 'machine'
 
 
   try {
-    $local_paths = get_dvlp_env 'path'
-    $machine_paths = get_dvlp_env 'path' 'machine'
-    $local_ext = get_dvlp_env 'pathext'
-    $machine_ext = get_dvlp_env 'pathext' 'machine'
+    $local_paths = get_kindtek_env 'path'
+    $machine_paths = get_kindtek_env 'path' 'machine'
+    $local_ext = get_kindtek_env 'pathext'
+    $machine_ext = get_kindtek_env 'pathext' 'machine'
               
     if ($local_ext -split ";" -notcontains ".ps1") {
-      set_dvlp_env "pathext" "$(get_dvlp_env 'pathext');.ps1"
+      set_kindtek_env "pathext" "$(get_kindtek_env 'pathext');.ps1"
     }
     if ($machine_ext -split ";" -notcontains ".ps1") {
-      set_dvlp_env "pathext" "$(get_dvlp_env 'pathext' 'machine');.ps1" "machine" 
+      set_kindtek_env "pathext" "$(get_kindtek_env 'pathext' 'machine');.ps1" "machine" 
     }
-    if ($local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
-      set_dvlp_env "path" "$(get_dvlp_env 'path');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
+    if ($local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/") {
+      set_kindtek_env "path" "$(get_kindtek_env 'path');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_KINDTEK_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
     }
-    if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLP_PATH/scripts/") {
-      set_dvlp_env "path" "$(get_dvlp_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
+    if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/") {
+      set_kindtek_env "path" "$(get_kindtek_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_KINDTEK_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
     }
 
   }
@@ -728,9 +728,9 @@ function set_default_wsl_distro {
       cmd.exe /c net start LxssManager
       $new_wsl_default_distro = $old_wsl_default_distro
     }
-    set_dvlp_env 'KINDTEK_DEFAULT_WSL_DISTRO' $new_wsl_default_distro
-    set_dvlp_env 'KINDTEK_OLD_DEFAULT_WSL_DISTRO' $old_wsl_default_distro
-    push_dvlp_envs
+    set_kindtek_env 'KINDTEK_DEFAULT_WSL_DISTRO' $new_wsl_default_distro
+    set_kindtek_env 'KINDTEK_OLD_DEFAULT_WSL_DISTRO' $old_wsl_default_distro
+    push_kindtek_envs
     # handle failed installations
     if ( $(test_default_wsl_distro $new_wsl_default_distro) -eq $false ) {
       # Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
@@ -784,7 +784,7 @@ function install_winget {
           $network_err_msg = "."
         }
       }
-      start_dvlp_process_popmax "powershell.exe -executionpolicy remotesigned -File $file" 'wait'
+      start_kindtek_process_popmax "powershell.exe -executionpolicy remotesigned -File $file" 'wait'
       # install winget and use winget to install everything else
       # $p = Get-Process -Name "PackageManagement"
       # Stop-Process -InputObject $p
@@ -803,7 +803,7 @@ function install_git {
     $software_name = "Github CLI"
     if (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.github-installed" -PathType Leaf)) {
       Write-Host "Installing $software_name ..." -ForegroundColor DarkCyan
-      start_dvlp_process_popmax "winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;" 'wait'
+      start_kindtek_process_popmax "winget install --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --exact --id GitHub.cli --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget install --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;winget upgrade --id Git.Git --source winget --silent --locale en-US --accept-package-agreements --accept-source-agreements;exit;" 'wait'
       Write-Host "$software_name installed" -ForegroundColor DarkCyan | Out-File -FilePath "$env:KINDTEK_WIN_GIT_PATH/.github-installed"; `
         
     }
@@ -870,7 +870,7 @@ function quick_sync_repo_new_win {
   if ($wait -eq $true){
     $wait = 'wait'
   }
-  start_dvlp_process_popmin "quick_sync_repo;exit" "$wait" ''
+  start_kindtek_process_popmin "quick_sync_repo;exit" "$wait" ''
 }
 
 function quick_sync_repo {
@@ -900,7 +900,7 @@ function sync_repos_new_win {
   if ($wait -eq $true){
     $wait = 'wait'
   }
-  start_dvlp_process_popmin "sync_repos;exit" "$wait" ''
+  start_kindtek_process_popmin "sync_repos;exit" "$wait" ''
 }
 
 function sync_repos {
@@ -937,15 +937,15 @@ function sync_repos {
       clone_repo
       Push-Location $env:KINDTEK_WIN_DVLW_PATH
     }
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLP_PATH)/.git")) {
-      write-host "pulling $env:KINDTEK_WIN_DVLP_NAME ..." -ForegroundColor DarkCyan
-      git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
-      write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_KINDTEK_PATH)/.git")) {
+      write-host "pulling $env:KINDTEK_WIN_KINDTEK_NAME ..." -ForegroundColor DarkCyan
+      git submodule update --remote --progress -- $env:KINDTEK_WIN_KINDTEK_NAME
+      write-host "$env:KINDTEK_WIN_KINDTEK_NAME pulled" -ForegroundColor DarkCyan
     }
     else {
-      write-host "pulling $env:KINDTEK_WIN_DVLP_NAME ..." -ForegroundColor DarkCyan
-      git submodule update --init --init --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
-      write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
+      write-host "pulling $env:KINDTEK_WIN_KINDTEK_NAME ..." -ForegroundColor DarkCyan
+      git submodule update --init --init --remote --progress -- $env:KINDTEK_WIN_KINDTEK_NAME
+      write-host "$env:KINDTEK_WIN_KINDTEK_NAME pulled" -ForegroundColor DarkCyan
     }
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLADV_PATH)/.git")) {
       write-host "pulling $env:KINDTEK_WIN_DVLADV_NAME ..." -ForegroundColor DarkCyan
@@ -969,7 +969,7 @@ function sync_repos {
     }
     Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1
     
-    Push-Location $env:KINDTEK_WIN_DVLP_NAME
+    Push-Location $env:KINDTEK_WIN_KINDTEK_NAME
     if ((Test-Path -Path "$($env:KINDTEK_WIN_KERNELS_PATH)/.git")) {
       write-host "pulling $env:KINDTEK_WIN_KERNELS_NAME ..." -ForegroundColor DarkCyan
       git submodule update --remote --progress -- $env:KINDTEK_WIN_KERNELS_NAME
@@ -1107,13 +1107,13 @@ function docker_devel_spawn {
 
   if ($(is_docker_desktop_online) -eq $true) {
     if ([string]::IsNullOrEmpty($img_name_tag)) {
-      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+      powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd"
     }
     elseif ($img_name_tag -eq "skip") {
-      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+      powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd"
     }
     else {
-      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
+      powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
     }
   }
   else {
@@ -1122,23 +1122,23 @@ function docker_devel_spawn {
     ... or enter 'force' to force docker to start"
     if ($start_docker -eq "force") {
       if ([string]::IsNullOrEmpty($img_name_tag)) {
-        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+        powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd"
       }
       elseif ($img_name_tag -eq "skip") {
-        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+        powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd"
       }
       else {
-        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
+        powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
       }
     }
   }
 }
 
-function run_dvlp_latest_kernel_installer {
+function run_kindtek_latest_kernel_installer {
   param (
     $distro
   )
-  push-location $env:KINDTEK_WIN_DVLP_PATH/kernels/linux/kache
+  push-location $env:KINDTEK_WIN_KINDTEK_PATH/kernels/linux/kache
   require_docker_desktop_online_new_win
   if ($(is_docker_desktop_online) -eq $true) {
     ./wsl-kernel-install.ps1 latest latest $distro
@@ -1147,8 +1147,8 @@ function run_dvlp_latest_kernel_installer {
   pop-location
 }
 
-function get_dvlp_auto_boot {
-  if ([string]::isNullOrEmpty("$(get_dvlp_env 'KINDTEK_AUTO_BOOT')")) {
+function get_kindtek_auto_boot {
+  if ([string]::isNullOrEmpty("$(get_kindtek_env 'KINDTEK_AUTO_BOOT')")) {
     return $true
   }
   else {
@@ -1156,36 +1156,30 @@ function get_dvlp_auto_boot {
   }
 }
 
-function get_dvlp_auto_boot_arg {
-  if ($(get_dvlp_auto_boot) -eq $true) {
-    return "$(get_dvlp_env 'KINDTEK_AUTO_BOOT')"
+function get_kindtek_auto_boot_arg {
+  if ($(get_kindtek_auto_boot) -eq $true) {
+    return "$(get_kindtek_env 'KINDTEK_AUTO_BOOT')"
   }
   else {
     return ""
   }
 }
 
-function set_dvlp_auto_boot {
+function set_kindtek_auto_boot {
   param (
     [bool]$auto_boot
   )
   if ($auto_boot) {
-    set_dvlp_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 'machine'
-    set_dvlp_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 
-    New-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Value "
-        # PowerShell -Command `"Set-ExecutionPolicy Unrestricted`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
-        start wt -p windows cmd.exe /c echo 'please confirm administrator access to launch wsl devel' & powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '$($env:USERPROFILE)\dvlp.ps1 `"$($global:dvlp_arg0)`" `"skip`"' >> `"$env:TEMP\spawnlogs.txt`" 2>&1
-        # PowerShell -Command `"Set-ExecutionPolicy RemoteSigned`" >> `"$env:TEMP\spawnlogs.txt`" 2>&1
-        # cmd /k
-        # echo: & echo: & echo: & echo please confirm admin access & timeout /t 3 & start wt /p cmd.exe powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', '%USERPROFILE%\dvlp.ps1 `"$($global:dvlp_arg0)`  `"skip`"" `""' & IF errorlevel 1 ( ECHO  & ECHO trying again without them ) ELSE ( ECHO successfully launched wsl docker devel & echo: & echo this window will close)
-        " -Force | Out-Null
-        # might be useful for later: 
-        # start wt -pipelinevariable windows cmd.exe -c "$env:USERNAME"; 'echo "hiworld"'
+    set_kindtek_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 'machine'
+    set_kindtek_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 
+    Copy-Item "$($env:KINDTEK_WIN_DVLW_PATH)\scripts\devel-boot.cmd" "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Force | Out-Null
+    # might be useful for later: 
+    # start wt -pipelinevariable windows cmd.exe -c "$env:USERNAME"
   }
   else {
-    set_dvlp_env 'KINDTEK_AUTO_BOOT' '0' 'machine'
-    set_dvlp_env 'KINDTEK_AUTO_BOOT' '0'
-    Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Confirm:$false -Force -ErrorAction SilentlyContinue | Out-Null   
+    set_kindtek_env 'KINDTEK_AUTO_BOOT' '' 'machine'
+    set_kindtek_env 'KINDTEK_AUTO_BOOT' ''
+    Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Confirm:$false -Force -ErrorAction SilentlyContinue | Out-Null   
   }
 }
 
@@ -1263,7 +1257,7 @@ function boot_devel {
           }                
         }
 
-        start_dvlp_process_popmin "start_docker_desktop | Out-Null;exit;"
+        start_kindtek_process_popmin "start_docker_desktop | Out-Null;exit;"
         $docker_tries = 0
         wsl.exe --distribution docker-desktop --version | out-null
         if (!$($?)) {
@@ -1273,7 +1267,7 @@ function boot_devel {
           Write-Host "waiting for docker desktop to come online"
         }
         while (($docker_tries -lt 5) -and !$($?)) {
-          start_dvlp_process_popmin "start_docker_desktop;exit;" 'wait'
+          start_kindtek_process_popmin "start_docker_desktop;exit;" 'wait'
           start-sleep 15
           $docker_tries += 1
           wsl.exe --distribution docker-desktop --version | out-null
@@ -1318,7 +1312,7 @@ function boot_devel {
             Start-Sleep 1
           }                
         }
-        start_dvlp_process_popmin "start_docker_desktop | Out-Null;exit;"
+        start_kindtek_process_popmin "start_docker_desktop | Out-Null;exit;"
         $docker_tries = 0
         wsl.exe --distribution docker-desktop --version | out-null
         if (!$($?)) {
@@ -1328,7 +1322,7 @@ function boot_devel {
           Write-Host "waiting for docker desktop to come online"
         }
         while (!$($?) -and $docker_tries -lt 5) {
-          start_dvlp_process_popmin "start_docker_desktop;exit;" 'wait'
+          start_kindtek_process_popmin "start_docker_desktop;exit;" 'wait'
           start-sleep 15
           $docker_tries += 1
           wsl.exe --distribution docker-desktop --version | out-null
@@ -1386,12 +1380,12 @@ function devel_daemon {
     catch { 
       try {
         # try pulling envs first
-        pull_dvlp_envs
+        pull_kindtek_envs
         return boot_devel
       }
       catch { 
         # try setting envs first then do bare minimum
-        set_dvlp_envs $env:KINDTEK_DEBUG_MODE
+        set_kindtek_envs $env:KINDTEK_DEBUG_MODE
         return safe_boot_devel
       }
       reboot_prompt
@@ -1405,11 +1399,11 @@ function devel_daemon {
 
   if ($keep_running) {
     # daemon initialized ... now check periodically for problems
-    start_dvlp_process_popmin "
+    start_kindtek_process_popmin "
       while (`$true){
         if (`$(dependencies_installed) -eq `$false){
             # try setting envs first then do bare minimum
-            pull_dvlp_envs $env:KINDTEK_DEBUG_MODE;
+            pull_kindtek_envs $env:KINDTEK_DEBUG_MODE;
             safe_boot_devel;
         }
         if (updates_found_local){
@@ -1591,20 +1585,20 @@ function wsl_devel_spawn {
 
             $old_wsl_default_distro = get_default_wsl_distro
             if ($dvlp_input -ieq 'daemon' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
-              # start_dvlp_process_pop "
+              # start_kindtek_process_pop "
               # `$old_wsl_default_distro = '$old_wsl_default_distro';
-              # `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' 'default');
+              # `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag' '' 'default');
               # `$new_wsl_default_distro = get_default_wsl_distro;
               # if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
               #     Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
               # }
               # if ('$img_name_tag' -like '*kernel' ){
-              #     run_dvlp_latest_kernel_installer
+              #     run_kindtek_latest_kernel_installer
               # }
               # " 'wait'
               $dvlp_input = 'screen'
               $old_wsl_default_distro = $old_wsl_default_distro;
-              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default');
+              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag" '' 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
                   Write-Host "ERROR: docker desktop failed to start with `$new_wsl_default_distro distro";
@@ -1613,25 +1607,25 @@ function wsl_devel_spawn {
             else {
               $dvlp_input = 'screen'
               $old_wsl_default_distro = $old_wsl_default_distro;
-              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default');
+              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_KINDTEK_FULLNAME-$img_name_tag" 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
                   Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro";
               }
-              # start_dvlp_process_pop "
+              # start_kindtek_process_pop "
               #               `$old_wsl_default_distro = $old_wsl_default_distro;
-              #               `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default');
+              #               `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_KINDTEK_FULLNAME-$img_name_tag' 'default');
               #               `$new_wsl_default_distro = get_default_wsl_distro;
               #               if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
               #                   Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
               #               }
               #               if ('$img_name_tag' -like '*kernel' ){
-              #                   run_dvlp_latest_kernel_installer
+              #                   run_kindtek_latest_kernel_installer
               #               }
               #               " 'wait'
             }
             if ($img_name_tag -like '*kernel' ){
-              run_dvlp_latest_kernel_installer
+              run_kindtek_latest_kernel_installer
             }
             if ($img_name_tag -like '*gui*' ){
               $start_gui = Read-Host "start gui?
@@ -1695,7 +1689,7 @@ continue or skip
         }
         . include_devel_tools
         if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
-          start_dvlp_process_hide 'sync_repos'
+          start_kindtek_process_hide 'sync_repos'
         }
         else {
           update_dvlp $true
@@ -1707,7 +1701,7 @@ continue or skip
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
       $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
       $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
-      if ($(get_dvlp_env 'KINDTEK_AUTO_BOOT') -eq '1') {
+      if ($(get_kindtek_env 'KINDTEK_AUTO_BOOT') -eq '1') {
         $auto_boot_status = 'ON'
       }
       else {
@@ -1715,7 +1709,7 @@ continue or skip
       }
       do {
         if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag))) -And ($img_name_tag -ne 'skip')) {
-          $docker_devel_spawn_noninteractive = "`r`n`t- [i!] import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default"
+          $docker_devel_spawn_noninteractive = "`r`n`t- [i!] import $env:KINDTEK_WIN_KINDTEK_FULLNAME:$img_name_tag as default"
         }
         if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -And !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -And "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -And "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
           $wsl_distro_revert_options = "- [r]evert wsl to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
@@ -1854,7 +1848,7 @@ continue or skip
               docker_devel_spawn
             }
             else {
-              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
+              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag" '' ''
             }
             $dvlp_input = 'screen'
           }
@@ -1864,7 +1858,7 @@ continue or skip
               docker_devel_spawn 'wait'
             }
             else {
-              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default' 'wait'
+              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_KINDTEK_FULLNAME)-$img_name_tag" 'default' 'wait'
             }
             $dvlp_input = 'screen'
           }
@@ -2195,14 +2189,14 @@ continue or skip
             }
             elseif ($dvlp_input -ieq 'tdl' ) {
               # wsl.exe --distribution "devels-playground-kali-git".trim() -- cd `$HOME/.local/bin; alias cdir`=`'source cdir.sh; alias grep=`'grep --color=auto`'; ls -al; cdir_cli
-              # start_dvlp_process_pop "wsl.exe --cd /hal --exec bash `$(cdir)" 'wait' 'noexit'
+              # start_kindtek_process_pop "wsl.exe --cd /hal --exec bash `$(cdir)" 'wait' 'noexit'
             }
             elseif ($dvlp_input -ieq 'tw' ) {
-              start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
+              start_kindtek_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
             }
             elseif ($dvlp_input -ieq 'tdw' ) {
               # one day might get the windows cdir working
-              # start_dvlp_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
+              # start_kindtek_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
             }
             $dvlp_input = 'screen'
 
@@ -2295,13 +2289,13 @@ continue or skip
             #     wsl.exe sh -c "cd /hel;. code"
           }
           elseif ($dvlp_input -ieq 'auto') {
-            if ($(get_dvlp_auto_boot)) {
-              set_dvlp_auto_boot $false
+            if ($(get_kindtek_auto_boot)) {
+              set_kindtek_auto_boot $false
               write-host 'auto boot turned OFF'
               start-sleep 1
             }
             else {
-              set_dvlp_auto_boot $true
+              set_kindtek_auto_boot $true
               write-host 'auto boot turned ON'
               start-sleep 1
             }
@@ -2315,12 +2309,12 @@ continue or skip
             return devel_daemon
           }
           elseif ($dvlp_input -ieq 'devel' ){
-            $debug_mode = get_dvlp_debug_mode
+            $debug_mode = get_kindtek_debug_mode
             if ($debug_mode -eq $true){
-              set_dvlp_debug_mode $false
+              set_kindtek_debug_mode $false
               $dvlp_input = 'screen'
             } else {
-              set_dvlp_debug_mode $true
+              set_kindtek_debug_mode $true
             }
           }
           elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon') {
@@ -2385,8 +2379,8 @@ continue or skip
   }
 }
 
-function get_dvlp_debug_mode {
-  $debug_mode = get_dvlp_env 'KINDTEK_DEBUG_MODE'
+function get_kindtek_debug_mode {
+  $debug_mode = get_kindtek_env 'KINDTEK_DEBUG_MODE'
   if ($debug_mode -eq '1' -Or $debug_mode -eq 1) {
     return $true
   }
@@ -2395,19 +2389,19 @@ function get_dvlp_debug_mode {
   }
 }
 
-function set_dvlp_debug_mode {
+function set_kindtek_debug_mode {
   param (
     [bool]$debug_mode_on
   )
   if ($debug_mode_on) {
     Set-PSDebug -Trace 2
-    set_dvlp_env 'KINDTEK_DEBUG_MODE' '1'
-    set_dvlp_env 'KINDTEK_DEBUG_MODE' '1' 'machine'
+    set_kindtek_env 'KINDTEK_DEBUG_MODE' '1'
+    set_kindtek_env 'KINDTEK_DEBUG_MODE' '1' 'machine'
   }
   else {
     Set-PSDebug -Trace 0
-    set_dvlp_env 'KINDTEK_DEBUG_MODE' '0'
-    set_dvlp_env 'KINDTEK_DEBUG_MODE' '0' 'machine'
+    set_kindtek_env 'KINDTEK_DEBUG_MODE' '0'
+    set_kindtek_env 'KINDTEK_DEBUG_MODE' '0' 'machine'
   }
 }
 
@@ -2450,7 +2444,7 @@ function reload_envs {
 }
 
 function reload_envs_new_win {
-  start_dvlp_process_popmin "hard_restart_wsl_docker" 
+  start_kindtek_process_popmin "hard_restart_wsl_docker" 
   # reload_envs
 }
 
@@ -2532,14 +2526,14 @@ function start_countdown_321_liftoff {
 # # # # # # # # # # # # # driver # # # # # # # # # # # # # # # # # 
 
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\repos\kindtek" | Out-Null
-pull_dvlp_envs
+pull_kindtek_envs
 # remove auto install script (optionally added when using restart prompt)
-if ($(get_dvlp_auto_boot) -ne $true) {
+if ($(get_kindtek_auto_boot) -ne $true) {
   Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\dvlp-spawn.cmd" -Force -ErrorAction SilentlyContinue
 }
 if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[1]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
   # echo 'installing everything and setting envs ..'
-  if ($(get_dvlp_debug_mode) -eq $true) {
+  if ($(get_kindtek_debug_mode) -eq $true) {
     Write-Host "`$PSCommandPath: $($PSCommandPath)"
     Write-Host "`$args[0]: $($args[0])"
     Set-PSDebug -Trace 2
@@ -2550,9 +2544,9 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   }
   $global:dvlp_arg0 = "$($args[0])"
   $global:dvlp_arg1 = "$($args[1])"
-  set_dvlp_envs $env:KINDTEK_DEBUG_MODE
-  if ($(get_dvlp_auto_boot) -eq $true){
-    set_dvlp_env ("KINDTEK_AUTO_BOOT", "$($args[0])")
+  set_kindtek_envs $env:KINDTEK_DEBUG_MODE
+  if ($(get_kindtek_auto_boot) -eq $true){
+    set_kindtek_env ("KINDTEK_AUTO_BOOT", "$($args[0])")
   }
   $global:dvlw_commit = $(get_local_commit)
   set-location $env:USERPROFILE
@@ -2568,7 +2562,7 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
   # echo 'setting the envs ..'
-  set_dvlp_envs $env:KINDTEK_DEBUG_MODE
+  set_kindtek_envs $env:KINDTEK_DEBUG_MODE
   # wsl_devel_spawn $args[0]
 }
 if ($global:devel_tools -ne "sourced") {
