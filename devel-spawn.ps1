@@ -1482,7 +1482,30 @@ function wsl_devel_spawn {
           " -ForegroundColor Yellow
           cmd.exe /c "timeout /t 3"
           try {
-            cmd.exe /c "exit 1"
+            cmd.exe /c "
+            powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
+            IF errorlevel 1 ( 
+              $(
+              write-host "
+              
+              WARNING: could not acquire admin access" -foregroundcolor darkred
+              
+              write-host "
+              expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
+              write-host -nonewline "
+  
+  
+  
+  
+  
+  
+              continue anyways? (y/N)
+              ")
+              exit /b
+            ) ELSE (
+              exit 0
+            )
+            "
             
             # powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`"' > NUL
             # start wt.exe /p cmd.exe powershell.exe "$env:USERPROFILE\dvlp.ps1" "$env:KINDTEK_AUTO_BOOT"  "skip"
