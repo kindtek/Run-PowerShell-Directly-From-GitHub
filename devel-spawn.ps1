@@ -581,9 +581,9 @@ function set_kindtek_envs {
   set_kindtek_env 'KINDTEK_WIN_DVLW_FULLNAME' "$repo_src_name"
   set_kindtek_env 'KINDTEK_WIN_DVLW_NAME' "$repo_dir_name"
   set_kindtek_env 'KINDTEK_WIN_DVLW_BRANCH' "$repo_src_branch"
-  set_kindtek_env 'KINDTEK_WIN_KINDTEK_PATH' "$git_path/$repo_dir_name2"
-  set_kindtek_env 'KINDTEK_WIN_KINDTEK_FULLNAME' "$repo_src_name2"
-  set_kindtek_env 'KINDTEK_WIN_KINDTEK_NAME' "$repo_dir_name2"
+  set_kindtek_env 'KINDTEK_WIN_DVLP_PATH' "$git_path/$repo_dir_name2"
+  set_kindtek_env 'KINDTEK_WIN_DVLP_FULLNAME' "$repo_src_name2"
+  set_kindtek_env 'KINDTEK_WIN_DVLP_NAME' "$repo_dir_name2"
   set_kindtek_env 'KINDTEK_WIN_POWERHELL_FULLNAME' "$repo_dir_name3"
   set_kindtek_env 'KINDTEK_WIN_POWERHELL_NAME' "$repo_dir_name3"
   set_kindtek_env 'KINDTEK_WIN_POWERHELL_PATH' "$git_path/$repo_dir_name3"
@@ -614,10 +614,10 @@ function set_kindtek_envs {
       set_kindtek_env "pathext" "$(get_kindtek_env 'pathext' 'machine');.ps1" "machine" 
     }
     if ($local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/") {
-      set_kindtek_env "path" "$(get_kindtek_env 'path');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_KINDTEK_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
+      set_kindtek_env "path" "$(get_kindtek_env 'path');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
     }
     if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/") {
-      set_kindtek_env "path" "$(get_kindtek_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_KINDTEK_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
+      set_kindtek_env "path" "$(get_kindtek_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
     }
 
   }
@@ -937,15 +937,15 @@ function sync_repos {
       clone_repo
       Push-Location $env:KINDTEK_WIN_DVLW_PATH
     }
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_KINDTEK_PATH)/.git")) {
-      write-host "pulling $env:KINDTEK_WIN_KINDTEK_NAME ..." -ForegroundColor DarkCyan
-      git submodule update --remote --progress -- $env:KINDTEK_WIN_KINDTEK_NAME
-      write-host "$env:KINDTEK_WIN_KINDTEK_NAME pulled" -ForegroundColor DarkCyan
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLP_PATH)/.git")) {
+      write-host "pulling $env:KINDTEK_WIN_DVLP_NAME ..." -ForegroundColor DarkCyan
+      git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
+      write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
     }
     else {
-      write-host "pulling $env:KINDTEK_WIN_KINDTEK_NAME ..." -ForegroundColor DarkCyan
-      git submodule update --init --init --remote --progress -- $env:KINDTEK_WIN_KINDTEK_NAME
-      write-host "$env:KINDTEK_WIN_KINDTEK_NAME pulled" -ForegroundColor DarkCyan
+      write-host "pulling $env:KINDTEK_WIN_DVLP_NAME ..." -ForegroundColor DarkCyan
+      git submodule update --init --init --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
+      write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
     }
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLADV_PATH)/.git")) {
       write-host "pulling $env:KINDTEK_WIN_DVLADV_NAME ..." -ForegroundColor DarkCyan
@@ -969,7 +969,7 @@ function sync_repos {
     }
     Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1
     
-    Push-Location $env:KINDTEK_WIN_KINDTEK_NAME
+    Push-Location $env:KINDTEK_WIN_DVLP_NAME
     if ((Test-Path -Path "$($env:KINDTEK_WIN_KERNELS_PATH)/.git")) {
       write-host "pulling $env:KINDTEK_WIN_KERNELS_NAME ..." -ForegroundColor DarkCyan
       git submodule update --remote --progress -- $env:KINDTEK_WIN_KERNELS_NAME
@@ -1107,13 +1107,13 @@ function docker_devel_spawn {
 
   if ($(is_docker_desktop_online) -eq $true) {
     if ([string]::IsNullOrEmpty($img_name_tag)) {
-      powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd"
+      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
     }
     elseif ($img_name_tag -eq "skip") {
-      powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd"
+      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
     }
     else {
-      powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
+      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
     }
   }
   else {
@@ -1122,23 +1122,23 @@ function docker_devel_spawn {
     ... or enter 'force' to force docker to start"
     if ($start_docker -eq "force") {
       if ([string]::IsNullOrEmpty($img_name_tag)) {
-        powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd"
+        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
       }
       elseif ($img_name_tag -eq "skip") {
-        powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd"
+        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
       }
       else {
-        powershell.exe -Command "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
+        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
       }
     }
   }
 }
 
-function run_kindtek_latest_kernel_installer {
+function run_dvlp_latest_kernel_installer {
   param (
     $distro
   )
-  push-location $env:KINDTEK_WIN_KINDTEK_PATH/kernels/linux/kache
+  push-location $env:KINDTEK_WIN_DVLP_PATH/kernels/linux/kache
   require_docker_desktop_online_new_win
   if ($(is_docker_desktop_online) -eq $true) {
     ./wsl-kernel-install.ps1 latest latest $distro
@@ -1147,7 +1147,7 @@ function run_kindtek_latest_kernel_installer {
   pop-location
 }
 
-function get_kindtek_auto_boot {
+function get_dvlp_auto_boot {
   if ([string]::isNullOrEmpty("$(get_kindtek_env 'KINDTEK_AUTO_BOOT')")) {
     return $true
   }
@@ -1484,7 +1484,7 @@ function wsl_devel_spawn {
             Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
           } catch {
             write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
-            write-host"
+            write-host "
             
             WARNING: could not acquire admin access" -foregroundcolor darkred
             
@@ -1587,7 +1587,7 @@ function wsl_devel_spawn {
             if ($dvlp_input -ieq 'daemon' -And (Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) {
               # start_kindtek_process_pop "
               # `$old_wsl_default_distro = '$old_wsl_default_distro';
-              # `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag' '' 'default');
+              # `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' '' 'default');
               # `$new_wsl_default_distro = get_default_wsl_distro;
               # if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
               #     Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
@@ -1598,7 +1598,7 @@ function wsl_devel_spawn {
               # " 'wait'
               $dvlp_input = 'screen'
               $old_wsl_default_distro = $old_wsl_default_distro;
-              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag" '' 'default');
+              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
                   Write-Host "ERROR: docker desktop failed to start with `$new_wsl_default_distro distro";
@@ -1607,14 +1607,14 @@ function wsl_devel_spawn {
             else {
               $dvlp_input = 'screen'
               $old_wsl_default_distro = $old_wsl_default_distro;
-              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_KINDTEK_FULLNAME-$img_name_tag" 'default');
+              $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
                   Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro";
               }
-              # start_kindtek_process_pop "
+              # start_dvlp_process_pop "
               #               `$old_wsl_default_distro = $old_wsl_default_distro;
-              #               `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_KINDTEK_FULLNAME-$img_name_tag' 'default');
+              #               `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default');
               #               `$new_wsl_default_distro = get_default_wsl_distro;
               #               if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
               #                   Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
@@ -1709,7 +1709,7 @@ continue or skip
       }
       do {
         if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag))) -And ($img_name_tag -ne 'skip')) {
-          $docker_devel_spawn_noninteractive = "`r`n`t- [i!] import $env:KINDTEK_WIN_KINDTEK_FULLNAME:$img_name_tag as default"
+          $docker_devel_spawn_noninteractive = "`r`n`t- [i!] import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default"
         }
         if ("$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_DEFAULT_WSL_DISTRO" -And !([string]::IsNullOrEmpty($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)) -And "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO" -ne "$env:KINDTEK_FAILSAFE_WSL_DISTRO" -And "$(test_wsl_distro $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO)" -eq $true) {
           $wsl_distro_revert_options = "- [r]evert wsl to $env:KINDTEK_OLD_DEFAULT_WSL_DISTRO`r`n`t"
@@ -1848,7 +1848,7 @@ continue or skip
               docker_devel_spawn
             }
             else {
-              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag" '' ''
+              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
             }
             $dvlp_input = 'screen'
           }
@@ -1858,7 +1858,7 @@ continue or skip
               docker_devel_spawn 'wait'
             }
             else {
-              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_KINDTEK_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_KINDTEK_FULLNAME)-$img_name_tag" 'default' 'wait'
+              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default' 'wait'
             }
             $dvlp_input = 'screen'
           }
