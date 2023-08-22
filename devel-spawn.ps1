@@ -1472,7 +1472,7 @@ function wsl_devel_spawn {
         if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
           $command_line = "-NoExit -File `"$($PSCommandPath)`" `"" + $global:dvlp_arg0 + "`" `"skip`" " 
           write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
-          Write-Host "please confirm admin access in prompt that appears" -ForegroundColor Magenta -BackgroundColor Yellow
+          Write-Host "`r`n`r`nplease confirm admin access in prompt that appears" -ForegroundColor Magenta -BackgroundColor Yellow
           Write-Host "..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors" -ForegroundColor Yellow
           Start-Sleep 6
           try {
