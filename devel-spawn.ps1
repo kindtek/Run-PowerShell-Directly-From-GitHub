@@ -1484,6 +1484,7 @@ function wsl_devel_spawn {
           try {
             $orig_foreground = [System.Console]::ForegroundColor
             $temp_foreground = [System.Console]::BackgroundColor
+            $host.UI.RawUI.ForegroundColor = $temp_foreground
             cmd.exe /c "powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized -file $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"'"
             if ($LASTEXITCODE -ne 0) {
               throw
