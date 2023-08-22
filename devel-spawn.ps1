@@ -1482,33 +1482,52 @@ function wsl_devel_spawn {
           " -ForegroundColor Yellow
           cmd.exe /c timeout 3
           try {
-            cmd.exe /c "powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($command_line)' > NUL"
-            if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-              if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
-                throw
-              }
-            }
-            # try {
-            #   wt.exe /p cmd.exe powershell.exe -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', "$env:USERPROFILE\dvlp.ps1" "$env:KINDTEK_AUTO_BOOT"  "skip"
-            # } catch {
-            #   Start-Process -FilePath PowerShell.exe -ArgumentList '-verb', 'runas', '-windowstyle', '-noexit', '-command', "$command_line"
-            # }
+            cmd.exe /c "
+            powershell.exe /nologo start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`"' > NUL
+            IF errorlevel 1 ( 
+              $(
+              write-host "
+              
+              WARNING: could not acquire admin access" -foregroundcolor darkred
+              
+              write-host "
+              expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
+              write-host -nonewline "
+  
+  
+  
+  
+  
+  
+              continue anyways? (y/N)
+              exit 1")
+            ) ELSE (
+              exit 0
+            )
+            "
+            
+            # powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`"' > NUL
+            # start wt.exe /p cmd.exe powershell.exe "$env:USERPROFILE\dvlp.ps1" "$env:KINDTEK_AUTO_BOOT"  "skip"
+            # # cmd.exe powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`"' > NUL
+            # powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`" > NUL' | out-null 2> $null
+            # Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
+
           } catch {
-            write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
-            write-host "
+            # write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
+            # write-host "
             
-            WARNING: could not acquire admin access" -foregroundcolor darkred
+            # WARNING: could not acquire admin access" -foregroundcolor darkred
             
-            write-host "
-            expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
-            write-host -nonewline "
+            # write-host "
+            # expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
+            # write-host -nonewline "
 
 
 
 
 
 
-            continue anyways? (y/N)"            
+            # continue anyways? (y/N)"            
             $continue_no_admin = Read-Host
             if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
               $admin_bypass = $true
