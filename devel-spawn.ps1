@@ -1497,16 +1497,34 @@ function wsl_devel_spawn {
 
             $continue_no_admin = Read-Host "
             
-            could not acquire admin access
-            the program may not function as expected
+            WARNING: could not acquire admin access" -foregroundcolor darkred
+
+            write-host "expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
+            write-host "
 
 
 
 
-            continue? (y/N)"
+
+
+            continue anyways? (y/N)"
             if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
               $admin_bypass = $true
-              start_countdown "good luck! " "3" "2" "1" ""
+              write-host "
+              
+              
+              $(start_countdown_321_liftoff 'good luck! ' '3' '2' '1' '')
+
+
+
+
+
+              "
+              
+              write-host "
+              
+              
+              "
             } else {
               exit
             }
