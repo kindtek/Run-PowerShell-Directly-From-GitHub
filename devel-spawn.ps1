@@ -1148,7 +1148,7 @@ function run_dvlp_latest_kernel_installer {
 }
 
 function get_kindtek_auto_boot {
-  if ([string]::isNullOrEmpty("$(get_kindtek_env 'KINDTEK_AUTO_BOOT')")) {
+  if (!([string]::isNullOrEmpty("$(get_kindtek_env 'KINDTEK_AUTO_BOOT')"))) {
     return $true
   }
   else {
