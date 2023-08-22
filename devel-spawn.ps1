@@ -1482,16 +1482,12 @@ function wsl_devel_spawn {
           " -ForegroundColor Yellow
           cmd.exe /c timeout 3
           try {
-            powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`"' > NUL
-            start wt.exe /p cmd.exe powershell.exe "$env:USERPROFILE\dvlp.ps1" "$env:KINDTEK_AUTO_BOOT"  "skip"
-            # cmd.exe powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`"' > NUL
-            powershell.exe start-process -filepath powershell.exe -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe %USERPROFILE%\dvlp.ps1 `"%KINDTEK_AUTO_BOOT%`"  `"skip`" > NUL' | out-null 2> $null
             Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList "$command_line"
-            try {
-              wt.exe /p cmd.exe powershell.exe -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', "$env:USERPROFILE\dvlp.ps1" "$env:KINDTEK_AUTO_BOOT"  "skip"
-            } catch {
-              Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -Wait -ArgumentList '-noexit', '-command', '-command', "$command_line"
-            }
+            # try {
+            #   wt.exe /p cmd.exe powershell.exe -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', "$env:USERPROFILE\dvlp.ps1" "$env:KINDTEK_AUTO_BOOT"  "skip"
+            # } catch {
+            #   Start-Process -FilePath PowerShell.exe -ArgumentList '-verb', 'runas', '-windowstyle', '-noexit', '-command', "$command_line"
+            # }
           } catch {
             write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
             write-host "
