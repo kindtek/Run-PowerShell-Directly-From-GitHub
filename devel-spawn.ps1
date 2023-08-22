@@ -23,7 +23,7 @@ if ($global:jump_screen -eq $true){
 }
 $global:jump_screen = $false
 
-if (get_dvlp_auto_boot -eq $true){
+if ($(get_dvlp_auto_boot) -eq $true){
   set_dvlp_env ("KINDTEK_AUTO_BOOT", "$($args[0])")
 }
 
