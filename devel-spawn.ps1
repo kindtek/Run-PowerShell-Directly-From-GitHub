@@ -1483,9 +1483,7 @@ function wsl_devel_spawn {
           cmd.exe /c "timeout /t 3"
           try {
             cmd.exe /c "
-            ECHO powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
-            timeout /t 5
-            @REM powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
+            powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
             IF errorlevel 1 ( 
               $(
               write-host "
