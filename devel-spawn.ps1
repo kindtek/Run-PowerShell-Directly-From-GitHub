@@ -1500,7 +1500,8 @@ function wsl_devel_spawn {
   
   
               continue anyways? (y/N)
-              exit 1")
+              ")
+              exit 1
             ) ELSE (
               exit 0
             )
@@ -1549,10 +1550,9 @@ function wsl_devel_spawn {
             } else {
               exit
             }
-            if ($admin_bypass -ne $true){
-              exit 1
-            }
-            
+          }
+          if ($admin_bypass -ne $true){
+            exit 1
           }
           # Write-Host "
           # Start-Process -FilePath PowerShell.exe -Verb Runas -WindowStyle Maximized -ArgumentList '$command_line'
