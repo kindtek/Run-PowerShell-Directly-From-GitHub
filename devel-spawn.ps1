@@ -1491,7 +1491,7 @@ function wsl_devel_spawn {
             
             write-host "
             expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
-            write-host "
+            write-host -nonewline "
 
 
 
@@ -1499,7 +1499,7 @@ function wsl_devel_spawn {
 
 
             continue anyways? (y/N)"            
-            $continue_no_admin = Read-Host -nonewline
+            $continue_no_admin = Read-Host
             if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
               $admin_bypass = $true
               write-host "
