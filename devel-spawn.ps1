@@ -1482,10 +1482,14 @@ function wsl_devel_spawn {
           " -ForegroundColor Yellow
           cmd.exe /c "timeout /t 3"
           try {
-            cmd.exe /c "powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized -file $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`" > NUL'"
+            $orig_foreground = [System.Console]::ForegroundColor
+            $temp_foreground = [System.Console]::BackgroundColor
+            cmd.exe /c "powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized -file $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"'"
             if ($LASTEXITCODE -ne 0) {
               throw
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
             }
+            $host.UI.RawUI.ForegroundColor = $orig_foreground
           } catch {
             write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
             write-host "
