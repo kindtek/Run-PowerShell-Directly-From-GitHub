@@ -1483,24 +1483,7 @@ function wsl_devel_spawn {
           cmd.exe /c "timeout /t 3"
           try {
             cmd.exe /c "
-            powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
-            IF errorlevel 1 ( 
-              $(
-              write-host "
-              
-              WARNING: could not acquire admin access" -foregroundcolor darkred
-              
-              write-host "
-              expect degraded performance and unpredictable results if you continue without it" -foregroundcolor darkyellow
-              write-host -nonewline "
-  
-  
-  
-  
-  
-  
-              continue anyways? (y/N)
-              ")
+
               exit 1
             ) ELSE (
               exit 0
