@@ -1449,7 +1449,7 @@ function wsl_devel_spawn {
     
     }
     else {
-      if (($dvlp_input -eq 'screen') -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+      if ((($dvlp_input -eq 'screen') -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or (($dvlp_input -eq 'screen') -and ($admin_bypass -eq $true))) {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
         write-host -nonewline "
