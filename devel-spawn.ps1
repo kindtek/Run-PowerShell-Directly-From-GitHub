@@ -1480,10 +1480,12 @@ function wsl_devel_spawn {
           Write-Host "`r`n`r`nplease confirm admin access in prompt that appears`r`n`r`n" -ForegroundColor Magenta -BackgroundColor Yellow
           Write-Host "`r`n`r`n`r`n`r`n..try using [WIN + x] then [a] to run this program with native admin privileges if you experience loss of copy/paste functionality or display errors
           " -ForegroundColor Yellow
-          cmd.exe /c timeout 3
+          cmd.exe /c timeout /t 3
           try {
             cmd.exe /c "
-            powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
+            ECHO powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
+            timeout /t 5
+            powershell.exe start-process -filepath 'powershell.exe' -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Maximized -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"' > NUL
             IF errorlevel 1 ( 
               $(
               write-host "
