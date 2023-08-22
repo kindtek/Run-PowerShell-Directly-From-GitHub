@@ -364,23 +364,23 @@ function start_kindtek_process_embed {
 }
 function get_kindtek_env {
   param (
-    $dvlp_env_var, $set_machine_env_flag
+    $kindtek_env_var, $set_machine_env_flag
   )
     
   try {
     if (([string]::IsNullOrEmpty($set_machine_env_flag)) ) {
-      # write-host "getting local $dvlp_env_var"
-      return [System.Environment]::GetEnvironmentVariable("$dvlp_env_var")
+      # write-host "getting local $kindtek_env_var"
+      return [System.Environment]::GetEnvironmentVariable("$kindtek_env_var")
     }
     else {    
-      # write-host "getting machine $dvlp_env_var"
-      return [System.Environment]::GetEnvironmentVariable("$dvlp_env_var", [System.EnvironmentVariableTarget]::Machine)
+      # write-host "getting machine $kindtek_env_var"
+      return [System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine)
     }
     return $null
   }
   catch {
     if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-      Write-Host "error setting $dvlp_env_var"
+      Write-Host "error setting $kindtek_env_var"
       Write-Host "$cmd_str"
     }
     return $null
@@ -389,33 +389,33 @@ function get_kindtek_env {
 }
 function set_kindtek_env {
   param (
-    $dvlp_env_var, $dvlp_env_val, $set_machine_env_flag, $set_both_env_flag
+    $kindtek_env_var, $kindtek_env_val, $set_machine_env_flag, $set_both_env_flag
   )
     
   try {
-    if (!([string]::IsNullOrEmpty($dvlp_env_var))) {
-      # Write-Host "setting $dvlp_env_var to $dvlp_env_val"
+    if (!([string]::IsNullOrEmpty($kindtek_env_var))) {
+      # Write-Host "setting $kindtek_env_var to $kindtek_env_val"
       if (([string]::IsNullOrEmpty($set_machine_env_flag)) -And ([string]::IsNullOrEmpty($set_both_env_flag))) {
-        # write-host "setting local env $dvlp_env_var to $dvlp_env_val"
-        [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
+        # write-host "setting local env $kindtek_env_var to $kindtek_env_val"
+        [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
       }
-      elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_kindtek_env "$dvlp_env_var" "machine") -ne $dvlp_env_val)) {
-        # write-host "setting machine env $dvlp_env_var to $dvlp_env_val"
-        [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
+      elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val)) {
+        # write-host "setting machine env $kindtek_env_var to $kindtek_env_val"
+        [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine)                  
       }
-      elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_kindtek_env "$dvlp_env_var" "machine") -ne $dvlp_env_val) -Or ($(get_kindtek_env "$dvlp_env_var") -ne $dvlp_env_val))) {
-        # write-host "setting local and machine env $dvlp_env_var to $dvlp_env_val"
-        [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val")
-        [System.Environment]::SetEnvironmentVariable("$dvlp_env_var", "$dvlp_env_val", [System.EnvironmentVariableTarget]::Machine)                  
+      elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val) -Or ($(get_kindtek_env "$kindtek_env_var") -ne $kindtek_env_val))) {
+        # write-host "setting local and machine env $kindtek_env_var to $kindtek_env_val"
+        [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
+        [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine)                  
       }
       else {
-        # write-host "not setting $dvlp_env_var to $dvlp_env_val with $($set_machine_env_flag) $($set_both_env_flag) ( currently: $(get_kindtek_env "$dvlp_env_var"), $(get_kindtek_env "$dvlp_env_var" 'machine')) "
+        # write-host "not setting $kindtek_env_var to $kindtek_env_val with $($set_machine_env_flag) $($set_both_env_flag) ( currently: $(get_kindtek_env "$kindtek_env_var"), $(get_kindtek_env "$kindtek_env_var" 'machine')) "
       }
     }
   }
   catch {
     if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
-      Write-Host "error setting $dvlp_env_var"
+      Write-Host "error setting $kindtek_env_var"
       Write-Host "$cmd_str"
     }
   }
