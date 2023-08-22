@@ -1505,7 +1505,7 @@ function wsl_devel_spawn {
               write-host "
               
               
-              $(start_countdown_321_liftoff 'good luck! ' '3' '2' '1' '')
+              $(start_countdown_3210_liftoff 'good luck! ' '3' '2' '1' '')
 
 
 
@@ -1538,7 +1538,7 @@ function wsl_devel_spawn {
         # write-host "test path $($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed $((Test-Path -Path "$env:KINDTEK_WIN_DVLW_PATH/.dvlp-installed" -PathType Leaf))"
         if (([string]::IsNullOrEmpty($global:dvlp_arg1))) {
           Write-Host "`t-- use CTRL + C or close this window to cancel anytime --"
-          start_countdown_321_liftoff "starting " "in 3" "in 2" "in 1" "now"
+          start_countdown_3210_liftoff "starting " "in 3" "in 2" "in 1" "now"
         }
         # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
         try {
@@ -2467,12 +2467,12 @@ function start_countdown_dynamic {
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "`r"  
     if ($i -eq $($countdown_msgs.length - 3)){
-      start_countdown_321_liftoff "$countdown_msg " "$($countdown_msgs[$($i+1)])" "$($countdown_msgs[$($i+2)])" "$($countdown_msgs[$($i+3)])" "$liftoff_msg"
+      start_countdown_3210_liftoff "$countdown_msg " "$($countdown_msgs[$($i+1)])" "$($countdown_msgs[$($i+2)])" "$($countdown_msgs[$($i+3)])" "$liftoff_msg"
     }
   }
 }
 
-function start_countdown_321_liftoff {
+function start_countdown_3210_liftoff {
   param (
     $countdown_msg,
     $countdown_msg3,
