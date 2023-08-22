@@ -38,7 +38,7 @@ function include_devel_tools {
     Remove-Item "$env:USERPROFILE/repos/$($git_owner)/.github-installed" -Confirm:$false -Force -ErrorAction SilentlyContinue
   }
 }
-class dvlp_process {
+class kindtek_process {
   [String]$proc_cmd
   [String]$proc_wait
   [String]$proc_noexit
@@ -121,18 +121,18 @@ class dvlp_process {
     }
     # $this.start()
   }
-  dvlp_process (
+  kindtek_process (
     [string]$proc_cmd
   ) {
     $this.init($proc_cmd, '')
   }
-  dvlp_process (
+  kindtek_process (
     [string]$proc_cmd,
     [string]$proc_wait
   ) {
     $this.init($proc_cmd, $proc_wait)
   }
-  dvlp_process (
+  kindtek_process (
     [string]$proc_cmd,
     [string]$proc_wait,
     [string]$proc_noexit
@@ -206,161 +206,161 @@ class dvlp_process {
   }
 }
 
-class dvlp_process_hide : dvlp_process {
+class kindtek_process_hide : kindtek_process {
   [String]$proc_exit
   [String]$proc_noexit
   [String]$proc_style
 
-  dvlp_process_hide([string]$proc_cmd) : base($proc_cmd) {
+  kindtek_process_hide([string]$proc_cmd) : base($proc_cmd) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
-  dvlp_process_hide([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait) {
+  kindtek_process_hide([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
-  dvlp_process_hide([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit) {
+  kindtek_process_hide([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
   re_set () {
     $this.proc_style = [System.Diagnostics.ProcessWindowStyle]::Hidden
   }
 }
 
-class dvlp_process_popmax : dvlp_process {
+class kindtek_process_popmax : kindtek_process {
   [String]$proc_exit
   [String]$proc_noexit
   [String]$proc_style
 
-  dvlp_process_popmax([string]$proc_cmd) : base($proc_cmd) {
+  kindtek_process_popmax([string]$proc_cmd) : base($proc_cmd) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
-  dvlp_process_popmax([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait) {
+  kindtek_process_popmax([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
-  dvlp_process_popmax([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit) {
+  kindtek_process_popmax([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
   re_set () {
     $this.proc_style = [System.Diagnostics.ProcessWindowStyle]::Maximized
   }
 }
 
-class dvlp_process_embed : dvlp_process {
+class kindtek_process_embed : kindtek_process {
   [String]$proc_exit
   [String]$proc_noexit
   [String]$proc_style
   [string]$proc_nowin
 
-  # dvlp_process_embed([string]$proc_cmd) : base($proc_cmd){
-  dvlp_process_embed([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd) {
+  # kindtek_process_embed([string]$proc_cmd) : base($proc_cmd){
+  kindtek_process_embed([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
 
-  dvlp_process_embed([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd) {
+  kindtek_process_embed([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
 
-  dvlp_process_embed([string]$proc_cmd) : base($proc_cmd) {
+  kindtek_process_embed([string]$proc_cmd) : base($proc_cmd) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
   re_set () {
     $this.proc_nowin = 'nowin'
   }
 }
 
-class dvlp_process_popmin : dvlp_process {
+class kindtek_process_popmin : kindtek_process {
   [String]$proc_exit
   [String]$proc_noexit
   [String]$proc_style
 
-  dvlp_process_popmin([string]$proc_cmd) : base($proc_cmd) {
+  kindtek_process_popmin([string]$proc_cmd) : base($proc_cmd) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
-  dvlp_process_popmin([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait) {
+  kindtek_process_popmin([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
-  dvlp_process_popmin([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit) {
+  kindtek_process_popmin([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
   re_set () {
     $this.proc_style = [System.Diagnostics.ProcessWindowStyle]::Minimized
   }
 }
 
-class dvlp_process_pop : dvlp_process {
+class kindtek_process_pop : kindtek_process {
   [String]$proc_exit
   [String]$proc_noexit
   [String]$proc_style
 
-  dvlp_process_pop([string]$proc_cmd) : base($proc_cmd) {
+  kindtek_process_pop([string]$proc_cmd) : base($proc_cmd) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
-  dvlp_process_pop([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait) {
+  kindtek_process_pop([string]$proc_cmd, [string]$proc_wait) : base($proc_cmd, $proc_wait) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
-  dvlp_process_pop([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit) {
+  kindtek_process_pop([string]$proc_cmd, [string]$proc_wait, [string]$proc_noexit) : base($proc_cmd, $proc_wait, $proc_noexit) {
     $this.re_set()
-        ([dvlp_process] $this).start()
+        ([kindtek_process] $this).start()
   }
   re_set () {
     $this.proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal
   }
 }
-# [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
+# [kindtek_process_popmin]$kindtek_proc = [kindtek_process_popmin]::new('write-host "zzzzzzzzzz";start-sleep 2;', 'zdf')
 
 function start_kindtek_process {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
-  [dvlp_process]$dvlp_proc = [dvlp_process]::new($proc_cmd, $proc_wait, $proc_noexit)
+  [kindtek_process]$kindtek_proc = [kindtek_process]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
 function start_kindtek_process_pop {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
-  [dvlp_process_pop]$dvlp_proc = [dvlp_process_pop]::new($proc_cmd, $proc_wait, $proc_noexit)
+  [kindtek_process_pop]$kindtek_proc = [kindtek_process_pop]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
 function start_kindtek_process_popmin {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
-  [dvlp_process_popmin]$dvlp_proc = [dvlp_process_popmin]::new($proc_cmd, $proc_wait, $proc_noexit)
+  [kindtek_process_popmin]$kindtek_proc = [kindtek_process_popmin]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
 function start_kindtek_process_popmax {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
-  [dvlp_process_popmax]$dvlp_proc = [dvlp_process_popmax]::new($proc_cmd, $proc_wait, $proc_noexit)
+  [kindtek_process_popmax]$kindtek_proc = [kindtek_process_popmax]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
 function start_kindtek_process_hide {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
-  [dvlp_process_hide]$dvlp_proc = [dvlp_process_hide]::new($proc_cmd, $proc_wait, $proc_noexit)
+  [kindtek_process_hide]$kindtek_proc = [kindtek_process_hide]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 
 function start_kindtek_process_embed {
   param (
     $proc_cmd, $proc_wait, $proc_noexit
   )
-  [dvlp_process_embed]$dvlp_proc = [dvlp_process_embed]::new($proc_cmd, $proc_wait, $proc_noexit)
+  [kindtek_process_embed]$kindtek_proc = [kindtek_process_embed]::new($proc_cmd, $proc_wait, $proc_noexit)
 }
 function get_kindtek_env {
   param (
@@ -613,10 +613,10 @@ function set_kindtek_envs {
     if ($machine_ext -split ";" -notcontains ".ps1") {
       set_kindtek_env "pathext" "$(get_kindtek_env 'pathext' 'machine');.ps1" "machine" 
     }
-    if ($local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/") {
+    if ($local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $local_paths -split ";" -notcontains "$env:KINDTEK_win_dvlp_PATH/scripts/") {
       set_kindtek_env "path" "$(get_kindtek_env 'path');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1"
     }
-    if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_KINDTEK_PATH/scripts/") {
+    if ($machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_SPAWN" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_DEVEL_TOOLS" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_WIN_DVLW_PATH/scripts/" -Or $machine_paths -split ";" -notcontains "$env:KINDTEK_win_dvlp_PATH/scripts/") {
       set_kindtek_env "path" "$(get_kindtek_env 'path' 'machine');$env:KINDTEK_DEVEL_TOOLS;$env:KINDTEK_DEVEL_SPAWN;$env:KINDTEK_WIN_DVLW_PATH/scripts/;$env:KINDTEK_WIN_DVLP_PATH/scripts/;$env:USERPROFILE\dvlp.ps1" "machine"
     }
 
@@ -1614,7 +1614,7 @@ function wsl_devel_spawn {
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
                   Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro";
               }
-              # start_dvlp_process_pop "
+              # start_kindtek_process_pop "
               #               `$old_wsl_default_distro = $old_wsl_default_distro;
               #               `$(docker_devel_spawn 'kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag' 'kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag' 'default');
               #               `$new_wsl_default_distro = get_default_wsl_distro;
