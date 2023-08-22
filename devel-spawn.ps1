@@ -1496,11 +1496,15 @@ function wsl_devel_spawn {
             write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
 
             $continue_no_admin = Read-Host "
+            
             could not acquire admin access
             the program may not function as expected
 
+
+
+
             continue? (y/N)"
-            if (($continue_no_admin -ieq "") -or ($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
+            if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
               $admin_bypass = $true
               start_countdown "good luck! " "3" "2" "1" ""
             } else {
