@@ -1487,12 +1487,12 @@ function wsl_devel_spawn {
             $host.UI.RawUI.ForegroundColor = $temp_foreground
             cmd.exe /c "powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized -file $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"'"
             if ($LASTEXITCODE -ne 0) {
-              throw
+              write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
               $host.UI.RawUI.ForegroundColor = $orig_foreground
+              throw
             }
             $host.UI.RawUI.ForegroundColor = $orig_foreground
           } catch {
-            write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
             write-host "
             
             WARNING: could not acquire admin access" -foregroundcolor darkred
