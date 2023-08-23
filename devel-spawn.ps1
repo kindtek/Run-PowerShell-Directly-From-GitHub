@@ -1406,15 +1406,14 @@ function devel_daemon {
             pull_kindtek_envs $env:KINDTEK_DEBUG_MODE;
             safe_boot_devel;
         }
-        if (updates_found_local){
-          update_dvlp;
-          start-sleep 60;
-        } elseif (updates_found){
+        sync_repos;
+        if ((`$(updates_found_local) -eq `$true) -or (`$(updates_found) -eq `$true)){
           update_dvlp
         }
-        sync_repos;
-        require_docker_desktop_online;
-      start-sleep 60;
+        if (`$(is_docker_desktop_online) -eq `$false){
+          require_docker_desktop_online;
+        }
+      start-sleep 5;
     }
     " '' 'noexit'
   }
