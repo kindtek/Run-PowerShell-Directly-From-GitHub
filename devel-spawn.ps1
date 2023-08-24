@@ -944,7 +944,7 @@ function sync_repos {
     }
     else {
       write-host "pulling $env:KINDTEK_WIN_DVLP_NAME ..." -ForegroundColor DarkCyan
-      git submodule update --init --init --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
+      git submodule update --init --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
       write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
     }
     if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLADV_PATH)/.git")) {
@@ -1096,6 +1096,12 @@ function require_devel_online {
       $docker_online = require_docker_desktop_online
     }
   } while ($docker_online -eq $false)
+}
+
+function keep_devel_online {
+  while (!($(is_docker_desktop_online))){
+    require_docker_desktop_online 2> $null
+  }
 }
 function docker_devel_spawn {
   param (
