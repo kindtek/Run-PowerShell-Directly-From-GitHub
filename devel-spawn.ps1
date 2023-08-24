@@ -1409,20 +1409,7 @@ function devel_daemon {
 
   if ($keep_running -eq $true) {
     # daemon initialized ... now check periodically for problems
-    start_kindtek_process_popmin "
-      while (`$true){
-        if (`$(dependencies_installed) -eq `$false){
-            # try setting envs first then do bare minimum
-            pull_kindtek_envs $env:KINDTEK_DEBUG_MODE;
-            safe_boot_devel;
-        }
-        sync_repos;
-        if ((`$(update_found_local) -eq `$true) -or (`$(update_found) -eq `$true)){
-          update_dvlp;
-        }
-        keep_devel_online
-      start-sleep 5;
-      }" 'wait' 'noexit'
+    keep_devel_online
   }
     
   return $true
