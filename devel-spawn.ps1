@@ -1720,7 +1720,7 @@ continue or skip
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
       $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
       $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
-      if ($(get_kindtek_env 'KINDTEK_AUTO_BOOT') -eq '1') {
+      if ($(get_kindtek_auto_boot) -eq $true) {
         $auto_boot_status = 'ON'
       }
       else {
