@@ -1706,8 +1706,8 @@ continue or skip
           }
         }
         write-host -nonewline "====-D-=-O-=-C-=-K-=-E-=-R-====-D-=-E-=-V-=-E-=-L=====))====:)
-      _ _ _ _ _ // 
-     <+````````|L|````" -ForegroundColor DarkRed
+       _ _ _ _ _ // 
+  <+``````````|L|````" -ForegroundColor DarkRed
         }
       }
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
@@ -1737,14 +1737,14 @@ continue or skip
         }
         try {
           $wsl_distro_list = get_wsl_distro_list
-          if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
-    #       write-host -nonewline ":)
-    #   _ _ _ _ _ // 
-    #  <+````````|L|````" -ForegroundColor DarkRed
-    #         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
-          }
           display_wsl_distro_list $wsl_distro_list
           $dvlp_options = "`r`n`r`n`r`nEnter a wsl distro number/name, powershell command, docker image (repo/image:tag), or one of the following:`r`n`r`n`t- [i]mport docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+          if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
+            #       write-host -nonewline ":)
+#   _ _ _ _ _ // 
+#  <+````````|L|````" -ForegroundColor DarkRed
+            #         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+                  }
         }
         catch {
           try {
@@ -1752,14 +1752,15 @@ continue or skip
             $wsl_distro_list = get_wsl_distro_list
             if ($global:dvlp_safe_mode -eq $true) {
           write-host -nonewline ":|
-      _ _ _ _ _ // 
-     <+````````|L|````" -ForegroundColor DarkRed
+       _ _ _ _ _ // 
+  <+````````````|L|````" -ForegroundColor DarkRed
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
           write-host -nonewline ":(
-      _ _ _ _ _ // 
-     <+````````|L|````" -ForegroundColor Red
+       _ _ _ _ _ // 
+  <+``````````|L|````" -ForegroundColor Red
+    
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             display_wsl_distro_list $wsl_distro_list
@@ -1770,6 +1771,8 @@ continue or skip
           write-host -nonewline ":|
        _ _ _ _ _ // 
      <+````````|L|````" -ForegroundColor DarkRed
+     write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+
   #       write-host -nonewline "
   #   <+~_-[W|-_=_.
   #                \\ 
