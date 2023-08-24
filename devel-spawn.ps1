@@ -1396,7 +1396,7 @@ function devel_daemon {
 
   } while ($boot_devel_loop_count -lt $boot_devel_loop_max -And $(boot_devel) -eq $false)
 
-  if ($keep_running) {
+  if ($keep_running -eq $true) {
     # daemon initialized ... now check periodically for problems
     start_kindtek_process_popmin "
       while (`$true){
