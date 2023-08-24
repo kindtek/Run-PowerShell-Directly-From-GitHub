@@ -1417,7 +1417,7 @@ function devel_daemon {
             safe_boot_devel;
         }
         sync_repos;
-        if ((`$(updates_found_local) -eq `$true) -or (`$(updates_found) -eq `$true)){
+        if ((`$(update_found_local) -eq `$true) -or (`$(update_found) -eq `$true)){
           update_dvlp;
         }
         keep_docker_desktop_online
