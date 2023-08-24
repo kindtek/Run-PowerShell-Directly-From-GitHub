@@ -1381,18 +1381,29 @@ function devel_daemon {
       try {
         # try pulling envs first
         pull_kindtek_envs
-        return boot_devel
+        if (!$($keep_running)){
+          return boot_devel
+        } else {
+          boot_devel
+        }
       } catch { 
         # try setting envs first then do bare minimum
         set_kindtek_envs $env:KINDTEK_DEBUG_MODE
-        return safe_boot_devel
+        if (!$($keep_running)){
+          return safe_boot_devel
+        } else {
+          safe_boot_devel
+        }
       }
       reboot_prompt
-      
-      return $false 
+      if (!$($keep_running)){
+        return $false 
+      }
     }
 
-    return $true
+    if (!$($keep_running)){
+      return $true 
+    }
 
   } while ($boot_devel_loop_count -lt $boot_devel_loop_max -And $(boot_devel) -eq $false)
 
