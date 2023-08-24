@@ -1586,6 +1586,10 @@ function wsl_devel_spawn {
             catch {
               Write-Host "failed setting up hypervm in user profile"
             }
+            write-host -nonewline "
+    <+~_-[W|-_=_.
+                         \\ 
+   <+-~-=-|S|-=-+|=]+====-D-=-O-=-C-=-K-=-E-=-R-====-D-=-E-=-V-=-E-=-L=====))====" -ForegroundColor DarkRed
           }
           if (!([string]::IsNullOrEmpty($img_name_tag)) -and $img_name_tag -ne "skip") {
             $host.UI.RawUI.ForegroundColor = "White"
@@ -1692,10 +1696,6 @@ continue or skip
       }
       else {
         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
-          write-host -nonewline ":)
-       _ _ _ _ _ // 
-    <+````````|L|````" -ForegroundColor DarkRed
-        }
         . include_devel_tools
         if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
           start_kindtek_process_hide 'sync_repos'
@@ -1705,6 +1705,11 @@ continue or skip
           if ($global:update_dvlw){
             return
           }
+        }
+        write-host -nonewline "
+====-D-=-O-=-C-=-K-=-E-=-R-====-D-=-E-=-V-=-E-=-L=====))====:)
+      _ _ _ _ _ // 
+     <+````````|L|````" -ForegroundColor DarkRed
         }
       }
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
@@ -1736,8 +1741,8 @@ continue or skip
           $wsl_distro_list = get_wsl_distro_list
           if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
           write-host -nonewline ":)
-       _ _ _ _ _ // 
-    <+````````|L|````" -ForegroundColor DarkRed
+      _ _ _ _ _ // 
+     <+````````|L|````" -ForegroundColor DarkRed
             write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
           }
           display_wsl_distro_list $wsl_distro_list
@@ -1749,14 +1754,14 @@ continue or skip
             $wsl_distro_list = get_wsl_distro_list
             if ($global:dvlp_safe_mode -eq $true) {
           write-host -nonewline ":|
-       _ _ _ _ _ // 
-    <+````````|L|````" -ForegroundColor DarkRed
+      _ _ _ _ _ // 
+     <+````````|L|````" -ForegroundColor DarkRed
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
           write-host -nonewline ":(
-       _ _ _ _ _ // 
-    <+````````|L|````" -ForegroundColor Red
+      _ _ _ _ _ // 
+     <+````````|L|````" -ForegroundColor Red
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             display_wsl_distro_list $wsl_distro_list
@@ -1766,7 +1771,7 @@ continue or skip
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
           write-host -nonewline ":|
        _ _ _ _ _ // 
-    <+````````|L|````" -ForegroundColor DarkRed
+     <+````````|L|````" -ForegroundColor DarkRed
   #       write-host -nonewline "
   #   <+~_-[W|-_=_.
   #                \\ 
