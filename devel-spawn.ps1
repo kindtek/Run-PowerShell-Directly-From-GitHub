@@ -1409,7 +1409,7 @@ function devel_daemon {
         if ((`$(updates_found_local) -eq `$true) -or (`$(updates_found) -eq `$true)){
           update_dvlp;
         }
-        keep_devel_online
+        keep_docker_desktop_online
       start-sleep 5;
       }" '' 'noexit'
   }
