@@ -1373,6 +1373,11 @@ function devel_daemon {
   )
   [int]$boot_devel_loop_count = 0
   [int]$boot_devel_loop_max = 10
+  if ([string]::isNullOrEmpty($keep_running)){
+    [bool]$keep_running = $false
+  } else {
+    [bool]$keep_running = $true
+  }
   do {
     $boot_devel_loop_count += 1 
     try {  
