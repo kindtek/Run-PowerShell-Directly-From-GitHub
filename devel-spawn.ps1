@@ -1712,7 +1712,7 @@ continue or skip
         }
         write-host -nonewline "====-D-=-O-=-C-=-K-=-E-=-R-====-D-=-E-=-V-=-E-=-L=====))====:)
        _ _ _ _ _ // 
-    <+``````````|L|``````" -ForegroundColor DarkRed
+    <+`"`````````|L|``````" -ForegroundColor DarkRed
         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
 
         }
@@ -1760,13 +1760,13 @@ continue or skip
             if ($global:dvlp_safe_mode -eq $true) {
           write-host -nonewline ":|
        _ _ _ _ _ // 
-    <+````````````|L|``````" -ForegroundColor DarkRed
+    +`"`````````|L|``````" -ForegroundColor DarkRed
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
           write-host -nonewline ":(
        _ _ _ _ _ // 
-    <+``````````|L|``````" -ForegroundColor Red
+    +`"`````````|L|``````" -ForegroundColor Red
     
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
@@ -1777,7 +1777,7 @@ continue or skip
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
           write-host -nonewline ":|
        _ _ _ _ _ // 
-    <+````````|L|``````" -ForegroundColor DarkRed
+      +`"`````````|L|``````" -ForegroundColor DarkRed
      write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
 
   #       write-host -nonewline "
