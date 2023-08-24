@@ -1381,7 +1381,9 @@ function devel_daemon {
   do {
     $boot_devel_loop_count += 1 
     try {  
-      return boot_devel
+      if (!$($keep_running)){
+        return boot_devel
+      }
     } catch { 
       try {
         # try pulling envs first
