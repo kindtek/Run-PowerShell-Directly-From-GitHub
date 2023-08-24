@@ -2310,7 +2310,7 @@ continue or skip
           }
           elseif ($dvlp_input -ieq 'daemon' ) {
             Write-Host "spawning daemon with $(get_default_wsl_distro)"
-            return devel_daemon
+            return $(devel_daemon $true)
           }
           elseif ($dvlp_input -ieq 'devel' ){
             $debug_mode = get_kindtek_debug_mode
