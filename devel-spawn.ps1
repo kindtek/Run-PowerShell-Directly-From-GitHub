@@ -1411,7 +1411,7 @@ function devel_daemon {
         }
         keep_docker_desktop_online
       start-sleep 5;
-      }" '' 'noexit'
+      }" 'wait' 'noexit'
   }
     
   return $true
