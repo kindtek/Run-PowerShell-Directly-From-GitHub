@@ -1376,20 +1376,18 @@ function devel_daemon {
     $boot_devel_loop_count += 1 
     try {  
       return boot_devel
-    }
-    catch { 
+    } catch { 
       try {
         # try pulling envs first
         pull_kindtek_envs
         return boot_devel
-      }
-      catch { 
+      } catch { 
         # try setting envs first then do bare minimum
         set_kindtek_envs $env:KINDTEK_DEBUG_MODE
         return safe_boot_devel
       }
       reboot_prompt
-            
+      
       return $false 
     }
 
@@ -1408,14 +1406,13 @@ function devel_daemon {
         }
         sync_repos;
         if ((`$(updates_found_local) -eq `$true) -or (`$(updates_found) -eq `$true)){
-          update_dvlp
+          update_dvlp;
         }
         if (`$(is_docker_desktop_online) -eq `$false){
           require_docker_desktop_online;
         }
       start-sleep 5;
-    }
-    " '' 'noexit'
+      }" '' 'noexit'
   }
     
   return $true
