@@ -1098,11 +1098,6 @@ function require_devel_online {
   } while ($docker_online -eq $false)
 }
 
-function keep_devel_online {
-  while (!($(is_docker_desktop_online))){
-    require_docker_desktop_online 2> $null
-  }
-}
 function docker_devel_spawn {
   param (
     $img_name_tag, $non_interactive, $default_distro
@@ -1414,9 +1409,7 @@ function devel_daemon {
         if ((`$(updates_found_local) -eq `$true) -or (`$(updates_found) -eq `$true)){
           update_dvlp;
         }
-        if (`$(is_docker_desktop_online) -eq `$false){
-          require_docker_desktop_online;
-        }
+        keep_devel_online
       start-sleep 5;
       }" '' 'noexit'
   }
