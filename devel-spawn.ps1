@@ -391,7 +391,7 @@ function set_kindtek_env {
   param (
     $kindtek_env_var, $kindtek_env_val, $set_machine_env_flag, $set_both_env_flag
   )
-    
+  Set-PSDebug -Trace 2
   try {
     if (!([string]::IsNullOrEmpty($kindtek_env_var))) {
       # Write-Host "setting $kindtek_env_var to $kindtek_env_val"
@@ -414,11 +414,14 @@ function set_kindtek_env {
     }
   }
   catch {
+    Set-PSDebug -Trace 0
     if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
       Write-Host "error setting $kindtek_env_var"
       Write-Host "$cmd_str"
     }
+
   }
+  Set-PSDebug -Trace 0
   return $null
 }
 
@@ -1170,6 +1173,7 @@ function set_kindtek_auto_boot {
   param (
     [bool]$auto_boot
   )
+  Set-PSDebug -Trace 2
   if ($auto_boot) {
     set_kindtek_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 'machine'
     set_kindtek_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 
@@ -1182,6 +1186,7 @@ function set_kindtek_auto_boot {
     set_kindtek_env 'KINDTEK_AUTO_BOOT' ''
     Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Confirm:$false -Force -ErrorAction SilentlyContinue -Verbose   
   }
+  Set-PSDebug -Trace 2
 }
 
 function safe_boot_devel {
