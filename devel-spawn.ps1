@@ -1810,12 +1810,7 @@ continue or skip
       $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
       $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
       do {
-        if ($(get_kindtek_auto_boot) -eq $true) {
-          $auto_boot_status = 'ON'
-        }
-        else {
-          $auto_boot_status = 'OFF'
-        }
+
         if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag))) -And ($img_name_tag -ne 'skip')) {
           $docker_devel_spawn_noninteractive = "`r`n`t- [i!] import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default"
         }
@@ -2022,10 +2017,10 @@ continue or skip
             display_wsl_distro_list $wsl_distro_list
             Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
             if ($(get_kindtek_auto_boot)) {
-              write-host "`r`n`t- [auto] boot OFF`r`n"
+              write-host "`t- [auto] boot ON`r`n"
             }
             else {
-              write-host "`r`n`t- [auto] boot OFF`r`n"
+              write-host "`t- [auto] boot OFF`r`n"
             }
           }
           # reset dvlp_options if cleared before
