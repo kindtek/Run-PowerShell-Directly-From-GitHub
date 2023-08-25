@@ -1974,11 +1974,11 @@ continue or skip
                 $host.UI.RawUI.ForegroundColor = $temp_foreground
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
-                $host.UI.RawUI.ForegroundColor = "Blue"
+                $host.UI.RawUI.ForegroundColor = "DarkBlue"
                 $host.UI.RawUI.ForegroundColor = "DarkRed"
                 set-psdebug -trace 0
-                [console]::backgroundcolor = "DarkYellow"
-                [console]::foregroundcolor = "DarkYellow"
+                [console]::backgroundcolor = "DarkBlue"
+                [console]::foregroundcolor = "DarkBlue"
                 echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
                 $orig_foreground = [System.Console]::ForegroundColor
                 $temp_foreground = [System.Console]::BackgroundColor
@@ -1986,8 +1986,8 @@ continue or skip
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
                 echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
-                [console]::backgroundcolor = "Blue"
-                [console]::foregroundcolor = "Blue"
+                [console]::backgroundcolor = "DarkBlue"
+                [console]::foregroundcolor = "DarkBlue"
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
                 [console]::backgroundcolor = "Pink"
