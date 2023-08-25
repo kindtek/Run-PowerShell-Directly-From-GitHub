@@ -1842,6 +1842,7 @@ continue or skip
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
           
+          Write-Host "`r`n`r`n"
           display_wsl_distro_list $wsl_distro_list
           Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
           Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor Red
@@ -1932,7 +1933,7 @@ continue or skip
               write-host "executing: wsl.exe --unregister $wsl_distro_selected_name"
               wsl.exe --unregister $wsl_distro_selected_name
               [int]$selected_wsl_distro_name_length = $wsl_distro_list[$([int]$wsl_choice-1)].length
-              $wsl_distro_list[$wsl_choice] = ''
+              $wsl_distro_list[$([int]$wsl_choice-1)] = ''
               for ($i = 0; $i -le $selected_wsl_distro_name_length - 1; $i++) {
                 $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
               }    
@@ -1988,7 +1989,7 @@ continue or skip
                 write-host "`r`ndeleting $wsl_distro_selected_name distro ..."
                 wsl.exe --unregister $wsl_distro_selected_name
                 [int]$selected_wsl_distro_name_length = $wsl_distro_list[$([int]$wsl_choice-1)].length
-                $wsl_distro_list[$wsl_choice] = ''
+                $wsl_distro_list[$([int]$wsl_choice-1)] = ''
                 for ($i = 0; $i -le $selected_wsl_distro_name_length - 1; $i++) {
                   $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
                 }    
