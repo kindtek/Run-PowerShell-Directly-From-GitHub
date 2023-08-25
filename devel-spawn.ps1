@@ -2019,10 +2019,14 @@ continue or skip
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
           if ($dvlp_input -ine 'nodisplay'){
-            Write-Host "`r`n"
             display_wsl_distro_list $wsl_distro_list
             Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
-
+            if ($(get_kindtek_auto_boot)) {
+              write-host "`r`n`t- auto boot OFF`r`n"
+            }
+            else {
+              write-host "`r`n`t- auto boot OFF`r`n"
+            }
           }
           # reset dvlp_options if cleared before
           Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor Red
