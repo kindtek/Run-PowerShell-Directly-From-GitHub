@@ -396,15 +396,15 @@ function set_kindtek_env {
     if (!([string]::IsNullOrEmpty($kindtek_env_var))) {
       # Write-Host "setting $kindtek_env_var to $kindtek_env_val"
       if (([string]::IsNullOrEmpty($set_machine_env_flag)) -And ([string]::IsNullOrEmpty($set_both_env_flag))) {
-        # write-host "setting local env $kindtek_env_var to $kindtek_env_val"
+        write-host "setting local env $kindtek_env_var to $kindtek_env_val"
         [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
       }
       elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val)) {
-        # write-host "setting machine env $kindtek_env_var to $kindtek_env_val"
+        write-host "setting machine env $kindtek_env_var to $kindtek_env_val"
         [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine)                  
       }
       elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val) -Or ($(get_kindtek_env "$kindtek_env_var") -ne $kindtek_env_val))) {
-        # write-host "setting local and machine env $kindtek_env_var to $kindtek_env_val"
+        write-host "setting local and machine env $kindtek_env_var to $kindtek_env_val"
         [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
         [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine)                  
       }
