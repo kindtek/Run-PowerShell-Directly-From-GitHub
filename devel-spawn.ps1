@@ -1770,7 +1770,6 @@ continue or skip
     
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
-            display_wsl_distro_list $wsl_distro_list
             $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] open wsl distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
           }
           catch {
@@ -1842,6 +1841,8 @@ continue or skip
             # once activated, keep command line mode active 
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
+          
+          display_wsl_distro_list $wsl_distro_list
           Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
           Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor Red
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
