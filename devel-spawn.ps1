@@ -2399,7 +2399,8 @@ continue or skip
                 Write-Host $dvlp_output
               }
               catch {
-                if ($dvlp_input -ne 'display'){
+               
+                if ($dvlp_input -ne 'display' -and $dvlp_input -ne 'nodisplay' -and $dvlp_input -ine 'screen'  -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' ){
                   write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
                   $dvlp_input = 'display'
                 }
