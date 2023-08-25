@@ -4,19 +4,7 @@
 
 # set special colors
 
-$p = $host.privatedata
-
-$p.ErrorForegroundColor    = "DarkGray"
-$p.ErrorBackgroundColor    = "Black"
-$p.WarningForegroundColor  = "White"
-$p.WarningBackgroundColor  = "Black"
-$p.DebugForegroundColor    = "DarkGray"
-$p.DebugBackgroundColor    = "Black"
-$p.VerboseForegroundColor  = "Gray"
-$p.VerboseBackgroundColor  = "Black"
-$p.ProgressForegroundColor = "Red"
-$p.ProgressBackgroundColor = "White"
-
+$global:devel_data = $host.privatedata
 # clear screen
 if ($global:jump_screen -eq $true){
   echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
@@ -1208,9 +1196,74 @@ function set_kindtek_auto_boot {
   Set-PSDebug -Trace 2
 }
 
+function lock_devel {
+
+  lock_theme "DarkGray" "Black"  "White" "Black" "DarkGray" "Black" "Gray" "Black" "Red" "White"
+}
+
+function lock_gates {
+  lock_theme "DarkRed" "DarkYellow" "DarkRed" "Blue" "DarkYellow" "Blue" "DarkYellow" "Gray" "Blue" "White"
+}
+
+function lock_theme {
+  param (
+    $ErrorForegroundColor,
+    $ErrorBackgroundColor,
+    $WarningForegroundColor,
+    $WarningBackgroundColor,
+    $DebugForegroundColor,
+    $VerboseForegroundColor,
+    $VerboseBackgroundColor,
+    $ProgressForegroundColor,
+    $ProgressBackgroundColor
+  )
+  $global:devel_data = $host.privatedata
+  $global:devel_data.ErrorForegroundColor    = $ErrorForegroundColor
+  $global:devel_data.ErrorBackgroundColor    = $ErrorBackgroundColor
+  $global:devel_data.WarningForegroundColor  = $WarningForegroundColor
+  $global:devel_data.WarningBackgroundColor  = $WarningBackgroundColor
+  $global:devel_data.DebugForegroundColor    = $DebugForegroundColor
+  $global:devel_data.DebugBackgroundColor    = $DebugBackgroundColor
+  $global:devel_data.VerboseForegroundColor  = $VerboseForegroundColor
+  $global:devel_data.VerboseBackgroundColor  = $VerboseBackgroundColor
+  $global:devel_data.ProgressForegroundColor = $ProgressForegroundColor
+  $global:devel_data.ProgressBackgroundColor = $ProgressBackgroundColor
+}
+
+function unlock_theme {
+  param (
+    $ErrorForegroundColor,
+    $ErrorBackgroundColor,
+    $WarningForegroundColor,
+    $WarningBackgroundColor,
+    $DebugForegroundColor,
+    $DebugBackgroundColor,
+    $VerboseForegroundColor,
+    $VerboseBackgroundColor,
+    $ProgressForegroundColor,
+    $ProgressBackgroundColor
+  )
+  $p.ErrorForegroundColor    = "DarkRed"
+  $p.ErrorBackgroundColor    = "DarkYellow"
+  $p.WarningForegroundColor  = "DarkRed"
+  $p.WarningBackgroundColor  = "Blue"
+  $p.DebugForegroundColor    = "DarkYellow"
+  $p.DebugBackgroundColor    = "Blue"
+  $p.VerboseForegroundColor  = "DarkYellow"
+  $p.VerboseBackgroundColor  = "Gray"
+  $p.ProgressForegroundColor = "Blue"
+  $p.ProgressBackgroundColor = "White"
+
+  $p = $global:devel_data.privatedata
+  
+  lock_theme $ErrorForegroundColor $ErrorBackgroundColor $WarningForegroundColor $WarningBackgroundColor $DebugForegroundColor $DebugBackgroundColor $VerboseForegroundColor $VerboseBackgroundColor $ProgressForegroundColor $ProgressBackgroundColor
+}
+
 function safe_boot_devel {
   try {
     Set-PSDebug -Trace 2;
+lock_gates
+
     install_winget $true
     install_git $true    
     sync_repos
@@ -1218,7 +1271,7 @@ function safe_boot_devel {
     install_dependencies $true
     start_docker_desktop_new_win
 
-        
+        unlock_theme
     Set-PSDebug -Trace "$env:KINDTEK_DEBUG_MODE"
     return $true
   }
@@ -1227,6 +1280,7 @@ function safe_boot_devel {
 
 function boot_devel {
   $new_windowsfeatures_installed = $false
+lock_gates
   try {
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
     $host.UI.RawUI.BackgroundColor = "Black"
@@ -1354,6 +1408,7 @@ function boot_devel {
         }
         start_docker_desktop | out-null
         if ($continue_install -ieq '' -or $(dependencies_installed) -eq $false -or (!(is_docker_desktop_online))) {
+unlock_theme
           if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
             if ($new_windowsfeatures_installed) {
               Write-Host "
@@ -1385,10 +1440,12 @@ function boot_devel {
             " -ForegroundColor Magenta -BackgroundColor Yellow
       write-host `r`n`r`n
     }
-        
+        unlock_theme
     return $true
   }
-  catch { return $false }
+  catch { 
+    unlock_theme
+    return $false }
 }
 
 function devel_daemon {
@@ -1843,6 +1900,74 @@ continue or skip
         $dvlp_prompt_cursor2 = " > "
         $dvlp_prompt_prefix = ""
         do {
+          if ($dvlp_input -eq 'gates'){
+            $sleep = 1
+            for ($i = 0; $i -le 3; $i++) {
+                write-output -nonewline "0" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "0" -foregroundcolor White -backgroundcolor blue
+                write-output -nonewline "0" -foregroundcolor DarkYellow -backgroundcolor gray
+                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "1" -foregroundcolor White -backgroundcolor blue
+                write-output -nonewline "1" -foregroundcolor DarkYellow -backgroundcolor gray
+                write-output -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-output -nonewline "!" -foregroundcolor Red -backgroundcolor blue
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                write-output -nonewline "*&&^**" -foregroundcolor White -backgroundcolor blue
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                write-output -nonewline "%#@" -foregroundcolor DarkYellow -backgroundcolor gray
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                write-output -nonewline "~#&^&@)"  -foregroundcolor White -backgroundcolor blue
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                write-output -nonewline "`r773999999999999999999999999999966666666666666666666666666666" -foregroundcolor Red -backgroundcolor blue
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                write-output "-1" -foregroundcolor black -backgroundcolor white
+                cmd.exe /c "timeout /t 10" 2> $null
+                # disguise timeout
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                $host.UI.RawUI.ForegroundColor = "Blue"
+                $host.UI.RawUI.ForegroundColor = "DarkRed"
+              
+            }
+            lock_gates
+            
+          }
+          
 
           Set-PSDebug -Trace 0
           if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
