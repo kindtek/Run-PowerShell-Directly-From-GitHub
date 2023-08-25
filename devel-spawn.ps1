@@ -1985,11 +1985,9 @@ continue or skip
                 }
                 write-host "`r`ndeleting $wsl_distro_selected_name distro ..."
                 wsl.exe --unregister $wsl_distro_selected_name
-                $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
-                write-host "`r`npro tip: next time you can use x$wsl_distro_selected_num to delete a distro"
-                start-sleep -Milliseconds 600
+                [int]$selected_wsl_distro_name_length = $wsl_distro_list[$([int]$wsl_choice-1)].length
                 $wsl_distro_list[$wsl_choice] = ''
-                for ($i = 0; $i -le $wsl_distro_list[$([int]$wsl_choice-1)].length - 1; $i++) {
+                for ($i = 0; $i -le $selected_wsl_distro_name_length - 1; $i++) {
                   $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
                 }    
                 $dvlp_input = 'display'
