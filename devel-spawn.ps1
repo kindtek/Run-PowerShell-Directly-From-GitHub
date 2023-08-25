@@ -5,13 +5,13 @@
 # set special colors
 
 $global:devel_data = $host.privatedata
-$global:devel_data.ErrorForegroundColor    = "Gray"
+$global:devel_data.ErrorForegroundColor    = "DarkGray"
 $global:devel_data.ErrorBackgroundColor    = "Black"
-$global:devel_data.WarningForegroundColor  = "White"
+$global:devel_data.WarningForegroundColor  = "Gray"
 $global:devel_data.WarningBackgroundColor  = "Black"
-$global:devel_data.DebugForegroundColor    = "Gray"
+$global:devel_data.DebugForegroundColor    = "DarkGray"
 $global:devel_data.DebugBackgroundColor    = "Black"
-$global:devel_data.VerboseForegroundColor  = "Gray"
+$global:devel_data.VerboseForegroundColor  = "DarkGray"
 $global:devel_data.VerboseBackgroundColor  = "Black"
 $global:devel_data.ProgressForegroundColor = "Red"
 $global:devel_data.ProgressBackgroundColor = "White"
