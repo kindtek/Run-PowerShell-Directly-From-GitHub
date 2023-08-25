@@ -2417,8 +2417,8 @@ continue or skip
               write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
             }
           }
-          Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
         } while ( $dvlp_input -eq 'display' -or $dvlp_input -eq 'nodisplay')
+        Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
       } while ($dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
     }
     elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
