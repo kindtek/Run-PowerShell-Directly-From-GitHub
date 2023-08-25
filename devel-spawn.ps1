@@ -2397,7 +2397,7 @@ continue or skip
                 $dvlp_input_orig = $dvlp_input
                 $dvlp_input = 'nodisplay'
                 $dvlp_output = Invoke-Expression $dvlp_input_orig | Out-String
-                Write-Host $dvlp_output
+                Write-Host -nonewline $dvlp_output
               }
               catch {
                
