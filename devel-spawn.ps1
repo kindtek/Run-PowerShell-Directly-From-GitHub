@@ -2535,7 +2535,7 @@ continue or skip
               set_kindtek_debug_mode $true
             }
           }
-          elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'nodisplay' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon') {
+          elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'nodisplay' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'gates') {
             try {
               # disguise unavoidable error message
               $orig_foreground = [System.Console]::ForegroundColor
