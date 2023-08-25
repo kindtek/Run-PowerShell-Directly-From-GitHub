@@ -2017,10 +2017,10 @@ continue or skip
             display_wsl_distro_list $wsl_distro_list
             Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
             if ($(get_kindtek_auto_boot)) {
-              write-host "`t- [auto] boot ON`r`n"
+              write-host "`r`n`t- [auto] boot ON`r`n"
             }
             else {
-              write-host "`t- [auto] boot OFF`r`n"
+              write-host "`r`n`t- [auto] boot OFF`r`n"
             }
           }
           # reset dvlp_options if cleared before
