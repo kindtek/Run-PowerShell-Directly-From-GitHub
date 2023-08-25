@@ -5,6 +5,17 @@
 # set special colors
 
 $global:devel_data = $host.privatedata
+$global:devel_data.ErrorForegroundColor    = "Gray"
+$global:devel_data.ErrorBackgroundColor    = "Black"
+$global:devel_data.WarningForegroundColor  = "White"
+$global:devel_data.WarningBackgroundColor  = "Black"
+$global:devel_data.DebugForegroundColor    = "Gray"
+$global:devel_data.DebugBackgroundColor    = "Black"
+$global:devel_data.VerboseForegroundColor  = "Gray"
+$global:devel_data.VerboseBackgroundColor  = "Black"
+$global:devel_data.ProgressForegroundColor = "Red"
+$global:devel_data.ProgressBackgroundColor = "White"
+
 # clear screen
 if ($global:jump_screen -eq $true){
   echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
@@ -12,6 +23,7 @@ if ($global:jump_screen -eq $true){
 $global:jump_screen = $false
 
 $global:devel_spawn = 'sourced'
+
 
 
 # # # # # # # # # # # # # # functions # # # # # # # # # # # # # # # # # # 
