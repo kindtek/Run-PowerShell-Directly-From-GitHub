@@ -1855,7 +1855,7 @@ continue or skip
               $dvlp_input = 'exit'
             }
           }
-          $dvlp_options = ''
+          # $dvlp_options = ''
           
           if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1))) {
             # entering space the first time will exit - after that need x or exit to exit
