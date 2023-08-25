@@ -1718,6 +1718,7 @@ continue or skip
         }
       }
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
+      Set-PSDebug -Trace 0
       $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
       $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
       if ($(get_kindtek_auto_boot) -eq $true) {
@@ -1777,7 +1778,6 @@ continue or skip
        _ _ _ _ _ // 
       +`"`````````|L|``````" -ForegroundColor DarkRed
      write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
-
   #       write-host -nonewline "
   #   <+~_-[W|-_=_.
   #                \\ 
@@ -1825,6 +1825,7 @@ continue or skip
         $dvlp_prompt_prefix = ""
 
         do {
+
           if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
             # once activated, keep command line mode active 
             $dvlp_prompt_cursor = $dvlp_prompt_cursor2
@@ -1840,7 +1841,6 @@ continue or skip
             # once activated, keep command line mode active 
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
-          Set-PSDebug -Trace 0
           if ($dvlp_input -ine 'nodisplay'){
             Write-Host "`r`n"
             display_wsl_distro_list $wsl_distro_list
@@ -1850,7 +1850,6 @@ continue or skip
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
           $dvlp_input = $Host.UI.ReadLine()
-          Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
           if ($dvlp_input -match "^\s*$"){
             $dvlp_input = 'display'
           } else {
@@ -2415,7 +2414,8 @@ continue or skip
               write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
             }
           }
-        } while ( $dvlp_input -eq 'display' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'nodisplay')
+          Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
+        } while ( $dvlp_input -eq 'display' -or $dvlp_input -eq 'nodisplay')
       } while ($dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
     }
     elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
