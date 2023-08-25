@@ -421,7 +421,7 @@ function set_kindtek_env {
     }
 
   }
-  Set-PSDebug -Trace 0
+  Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
   return $null
 }
 
