@@ -1872,7 +1872,7 @@ continue or skip
           }
           catch {}
           if (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2)) {
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ieq 'update') {
             update_dvlp $true
@@ -1883,7 +1883,7 @@ continue or skip
               reload_dvlp
             }
             else {
-              $dvlp_input = 'noscreen'
+              $dvlp_input = 'display'
             }
           }
           elseif ($dvlp_input -ieq 'i') {
@@ -1916,7 +1916,7 @@ continue or skip
             }
             else {
               write-host "no distro for ${wsl_choice} found"
-              $dvlp_input = 'noscreen'
+              $dvlp_input = 'display'
             }
           }
           elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "x\d")) {
@@ -1939,7 +1939,7 @@ continue or skip
         
             }
             else {
-              $dvlp_input = 'noscreen'
+              $dvlp_input = 'display'
               write-host "no distro for ${wsl_choice} found"
             }
           }
@@ -1952,7 +1952,7 @@ continue or skip
               wsl.exe --distribution "$($wsl_distro_selected_name)".trim() -- bash
             }
             else {
-              $dvlp_input = 'noscreen'
+              $dvlp_input = 'display'
               write-host "no distro for ${wsl_choice} found"
             }
                     
@@ -1965,7 +1965,7 @@ continue or skip
               gui_launch $wsl_distro_selected_name
             }
             else {
-              $dvlp_input = 'noscreen'
+              $dvlp_input = 'display'
               write-host "no distro for ${wsl_choice} found"
             }
           } 
@@ -1973,7 +1973,7 @@ continue or skip
             $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $dvlp_input
             if ([string]::IsNullOrEmpty($wsl_distro_selected_name)) {
               write-host "no distro found for $dvlp_input`r`n`r`n"
-              $dvlp_input = 'noscreen'
+              $dvlp_input = 'display'
             }
             else {
               write-host "`r`n`r`n$wsl_distro_selected_name selected.`r`n`r`nEnter terminal, gui, DEFAULT, DELETE, setup, kernel, backup, rename, restore`r`n`t ... or press ENTER to open"
@@ -2144,7 +2144,7 @@ continue or skip
                   }
                 }
                 else {
-                  $dvlp_input = 'noscreen'
+                  $dvlp_input = 'display'
                 }
               }
               elseif ($wsl_action_choice -ieq 'RESTORE') {
@@ -2195,7 +2195,7 @@ continue or skip
                       }
                     }
                     else {
-                      $dvlp_input = 'noscreen'
+                      $dvlp_input = 'display'
                     }
                   }
                   else {
@@ -2210,7 +2210,7 @@ continue or skip
                 }
               }
               else {
-                $dvlp_input = 'noscreen'
+                $dvlp_input = 'display'
               }
             }
             # $dvlp_input = 'screen'
@@ -2228,7 +2228,7 @@ continue or skip
                 Write-Host "error setting $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro"
               }
             }
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'display'
           }
           elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -like 't**') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {    
             if ($dvlp_input -ieq 't') {
@@ -2263,7 +2263,7 @@ continue or skip
               if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
                 $dvlp_input = $dvlp_input + $dvlp_kindtek_options
                 if ($dvlp_kindtek_options -ieq 'w') {
-                  $dvlp_input = 'noscreen'
+                  $dvlp_input = 'display'
                   Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall"
                   $dvlp_kindtek_options_win = Read-Host
                   if ($dvlp_kindtek_options_win -ceq 'r') {
@@ -2308,25 +2308,25 @@ continue or skip
               wsl.exe --set-default "$env:KINDTEK_OLD_DEFAULT_WSL_DISTRO".trim()
               # restart_wsl_docker
               restart_wsl_docker_new_win
-              $dvlp_input = 'noscreen'
+              $dvlp_input = 'display'
             }
           }
           elseif ($dvlp_input -ceq 'restart') {
             # restart_wsl_docker
             restart_wsl_docker_new_win
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ceq 'restart!') {
             # restart_wsl_docker
             hard_restart_wsl_docker_new_win
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ceq 'RESTART') {
             if (Test-Path "$wsl_restart_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
               powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
               require_docker_desktop_online_new_win
             }
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ieq 'rollback') {
             $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
@@ -2334,11 +2334,11 @@ continue or skip
               powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
               require_docker_desktop_online_new_win
             }
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ceq 'reboot' -or $dvlp_input -ceq 'reboot now' -or $dvlp_input -ceq 'reboot continue') {
             reboot_prompt "$dvlp_input"
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'display'
             # elseif ($dvlp_input -ieq 'v') {
             #     wsl.exe sh -c "cd /hel;. code"
           }
@@ -2353,7 +2353,7 @@ continue or skip
               write-host 'auto boot turned ON'
               start-sleep 1
             }
-            $dvlp_input = 'noscreen'
+            $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ieq 't' ) {
             wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
@@ -2390,7 +2390,7 @@ continue or skip
             else {
               try {
                 $dvlp_input_orig = $dvlp_input
-                $dvlp_input = 'noscreen'
+                $dvlp_input = 'display'
                 $dvlp_output = Invoke-Expression $dvlp_input_orig | Out-String
                 Write-Host $dvlp_output
               }
