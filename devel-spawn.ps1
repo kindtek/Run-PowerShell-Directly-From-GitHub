@@ -1701,7 +1701,7 @@ continue or skip
       else {
         if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
         . include_devel_tools
-        if (($dvlp_input -ceq 'noscreen' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
+        if (($dvlp_input -ceq 'nodisplay' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
           start_kindtek_process_hide 'sync_repos'
         }
         else {
@@ -2375,7 +2375,7 @@ continue or skip
               set_kindtek_debug_mode $true
             }
           }
-          elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'noscreen' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon') {
+          elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'nodisplay' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon') {
             try {
               # disguise unavoidable error message
               $orig_foreground = [System.Console]::ForegroundColor
@@ -2394,7 +2394,7 @@ continue or skip
             else {
               try {
                 $dvlp_input_orig = $dvlp_input
-                $dvlp_input = 'display'
+                $dvlp_input = 'nodisplay'
                 $dvlp_output = Invoke-Expression $dvlp_input_orig | Out-String
                 Write-Host $dvlp_output
               }
@@ -2406,7 +2406,7 @@ continue or skip
               }
             }
           } 
-          if ($dvlp_input -eq 'noscreen') {
+          if ($dvlp_input -eq 'nodisplay') {
             if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1) {
               write-host "`r`ncommand line mode activated`r`n`tenter 'x' to exit`r`n"
             }
@@ -2415,7 +2415,7 @@ continue or skip
               write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
             }
           }
-        } while ( $dvlp_input -eq 'display' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
+        } while ( $dvlp_input -eq 'display' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'nodisplay')
       } while ($dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
     }
     elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
