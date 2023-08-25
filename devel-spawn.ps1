@@ -1922,6 +1922,12 @@ continue or skip
               }
               write-host "executing: wsl.exe --unregister $wsl_distro_selected_name"
               wsl.exe --unregister $wsl_distro_selected_name
+              $wsl_distro_list[$wsl_choice] = ''
+              for ($i = 0; $i -le $wsl_distro_list[$([int]$wsl_choice-1)].length - 1; $i++) {
+                $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
+              }    
+              $dvlp_input = ' '
+        
             }
             else {
               $dvlp_input = 'noscreen'
@@ -1974,7 +1980,11 @@ continue or skip
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: next time you can use x$wsl_distro_selected_num to delete a distro"
                 start-sleep -Milliseconds 600
-                $dvlp_input = 'screen'
+                $wsl_distro_list[$wsl_choice] = ''
+                for ($i = 0; $i -le $wsl_distro_list[$([int]$wsl_choice-1)].length - 1; $i++) {
+                  $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
+                }    
+                $dvlp_input = ' '
               }
               elseif ($wsl_action_choice -ceq 'DEFAULT') {
                 write-host "`r`nsetting $wsl_distro_selected_name as default distro ..."
@@ -2379,6 +2389,7 @@ continue or skip
               }
               catch {
                 write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
+                $dvlp_input = ' '
               }
             }
           } 
@@ -2391,8 +2402,8 @@ continue or skip
               write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
             }
           }
-        } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
-      } while ($dvlp_input -ne '' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
+        } while ( $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen' -or $dvlp_input -eq 'noscreen')
+      } while ($dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
     }
     elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
       try {
