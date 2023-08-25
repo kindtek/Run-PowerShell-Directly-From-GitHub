@@ -1826,6 +1826,7 @@ continue or skip
 
         do {
 
+          Set-PSDebug -Trace 0
           if ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2) {
             # once activated, keep command line mode active 
             $dvlp_prompt_cursor = $dvlp_prompt_cursor2
