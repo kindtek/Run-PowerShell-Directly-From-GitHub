@@ -1873,6 +1873,7 @@ continue or skip
           $dvlp_input = $Host.UI.ReadLine()
           if ($dvlp_input -match "^\s*$"){
             $dvlp_input = 'display'
+            Write-Host "`r`n"
             display_wsl_distro_list $wsl_distro_list
             Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
           } else {
