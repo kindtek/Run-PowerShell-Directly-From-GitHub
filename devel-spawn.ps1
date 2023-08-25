@@ -1823,7 +1823,6 @@ continue or skip
         $dvlp_prompt_cursor1 = "(exit) > "
         $dvlp_prompt_cursor2 = " > "
         $dvlp_prompt_prefix = ""
-
         do {
 
           Set-PSDebug -Trace 0
@@ -1845,8 +1844,10 @@ continue or skip
           if ($dvlp_input -ine 'nodisplay'){
             Write-Host "`r`n"
             display_wsl_distro_list $wsl_distro_list
+            Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
+
           }
-          Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
+          # reset dvlp_options if cleared before
           Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor Red
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
