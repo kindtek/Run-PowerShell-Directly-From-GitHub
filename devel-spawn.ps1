@@ -1432,7 +1432,7 @@ function wsl_devel_spawn {
   param (
     $img_name_tag
   )
-  $dvlp_input = 'screen'
+  $dvlp_input = 'display'
   do {
     $host.UI.RawUI.ForegroundColor = "White"
     $host.UI.RawUI.BackgroundColor = "Black"
@@ -1564,7 +1564,7 @@ function wsl_devel_spawn {
 
           if (!(Test-Path -Path "$($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed" -PathType Leaf)) {
             docker_devel_spawn 'default'
-            $dvlp_input = 'screen'
+            $dvlp_input = 'display'
             # cmd.exe /c net stop LxssManager
             # cmd.exe /c net start LxssManager
             # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
@@ -1612,7 +1612,7 @@ function wsl_devel_spawn {
               #     run_kindtek_latest_kernel_installer
               # }
               # " 'wait'
-              $dvlp_input = 'screen'
+              $dvlp_input = 'display'
               $old_wsl_default_distro = $old_wsl_default_distro;
               $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
@@ -1621,7 +1621,7 @@ function wsl_devel_spawn {
               }              
             }
             else {
-              $dvlp_input = 'screen'
+              $dvlp_input = 'display'
               $old_wsl_default_distro = $old_wsl_default_distro;
               $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
@@ -1899,7 +1899,7 @@ continue or skip
             else {
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
             }
-            $dvlp_input = 'screen'
+            $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ieq 'i!') {
             require_docker_desktop_online_new_win
@@ -1909,11 +1909,11 @@ continue or skip
             else {
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default' 'wait'
             }
-            $dvlp_input = 'screen'
+            $dvlp_input = 'display'
           }
           elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "d\d")) {
             [int]$wsl_choice = $("$dvlp_input".Substring(1))
-            $dvlp_input = 'screen'
+            $dvlp_input = 'display'
             $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
             if ($wsl_distro_selected_name) {
               set_default_wsl_distro $wsl_distro_selected_name
@@ -1927,7 +1927,7 @@ continue or skip
             [int]$wsl_choice = $("$dvlp_input".Substring(1))
             $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
             if ($wsl_distro_selected_name) {
-              $dvlp_input = 'screen'
+              $dvlp_input = 'display'
               if ($wsl_distro_selected_name -eq $(get_default_wsl_distro)) {
                 write-host "replacing $wsl_distro_selected_name with $env:KINDTEK_FAILSAFE_WSL_DISTRO as default distro ..."
                 revert_default_wsl_distro
@@ -1949,7 +1949,7 @@ continue or skip
           }
           elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "t\d")) {
             [int]$wsl_choice = $("$dvlp_input".Substring(1))
-            $dvlp_input = 'screen'
+            $dvlp_input = 'display'
             $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
             if ($wsl_distro_selected_name) {
               write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
@@ -1963,7 +1963,7 @@ continue or skip
           }
           elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "g\d")) {
             [int]$wsl_choice = $("$dvlp_input".Substring(1))
-            $dvlp_input = 'screen'
+            $dvlp_input = 'display'
             $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
             if ($wsl_distro_selected_name) {
               gui_launch $wsl_distro_selected_name
@@ -2003,7 +2003,7 @@ continue or skip
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: next time use d$wsl_distro_selected_num to set $wsl_distro_selected_name as default"
                 start-sleep -Milliseconds 600
-                $dvlp_input = 'screen'
+                $dvlp_input = 'display'
 
               }
               elseif ($wsl_action_choice -ieq 'kernel') {
@@ -2042,11 +2042,11 @@ continue or skip
                   powershell -File $wsl_kernel_rollback_path                                
                 }
                 if ($kernel_choice = '') {
-                  $dvlp_input = 'screen'
+                  $dvlp_input = 'display'
                 }
                 $kernel_choice = ''
                 if ([string]::IsNullOrEmpty($kernel_choice)) {
-                  $dvlp_input = 'screen'
+                  $dvlp_input = 'display'
                 }
 
               }
@@ -2217,7 +2217,7 @@ continue or skip
                 $dvlp_input = 'display'
               }
             }
-            # $dvlp_input = 'screen'
+            # $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ieq 'revert' -or $dvlp_input -ieq 'failsafe') {
             try {
@@ -2256,12 +2256,12 @@ continue or skip
               # one day might get the windows cdir working
               # start_kindtek_process_pop "Set-Location -literalPath $env:USERPROFILE" 'wait' 'noexit'
             }
-            $dvlp_input = 'screen'
+            $dvlp_input = 'display'
 
           }
           elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -Like 'm*') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {
             if ($dvlp_input -ieq 'm') {
-              $dvlp_input = 'screen'
+              $dvlp_input = 'display'
               Write-Host "`r`n`t[l]inux or [w]indows"
               $dvlp_kindtek_options = Read-Host
               if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
@@ -2370,7 +2370,7 @@ continue or skip
             $debug_mode = get_kindtek_debug_mode
             if ($debug_mode -eq $true){
               set_kindtek_debug_mode $false
-              $dvlp_input = 'screen'
+              $dvlp_input = 'display'
             } else {
               set_kindtek_debug_mode $true
             }
@@ -2389,7 +2389,7 @@ continue or skip
             if ($null -ne $is_docker_image ) {
               Write-Host "`r`n$dvlp_input is a valid docker hub official image"
               docker_devel_spawn "$dvlp_input"
-              $dvlp_input = 'screen'
+              $dvlp_input = 'display'
             }
             else {
               try {
