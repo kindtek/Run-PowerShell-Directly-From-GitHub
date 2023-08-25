@@ -414,7 +414,7 @@ function set_kindtek_env {
     }
   }
   catch {
-    Set-PSDebug -Trace 0
+    Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
     if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
       Write-Host "error setting $kindtek_env_var"
       Write-Host "$cmd_str"
