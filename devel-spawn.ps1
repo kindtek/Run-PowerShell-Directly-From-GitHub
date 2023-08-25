@@ -1851,6 +1851,8 @@ continue or skip
             $dvlp_input = $dvlp_input.trim()
           }  elseif ($dvlp_prompt -eq $dvlp_prompt1){
             $dvlp_input = 'exit'
+          } elseif ($dvlp_prompt -eq ' '){
+            $dvlp_input = 'display'
           }
           $dvlp_options = ''
           
@@ -1932,7 +1934,7 @@ continue or skip
               for ($i = 0; $i -le $selected_wsl_distro_name_length - 1; $i++) {
                 $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
               }    
-              $dvlp_input = ' '
+              $dvlp_input = 'display'
         
             }
             else {
@@ -1990,7 +1992,7 @@ continue or skip
                 for ($i = 0; $i -le $wsl_distro_list[$([int]$wsl_choice-1)].length - 1; $i++) {
                   $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
                 }    
-                $dvlp_input = ' '
+                $dvlp_input = 'display'
               }
               elseif ($wsl_action_choice -ceq 'DEFAULT') {
                 write-host "`r`nsetting $wsl_distro_selected_name as default distro ..."
@@ -2395,7 +2397,7 @@ continue or skip
               }
               catch {
                 write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
-                $dvlp_input = ' '
+                $dvlp_input = 'display'
               }
             }
           } 
