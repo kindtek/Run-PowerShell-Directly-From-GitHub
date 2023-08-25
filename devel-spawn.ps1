@@ -1841,7 +1841,7 @@ continue or skip
             # once activated, keep command line mode active 
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
-          
+          Set-PSDebug -Trace 0
           if ($dvlp_input -ine 'nodisplay'){
             Write-Host "`r`n"
             display_wsl_distro_list $wsl_distro_list
@@ -1851,6 +1851,7 @@ continue or skip
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
           $dvlp_input = $Host.UI.ReadLine()
+          Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
           if ($dvlp_input -match "^\s*$"){
             $dvlp_input = 'display'
           } else {
