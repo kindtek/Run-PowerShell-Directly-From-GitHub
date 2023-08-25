@@ -1745,7 +1745,7 @@ continue or skip
         try {
           $wsl_distro_list = get_wsl_distro_list
           display_wsl_distro_list $wsl_distro_list
-          $dvlp_options = "`r`n`r`n`t- [n = distro number] open distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [powershell command]`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+          $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [n = distro number] open distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
           if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             #       write-host -nonewline ":)
 #   _ _ _ _ _ // 
@@ -1771,7 +1771,7 @@ continue or skip
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             display_wsl_distro_list $wsl_distro_list
-            $dvlp_options = "`r`n`r`n`t- [n = distro number] open distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [powershell command]`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+            $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [n = distro number] open distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
           }
           catch {
             if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
@@ -1814,7 +1814,7 @@ continue or skip
               #     
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
-            $dvlp_options = "`r`n`r`n`t- [n = distro number] open distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [powershell command]`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
+            $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [n = distro number] open distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]`r`n`t- [auto] boot is $auto_boot_status`r`n`r`n`r`n"
           }
         }
         # $dvlp_input = Read-Host "`r`nHit ENTER to exit or choose from the following:`r`n`t- launch [W]SL`r`n`t- launch [D]evels Playground`r`n`t- launch repo in [V]S Code`r`n`t- build/install a Linux [K]ernel`r`n`r`n`t"
