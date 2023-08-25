@@ -1847,7 +1847,7 @@ continue or skip
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
           $dvlp_input = $Host.UI.ReadLine()
-          if (([string]::IsNullOrWhiteSpace(($dvlp_input))) -and (!([string]::IsNullOrEmpty($dvlp_prompt)))){
+          if ($dvlp_input -match "^\s*$"){
             $dvlp_input = 'display'
           } else {
             $dvlp_input = $dvlp_input.trim()
