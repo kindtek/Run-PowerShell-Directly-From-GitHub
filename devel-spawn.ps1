@@ -2023,6 +2023,7 @@ continue or skip
               write-host "`r`n`t- [auto] boot OFF`r`n"
             }
           }
+          write-host ""
           # reset dvlp_options if cleared before
           Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor Red
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
