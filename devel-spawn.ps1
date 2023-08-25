@@ -2034,6 +2034,13 @@ continue or skip
             Write-Host "`r`n"
             display_wsl_distro_list $wsl_distro_list
             Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
+            if ($(get_kindtek_auto_boot)) {
+              write-host "`r`n`t- [auto] boot ON`r`n"
+            }
+            else {
+              write-host "`r`n`t- [auto] boot OFF`r`n"
+            }
+            write-host ""
           } else {
             $dvlp_input = $dvlp_input.trim()
             if (($dvlp_prompt -eq $dvlp_prompt1) -and ([string]::IsNullOrEmpty(($dvlp_input)))){
