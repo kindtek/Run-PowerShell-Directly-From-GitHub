@@ -1915,56 +1915,58 @@ continue or skip
           if ($dvlp_input -eq 'gates'){
             $sleep = 1
             for ($i = 0; $i -le 3; $i++) {
-                write-output -nonewline "0" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "0" -foregroundcolor White -backgroundcolor blue
-                write-output -nonewline "0" -foregroundcolor DarkYellow -backgroundcolor gray
-                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "1" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "1" -foregroundcolor White -backgroundcolor blue
-                write-output -nonewline "1" -foregroundcolor DarkYellow -backgroundcolor gray
-                write-output -nonewline "1" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "1" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                set-psdebug -trace 2
+                write-host -nonewline "0" -ForegroundColor DarkRed -backgroundcolor blue
+                write-host -nonewline "0" -foregroundcolor White -backgroundcolor blue
+                write-host -nonewline "0" -foregroundcolor DarkYellow -backgroundcolor gray
+                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "1" -foregroundcolor White -backgroundcolor blue
+                write-host -nonewline "1" -foregroundcolor DarkYellow -backgroundcolor gray
+                write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+                bill
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "!" -foregroundcolor Red -backgroundcolor blue
                 $orig_foreground = [System.Console]::ForegroundColor
                 $temp_foreground = [System.Console]::BackgroundColor
                 $host.UI.RawUI.ForegroundColor = $temp_foreground
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-output -nonewline "!" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "*&&^**" -foregroundcolor White -backgroundcolor blue
                 $orig_foreground = [System.Console]::ForegroundColor
                 $temp_foreground = [System.Console]::BackgroundColor
                 $host.UI.RawUI.ForegroundColor = $temp_foreground
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-output -nonewline "*&&^**" -foregroundcolor White -backgroundcolor blue
+                write-host -nonewline "%#@" -foregroundcolor DarkYellow -backgroundcolor gray
                 $orig_foreground = [System.Console]::ForegroundColor
                 $temp_foreground = [System.Console]::BackgroundColor
                 $host.UI.RawUI.ForegroundColor = $temp_foreground
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-output -nonewline "%#@" -foregroundcolor DarkYellow -backgroundcolor gray
+                write-host -nonewline "~#&^&@)"  -foregroundcolor White -backgroundcolor blue
                 $orig_foreground = [System.Console]::ForegroundColor
                 $temp_foreground = [System.Console]::BackgroundColor
                 $host.UI.RawUI.ForegroundColor = $temp_foreground
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-output -nonewline "~#&^&@)"  -foregroundcolor White -backgroundcolor blue
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-output -nonewline "`r773999999999999999999999999999966666666666666666666666666666" -foregroundcolor Red -backgroundcolor blue
+                write-host -nonewline "`r773999999999999999999999999999966666666666666666666666666666" -foregroundcolor Red -backgroundcolor blue
                 $orig_foreground = [System.Console]::ForegroundColor
                 $temp_foreground = [System.Console]::BackgroundColor
                 $host.UI.RawUI.ForegroundColor = $temp_foreground
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-output "-1" -foregroundcolor black -backgroundcolor white
+                write-host "-1" -foregroundcolor black -backgroundcolor white
                 cmd.exe /c "timeout /t 10" 2> $null
                 # disguise timeout
                 $orig_foreground = [System.Console]::ForegroundColor
@@ -1974,6 +1976,25 @@ continue or skip
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
                 $host.UI.RawUI.ForegroundColor = "Blue"
                 $host.UI.RawUI.ForegroundColor = "DarkRed"
+                set-psdebug -trace 0
+                [console]::backgroundcolor = "DarkYellow"
+                [console]::foregroundcolor = "DarkYellow"
+                echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+                echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+                [console]::backgroundcolor = "Blue"
+                [console]::foregroundcolor = "Blue"
+                cmd.exe /c "timeout /t $sleep" 2> $null
+                echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+                [console]::backgroundcolor = "Pink"
+                [console]::foregroundcolor = "Pink"
+                echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+                [console]::backgroundcolor = "Blue"
+                [console]::foregroundcolor = "Blue"
               
             }
             lock_gates
