@@ -2548,6 +2548,7 @@ continue or skip
             return $(devel_daemon $true)
           }
           elseif ($dvlp_input -ieq 'devel' ){
+            unlock_theme
             $debug_mode = get_kindtek_debug_mode
             if ($debug_mode -eq $true){
               set_kindtek_debug_mode $false
