@@ -2395,7 +2395,6 @@ continue or skip
                 Write-Host $dvlp_output
               }
               catch {
-                write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
                 $dvlp_input = 'display'
               }
             }
