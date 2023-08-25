@@ -900,7 +900,7 @@ function sync_repos_new_win {
   param (
     [bool]$wait
   )
-  if ([sting]::isnullorempty([string]$wait)){
+  if (!([string]::isnullorempty([string]$wait))){
     [string]$wait = 'wait'
   }
   start_kindtek_process_popmin "sync_repos;exit" "$wait" ''
