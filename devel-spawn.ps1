@@ -837,7 +837,11 @@ function clone_repo {
   param (
     [bool]$quiet
   )
-
+  if (([string]::isnullorempty([string]$quiet))){
+    [bool]$quiet = $false
+  } else {
+    [bool]$quiet = $true
+  }
   Push-Location $env:KINDTEK_WIN_GIT_PATH
   if ($quiet -eq $false) {
     write-host "cloning $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
@@ -854,6 +858,11 @@ function pull_repo {
   param (
     [bool]$quiet
   )
+  if (([string]::isnullorempty([string]$quiet))){
+    [bool]$quiet = $false
+  } else {
+    [bool]$quiet = $true
+  }
   Push-Location $env:KINDTEK_WIN_GIT_PATH
   if ($quiet -eq $false) {
     write-host "pulling $env:KINDTEK_WIN_DVLW_NAME ..." -ForegroundColor DarkCyan
@@ -870,6 +879,11 @@ function quick_sync_repo_new_win {
   param (
     [bool]$wait
   )
+  if (([string]::isnullorempty([string]$wait))){
+    [bool]$wait = $false
+  } else {
+    [bool]$wait = $true
+  }
   if ($wait -eq $true){
     $wait = 'wait'
   }
@@ -880,6 +894,11 @@ function quick_sync_repo {
   param (
     [bool]$quiet
   )
+  if (([string]::isnullorempty([string]$quiet))){
+    [bool]$quiet = $false
+  } else {
+    [bool]$quiet = $true
+  }
   if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
     if ($quiet -eq $false) {
       # write-host "path $($env:KINDTEK_WIN_DVLW_PATH)/.git found" 
