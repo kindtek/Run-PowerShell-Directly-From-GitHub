@@ -1807,15 +1807,15 @@ continue or skip
       }
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
       Set-PSDebug -Trace 0
-      $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
       $env:KINDTEK_DEFAULT_WSL_DISTRO = get_default_wsl_distro
-      if ($(get_kindtek_auto_boot) -eq $true) {
-        $auto_boot_status = 'ON'
-      }
-      else {
-        $auto_boot_status = 'OFF'
-      }
+      $wsl_restart_path = "$env:USERPROFILE/wsl-restart.ps1"
       do {
+        if ($(get_kindtek_auto_boot) -eq $true) {
+          $auto_boot_status = 'ON'
+        }
+        else {
+          $auto_boot_status = 'OFF'
+        }
         if ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -And (!([string]::IsNullOrEmpty($img_name_tag))) -And ($img_name_tag -ne 'skip')) {
           $docker_devel_spawn_noninteractive = "`r`n`t- [i!] import $env:KINDTEK_WIN_DVLP_FULLNAME:$img_name_tag as default"
         }
