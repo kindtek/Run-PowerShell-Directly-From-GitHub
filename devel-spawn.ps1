@@ -1842,8 +1842,10 @@ continue or skip
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
           
-          Write-Host "`r`n`r`n"
-          display_wsl_distro_list $wsl_distro_list
+          if ($dvlp_input -eq 'display'){
+            Write-Host "`r`n`r`n"
+            display_wsl_distro_list $wsl_distro_list
+          }
           Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
           Write-Host -nonewline "$dvlp_prompt_prefix" -ForegroundColor Red
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
