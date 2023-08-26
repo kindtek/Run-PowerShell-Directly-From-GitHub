@@ -1224,6 +1224,7 @@ function lock_theme {
     $WarningForegroundColor,
     $WarningBackgroundColor,
     $DebugForegroundColor,
+    $DebugBackgroundColor,
     $VerboseForegroundColor,
     $VerboseBackgroundColor,
     $ProgressForegroundColor,
