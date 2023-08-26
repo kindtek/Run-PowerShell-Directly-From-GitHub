@@ -1979,8 +1979,8 @@ continue or skip
                 [console]::foregroundcolor = "DarkBlue"
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
-                [console]::backgroundcolor = "Pink"
-                [console]::foregroundcolor = "Pink"
+                [console]::backgroundcolor = "Magenta"
+                [console]::foregroundcolor = "Magenta"
                 echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
                 [console]::backgroundcolor = "Blue"
                 [console]::foregroundcolor = "Blue"
