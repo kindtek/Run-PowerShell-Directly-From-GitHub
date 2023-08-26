@@ -1230,36 +1230,39 @@ function lock_theme {
     $ProgressForegroundColor,
     $ProgressBackgroundColor
   )
+  $host.privatedata.ErrorForegroundColor    = $ErrorForegroundColor
+  $host.privatedata.ErrorBackgroundColor    = $ErrorBackgroundColor
+  $host.privatedata.WarningForegroundColor  = $WarningForegroundColor
+  $host.privatedata.WarningBackgroundColor  = $WarningBackgroundColor
+  $host.privatedata.DebugForegroundColor    = $DebugForegroundColor
+  $host.privatedata.DebugBackgroundColor    = $DebugBackgroundColor
+  $host.privatedata.VerboseForegroundColor  = $VerboseForegroundColor
+  $host.privatedata.VerboseBackgroundColor  = $VerboseBackgroundColor
+  $host.privatedata.ProgressForegroundColor = $ProgressForegroundColor
+  $host.privatedata.ProgressBackgroundColor = $ProgressBackgroundColor
+  $global:devel_data_old = $global:devel_data
   $global:devel_data = $host.privatedata
-  $global:devel_data.ErrorForegroundColor    = $ErrorForegroundColor
-  $global:devel_data.ErrorBackgroundColor    = $ErrorBackgroundColor
-  $global:devel_data.WarningForegroundColor  = $WarningForegroundColor
-  $global:devel_data.WarningBackgroundColor  = $WarningBackgroundColor
-  $global:devel_data.DebugForegroundColor    = $DebugForegroundColor
-  $global:devel_data.DebugBackgroundColor    = $DebugBackgroundColor
-  $global:devel_data.VerboseForegroundColor  = $VerboseForegroundColor
-  $global:devel_data.VerboseBackgroundColor  = $VerboseBackgroundColor
-  $global:devel_data.ProgressForegroundColor = $ProgressForegroundColor
-  $global:devel_data.ProgressBackgroundColor = $ProgressBackgroundColor
+
 }
 
 function unlock_theme {
- 
-  $p = $global:devel_data.privatedata
+  if ($null = $global:devel_data){
+    $global:devel_data =   $host.privatedata
+  }
 
-  $p.ErrorForegroundColor    = "DarkRed"
-  $p.ErrorBackgroundColor    = "DarkYellow"
-  $p.WarningForegroundColor  = "DarkRed"
-  $p.WarningBackgroundColor  = "Blue"
-  $p.DebugForegroundColor    = "DarkYellow"
-  $p.DebugBackgroundColor    = "Blue"
-  $p.VerboseForegroundColor  = "DarkYellow"
-  $p.VerboseBackgroundColor  = "Gray"
-  $p.ProgressForegroundColor = "Blue"
-  $p.ProgressBackgroundColor = "White"
+  $global:devel_data.ErrorForegroundColor    = "DarkRed"
+  $global:devel_data.ErrorBackgroundColor    = "DarkYellow"
+  $global:devel_data.WarningForegroundColor  = "DarkRed"
+  $global:devel_data.WarningBackgroundColor  = "Blue"
+  $global:devel_data.DebugForegroundColor    = "DarkYellow"
+  $global:devel_data.DebugBackgroundColor    = "Blue"
+  $global:devel_data.VerboseForegroundColor  = "DarkYellow"
+  $global:devel_data.VerboseBackgroundColor  = "Gray"
+  $global:devel_data.ProgressForegroundColor = "Blue"
+  $global:devel_data.ProgressBackgroundColor = "White"
 
   
-  lock_theme $ErrorForegroundColor $ErrorBackgroundColor $WarningForegroundColor $WarningBackgroundColor $DebugForegroundColor $DebugBackgroundColor $VerboseForegroundColor $VerboseBackgroundColor $ProgressForegroundColor $ProgressBackgroundColor
+  lock_theme $global:devel_data.ErrorForegroundColor $global:devel_data.ErrorBackgroundColor $global:devel_data.WarningForegroundColor $global:devel_data.WarningBackgroundColor $global:devel_data.DebugForegroundColor $global:devel_data.DebugBackgroundColor $global:devel_data.VerboseForegroundColor $global:devel_data.VerboseBackgroundColor $global:devel_data.ProgressForegroundColor $global:devel_data.ProgressBackgroundColor
 }
 
 function safe_boot_devel {
