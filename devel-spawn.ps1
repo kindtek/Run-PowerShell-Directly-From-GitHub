@@ -1244,18 +1244,9 @@ function lock_theme {
 }
 
 function unlock_theme {
-  param (
-    $ErrorForegroundColor,
-    $ErrorBackgroundColor,
-    $WarningForegroundColor,
-    $WarningBackgroundColor,
-    $DebugForegroundColor,
-    $DebugBackgroundColor,
-    $VerboseForegroundColor,
-    $VerboseBackgroundColor,
-    $ProgressForegroundColor,
-    $ProgressBackgroundColor
-  )
+ 
+  $p = $global:devel_data.privatedata
+
   $p.ErrorForegroundColor    = "DarkRed"
   $p.ErrorBackgroundColor    = "DarkYellow"
   $p.WarningForegroundColor  = "DarkRed"
@@ -1267,7 +1258,6 @@ function unlock_theme {
   $p.ProgressForegroundColor = "Blue"
   $p.ProgressBackgroundColor = "White"
 
-  $p = $global:devel_data.privatedata
   
   lock_theme $ErrorForegroundColor $ErrorBackgroundColor $WarningForegroundColor $WarningBackgroundColor $DebugForegroundColor $DebugBackgroundColor $VerboseForegroundColor $VerboseBackgroundColor $ProgressForegroundColor $ProgressBackgroundColor
 }
