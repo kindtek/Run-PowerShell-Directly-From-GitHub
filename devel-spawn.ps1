@@ -1699,9 +1699,9 @@ function wsl_devel_spawn {
               # if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
               #     Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
               # }
-              # if ('$img_name_tag' -like '*kernel' ){
-              #     run_kindtek_latest_kernel_installer
-              # }
+              if ($img_name_tag -like '*kernel' ){
+                restart_wsl_docker_new_win
+              }
               # " 'wait'
               $dvlp_input = 'display'
               $old_wsl_default_distro = $old_wsl_default_distro;
