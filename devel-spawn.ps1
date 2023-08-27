@@ -396,17 +396,27 @@ function set_kindtek_env {
     if (!([string]::IsNullOrEmpty($kindtek_env_var))) {
       # Write-Host "setting $kindtek_env_var to $kindtek_env_val"
       if (([string]::IsNullOrEmpty($set_machine_env_flag)) -And ([string]::IsNullOrEmpty($set_both_env_flag))) {
-        write-host "setting local env $kindtek_env_var to $kindtek_env_val"
-        [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
+        # check to avoid writing same thing repeatedly
+        if ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val ){
+          write-host "setting local env $kindtek_env_var to $kindtek_env_val"
+          [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
+        }
+
       }
       elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val)) {
-        write-host "setting machine env $kindtek_env_var to $kindtek_env_val"
-        [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine)                  
+        # check to avoid writing same thing repeatedly
+        if ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val ){
+          write-host "setting machine env $kindtek_env_var to $kindtek_env_val"
+          [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine) 
+        }                 
       }
       elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val) -Or ($(get_kindtek_env "$kindtek_env_var") -ne $kindtek_env_val))) {
-        write-host "setting local and machine env $kindtek_env_var to $kindtek_env_val"
-        [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
-        [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine)                  
+        # check to avoid writing same thing repeatedly
+        if (([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val) -or ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val) ){
+          write-host "setting local and machine env $kindtek_env_var to $kindtek_env_val"
+          [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
+          [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine)  
+        }                
       }
       else {
         # write-host "not setting $kindtek_env_var to $kindtek_env_val with $($set_machine_env_flag) $($set_both_env_flag) ( currently: $(get_kindtek_env "$kindtek_env_var"), $(get_kindtek_env "$kindtek_env_var" 'machine')) "
@@ -2449,20 +2459,15 @@ continue or skip
                 $dvlp_input = $dvlp_input + $dvlp_kindtek_options
                 if ($dvlp_kindtek_options -ieq 'w') {
                   $dvlp_input = 'display'
-                  Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall"
+                  Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall`r`n`t`t- [R]eboot computer"
                   $dvlp_kindtek_options_win = Read-Host
                   if ($dvlp_kindtek_options_win -ceq 'r') {
                     reset_docker_settings_hard
                     require_docker_desktop_online_new_win
                   }
                   if ($dvlp_kindtek_options_win -ceq 'R') {
-                    Remove-Item "$env:USERPROFILE/.wslconfig" -Confirm:$false -Force -ErrorAction SilentlyContinue
-                    restart_wsl_docker
-                    $revert_failsafe = Read-Host "revert to $env:KINDTEK_FAILSAFE_WSL_DISTRO ? (Y/n)"
-                    if (($revert_failsafe -eq '') -or ($revert_failsafe -ieq 'y') -or ($revert_failsafe -eq 'yes')) {
-                      revert_default_wsl_distro
-                    }
-                    require_docker_desktop_online_new_win
+                    reboot_prompt "reboot"
+                    $dvlp_input = 'display'
                   }
                   if ($dvlp_kindtek_options_win -ceq 'd') {
                     reinstall_docker
@@ -2480,8 +2485,9 @@ continue or skip
                     reboot_prompt
                   }
                 }
-                elseif ($dvlp_kindtek_options_win -ieq 'l') {
-                  $dvlp_kindtek_options_win = Read-Host
+                elseif ($dvlp_kindtek_options -ieq 'l') {
+                  Write-Host "`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
+                  $dvlp_kindtek_options_lin = Read-Host
                 }
               }
             }                        
