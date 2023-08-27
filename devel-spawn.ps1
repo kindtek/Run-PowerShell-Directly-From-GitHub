@@ -1700,7 +1700,11 @@ function wsl_devel_spawn {
               #     Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
               # }
               if ($img_name_tag -like '*kernel' ){
-                restart_wsl_docker_new_win
+                $restart_wsl_docker = Read-Host "restart wsl with new kernel?
+(yes)
+"               if (( $restart_wsl_docker -eq "" ) -or ( $restart_wsl_docker -eq "y" ) -or ( $restart_wsl_docker -eq "yes" )){
+                  restart_wsl_docker_new_win
+                }
               }
               # " 'wait'
               $dvlp_input = 'display'
