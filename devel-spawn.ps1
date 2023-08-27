@@ -1646,7 +1646,7 @@ function wsl_devel_spawn {
 
           if (!(Test-Path -Path "$($env:KINDTEK_WIN_GIT_PATH)/.dvlp-installed" -PathType Leaf)) {
             docker_devel_spawn 'default'
-            $dvlp_input = 'display'
+            $dvlp_input = 'screen'
             # cmd.exe /c net stop LxssManager
             # cmd.exe /c net start LxssManager
             # write-host "testing wsl distro $env:KINDTEK_FAILSAFE_WSL_DISTRO"
@@ -2081,17 +2081,17 @@ continue or skip
             else {
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
             }
-            $dvlp_input = 'display'
+            $dvlp_input = 'screen'
           }
           elseif ($dvlp_input -ieq 'i!') {
             require_docker_desktop_online_new_win
             if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
-              docker_devel_spawn 'wait'
+              docker_devel_spawn
             }
             else {
-              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default' 'wait'
+              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
             }
-            $dvlp_input = 'display'
+            $dvlp_input = 'screen'
           }
           elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "d\d")) {
             [int]$wsl_choice = $("$dvlp_input".Substring(1))
