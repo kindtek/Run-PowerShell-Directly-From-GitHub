@@ -969,16 +969,6 @@ function sync_repos {
       git submodule update --init --remote --progress -- $env:KINDTEK_WIN_DVLP_NAME
       write-host "$env:KINDTEK_WIN_DVLP_NAME pulled" -ForegroundColor DarkCyan
     }
-    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLADV_PATH)/.git")) {
-      write-host "pulling $env:KINDTEK_WIN_DVLADV_NAME ..." -ForegroundColor DarkCyan
-      git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLADV_NAME
-      write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled" -ForegroundColor DarkCyan
-    }
-    else {
-      write-host "pulling $env:KINDTEK_WIN_DVLADV_NAME ..." -ForegroundColor DarkCyan
-      git submodule update --init --remote --progress -- $env:KINDTEK_WIN_DVLADV_NAME
-      write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled" -ForegroundColor DarkCyan
-    }
     if ((Test-Path -Path "$($env:KINDTEK_WIN_POWERHELL_PATH)/.git")) {
       write-host "pulling $env:KINDTEK_WIN_POWERHELL_NAME ..." -ForegroundColor DarkCyan
       git submodule update --remote --progress -- $env:KINDTEK_WIN_POWERHELL_NAME
@@ -988,6 +978,16 @@ function sync_repos {
       write-host "pulling $env:KINDTEK_WIN_POWERHELL_NAME ..." -ForegroundColor DarkCyan
       git submodule update --init --remote --progress -- $env:KINDTEK_WIN_POWERHELL_NAME
       write-host "$env:KINDTEK_WIN_POWERHELL_NAME pulled" -ForegroundColor DarkCyan
+    }
+    if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLADV_PATH)/.git")) {
+      write-host "pulling $env:KINDTEK_WIN_DVLADV_NAME ..." -ForegroundColor DarkCyan
+      git submodule update --remote --progress -- $env:KINDTEK_WIN_DVLADV_NAME
+      write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled" -ForegroundColor DarkCyan
+    }
+    else {
+      write-host "pulling $env:KINDTEK_WIN_DVLADV_NAME ..." -ForegroundColor DarkCyan
+      git submodule update --init --remote --progress -- $env:KINDTEK_WIN_DVLADV_NAME
+      write-host "$env:KINDTEK_WIN_DVLADV_NAME pulled" -ForegroundColor DarkCyan
     }
     Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1
     
@@ -1023,7 +1023,6 @@ function sync_repos {
   Pop-Location
   Pop-Location
   Pop-Location
-  Copy-Item $env:KINDTEK_WIN_POWERHELL_PATH/devel-spawn.ps1 $env:USERPROFILE/dvlp.ps1
 }
 
 function get_local_commit {
