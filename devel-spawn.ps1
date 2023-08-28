@@ -2097,6 +2097,9 @@ continue or skip
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
             }
             $dvlp_input = 'screen'
+            if ($img_name_tag -like '*kernel' ){
+              wsl_docker_restart_
+            }
           }
           elseif ($dvlp_input -ieq 'i!') {
             require_docker_desktop_online_new_win
@@ -2107,6 +2110,10 @@ continue or skip
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
             }
             $dvlp_input = 'screen'
+            if ($img_name_tag -like '*kernel' ){
+              wsl_docker_restart_
+            }
+
           }
           elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -imatch "d\d")) {
             [int]$wsl_choice = $("$dvlp_input".Substring(1))
