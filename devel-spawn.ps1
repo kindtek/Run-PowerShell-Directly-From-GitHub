@@ -1637,7 +1637,6 @@ function wsl_devel_spawn {
       }
       if ( ($dvlp_input -eq 'devel') -or ($confirmation -eq 'devel') ) {
         unlock_theme
-        $debug_mode = get_kindtek_debug_mode
         $dvlp_input = 'display'
         set_kindtek_debug_mode $true   
       } else {
@@ -2472,22 +2471,34 @@ continue or skip
             $dvlp_input = 'display'
 
           }
-          elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -Like 'm*') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {
-            if ($dvlp_input -ieq 'm') {
+          elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -Like 'm*') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {
+            if ($dvlp_input -Like 'm*') {
               $dvlp_input = 'display'
-              Write-Host "`r`n`t[l]inux or [w]indows"
-              $dvlp_kindtek_options = Read-Host
+              if (!([string]::isNullOrEmpty($dvlp_input[1]))){
+                $dvlp_kindtek_options = $dvlp_input[1]
+              } else {
+                Write-Host "`r`n`t[l]inux or [w]indows"
+                $dvlp_kindtek_options = Read-Host
+              }
               if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
                 $dvlp_input = $dvlp_input + $dvlp_kindtek_options
                 if ($dvlp_kindtek_options -ieq 'w') {
                   $dvlp_input = 'display'
-                  Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall`r`n`t`t- [R]eboot computer"
-                  $dvlp_kindtek_options_win = Read-Host
+                  if (!([string]::isNullOrEmpty($dvlp_input[2]))){
+                    $dvlp_kindtek_options_win = $dvlp_input[2]
+                  } else {
+                    Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall`r`n`t`t- [reboot] computer"
+                    $dvlp_kindtek_options_win = Read-Host
+                  }
                   if ($dvlp_kindtek_options_win -ceq 'r') {
-                    reset_docker_settings_hard
+                    reset_docker_settings
                     require_docker_desktop_online_new_win
                   }
                   if ($dvlp_kindtek_options_win -ceq 'R') {
+                    reset_docker_settings_hard
+                    require_docker_desktop_online_new_win
+                  }
+                  if ($dvlp_kindtek_options_win -ieq 'reboot') {
                     reboot_prompt "reboot"
                     $dvlp_input = 'display'
                   }
@@ -2508,8 +2519,12 @@ continue or skip
                   }
                 }
                 elseif ($dvlp_kindtek_options -ieq 'l') {
-                  Write-Host "`r`n`t`t- [s]etup $(get_default_wsl_distro)`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
-                  $dvlp_kindtek_options_lin = Read-Host
+                  if (!([string]::isNullOrEmpty($dvlp_input[2]))){
+                    $dvlp_kindtek_options_lin = $dvlp_input[2]
+                  } else {
+                    Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall`r`n`t`t- [reboot] computer"
+                    $dvlp_kindtek_options_lin = Read-Host
+                  }
                   if ($dvlp_kindtek_options_lin -eq "s"){
                     wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
                     $dvlp_input = 'display'
