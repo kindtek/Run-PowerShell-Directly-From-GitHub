@@ -2064,7 +2064,7 @@ continue or skip
               $dvlp_input = 'exit'
             }
           }
-          set_kindtek_debug_mode $true
+          set_kindtek_debug_mode $(get_kindtek_debug_mode)
           # $dvlp_options = ''
           
           if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1))) {
