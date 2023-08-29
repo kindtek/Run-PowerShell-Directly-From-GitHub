@@ -2478,6 +2478,7 @@ continue or skip
             if ($dvlp_input[0] -eq 'm') {
               $dvlp_kindtek_options = $dvlp_input[1]
               $dvlp_kindtek_options_win = $dvlp_input[2]
+              $dvlp_kindtek_options_lin = $dvlp_input[2]
               $dvlp_input = 'display'
               if (([string]::isNullOrEmpty($dvlp_kindtek_options))){
                 Write-Host "`r`n`t[l]inux or [w]indows"
@@ -2486,7 +2487,7 @@ continue or skip
               if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
                 if ($dvlp_kindtek_options -ieq 'w') {
                   $dvlp_input = 'display'
-                  if (([string]::isNullOrEmpty($dvlp_kindtek_options_lin))){
+                  if (([string]::isNullOrEmpty($dvlp_kindtek_options_win))){
                     Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall`r`n`t`t- [reboot] computer"
                     $dvlp_kindtek_options_win = Read-Host
                   }
