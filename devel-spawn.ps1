@@ -1552,7 +1552,7 @@ function wsl_devel_spawn {
     
     }
     else {
-      if ((($dvlp_input -eq 'screen') -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or (($dvlp_input -eq 'screen') -and ($admin_bypass -eq $true))) {
+      if (((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display')) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or ((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and ($admin_bypass -eq $true)))) {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
         write-host -nonewline "
@@ -1796,7 +1796,7 @@ continue or skip
                 
       }
       else {
-        if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
+        if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
         . include_devel_tools
         if (($dvlp_input -ceq 'nodisplay' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
           start_kindtek_process_hide 'sync_repos'
@@ -1838,7 +1838,7 @@ continue or skip
         try {
           $wsl_distro_list = get_wsl_distro_list
           $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] open wsl distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]"
-          if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
+          if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             #       write-host -nonewline ":)
 #   _ _ _ _ _ // 
 #  <+````````|L|``````" -ForegroundColor DarkRed
@@ -1855,7 +1855,7 @@ continue or skip
     +`"`````````|L|``````" -ForegroundColor DarkRed
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
-            elseif ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
+            elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
           write-host -nonewline ":(
        _ _ _ _ _ // 
     +`"`````````|L|``````" -ForegroundColor Red
@@ -1865,7 +1865,7 @@ continue or skip
             $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] open wsl distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance`r`n`t- [update]$update_found`r`n`t- [screen]`r`n`t- [restart] wsl/docker`r`n`t${wsl_distro_revert_options}- [reboot] computer`r`n`t- [devel]`r`n`t- [daemon]"
           }
           catch {
-            if ($dvlp_input -eq 'screen' -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
+            if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
           write-host -nonewline ":|
        _ _ _ _ _ // 
       +`"`````````|L|``````" -ForegroundColor DarkRed
