@@ -2098,7 +2098,7 @@ continue or skip
             }
             $dvlp_input = 'screen'
             if ($img_name_tag -like '*kernel' ){
-              wsl_docker_restart_
+              restart_wsl_docker_new_win
             }
           }
           elseif ($dvlp_input -ieq 'i!') {
@@ -2111,7 +2111,7 @@ continue or skip
             }
             $dvlp_input = 'screen'
             if ($img_name_tag -like '*kernel' ){
-              wsl_docker_restart_
+              restart_wsl_docker_new_win
             }
 
           }
@@ -2499,8 +2499,18 @@ continue or skip
                   }
                 }
                 elseif ($dvlp_kindtek_options -ieq 'l') {
-                  Write-Host "`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
-                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
+                  Write-Host "`r`n`t`t- [s]etup $(get_default_wsl_distro)`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
+                  $dvlp_kindtek_options_lin = Read-Host
+                  if ($dvlp_kindtek_options_lin -eq "s"){
+                    wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
+                    $dvlp_input = 'display'
+                  } elseif ($dvlp_kindtek_options_lin -ceq "r"){
+                    restart_wsl_docker_new_win
+                    $dvlp_input = 'display'
+                  } elseif ($dvlp_kindtek_options_lin -ceq "R"){
+                    hard_restart_wsl_docker_new_win
+                    $dvlp_input = 'display'
+                  }
                 }
               }
             }                        
