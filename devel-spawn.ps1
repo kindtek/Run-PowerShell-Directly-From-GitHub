@@ -1527,6 +1527,7 @@ function wsl_devel_spawn {
   )
   $dvlp_input = 'display'
   do {
+    Set-PSDebug -Trace 0
     $host.UI.RawUI.ForegroundColor = "White"
     $host.UI.RawUI.BackgroundColor = "Black"
 
@@ -1566,7 +1567,7 @@ function wsl_devel_spawn {
         # no need for this variable anymore - leaving will only make display look weird
       }
     }
-    if ($confirmation -eq '' -or $confirmation -eq 'skip') {
+    if ($confirmation -eq '' -or $confirmation -eq 'skip' -or $confirmation -eq 'devel') {
       # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
       # Self-elevate the script if required
       if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
@@ -1633,6 +1634,14 @@ function wsl_devel_spawn {
           # "
           
         }
+      }
+      if ( ($dvlp_input -eq 'devel') -or ($confirmation -eq 'devel') ) {
+        unlock_theme
+        $debug_mode = get_kindtek_debug_mode
+        $dvlp_input = 'display'
+        set_kindtek_debug_mode $true   
+      } else {
+        Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
       }
       # if confirmation is daemon or (img_tag must not empty ... OR dvlp must not installed)
       # if (($confirmation -eq 'daemon') -Or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf) -Or (!([string]::IsNullOrEmpty($img_name_tag))))) {
