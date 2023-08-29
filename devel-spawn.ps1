@@ -2521,7 +2521,7 @@ continue or skip
                 }
                 elseif ($dvlp_kindtek_options -ieq 'l') {
                   if (([string]::isNullOrEmpty($dvlp_kindtek_options_lin))){
-                    Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall`r`n`t`t- [reboot] computer"
+                    Write-Host "`r`n`t`t- [s]etup $(get_default_wsl_distro)`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
                     $dvlp_kindtek_options_lin = Read-Host
                   }
                   if ($dvlp_kindtek_options_lin -eq "s"){
