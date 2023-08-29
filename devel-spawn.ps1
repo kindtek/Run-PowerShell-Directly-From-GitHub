@@ -2500,7 +2500,7 @@ continue or skip
                 }
                 elseif ($dvlp_kindtek_options -ieq 'l') {
                   Write-Host "`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
-                  $dvlp_kindtek_options_lin = Read-Host
+                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
                 }
               }
             }                        
@@ -2560,7 +2560,7 @@ continue or skip
             $dvlp_input = 'display'
           }
           elseif ($dvlp_input -ieq 't' ) {
-            wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
+            wsl.exe -- cd `$HOME `&`& bash
           }
           elseif ($dvlp_input -ieq 'daemon' ) {
             Write-Host "spawning daemon with $(get_default_wsl_distro)"
