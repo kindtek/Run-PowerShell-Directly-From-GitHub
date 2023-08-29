@@ -2477,12 +2477,13 @@ continue or skip
               $dvlp_input = 'display'
               $dvlp_kindtek_options = $dvlp_input[1]
               $dvlp_kindtek_options_win = $dvlp_input[2]
+              write-debug " dvlp_kindtek_options = $($dvlp_input[1])"
+              write-debug " dvlp_kindtek_options_win = $($dvlp_input[2])"
               if (([string]::isNullOrEmpty($dvlp_kindtek_options))){
                 Write-Host "`r`n`t[l]inux or [w]indows"
                 $dvlp_kindtek_options = Read-Host
               }
               if ($dvlp_kindtek_options -ieq 'l' -Or $dvlp_kindtek_options -ieq 'w') {
-                $dvlp_input = $dvlp_input + $dvlp_kindtek_options
                 if ($dvlp_kindtek_options -ieq 'w') {
                   $dvlp_input = 'display'
                   if (([string]::isNullOrEmpty($dvlp_kindtek_options_win))){
