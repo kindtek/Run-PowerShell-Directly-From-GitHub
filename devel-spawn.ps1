@@ -2100,7 +2100,7 @@ continue or skip
           }
           elseif ($dvlp_input -ieq 'i') {
             # require_docker_desktop_online
-            require_docker_desktop_online_new_win
+            require_docker_desktop_online_new_win_no_wait
             if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
               docker_devel_spawn
             }
@@ -2113,7 +2113,7 @@ continue or skip
             }
           }
           elseif ($dvlp_input -ieq 'i!') {
-            require_docker_desktop_online_new_win
+            require_docker_desktop_online_new_win_no_wait
             if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
               docker_devel_spawn
             }
