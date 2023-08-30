@@ -2568,7 +2568,7 @@ continue or skip
           elseif ($dvlp_input -ieq 'rollback') {
             $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
             if (Test-Path "$wsl_kernel_rollback_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
-              powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_restart_path
+              powershell.exe -ExecutionPolicy RemoteSigned -File $wsl_kernel_rollback_path
               require_docker_desktop_online_new_win
             }
             $dvlp_input = 'display'
