@@ -2048,6 +2048,7 @@ continue or skip
           write-host -nonewline " $dvlp_prompt_location" -ForegroundColor DarkGray
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
           $dvlp_input = $Host.UI.ReadLine()
+          # automatically trigger display by preceeding command with space(s)
           if ($dvlp_input -match "^\s*$"){
             $dvlp_input = 'display'
             Write-Host "`r`n"
@@ -2062,16 +2063,13 @@ continue or skip
             write-host ""
           } else {
             $dvlp_input = $dvlp_input.trim()
-            if (($dvlp_prompt -eq $dvlp_prompt1) -and ([string]::IsNullOrEmpty(($dvlp_input)))){
-              $dvlp_input = 'exit'
-            }
           }
           set_kindtek_debug_mode $(get_kindtek_debug_mode)
           # $dvlp_options = ''
           
           if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1))) {
             # entering space the first time will exit - after that need x or exit to exit
-            $dvlp_input = 'exit'
+            return
           }
           try {    
             if ($wsl_distro_list.contains($dvlp_input)) {
