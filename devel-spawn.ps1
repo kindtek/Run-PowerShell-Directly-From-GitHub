@@ -2049,7 +2049,7 @@ continue or skip
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
           $dvlp_input = $Host.UI.ReadLine()
           # automatically trigger display by preceeding command with space(s)
-          if ($dvlp_input -match "^\s*$"){
+          if ($dvlp_input -match "^\s*$" -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2)){
             $dvlp_input = 'display'
             Write-Host "`r`n"
             display_wsl_distro_list $wsl_distro_list
@@ -2069,7 +2069,7 @@ continue or skip
           
           if (($dvlp_input -ieq 'x') -Or ($dvlp_input -ieq 'exit') -Or (($dvlp_input -ieq '') -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor1))) {
             # entering space the first time will exit - after that need x or exit to exit
-            return
+            break
           }
           try {    
             if ($wsl_distro_list.contains($dvlp_input)) {
