@@ -193,10 +193,15 @@ class kindtek_process {
       if ([string]::IsNullOrEmpty($this.proc_noexit)) {
         # write-host  "Start-Process -Filepath powershell.exe $proc_show -ArgumentList `"-Command`", `"$($this.proc_cmd)`""
         Start-Process -Filepath powershell.exe -LoadUserProfile -WorkingDirectory $env:USERPROFILE @proc_show -ArgumentList '-Command', $this.proc_cmd
+        # todo: use wt for new processes
+        # cmd.exe /c "powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized -file $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"'"
+
       }
       else {
         # Write-host "Start-Process -Filepath powershell.exe $proc_show -ArgumentList $($this.proc_noexit), '-Command', '$($this.proc_cmd)'"
         Start-Process -Filepath powershell.exe -LoadUserProfile -WorkingDirectory $env:USERPROFILE @proc_show -ArgumentList $this.proc_noexit, '-Command', $this.proc_cmd
+        # todo: use wt for new processes
+        # cmd.exe /c "powershell.exe start-process -filepath powershell.exe -ErrorAction SilentlyContinue -Verb RunAs -WindowStyle Hidden -ArgumentList '-Command', 'wt.exe /p /M cmd.exe powershell.exe -windowstyle maximized -file $($PSCommandPath) `"$($global:dvlp_arg0)`"  `"skip`"'"
       }
     }
     catch { 
@@ -1570,7 +1575,7 @@ function wsl_devel_spawn {
       }
     }
     if ($confirmation -eq '' -or $confirmation -eq 'skip' -or $confirmation -eq 'devel') {
-      # source of the below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
+      # source of conditions for below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
       # Self-elevate the script if required
       if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
