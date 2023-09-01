@@ -2491,9 +2491,20 @@ continue or skip
               }
               if ($dvlp_kindtek_options -ceq 'd') {
                 $dvlp_input = 'devel'
+                continue
+                # $debug_mode = get_kindtek_debug_mode
+                # if ($debug_mode -eq $true){
+                #   set_kindtek_debug_mode $false
+                #   $dvlp_input = 'display'
+                # } else {
+                #   set_kindtek_debug_mode $true
+                # }
               }
               if ($dvlp_kindtek_options -ceq 'D') {
                 $dvlp_input = 'daemon'
+                continue
+                # Write-Host "spawning daemon with $(get_default_wsl_distro)"
+                # return $(devel_daemon $true)
               }
               if ($dvlp_kindtek_options -ieq 'w') {
                 $dvlp_input = 'display'
@@ -2610,7 +2621,6 @@ continue or skip
             return $(devel_daemon $true)
           }
           elseif ($dvlp_input -ieq 'devel' ){
-            unlock_theme
             $debug_mode = get_kindtek_debug_mode
             if ($debug_mode -eq $true){
               set_kindtek_debug_mode $false
