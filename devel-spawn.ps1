@@ -1223,7 +1223,7 @@ function set_kindtek_auto_boot {
     set_kindtek_env 'KINDTEK_AUTO_BOOT' ''
     Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Confirm:$false -Force -ErrorAction SilentlyContinue -Verbose   
   }
-  Set-PSDebug -Trace 2
+  Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
 }
 
 function lock_devel {
