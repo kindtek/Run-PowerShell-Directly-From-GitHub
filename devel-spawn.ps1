@@ -2288,11 +2288,11 @@ continue or skip
               }
               elseif ($wsl_action_choice -Ieq 'VERSION1') {
                 write-host "`r`nsetting $wsl_distro_selected_name to wsl version 1..."
-                wsl.exe --distribution $wsl_distro_selected_name --set-version 1
+                wsl.exe --set-version $wsl_distro_selected_name 1
               }
               elseif ($wsl_action_choice -ieq 'VERSION2') {
                 write-host "`r`nsetting $wsl_distro_selected_name to wsl version 2..."
-                wsl.exe --distribution $wsl_distro_selected_name --set-version 2
+                wsl.exe --set-version $wsl_distro_selected_name 2
               }
               elseif ($wsl_action_choice -ieq 'BACKUP') {
                 $base_distro = $wsl_distro_selected_name.Substring(0, $wsl_distro_selected_name.lastIndexOf('-'))
