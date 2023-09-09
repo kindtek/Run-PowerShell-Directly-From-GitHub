@@ -2657,17 +2657,24 @@ continue or skip
             }
             else {
               try {
+                $ErrorActionPreference = "Stop"
                 $dvlp_input_orig = $dvlp_input
                 $dvlp_input = 'nodisplay'
                 $dvlp_output = Invoke-Expression $dvlp_input_orig | Out-String
-                Write-Host -nonewline $dvlp_output
+                # Write-Host -nonewline $dvlp_output
               }
               catch {
-               
-                if ($dvlp_input -ne 'display' -and $dvlp_input -ne 'nodisplay' -and $dvlp_input -ine 'screen'  -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' ){
-                  write-host "invalid command`r`n$dvlp_input_orig`r`n$confirmation"
-                  $dvlp_input = 'display'
+                try {
+                  $dvlp_output = wsl.exe -- $dvlp_input_orig
+                  Write-Host -nonewline $dvlp_output | Out-String
+                } catch {
+                    write-host "invalid command`r`n$dvlp_input_orig"
+                    $dvlp_input = 'display'
                 }
+              }
+              finally {
+                Write-Host -nonewline $dvlp_output
+                $ErrorActionPreference = "Continue"
               }
             }
           } 
