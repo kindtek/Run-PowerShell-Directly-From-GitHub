@@ -2361,9 +2361,9 @@ continue or skip
                     $base_distro_root_path = "$($env:USERPROFILE)\kache\docker2wsl\$($base_distro_name)\$($base_distro_id)"
                     Remove-Item  "$base_distro_root_path\.diskshrink.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
                     Remove-Item  "$base_distro_root_path\.diskman.ps1" -Force -ErrorAction SilentlyContinue | Out-Null
-                    Move-Item  "$base_distro_root_path\.container_id" "$base_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue | Out-Null
-                    Move-Item  "$base_distro_root_path\.image_id" "$base_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue | Out-Null
-                    Move-Item  "$base_distro_root_path\backups" "$base_distro_root_path\backups" -Force -ErrorAction SilentlyContinue | Out-Null
+                    Move-Item  "$base_distro_root_path\.container_id" "$new_distro_root_path\.container_id" -Force -ErrorAction SilentlyContinue | Out-Null
+                    Move-Item  "$base_distro_root_path\.image_id" "$new_distro_root_path\.image_id" -Force -ErrorAction SilentlyContinue | Out-Null
+                    Move-Item  "$base_distro_root_path\backups" "$new_distro_root_path\backups" -Force -ErrorAction SilentlyContinue | Out-Null
 
                   }
                 }
