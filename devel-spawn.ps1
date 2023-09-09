@@ -1214,14 +1214,14 @@ function set_kindtek_auto_boot {
   if ($auto_boot) {
     set_kindtek_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 'machine'
     set_kindtek_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 
-    Copy-Item "$($env:KINDTEK_WIN_DVLW_PATH)\scripts\devel-boot.cmd" "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Force -Verbose
+    Copy-Item "$($env:KINDTEK_WIN_DVLW_PATH)\scripts\devel-boot.cmd" "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Force
     # might be useful for later: 
     # start wt -pipelinevariable windows cmd.exe -c "$env:USERNAME"
   }
   else {
     set_kindtek_env 'KINDTEK_AUTO_BOOT' '' 'machine'
     set_kindtek_env 'KINDTEK_AUTO_BOOT' ''
-    Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Confirm:$false -Force -ErrorAction SilentlyContinue -Verbose   
+    Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Confirm:$false -Force -ErrorAction SilentlyContinue   
   }
   # Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
 }
