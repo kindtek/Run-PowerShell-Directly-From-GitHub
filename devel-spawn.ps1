@@ -2665,8 +2665,7 @@ continue or skip
               }
               catch {
                 try {
-                  $dvlp_output = wsl.exe -- $dvlp_input_orig
-                  Write-Host -nonewline $dvlp_output | Out-String
+                  $dvlp_output = wsl.exe -- $dvlp_input_orig | Out-String
                 } catch {
                     write-host "invalid command`r`n$dvlp_input_orig"
                     $dvlp_input = 'display'
