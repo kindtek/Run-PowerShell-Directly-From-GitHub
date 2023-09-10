@@ -2641,7 +2641,7 @@ continue or skip
             }
           }
           elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'nodisplay' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'gates') {
-            write-host "dvlp_input: $dvlp_input"
+            # write-host "dvlp_input: $dvlp_input"
             try {
               # disguise unavoidable error message
               $orig_foreground = [System.Console]::ForegroundColor
@@ -2669,8 +2669,8 @@ continue or skip
                 try {
                   $dvlp_output = wsl.exe -- $dvlp_input_orig
                 } catch {
-                    write-host "invalid command`r`n$dvlp_input_orig"
-                    $dvlp_input = 'display'
+                    # write-host "invalid command`r`n$dvlp_input_orig"
+                    $dvlp_input = $dvlp_input_orig
                 }
               }
               finally {
