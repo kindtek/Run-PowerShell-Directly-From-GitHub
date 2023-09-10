@@ -2667,7 +2667,7 @@ continue or skip
               }
               catch {
                 try {
-                  $dvlp_output = wsl.exe -- $dvlp_input_orig
+                  $dvlp_output = wsl.exe -- $dvlp_input_orig | Out-String
                 } catch {
                     # write-host "invalid command`r`n$dvlp_input_orig"
                     $dvlp_input = $dvlp_input_orig
