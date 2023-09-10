@@ -1862,7 +1862,10 @@ continue or skip
 #   _ _ _ _ _ // 
 #  <+````````|L|``````" -ForegroundColor DarkRed
             #         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
-                  }
+          }
+          write-host -nonewline ":)
+       _ _ _ _ _ // 
+      +`"`````````|L|``````" -ForegroundColor DarkRed
         }
         catch {
           try {
