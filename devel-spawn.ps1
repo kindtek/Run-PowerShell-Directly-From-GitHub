@@ -1863,12 +1863,6 @@ continue or skip
 #  <+````````|L|``````" -ForegroundColor DarkRed
             #         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
           }
-          if (($dvlp_input -ne 'daemon') -and ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf)) -or ($confirmation -eq 'skip')) {
-
-          write-host -nonewline ":)
-       _ _ _ _ _ // 
-      +`"`````````|L|``````" -ForegroundColor DarkRed
-          }
         }
         catch {
           try {
