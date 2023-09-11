@@ -1212,9 +1212,9 @@ function set_kindtek_auto_boot {
   )
   # Set-PSDebug -Trace 2
   if ($auto_boot) {
-    write-output "
-    env_auto_boot: $(get_kindtek_env 'KINDTEK_AUTO_BOOT')
-    global_arg0: $($global:dvlp_arg0)"
+    # write-output "
+    # env_auto_boot: $(get_kindtek_env 'KINDTEK_AUTO_BOOT')
+    # global_arg0: $($global:dvlp_arg0)"
 
     if ($(get_kindtek_env 'KINDTEK_AUTO_BOOT') -ne "$($global:dvlp_arg0)") {
       set_kindtek_env 'KINDTEK_AUTO_BOOT' "$($global:dvlp_arg0)" 
