@@ -2118,7 +2118,7 @@ continue or skip
             }
             $dvlp_input = 'screen'
             if ($img_name_tag -like '*kernel' ){
-              restart_wsl_docker_new_win
+              restart_wsl_docker_new_win_wait
             }
           }
           elseif ($dvlp_input -ieq 'i!') {
@@ -2131,7 +2131,7 @@ continue or skip
             }
             $dvlp_input = 'screen'
             if ($img_name_tag -like '*kernel' ){
-              restart_wsl_docker_new_win
+              restart_wsl_docker_new_win_wait
               wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'no kernel import'
             }
 
@@ -2496,7 +2496,6 @@ continue or skip
               }
               if ($dvlp_kindtek_options -ieq 'r') {
                 restart_wsl_docker_new_win
-                start-sleep 3
                 $dvlp_input = 'screen'
                 break;
               }
