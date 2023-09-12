@@ -2304,13 +2304,17 @@ continue or skip
                 }
 
               }
-              elseif ($wsl_action_choice -ieq 'update') {
+              elseif ($wsl_action_choice -ceq 'update') {
                 write-host "`r`nupdating repo and home directory for $wsl_distro_selected_name ..."
-                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; [ ! -f k-home.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash k-home.sh 
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash 
+              }
+              elseif ($wsl_action_choice -ceq 'UPDATE') {
+                write-host "`r`nupdating repo and home directory for $wsl_distro_selected_name ..."
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash k-home.sh 
               }
               elseif ($wsl_action_choice -ieq 'setup') {
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
-                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; [ ! -f setup.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash k-home.sh`; bash setup.sh "$env:USERNAME" 'full'
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; [ ! -f setup.sh ]  `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/setup.sh`; bash setup.sh "$env:USERNAME" 'full'
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                 write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
