@@ -2285,11 +2285,11 @@ continue or skip
               }
               elseif ($wsl_action_choice -ieq 'update') {
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
-                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& [ -f k-home.sh ] `&`& bash k-home.sh `|`| wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh `| bash 
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; [ ! -f k-home.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash k-home.sh 
               }
               elseif ($wsl_action_choice -ieq 'setup') {
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
-                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& [ -f setup.sh ] `&`&bash setup.sh "$env:USERNAME" 'full' `|`| wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh `| bash `&`& bash setup.sh 'full'
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; [ ! -f setup.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash k-home.sh`; bash setup.sh 'full'
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                 write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
@@ -2570,14 +2570,13 @@ continue or skip
                   $dvlp_kindtek_options_lin = Read-Host
                 }
                 if ($dvlp_kindtek_options_lin -eq "u"){
-                  wsl.exe -- cd `$HOME `&`& [ -f k-home.sh ] `&`& bash k-home.sh `|`| wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh `| bash `&`& bash setup.sh 
+                  wsl.exe -- cd `$HOME `&`& [ ! -f k-home.sh ] `&`& bash k-home.sh `|`| wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh `| bash `&`& bash setup.sh 
                   $dvlp_input = 'display'
                 }elseif ($dvlp_kindtek_options_lin -eq "s"){
-                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
+                  wsl.exe -- cd `$HOME`; [ ! -f setup.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash setup.sh 'full'
                   $dvlp_input = 'display'
                 } elseif ($dvlp_kindtek_options_lin -eq "q"){
-                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
-                  $dvlp_input = 'display'
+                  wsl.exe -- cd `$HOME`; [ ! -f setup.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash setup.sh                   $dvlp_input = 'display'
                 }elseif ($dvlp_kindtek_options_lin -ceq "r"){
                   restart_wsl_docker_new_win
                   $dvlp_input = 'display'
