@@ -2134,8 +2134,6 @@ continue or skip
             }
             $dvlp_input = 'screen'
             if ($img_name_tag -like '*kernel' ){
-              restart_wsl_docker_new_win
-              start-sleep 5
               do {
                 start-sleep 3
                 wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'no kernel import'
