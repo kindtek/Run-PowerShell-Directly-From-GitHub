@@ -2714,16 +2714,15 @@ continue or skip
                 $ErrorActionPreference = "Stop"
                 $dvlp_input_orig = $dvlp_input
                 $dvlp_input = 'nodisplay'
-                $dvlp_output = Invoke-Expression $dvlp_input_orig | Out-String
-                if (!($?) -or ($dvlp_output -like "/bin/bash: line*")){
+                Invoke-Expression "Do-ErrorProneAction -Parameter $dvlp_input_orig" -OutVariable dvlp_output
+                if (!($?)){
                   throw
                 }
-                # Write-Host -nonewline $dvlp_output
               }
               catch {
                 try {
                   $dvlp_output = wsl.exe -- $dvlp_input_orig | Out-String
-                  if (!($?) -or ($dvlp_output -like "/bin/bash: line*")){
+                  if (!($?)){
                     throw
                   }
                 }
@@ -2758,7 +2757,7 @@ continue or skip
     }
     elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
       try {
-        Invoke-Expression $confirmation | Out-Null
+        Invoke-Expression "Do-ErrorProneAction $confirmation" | Out-Null
       }
       catch {
         $dvlp_input = $confirmation
