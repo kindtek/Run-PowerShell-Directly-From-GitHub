@@ -18,7 +18,7 @@ $global:devel_data.ProgressBackgroundColor = "White"
 
 # clear screen
 if ($global:jump_screen -eq $true){
-  echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+  write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
 }
 $global:jump_screen = $false
 
@@ -77,7 +77,7 @@ class kindtek_process {
       $this.proc_noexit = ''
     }
     if (!([String]::IsNullOrEmpty($proc_cmd))) {
-      # echo testing path $env:KINDTEK_DEVEL_TOOLS
+      # write-host testing path $env:KINDTEK_DEVEL_TOOLS
       if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
         # write-host "dvl-tools: $proc_cmd"
         if ($(get_kindtek_debug_mode) -eq $true) {
@@ -87,10 +87,10 @@ class kindtek_process {
           $this.proc_cmd = ". $env:KINDTEK_DEVEL_TOOLS;$proc_cmd"
         }
         # write-host 'dot sourcing devel tools'
-        # echo path $env:KINDTEK_DEVEL_TOOLS exists
+        # write-host path $env:KINDTEK_DEVEL_TOOLS exists
       }
       elseif ((Test-Path -Path "$env:KINDTEK_DEVEL_SPAWN" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
-        # echo path $env:KINDTEK_DEVEL_TOOLS does not exist
+        # write-host path $env:KINDTEK_DEVEL_TOOLS does not exist
         # write-host "dvl-spawn: $proc_cmd"
         if ($(get_kindtek_debug_mode) -eq $true) {
           $this.proc_cmd = "write-host '$proc_cmd';Set-PSDebug -Trace 2;$proc_cmd;"
@@ -472,12 +472,12 @@ function unset_kindtek_envs {
   # }
   # catch {}
   get-childitem env: | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
-    echo "deleting local env $($_.name)"
+    write-host "deleting local env $($_.name)"
     set_kindtek_env "$($_.name)" "$null"
   }
   if (!([string]::IsNullOrEmpty($unset_machine_envs))) {
     [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
-      echo "deleting machine env $($_.name)"
+      write-host "deleting machine env $($_.name)"
       set_kindtek_env "$($_.name)" "$null" 'machine'
     }
   }
@@ -516,7 +516,7 @@ function push_kindtek_envs {
   else {
     $git_repo_owner = [System.Environment]::GetEnvironmentVariable('KINDTEK_WIN_GIT_OWNER')
   }
-  # echo 'local env'
+  # write-host 'local env'
   # get-childitem env: | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
   #     write-host " $($_.name):  $($_.value)"
   # }
@@ -530,7 +530,7 @@ function push_kindtek_envs {
   # try {
   #         reload_envs
   # } catch {}
-  # echo 'machine env'
+  # write-host 'machine env'
   # [Environment]::GetEnvironmentVariables('machine').GetEnumerator() | where-object name -match "^$([regex]::escape($git_repo_owner)).*$" | foreach-object {
   #     write-host " $($_.name):  $($_.value)"
   # }
@@ -955,7 +955,7 @@ function sync_repos {
     }
     Write-Host "synchronizing kindtek github repos ..." -ForegroundColor DarkCyan
     New-Item -ItemType Directory -Force -Path $env:KINDTEK_WIN_GIT_PATH | Out-Null
-    echo "entering path $($env:KINDTEK_WIN_GIT_PATH)"
+    write-host "entering path $($env:KINDTEK_WIN_GIT_PATH)"
     Push-Location $env:KINDTEK_WIN_GIT_PATH
     Write-Host "synchronizing $env:KINDTEK_WIN_GIT_PATH/$env:KINDTEK_WIN_DVLW_NAME with https://github.com/$env:KINDTEK_WIN_GIT_OWNER/$env:KINDTEK_WIN_DVLW_FULLNAME repo ..." -ForegroundColor DarkCyan
     write-host "testing path $($env:KINDTEK_WIN_DVLW_PATH)/.git" 
@@ -2005,20 +2005,20 @@ continue or skip
                 set-psdebug -trace 0
                 [console]::backgroundcolor = "DarkBlue"
                 [console]::foregroundcolor = "DarkBlue"
-                echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+                write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
                 $orig_foreground = [System.Console]::ForegroundColor
                 $temp_foreground = [System.Console]::BackgroundColor
                 $host.UI.RawUI.ForegroundColor = $temp_foreground
                 cmd.exe /c "timeout /t $sleep" 2> $null
                 $host.UI.RawUI.ForegroundColor = $orig_foreground
-                echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+                write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
                 [console]::backgroundcolor = "DarkBlue"
                 [console]::foregroundcolor = "DarkBlue"
                 cmd.exe /c "timeout /t $sleep" 2> $null
-                echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+                write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
                 [console]::backgroundcolor = "Magenta"
                 [console]::foregroundcolor = "Magenta"
-                echo ("`n" * $Host.UI.RawUI.WindowSize.Height)
+                write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
                 [console]::backgroundcolor = "Blue"
                 [console]::foregroundcolor = "Blue"
               
@@ -2889,7 +2889,7 @@ if ($(get_kindtek_auto_boot) -ne $true) {
   Remove-Item -Path "$env:AppData\Microsoft\Windows\Start Menu\Programs\Startup\devel-boot.cmd" -Force -ErrorAction SilentlyContinue
 }
 if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[1]))) -Or ($($PSCommandPath) -eq "$env:USERPROFILE\dvlp.ps1")) {
-  # echo 'installing everything and setting envs ..'
+  # write-host 'installing everything and setting envs ..'
   if ($(get_kindtek_debug_mode) -eq $true) {
     Write-Host "`$PSCommandPath: $($PSCommandPath)"
     Write-Host "`$args[0]: $($args[0])"
@@ -2918,14 +2918,14 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
   $global:devel_tools = "sourced"
 }
 elseif ($($PSCommandPath) -eq "$env:KINDTEK_WIN_POWERHELL_PATH\devel-spawn.ps1") {
-  # echo 'setting the envs ..'
+  # write-host 'setting the envs ..'
   set_kindtek_envs $env:KINDTEK_DEBUG_MODE
   # wsl_devel_spawn $args[0]
 }
 if ($global:devel_tools -ne "sourced") {
-  # echo 'devel_tools not yet sourced'
+  # write-host 'devel_tools not yet sourced'
   if (Test-Path -Path "$env:KINDTEK_DEVEL_TOOLS" -PathType Leaf) {
-    # echo 'now sourcing devel_tools ...'
+    # write-host 'now sourcing devel_tools ...'
     . include_devel_tools
   }
 }
