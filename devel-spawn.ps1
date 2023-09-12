@@ -2715,7 +2715,7 @@ continue or skip
                 $dvlp_input_orig = $dvlp_input
                 $dvlp_input = 'nodisplay'
                 $dvlp_output = Invoke-Expression $dvlp_input_orig | Out-String
-                if (!($?)){
+                if (!($?) -or ($dvlp_output -like "/bin/bash: line*")){
                   throw
                 }
                 # Write-Host -nonewline $dvlp_output
@@ -2723,7 +2723,7 @@ continue or skip
               catch {
                 try {
                   $dvlp_output = wsl.exe -- $dvlp_input_orig | Out-String
-                  if (!($?)){
+                  if (!($?) -or ($dvlp_output -like "/bin/bash: line*")){
                     throw
                   }
                 }
