@@ -1877,6 +1877,7 @@ continue or skip
               write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
             }
             elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
+            elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display')) {
           write-host -nonewline ":(
        _ _ _ _:|_// e v e l 
     +`"`````````|L|``````" -ForegroundColor Red
