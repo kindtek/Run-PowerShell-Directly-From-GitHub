@@ -2714,15 +2714,15 @@ continue or skip
                 $ErrorActionPreference = "Stop"
                 $dvlp_input_orig = $dvlp_input
                 $dvlp_input = 'nodisplay'
-                Invoke-Expression "Do-ErrorProneAction -Parameter $dvlp_input_orig" -OutVariable dvlp_output
-                if (!($?)){
+                Invoke-Expression "$dvlp_input_orig" -OutVariable dvlp_output
+                if (!($?) -or ($dvlp_output -match "$([Regex]::Escape("/bin/bash:"))*")){
                   throw
                 }
               }
               catch {
                 try {
                   $dvlp_output = wsl.exe -- $dvlp_input_orig | Out-String
-                  if (!($?)){
+                  if (!($?) -or ($dvlp_output -match "$([Regex]::Escape("/bin/bash:"))*")){
                     throw
                   }
                 }
