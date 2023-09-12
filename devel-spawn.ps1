@@ -1759,7 +1759,7 @@ function wsl_devel_spawn {
               #               " 'wait'
             }
             if ($img_name_tag -like '*kernel' ){
-              wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'no kernel import'
+              wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 
             }
             if ($img_name_tag -like '*gui*' ){
               $start_gui = Read-Host "start gui?
@@ -2136,7 +2136,7 @@ continue or skip
             if ($img_name_tag -like '*kernel' ){
               do {
                 start-sleep 3
-                wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'no kernel import'
+                wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 
               } while (!$($?))
             }
 
@@ -2282,7 +2282,7 @@ continue or skip
               }
               elseif ($wsl_action_choice -ieq 'setup') {
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
-                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'no kernel import'
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                 write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
@@ -2563,7 +2563,7 @@ continue or skip
                   $dvlp_kindtek_options_lin = Read-Host
                 }
                 if ($dvlp_kindtek_options_lin -eq "s"){
-                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'no kernel import'
+                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 
                   $dvlp_input = 'display'
                 } elseif ($dvlp_kindtek_options_lin -ceq "r"){
                   restart_wsl_docker_new_win
