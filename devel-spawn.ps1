@@ -2722,10 +2722,18 @@ continue or skip
               }
               catch {
                 try {
-                  $dvlp_input_orig = $dvlp_input_orig.replace('&','`&')
                   $dvlp_input_orig = $dvlp_input_orig.replace('|','`|')
+                  $dvlp_input_orig = $dvlp_input_orig.replace('\','`\')
+                  $dvlp_input_orig = $dvlp_input_orig.replace(':','`:')
                   $dvlp_input_orig = $dvlp_input_orig.replace(';','`;')
+                  $dvlp_input_orig = $dvlp_input_orig.replace('>','`>')
+                  $dvlp_input_orig = $dvlp_input_orig.replace('<','`<')
+                  $dvlp_input_orig = $dvlp_input_orig.replace('?','`?')
+                  $dvlp_input_orig = $dvlp_input_orig.replace('&','`&')
+                  $dvlp_input_orig = $dvlp_input_orig.replace('!','`!')
                   $dvlp_input_orig = $dvlp_input_orig.replace('$','`$')
+                  $dvlp_input_orig = $dvlp_input_orig.replace('*','`*')
+                  
                   Invoke-Expression "wsl.exe -- $dvlp_input_orig" -OutVariable dvlp_output
                   if (!($?) -or ($dvlp_output -match "$([Regex]::Escape("/bin/bash:"))*")){
                     throw
