@@ -1570,14 +1570,8 @@ function wsl_devel_spawn {
     else {
       if (((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display')) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or ((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and ($admin_bypass -eq $true)))) {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
-        write-host -nonewline ":)
-        _ _ _ _ _ // 
-     <+`"`````````|L|``````" -ForegroundColor DarkRed
         write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
-        write-host -nonewline "
-    <+~_-[W|-_=_.
-                 \\ 
-   <+-~-=-|S|-=-+|=]+" -ForegroundColor DarkRed
+        write-host -nonewline "" -ForegroundColor DarkRed
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         # write-host -nonewline "====-D-=-O-=-C-=-K-=-E-=-R-====-D-=-E-=-V-=-E-=-L=====))====:)
@@ -1714,7 +1708,7 @@ function wsl_devel_spawn {
             }
             write-host -nonewline "
     <+~_-[W|-_=_.
-                         \\ 
+                \\ 
    <+-~-=-|S|-=-+|=]+====-D-=-O-=-C-=-K-=-E-=-R-====-D-=-E-=-V-=-E-=-L=====))====" -ForegroundColor DarkRed
           }
           if (!([string]::IsNullOrEmpty($img_name_tag)) -and $img_name_tag -ne "skip") {
