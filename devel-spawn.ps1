@@ -1759,7 +1759,7 @@ function wsl_devel_spawn {
               #               " 'wait'
             }
             if ($img_name_tag -like '*kernel' ){
-              wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 
+              wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
             }
             if ($img_name_tag -like '*gui*' ){
               $start_gui = Read-Host "start gui?
@@ -2136,7 +2136,7 @@ continue or skip
             if ($img_name_tag -like '*kernel' ){
               do {
                 start-sleep 3
-                wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 
+                wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
               } while (!$($?))
             }
 
@@ -2237,7 +2237,7 @@ continue or skip
 
               }
               elseif ($wsl_action_choice -ieq 'kernel') {
-                $kernel_choices = @()
+                $kernel_choices = @('import')
                 $wsl_kernel_make_path = "$($env:USERPROFILE)/kache/wsl-kernel-make.ps1"
                 $wsl_kernel_rollback_path = "$($env:USERPROFILE)/kache/wsl-kernel-rollback.ps1"
                 $wsl_kernel_install_path = "$($env:USERPROFILE)/kache/wsl-kernel-install.ps1"
@@ -2252,12 +2252,16 @@ continue or skip
                 if (Test-Path "$wsl_kernel_rollback_path" -PathType Leaf -ErrorAction SilentlyContinue ) {
                   $kernel_choices += 'rollback'
                 }
+                
                 write-host 'enter one of the following:'
                 for ($i = 0; $i -le $kernel_choices.length - 1; $i++) {
                   write-host $kernel_choices[$i]
                 }
                 $kernel_choice = read-host "
     (main menu)"
+                if ($kernel_choice = 'import') {
+                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" "import"                                
+                }
                 if ($kernel_choice = 'install') {
                   push-location "$env:USERPROFILE/kache"
                   write-host "powershell.exe -File $wsl_kernel_install_path `"''`" `"''`" $wsl_distro_selected_name"
@@ -2282,7 +2286,7 @@ continue or skip
               }
               elseif ($wsl_action_choice -ieq 'setup') {
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
-                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                 write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
@@ -2559,13 +2563,16 @@ continue or skip
               }
               elseif ($dvlp_kindtek_options -ieq 'l') {
                 if (([string]::isNullOrEmpty($dvlp_kindtek_options_lin))){
-                  Write-Host "`r`n`t`t- [s]etup $(get_default_wsl_distro)`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
+                  Write-Host "`r`n`t`t- [s]etup $(get_default_wsl_distro)`r`n`t`t- [q]uick setup $(get_default_wsl_distro)`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
                   $dvlp_kindtek_options_lin = Read-Host
                 }
                 if ($dvlp_kindtek_options_lin -eq "s"){
-                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 
+                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
                   $dvlp_input = 'display'
-                } elseif ($dvlp_kindtek_options_lin -ceq "r"){
+                } elseif ($dvlp_kindtek_options_lin -eq "q"){
+                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME"
+                  $dvlp_input = 'display'
+                }elseif ($dvlp_kindtek_options_lin -ceq "r"){
                   restart_wsl_docker_new_win
                   $dvlp_input = 'display'
                 } elseif ($dvlp_kindtek_options_lin -ceq "R"){
