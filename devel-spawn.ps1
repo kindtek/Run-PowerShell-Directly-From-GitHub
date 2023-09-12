@@ -2337,6 +2337,7 @@ continue or skip
                   write-host "importing $new_distro_file_path as $new_distro_name ..."
                   if (wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path") {
                     wsl.exe --unregister $wsl_distro_selected_name
+                    wsl.exe -- export WSL_DISTRO_NAME="$new_distro_name-$base_distro_id"
                     $new_distro_diskman = "$($new_distro_root_path)\diskman.ps1"
                     $new_distro_diskshrink = "$($new_distro_root_path)\diskshrink.ps1"
                     New-Item -Path $new_distro_diskman -ItemType File -Force -Value "select vdisk file=$new_distro_diskman\ext4.vhdx 
