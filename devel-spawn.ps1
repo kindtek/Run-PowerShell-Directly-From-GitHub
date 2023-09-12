@@ -2715,11 +2715,17 @@ continue or skip
                 $dvlp_input_orig = $dvlp_input
                 $dvlp_input = 'nodisplay'
                 $dvlp_output = Invoke-Expression $dvlp_input_orig | Out-String
+                if (!($?)){
+                  throw
+                }
                 # Write-Host -nonewline $dvlp_output
               }
               catch {
                 try {
                   $dvlp_output = wsl.exe -- $dvlp_input_orig | Out-String
+                  if (!($?)){
+                    throw
+                  }
                 }
                 catch {
                   # write-host "invalid command`r`n$dvlp_input_orig"
