@@ -1769,7 +1769,7 @@ continue or skip
 (continue)
 " 
               if ($start_gui -eq "" -or $start_gui -ieq "continue"){
-                start_gui $new_default_distro
+                gui_launch $new_default_distro
               }  
             }
           }
