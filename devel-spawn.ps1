@@ -1168,10 +1168,11 @@ function docker_devel_spawn {
     }
   }
   else {
-    Write-Host "`r`docker desktop is not starting automatically"
-    $start_docker = Read-Host "press ENTER to keep trying normally
-    ... or enter 'force' to force docker to start"
-    if ($start_docker -eq "force") {
+    Write-Host "`r`docker desktop is taking a while to start..."
+    $start_docker = Read-Host "
+    press ENTER to keep trying normally
+      ... or enter 'quit' to quit (not recommended)"
+    if ($start_docker -ne "quit") {
       if ([string]::IsNullOrEmpty($img_name_tag)) {
         powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
       }
@@ -1181,7 +1182,7 @@ function docker_devel_spawn {
       else {
         powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
       }
-    }
+    } 
   }
 }
 
