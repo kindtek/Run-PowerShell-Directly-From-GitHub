@@ -2722,7 +2722,7 @@ continue or skip
               }
               catch {
                 try {
-                  $dvlp_output = wsl.exe -- $dvlp_input_orig | Out-String
+                  Invoke-Expression "wsl.exe -- $dvlp_input_orig" -OutVariable dvlp_output
                   if (!($?) -or ($dvlp_output -match "$([Regex]::Escape("/bin/bash:"))*")){
                     throw
                   }
