@@ -2710,6 +2710,7 @@ continue or skip
               $dvlp_input = 'display'
             }
             else {
+              set-psdebug -trace 2
               try {
                 $ErrorActionPreference = "Stop"
                 $dvlp_input_orig = $dvlp_input
@@ -2735,6 +2736,7 @@ continue or skip
                 Write-Host -nonewline $dvlp_output
                 $ErrorActionPreference = "Continue"
               }
+              set-psdebug -trace 0
             }
           } 
           if ($dvlp_input -eq 'nodisplay') {
