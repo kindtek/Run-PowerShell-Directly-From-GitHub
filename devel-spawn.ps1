@@ -2284,7 +2284,7 @@ continue or skip
 
               }
               elseif ($wsl_action_choice -ieq 'update') {
-                write-host "`r`nsetting up $wsl_distro_selected_name ..."
+                write-host "`r`nupdating repo and home directory for $wsl_distro_selected_name ..."
                 wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; [ ! -f k-home.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash k-home.sh 
               }
               elseif ($wsl_action_choice -ieq 'setup') {
