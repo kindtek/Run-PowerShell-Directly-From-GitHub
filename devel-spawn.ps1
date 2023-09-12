@@ -756,7 +756,7 @@ function set_default_wsl_distro {
     # handle failed installations
     if ( $(test_default_wsl_distro $new_wsl_default_distro) -eq $false ) {
       # Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro as default"
-      # start-sleep -Milliseconds 600
+      # start-sleep -Milliseconds 300
       # Write-Host "reverting to $env:KINDTEK_FAILSAFE_WSL_DISTRO as default wsl distro ..."
       # try {
       #     wsl.exe --set-default "$env:KINDTEK_FAILSAFE_WSL_DISTRO".trim()
@@ -844,7 +844,7 @@ function install_git {
 
 function uninstall_git {
   Write-Host "please wait while git is uninstalled"
-  start-sleep -Milliseconds 600
+  start-sleep -Milliseconds 300
   # docker builder prune -af 
   # docker system prune -af --volumes 
   Start-Process powershell.exe -Wait -Argumentlist '-Command', 'write-host "uninstalling git... ";winget uninstall --id=Git.Git;winget uninstall --id=Git.Git;' | Out-Null 
@@ -2210,7 +2210,7 @@ continue or skip
               $dvlp_input = 'display'
             }
             else {
-              write-host "`r`n`r`n$wsl_distro_selected_name selected.`r`n`r`nEnter terminal, gui, DEFAULT, DELETE, setup, kernel, backup, rename, restore`r`n`t ... or press ENTER to open"
+              write-host "`r`n`r`n$wsl_distro_selected_name selected.`r`n`r`nEnter terminal, update, setup, gui, DEFAULT, DELETE, kernel, backup, rename, restore`r`n`t ... or press ENTER to open"
               $wsl_action_choice = read-host "
     (open $wsl_distro_selected_name)"
               if ($wsl_action_choice -ceq 'DELETE') {
@@ -2232,9 +2232,8 @@ continue or skip
                 wsl.exe --set-default "$wsl_distro_selected_name".trim()
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: next time use d$wsl_distro_selected_num to set $wsl_distro_selected_name as default"
-                start-sleep -Milliseconds 600
+                start-sleep -Milliseconds 300
                 $dvlp_input = 'display'
-
               }
               elseif ($wsl_action_choice -ieq 'kernel') {
                 $kernel_choices = @('import')
@@ -2284,22 +2283,26 @@ continue or skip
                 }
 
               }
+              elseif ($wsl_action_choice -ieq 'update') {
+                write-host "`r`nsetting up $wsl_distro_selected_name ..."
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& [ -f k-home.sh ] ^&^& bash k-home.sh ^|^| wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh ^| bash ^&^& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh ^| bash 
+              }
               elseif ($wsl_action_choice -ieq 'setup') {
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
-                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& [ -f setup.sh ] ^&^&bash setup.sh "$env:USERNAME" 'full' ^|^| wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh ^| bash ^&^& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh ^| bash ^&^& bash setup.sh 'full'
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
                 write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
                 wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: next time use t$wsl_distro_selected_num to open the terminal for $wsl_distro_selected_name"
-                start-sleep -Milliseconds 600
+                start-sleep -Milliseconds 300
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ) {
                 gui_launch $wsl_distro_selected_name
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: use g$wsl_distro_selected_num to open the gui for $wsl_distro_selected_name"
-                start-sleep -Milliseconds 600
+                start-sleep -Milliseconds 300
               }
               elseif ($wsl_action_choice -Ieq 'VERSION1') {
                 write-host "`r`nsetting $wsl_distro_selected_name to wsl version 1..."
@@ -2563,10 +2566,13 @@ continue or skip
               }
               elseif ($dvlp_kindtek_options -ieq 'l') {
                 if (([string]::isNullOrEmpty($dvlp_kindtek_options_lin))){
-                  Write-Host "`r`n`t`t- [s]etup $(get_default_wsl_distro)`r`n`t`t- [q]uick setup $(get_default_wsl_distro)`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
+                  Write-Host "`r`n`t`t- [u]pdate $(get_default_wsl_distro) home directory`r`n`t`t- [s]etup $(get_default_wsl_distro)`r`n`t`t- [q]uick setup $(get_default_wsl_distro)`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
                   $dvlp_kindtek_options_lin = Read-Host
                 }
-                if ($dvlp_kindtek_options_lin -eq "s"){
+                if ($dvlp_kindtek_options_lin -eq "u"){
+                  wsl.exe -- cd `$HOME `&`& [ -f k-home.sh ] `&`& bash k-home.sh `|`| wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh `| bash `&`& bash setup.sh 
+                  $dvlp_input = 'display'
+                }elseif ($dvlp_kindtek_options_lin -eq "s"){
                   wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
                   $dvlp_input = 'display'
                 } elseif ($dvlp_kindtek_options_lin -eq "q"){
