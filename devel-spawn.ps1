@@ -1570,7 +1570,7 @@ function wsl_devel_spawn {
     else {
       if (((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display')) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or ((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and ($admin_bypass -eq $true)))) {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
-        write-host "`r`n`r`n`r`n --------------------------------------------------------------------------"
+        write-host "`r`n`r`n`r`n ------------------------------------------------------------------------------"
         write-host -nonewline "
     <+~_-[W|-_=_.
               :| \\  o c k e r
@@ -1831,7 +1831,7 @@ continue or skip
         write-host -nonewline "===-$dvlw_commit-===))====:)
        _ _ _ _:|_// e v e l 
     <+`"`````````|L|``````" -ForegroundColor DarkRed
-        write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+        write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
 
         }
       }
@@ -1863,7 +1863,7 @@ continue or skip
             #       write-host -nonewline ":)
 #   _ _ _ _:|_// e v e l 
 #  <+````````|L|``````" -ForegroundColor DarkRed
-            #         write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+            #         write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
           }
         }
         catch {
@@ -1874,7 +1874,7 @@ continue or skip
           write-host -nonewline ":|
        _ _ _ _:|_// e v e l 
     +`"`````````|L|``````" -ForegroundColor DarkRed
-              write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+              write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
             }
             # elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') ) {
@@ -1882,7 +1882,7 @@ continue or skip
        _ _ _ _:|_// e v e l 
     +`"`````````|L|``````" -ForegroundColor Red
     
-              write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+              write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
             }
             $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
           }
@@ -1891,7 +1891,7 @@ continue or skip
           write-host -nonewline ":|
        _ _ _ _:|_// e v e l 
       +`"`````````|L|``````" -ForegroundColor DarkRed
-     write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+     write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
   #       write-host -nonewline "
   #   <+~_-[W|-_=_.
   #             :  \\ o c k e r
@@ -1924,7 +1924,7 @@ continue or skip
 
 
               #     
-              write-host "`r`n`r`n --------------------------------------------------------------------------`r`n`r`n"
+              write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
             }
             $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
           }
