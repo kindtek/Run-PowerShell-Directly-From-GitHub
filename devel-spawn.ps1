@@ -5,19 +5,19 @@
 # set special colors
 
 $global:devel_data = $host.privatedata
-$global:devel_data.ErrorForegroundColor    = "DarkGray"
-$global:devel_data.ErrorBackgroundColor    = "Black"
-$global:devel_data.WarningForegroundColor  = "Gray"
-$global:devel_data.WarningBackgroundColor  = "Black"
-$global:devel_data.DebugForegroundColor    = "DarkGray"
-$global:devel_data.DebugBackgroundColor    = "Black"
-$global:devel_data.VerboseForegroundColor  = "DarkGray"
-$global:devel_data.VerboseBackgroundColor  = "Black"
+$global:devel_data.ErrorForegroundColor = "DarkGray"
+$global:devel_data.ErrorBackgroundColor = "Black"
+$global:devel_data.WarningForegroundColor = "Gray"
+$global:devel_data.WarningBackgroundColor = "Black"
+$global:devel_data.DebugForegroundColor = "DarkGray"
+$global:devel_data.DebugBackgroundColor = "Black"
+$global:devel_data.VerboseForegroundColor = "DarkGray"
+$global:devel_data.VerboseBackgroundColor = "Black"
 $global:devel_data.ProgressForegroundColor = "Red"
 $global:devel_data.ProgressBackgroundColor = "White"
 
 # clear screen
-if ($global:jump_screen -eq $true){
+if ($global:jump_screen -eq $true) {
   write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
 }
 $global:jump_screen = $false
@@ -34,7 +34,8 @@ function include_devel_tools {
       # write-host "dot sourcing $env:KINDTEK_DEVEL_TOOLS"
       . $env:KINDTEK_DEVEL_TOOLS
     } 
-  } catch {
+  }
+  catch {
     Remove-Item "$env:USERPROFILE/repos/$($git_owner)/.github-installed" -Confirm:$false -Force -ErrorAction SilentlyContinue
   }
 }
@@ -401,7 +402,7 @@ function set_kindtek_env {
       # Write-Host "setting $kindtek_env_var to $kindtek_env_val"
       if (([string]::IsNullOrEmpty($set_machine_env_flag)) -And ([string]::IsNullOrEmpty($set_both_env_flag))) {
         # check to avoid writing same thing repeatedly
-        if ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val ){
+        if ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val ) {
           write-host "setting local env $kindtek_env_var to $kindtek_env_val"
           Set-PSDebug -Trace 2
           [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
@@ -410,7 +411,7 @@ function set_kindtek_env {
       }
       elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val)) {
         # check to avoid writing same thing repeatedly
-        if ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val ){
+        if ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val ) {
           write-host "setting machine env $kindtek_env_var to $kindtek_env_val"
           Set-PSDebug -Trace 2
           [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine) 
@@ -418,7 +419,7 @@ function set_kindtek_env {
       }
       elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val) -Or ($(get_kindtek_env "$kindtek_env_var") -ne $kindtek_env_val))) {
         # check to avoid writing same thing repeatedly
-        if (([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val) -or ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val) ){
+        if (([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val) -or ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val) ) {
           write-host "setting local and machine env $kindtek_env_var to $kindtek_env_val"
           Set-PSDebug -Trace 2
           [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
@@ -856,9 +857,10 @@ function clone_repo {
   param (
     [bool]$quiet
   )
-  if (([string]::isnullorempty([string]$quiet))){
+  if (([string]::isnullorempty([string]$quiet))) {
     [bool]$quiet = $false
-  } else {
+  }
+  else {
     [bool]$quiet = $true
   }
   Push-Location $env:KINDTEK_WIN_GIT_PATH
@@ -877,9 +879,10 @@ function pull_repo {
   param (
     [bool]$quiet
   )
-  if (([string]::isnullorempty([string]$quiet))){
+  if (([string]::isnullorempty([string]$quiet))) {
     [bool]$quiet = $false
-  } else {
+  }
+  else {
     [bool]$quiet = $true
   }
   Push-Location $env:KINDTEK_WIN_GIT_PATH
@@ -898,12 +901,13 @@ function quick_sync_repo_new_win {
   param (
     [bool]$wait
   )
-  if (([string]::isnullorempty([string]$wait))){
+  if (([string]::isnullorempty([string]$wait))) {
     [bool]$wait = $false
-  } else {
+  }
+  else {
     [bool]$wait = $true
   }
-  if ($wait -eq $true){
+  if ($wait -eq $true) {
     $wait = 'wait'
   }
   start_kindtek_process_popmin "quick_sync_repo;exit" "$wait" ''
@@ -913,9 +917,10 @@ function quick_sync_repo {
   param (
     [bool]$quiet
   )
-  if (([string]::isnullorempty([string]$quiet))){
+  if (([string]::isnullorempty([string]$quiet))) {
     [bool]$quiet = $false
-  } else {
+  }
+  else {
     [bool]$quiet = $true
   }
   if ((Test-Path -Path "$($env:KINDTEK_WIN_DVLW_PATH)/.git")) {
@@ -938,7 +943,7 @@ function sync_repos_new_win {
   param (
     [bool]$wait
   )
-  if (!([string]::isnullorempty([string]$wait))){
+  if (!([string]::isnullorempty([string]$wait))) {
     [string]$wait = 'wait'
   }
   start_kindtek_process_popmin "sync_repos;exit" "$wait" ''
@@ -1065,15 +1070,17 @@ function get_remote_commit {
 }
 
 function get_latest_commit {
-  if ($(update_found_local)){
+  if ($(update_found_local)) {
     # we have an update  
-    if($(get_local_commit) -ne $(get_remote_commit)){
+    if ($(get_local_commit) -ne $(get_remote_commit)) {
       # try sync to get latest commit available since local head might be ahead of remote head
       quick_sync_repo $true
-  } else{
+    }
+    else {
       # local head is current with remote - no need to sync
     } 
-  } elseif ($(update_found_remote)) {
+  }
+  elseif ($(update_found_remote)) {
     # sync to get latest commit from local
     quick_sync_repo $true
 
@@ -1087,7 +1094,8 @@ function update_found_local {
   $local_commit = $(get_local_commit)
   if ($global:dvlw_commit -ne $local_commit) {
     return $true
-  } else {
+  }
+  else {
     return $false
   }
 }
@@ -1096,15 +1104,17 @@ function update_found_remote {
   $remote_commit = $(get_remote_commit)
   if ($global:dvlw_commit -ne $remote_commit) {
     return $true
-  } else {
+  }
+  else {
     return $false
   }
 }
 
 function update_found {
-  if($(get_latest_commit) -ne $global:dvlw_commit){
+  if ($(get_latest_commit) -ne $global:dvlw_commit) {
     return $true
-  } else {
+  }
+  else {
     return $false
   }
 }
@@ -1256,14 +1266,14 @@ function lock_theme {
     $ProgressForegroundColor,
     $ProgressBackgroundColor
   )
-  $host.privatedata.ErrorForegroundColor    = $ErrorForegroundColor
-  $host.privatedata.ErrorBackgroundColor    = $ErrorBackgroundColor
-  $host.privatedata.WarningForegroundColor  = $WarningForegroundColor
-  $host.privatedata.WarningBackgroundColor  = $WarningBackgroundColor
-  $host.privatedata.DebugForegroundColor    = $DebugForegroundColor
-  $host.privatedata.DebugBackgroundColor    = $DebugBackgroundColor
-  $host.privatedata.VerboseForegroundColor  = $VerboseForegroundColor
-  $host.privatedata.VerboseBackgroundColor  = $VerboseBackgroundColor
+  $host.privatedata.ErrorForegroundColor = $ErrorForegroundColor
+  $host.privatedata.ErrorBackgroundColor = $ErrorBackgroundColor
+  $host.privatedata.WarningForegroundColor = $WarningForegroundColor
+  $host.privatedata.WarningBackgroundColor = $WarningBackgroundColor
+  $host.privatedata.DebugForegroundColor = $DebugForegroundColor
+  $host.privatedata.DebugBackgroundColor = $DebugBackgroundColor
+  $host.privatedata.VerboseForegroundColor = $VerboseForegroundColor
+  $host.privatedata.VerboseBackgroundColor = $VerboseBackgroundColor
   $host.privatedata.ProgressForegroundColor = $ProgressForegroundColor
   $host.privatedata.ProgressBackgroundColor = $ProgressBackgroundColor
   $global:devel_data_old = $global:devel_data
@@ -1272,18 +1282,18 @@ function lock_theme {
 }
 
 function unlock_theme {
-  if ($null = $global:devel_data){
-    $global:devel_data =   $host.privatedata
+  if ($null = $global:devel_data) {
+    $global:devel_data = $host.privatedata
   }
 
-  $global:devel_data.ErrorForegroundColor    = "DarkRed"
-  $global:devel_data.ErrorBackgroundColor    = "DarkYellow"
-  $global:devel_data.WarningForegroundColor  = "DarkRed"
-  $global:devel_data.WarningBackgroundColor  = "Blue"
-  $global:devel_data.DebugForegroundColor    = "DarkYellow"
-  $global:devel_data.DebugBackgroundColor    = "Blue"
-  $global:devel_data.VerboseForegroundColor  = "DarkYellow"
-  $global:devel_data.VerboseBackgroundColor  = "Gray"
+  $global:devel_data.ErrorForegroundColor = "DarkRed"
+  $global:devel_data.ErrorBackgroundColor = "DarkYellow"
+  $global:devel_data.WarningForegroundColor = "DarkRed"
+  $global:devel_data.WarningBackgroundColor = "Blue"
+  $global:devel_data.DebugForegroundColor = "DarkYellow"
+  $global:devel_data.DebugBackgroundColor = "Blue"
+  $global:devel_data.VerboseForegroundColor = "DarkYellow"
+  $global:devel_data.VerboseBackgroundColor = "Gray"
   $global:devel_data.ProgressForegroundColor = "Blue"
   $global:devel_data.ProgressBackgroundColor = "White"
 
@@ -1294,7 +1304,7 @@ function unlock_theme {
 function safe_boot_devel {
   try {
     Set-PSDebug -Trace 2;
-lock_gates
+    lock_gates
 
     install_winget $true
     install_git $true    
@@ -1303,7 +1313,7 @@ lock_gates
     install_dependencies $true
     start_docker_desktop_new_win
 
-        unlock_theme
+    unlock_theme
     Set-PSDebug -Trace "$env:KINDTEK_DEBUG_MODE"
     return $true
   }
@@ -1312,7 +1322,7 @@ lock_gates
 
 function boot_devel {
   $new_windowsfeatures_installed = $false
-lock_gates
+  lock_gates
   try {
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
     $host.UI.RawUI.BackgroundColor = "Black"
@@ -1440,7 +1450,7 @@ lock_gates
         }
         start_docker_desktop | out-null
         if ($continue_install -ieq '' -or $(dependencies_installed) -eq $false -or (!(is_docker_desktop_online))) {
-unlock_theme
+          unlock_theme
           if ($new_windowsfeatures_installed -or $new_dependencies_installed ) {
             if ($new_windowsfeatures_installed) {
               Write-Host "
@@ -1472,12 +1482,13 @@ unlock_theme
             " -ForegroundColor Magenta -BackgroundColor Yellow
       write-host `r`n`r`n
     }
-        unlock_theme
+    unlock_theme
     return $true
   }
   catch { 
     unlock_theme
-    return $false }
+    return $false 
+  }
 }
 
 function devel_daemon {
@@ -1486,42 +1497,47 @@ function devel_daemon {
   )
   [int]$boot_devel_loop_count = 0
   [int]$boot_devel_loop_max = 10
-  if ([string]::isNullOrEmpty($keep_running)){
+  if ([string]::isNullOrEmpty($keep_running)) {
     [bool]$keep_running = $false
-  } else {
+  }
+  else {
     [bool]$keep_running = $true
   }
   do {
     $boot_devel_loop_count += 1 
     try {  
-      if (!$($keep_running)){
+      if (!$($keep_running)) {
         return boot_devel
       }
-    } catch { 
+    }
+    catch { 
       try {
         # try pulling envs first
         pull_kindtek_envs
-        if (!$($keep_running)){
+        if (!$($keep_running)) {
           return boot_devel
-        } else {
+        }
+        else {
           boot_devel
         }
-      } catch { 
+      }
+      catch { 
         # try setting envs first then do bare minimum
         set_kindtek_envs $env:KINDTEK_DEBUG_MODE
-        if (!$($keep_running)){
+        if (!$($keep_running)) {
           return safe_boot_devel
-        } else {
+        }
+        else {
           safe_boot_devel
         }
       }
       reboot_prompt
-      if (!$($keep_running)){
+      if (!$($keep_running)) {
         return $false 
       }
     }
 
-    if (!$($keep_running)){
+    if (!$($keep_running)) {
       return $true 
     }
 
@@ -1578,7 +1594,7 @@ function wsl_devel_spawn {
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         write-host -nonewline "===-$dvlw_commit-===))====" -ForegroundColor DarkRed
-     }
+      }
     }
     if ($confirmation -eq '' -or $confirmation -eq 'skip' -or $confirmation -eq 'devel') {
       # source of conditions for below self-elevating script: https://blog.expta.com/2017/03/how-to-self-elevate-powershell-script.html#:~:text=If%20User%20Account%20Control%20(UAC,select%20%22Run%20with%20PowerShell%22.
@@ -1602,7 +1618,8 @@ function wsl_devel_spawn {
               throw
             }
             # $host.UI.RawUI.ForegroundColor = $orig_foreground
-          } catch {
+          }
+          catch {
             write-host "
             
             WARNING: could not acquire admin access" -foregroundcolor darkred
@@ -1618,7 +1635,7 @@ function wsl_devel_spawn {
 
             continue anyways? (y/N)"            
             $continue_no_admin = Read-Host
-            if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")){
+            if (($continue_no_admin -ieq "y") -or ($continue_no_admin -ieq "yes")) {
               $admin_bypass = $true
               write-host "
               
@@ -1635,11 +1652,12 @@ function wsl_devel_spawn {
               
               
               "
-            } else {
+            }
+            else {
               exit
             }
           }
-          if ($admin_bypass -ne $true){
+          if ($admin_bypass -ne $true) {
             exit 1
           }
           # Write-Host "
@@ -1652,7 +1670,8 @@ function wsl_devel_spawn {
         unlock_theme
         $dvlp_input = 'display'
         set_kindtek_debug_mode $true   
-      } else {
+      }
+      else {
         Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
       }
       # if confirmation is daemon or (img_tag must not empty ... OR dvlp must not installed)
@@ -1666,9 +1685,10 @@ function wsl_devel_spawn {
         }
         # make sure failsafe kalilinux-kali-rolling-latest distro is installed so changes can be easily reverted
         try {
-          if ($global:dvlp_safe_mode -eq $true){
+          if ($global:dvlp_safe_mode -eq $true) {
             $devel_booted = $(safe_boot_devel)
-          } else {
+          }
+          else {
             $devel_booted = $(boot_devel)
           }
           
@@ -1704,7 +1724,7 @@ function wsl_devel_spawn {
             catch {
               Write-Host "failed setting up hypervm in user profile"
             }
-          write-host -nonewline "
+            write-host -nonewline "
     <+~_-[W|-_=_.
               :| \\  o c k e r
    <+-~-=-|S|-=|-+=]+===-$dvlw_commit-===))====" -ForegroundColor DarkRed
@@ -1722,10 +1742,10 @@ function wsl_devel_spawn {
               # if ((`$new_wsl_default_distro -ne `$old_wsl_default_distro) -And (`$(is_docker_desktop_online) -eq $false)) {
               #     Write-Host 'ERROR: docker desktop failed to start with `$new_wsl_default_distro distro';
               # }
-              if ($img_name_tag -like '*kernel' ){
+              if ($img_name_tag -like '*kernel' ) {
                 $restart_wsl_docker = Read-Host "restart wsl with new kernel?
 (yes)
-"               if (( $restart_wsl_docker -eq "" ) -or ( $restart_wsl_docker -eq "y" ) -or ( $restart_wsl_docker -eq "yes" )){
+"               if (( $restart_wsl_docker -eq "" ) -or ( $restart_wsl_docker -eq "y" ) -or ( $restart_wsl_docker -eq "yes" )) {
                   restart_wsl_docker_new_win
                 }
               }
@@ -1735,7 +1755,7 @@ function wsl_devel_spawn {
               $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
-                  Write-Host "ERROR: docker desktop failed to start with `$new_wsl_default_distro distro";
+                Write-Host "ERROR: docker desktop failed to start with `$new_wsl_default_distro distro";
               }              
             }
             else {
@@ -1744,7 +1764,7 @@ function wsl_devel_spawn {
               $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$env:KINDTEK_WIN_DVLP_FULLNAME-$img_name_tag" 'default');
               $new_wsl_default_distro = get_default_wsl_distro;
               if (($new_wsl_default_distro -ne $old_wsl_default_distro) -And ($(is_docker_desktop_online) -eq $false)) {
-                  Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro";
+                Write-Host "ERROR: docker desktop failed to start with $new_wsl_default_distro distro";
               }
               # start_kindtek_process_pop "
               #               `$old_wsl_default_distro = $old_wsl_default_distro;
@@ -1758,17 +1778,17 @@ function wsl_devel_spawn {
               #               }
               #               " 'wait'
             }
-            if ($img_name_tag -like '*kernel' ){
+            if ($img_name_tag -like '*kernel' ) {
               wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
             }
-            if ($img_name_tag -like '*gui*' ){
+            if ($img_name_tag -like '*gui*' ) {
               $start_gui = Read-Host "start gui?
 
 continue or skip
 
 (continue)
 " 
-              if ($start_gui -eq "" -or $start_gui -ieq "continue"){
+              if ($start_gui -eq "" -or $start_gui -ieq "continue") {
                 gui_launch $new_default_distro
               }  
             }
@@ -1818,20 +1838,20 @@ continue or skip
       }
       else {
         if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1)) -and (($confirmation -ne "skip"))) {
-        . include_devel_tools
-        if (($dvlp_input -ceq 'nodisplay' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
-          start_kindtek_process_hide 'sync_repos'
-        }
-        else {
-          update_dvlp $true
-          if ($global:update_dvlw){
-            return
+          . include_devel_tools
+          if (($dvlp_input -ceq 'nodisplay' -or $dvlp_input -ceq 'screen') -And ((Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
+            start_kindtek_process_hide 'sync_repos'
           }
-        }
-        write-host -nonewline "===-$dvlw_commit-===))====:)
+          else {
+            update_dvlp $true
+            if ($global:update_dvlw) {
+              return
+            }
+          }
+          write-host -nonewline "===-$dvlw_commit-===))====:)
        _ _ _ _:|_// e v e l 
     <+`"`````````|L|``````" -ForegroundColor DarkRed
-        write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
+          write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
 
         }
       }
@@ -1861,8 +1881,8 @@ continue or skip
           $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
           if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             #       write-host -nonewline ":)
-#   _ _ _ _:|_// e v e l 
-#  <+````````|L|``````" -ForegroundColor DarkRed
+            #   _ _ _ _:|_// e v e l 
+            #  <+````````|L|``````" -ForegroundColor DarkRed
             #         write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
           }
         }
@@ -1871,14 +1891,14 @@ continue or skip
             . include_devel_tools
             $wsl_distro_list = get_wsl_distro_list
             if ($global:dvlp_safe_mode -eq $true) {
-          write-host -nonewline ":|
+              write-host -nonewline ":|
        _ _ _ _:|_// e v e l 
     +`"`````````|L|``````" -ForegroundColor DarkRed
               write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
             }
             # elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') ) {
-          write-host -nonewline ":(
+              write-host -nonewline ":(
        _ _ _ _:|_// e v e l 
     +`"`````````|L|``````" -ForegroundColor Red
     
@@ -1888,39 +1908,39 @@ continue or skip
           }
           catch {
             if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
-          write-host -nonewline ":|
+              write-host -nonewline ":|
        _ _ _ _:|_// e v e l 
       +`"`````````|L|``````" -ForegroundColor DarkRed
-     write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
-  #       write-host -nonewline "
-  #   <+~_-[W|-_=_.
-  #             :  \\ o c k e r
-  #  <+-~-=-|S|-=-+|=]+===-$dvlw_commit-===))====:)
-  #      _ _ _ _:|_// e v e l 
-  #   <+````````|L|``````" -ForegroundColor DarkRed
-            # '
-#     <+~_-[W|-_=_.
-#               :  \\ o c k e r
-#    <+-~-=-|S|-=-+|=]+===-$dvlw_commit-===))====:)
-#        _ _ _ _:|_// e v e l 
-#     <+```|L|``````
-#                                                                                                                                                        `r`n
-            # write-host 
-# '
-#          \________
-#              W    \\ 
-#       <------S----+++=O C K E R===D E V E L====|======|
-#           ___L____// 
-#          /
-#      ' 
-#  write-host
-# '  
-#          </=+====\\
-#             W     \\ O_C_K_E_R
-#         <-= S --`=|+|===============================|#######|
-#             L     // E V E L
-#          <\=+====//  
-# '
+              write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
+              #       write-host -nonewline "
+              #   <+~_-[W|-_=_.
+              #             :  \\ o c k e r
+              #  <+-~-=-|S|-=-+|=]+===-$dvlw_commit-===))====:)
+              #      _ _ _ _:|_// e v e l 
+              #   <+````````|L|``````" -ForegroundColor DarkRed
+              # '
+              #     <+~_-[W|-_=_.
+              #               :  \\ o c k e r
+              #    <+-~-=-|S|-=-+|=]+===-$dvlw_commit-===))====:)
+              #        _ _ _ _:|_// e v e l 
+              #     <+```|L|``````
+              #                                                                                                                                                        `r`n
+              # write-host 
+              # '
+              #          \________
+              #              W    \\ 
+              #       <------S----+++=O C K E R===D E V E L====|======|
+              #           ___L____// 
+              #          /
+              #      ' 
+              #  write-host
+              # '  
+              #          </=+====\\
+              #             W     \\ O_C_K_E_R
+              #         <-= S --`=|+|===============================|#######|
+              #             L     // E V E L
+              #          <\=+====//  
+              # '
 
 
               #     
@@ -1938,89 +1958,89 @@ continue or skip
         $dvlp_prompt_cursor2 = " > "
         $dvlp_prompt_prefix = ""
         do {
-          if ($dvlp_input -eq 'gates'){
+          if ($dvlp_input -eq 'gates') {
             $sleep = 1
             for ($i = 0; $i -le 3; $i++) {
-                set-psdebug -trace 2
-                write-host -nonewline "0" -ForegroundColor DarkRed -backgroundcolor blue
-                write-host -nonewline "0" -foregroundcolor White -backgroundcolor blue
-                write-host -nonewline "0" -foregroundcolor DarkYellow -backgroundcolor gray
-                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "1" -foregroundcolor White -backgroundcolor blue
-                write-host -nonewline "1" -foregroundcolor DarkYellow -backgroundcolor gray
-                write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
-                bill
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
-                write-host -nonewline "!" -foregroundcolor Red -backgroundcolor blue
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-host -nonewline "*&&^**" -foregroundcolor White -backgroundcolor blue
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-host -nonewline "%#@" -foregroundcolor DarkYellow -backgroundcolor gray
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-host -nonewline "~#&^&@)"  -foregroundcolor White -backgroundcolor blue
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-host -nonewline "`r773999999999999999999999999999966666666666666666666666666666" -foregroundcolor Red -backgroundcolor blue
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-host "-1" -foregroundcolor black -backgroundcolor white
-                cmd.exe /c "timeout /t 10" 2> $null
-                # disguise timeout
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                $host.UI.RawUI.ForegroundColor = "DarkBlue"
-                $host.UI.RawUI.ForegroundColor = "DarkRed"
-                set-psdebug -trace 0
-                [console]::backgroundcolor = "DarkBlue"
-                [console]::foregroundcolor = "DarkBlue"
-                write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
-                $orig_foreground = [System.Console]::ForegroundColor
-                $temp_foreground = [System.Console]::BackgroundColor
-                $host.UI.RawUI.ForegroundColor = $temp_foreground
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                $host.UI.RawUI.ForegroundColor = $orig_foreground
-                write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
-                [console]::backgroundcolor = "DarkBlue"
-                [console]::foregroundcolor = "DarkBlue"
-                cmd.exe /c "timeout /t $sleep" 2> $null
-                write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
-                [console]::backgroundcolor = "Magenta"
-                [console]::foregroundcolor = "Magenta"
-                write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
-                [console]::backgroundcolor = "Blue"
-                [console]::foregroundcolor = "Blue"
+              set-psdebug -trace 2
+              write-host -nonewline "0" -ForegroundColor DarkRed -backgroundcolor blue
+              write-host -nonewline "0" -foregroundcolor White -backgroundcolor blue
+              write-host -nonewline "0" -foregroundcolor DarkYellow -backgroundcolor gray
+              write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "1" -foregroundcolor White -backgroundcolor blue
+              write-host -nonewline "1" -foregroundcolor DarkYellow -backgroundcolor gray
+              write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "1" -foregroundcolor Red -backgroundcolor blue
+              bill
+              $host.UI.RawUI.ForegroundColor = $temp_foreground
+              cmd.exe /c "timeout /t $sleep" 2> $null
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
+              $orig_foreground = [System.Console]::ForegroundColor
+              $temp_foreground = [System.Console]::BackgroundColor
+              write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "6" -foregroundcolor Red -backgroundcolor blue
+              write-host -nonewline "!" -foregroundcolor Red -backgroundcolor blue
+              $orig_foreground = [System.Console]::ForegroundColor
+              $temp_foreground = [System.Console]::BackgroundColor
+              $host.UI.RawUI.ForegroundColor = $temp_foreground
+              cmd.exe /c "timeout /t $sleep" 2> $null
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
+              write-host -nonewline "*&&^**" -foregroundcolor White -backgroundcolor blue
+              $orig_foreground = [System.Console]::ForegroundColor
+              $temp_foreground = [System.Console]::BackgroundColor
+              $host.UI.RawUI.ForegroundColor = $temp_foreground
+              cmd.exe /c "timeout /t $sleep" 2> $null
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
+              write-host -nonewline "%#@" -foregroundcolor DarkYellow -backgroundcolor gray
+              $orig_foreground = [System.Console]::ForegroundColor
+              $temp_foreground = [System.Console]::BackgroundColor
+              $host.UI.RawUI.ForegroundColor = $temp_foreground
+              cmd.exe /c "timeout /t $sleep" 2> $null
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
+              write-host -nonewline "~#&^&@)"  -foregroundcolor White -backgroundcolor blue
+              $orig_foreground = [System.Console]::ForegroundColor
+              $temp_foreground = [System.Console]::BackgroundColor
+              $host.UI.RawUI.ForegroundColor = $temp_foreground
+              cmd.exe /c "timeout /t $sleep" 2> $null
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
+              write-host -nonewline "`r773999999999999999999999999999966666666666666666666666666666" -foregroundcolor Red -backgroundcolor blue
+              $orig_foreground = [System.Console]::ForegroundColor
+              $temp_foreground = [System.Console]::BackgroundColor
+              $host.UI.RawUI.ForegroundColor = $temp_foreground
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
+              write-host "-1" -foregroundcolor black -backgroundcolor white
+              cmd.exe /c "timeout /t 10" 2> $null
+              # disguise timeout
+              $orig_foreground = [System.Console]::ForegroundColor
+              $temp_foreground = [System.Console]::BackgroundColor
+              $host.UI.RawUI.ForegroundColor = $temp_foreground
+              cmd.exe /c "timeout /t $sleep" 2> $null
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
+              $host.UI.RawUI.ForegroundColor = "DarkBlue"
+              $host.UI.RawUI.ForegroundColor = "DarkRed"
+              set-psdebug -trace 0
+              [console]::backgroundcolor = "DarkBlue"
+              [console]::foregroundcolor = "DarkBlue"
+              write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
+              $orig_foreground = [System.Console]::ForegroundColor
+              $temp_foreground = [System.Console]::BackgroundColor
+              $host.UI.RawUI.ForegroundColor = $temp_foreground
+              cmd.exe /c "timeout /t $sleep" 2> $null
+              $host.UI.RawUI.ForegroundColor = $orig_foreground
+              write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
+              [console]::backgroundcolor = "DarkBlue"
+              [console]::foregroundcolor = "DarkBlue"
+              cmd.exe /c "timeout /t $sleep" 2> $null
+              write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
+              [console]::backgroundcolor = "Magenta"
+              [console]::foregroundcolor = "Magenta"
+              write-output ("`n" * $Host.UI.RawUI.WindowSize.Height)
+              [console]::backgroundcolor = "Blue"
+              [console]::foregroundcolor = "Blue"
               
             }
             lock_gates
@@ -2044,7 +2064,7 @@ continue or skip
             # once activated, keep command line mode active 
             $dvlp_prompt_location = "$("$(get-location)".tolower())"
           }
-          if ($dvlp_input -ine 'nodisplay'){
+          if ($dvlp_input -ine 'nodisplay') {
             display_wsl_distro_list $wsl_distro_list
             Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
             if ($(get_kindtek_auto_boot)) {
@@ -2062,7 +2082,7 @@ continue or skip
           write-host -nonewline "$dvlp_prompt_cursor" -ForegroundColor Yellow
           $dvlp_input = $Host.UI.ReadLine()
           # automatically trigger display by preceeding command with space(s)
-          if ($dvlp_input -match "^\s*$" -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2)){
+          if ($dvlp_input -match "^\s*$" -and ($dvlp_prompt_cursor -eq $dvlp_prompt_cursor2)) {
             $dvlp_input = 'display'
             Write-Host "`r`n"
             display_wsl_distro_list $wsl_distro_list
@@ -2074,7 +2094,8 @@ continue or skip
               write-host "`r`n`t- [auto] boot OFF`r`n"
             }
             write-host ""
-          } else {
+          }
+          else {
             $dvlp_input = $dvlp_input.trim()
           }
           set_kindtek_debug_mode $(get_kindtek_debug_mode)
@@ -2100,7 +2121,7 @@ continue or skip
           }
           elseif ($dvlp_input -ieq 'update') {
             update_dvlp $true
-            if ($global:update_dvlw){
+            if ($global:update_dvlw) {
               return
             }
             if (($dependencies_installed -eq $false) -or (!(Test-Path -Path "$env:KINDTEK_WIN_GIT_PATH/.dvlp-installed" -PathType Leaf))) {
@@ -2120,7 +2141,7 @@ continue or skip
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
             }
             $dvlp_input = 'screen'
-            if ($img_name_tag -like '*kernel' ){
+            if ($img_name_tag -like '*kernel' ) {
               restart_wsl_docker_new_win_wait
             }
           }
@@ -2133,7 +2154,7 @@ continue or skip
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
             }
             $dvlp_input = 'screen'
-            if ($img_name_tag -like '*kernel' ){
+            if ($img_name_tag -like '*kernel' ) {
               do {
                 start-sleep 3
                 wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
@@ -2164,10 +2185,10 @@ continue or skip
               }
               write-host "executing: wsl.exe --unregister $wsl_distro_selected_name"
               wsl.exe --unregister $wsl_distro_selected_name
-              [int]$selected_wsl_distro_name_length = $wsl_distro_list[$([int]$wsl_choice-1)].length
-              $wsl_distro_list[$([int]$wsl_choice-1)] = ''
+              [int]$selected_wsl_distro_name_length = $wsl_distro_list[$([int]$wsl_choice - 1)].length
+              $wsl_distro_list[$([int]$wsl_choice - 1)] = ''
               for ($i = 0; $i -le $selected_wsl_distro_name_length - 1; $i++) {
-                $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
+                $wsl_distro_list[$([int]$wsl_choice - 1)] += "X"
               }    
               $dvlp_input = 'display'
         
@@ -2220,10 +2241,10 @@ continue or skip
                 }
                 write-host "`r`ndeleting $wsl_distro_selected_name distro ..."
                 wsl.exe --unregister $wsl_distro_selected_name
-                [int]$selected_wsl_distro_name_length = $wsl_distro_list[$([int]$wsl_choice-1)].length
-                $wsl_distro_list[$([int]$wsl_choice-1)] = ''
+                [int]$selected_wsl_distro_name_length = $wsl_distro_list[$([int]$wsl_choice - 1)].length
+                $wsl_distro_list[$([int]$wsl_choice - 1)] = ''
                 for ($i = 0; $i -le $selected_wsl_distro_name_length - 1; $i++) {
-                  $wsl_distro_list[$([int]$wsl_choice-1)] += "X"
+                  $wsl_distro_list[$([int]$wsl_choice - 1)] += "X"
                 }    
                 $dvlp_input = 'display'
               }
@@ -2503,7 +2524,7 @@ continue or skip
               $dvlp_kindtek_options_win = $dvlp_input[2]
               $dvlp_kindtek_options_lin = $dvlp_input[2]
               $dvlp_input = 'display'
-              if (([string]::isNullOrEmpty($dvlp_kindtek_options))){
+              if (([string]::isNullOrEmpty($dvlp_kindtek_options))) {
                 Write-Host "`r`n`t[l]inux [w]indows [r]estart wsl/docker [d]evel mode [D]ameon mode"
                 $dvlp_kindtek_options = Read-Host
               }
@@ -2531,7 +2552,7 @@ continue or skip
               }
               if ($dvlp_kindtek_options -ieq 'w') {
                 $dvlp_input = 'display'
-                if (([string]::isNullOrEmpty($dvlp_kindtek_options_win))){
+                if (([string]::isNullOrEmpty($dvlp_kindtek_options_win))) {
                   Write-Host "`r`n`t`t- [r]eset docker settings`r`n`t`t- [R]eset wsl settings`r`n`t`t- [d]ocker re-install`r`n`t`t- [D]ocker uninstall`r`n`t`t- [w]indows re-install`r`n`t`t- [W]indows uninstall`r`n`t`t- [reboot] computer"
                   $dvlp_kindtek_options_win = Read-Host
                 }
@@ -2565,23 +2586,27 @@ continue or skip
                 }
               }
               elseif ($dvlp_kindtek_options -ieq 'l') {
-                if (([string]::isNullOrEmpty($dvlp_kindtek_options_lin))){
+                if (([string]::isNullOrEmpty($dvlp_kindtek_options_lin))) {
                   Write-Host "`r`n`t`t- [u]pdate $(get_default_wsl_distro) home directory`r`n`t`t- [s]etup $(get_default_wsl_distro)`r`n`t`t- [q]uick setup $(get_default_wsl_distro)`r`n`t`t- [r]estart wsl/docker`r`n`t`t- [R]estart wsl/docker (hard restart)"
                   $dvlp_kindtek_options_lin = Read-Host
                 }
-                if ($dvlp_kindtek_options_lin -eq "u"){
+                if ($dvlp_kindtek_options_lin -eq "u") {
                   wsl.exe -- cd `$HOME `&`& [ ! -f k-home.sh ] `&`& bash k-home.sh `|`| wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh `| bash `&`& bash setup.sh "$env:USERNAME"
                   $dvlp_input = 'display'
-                }elseif ($dvlp_kindtek_options_lin -eq "s"){
+                }
+                elseif ($dvlp_kindtek_options_lin -eq "s") {
                   wsl.exe -- cd `$HOME`; [ ! -f setup.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash setup.sh "$env:USERNAME" 'full'
                   $dvlp_input = 'display'
-                } elseif ($dvlp_kindtek_options_lin -eq "q"){
+                }
+                elseif ($dvlp_kindtek_options_lin -eq "q") {
                   wsl.exe -- cd `$HOME`; [ ! -f setup.sh ] `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh `| bash `&`& wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash setup.sh "$env:USERNAME" 
                   $dvlp_input = 'display'
-                }elseif ($dvlp_kindtek_options_lin -ceq "r"){
+                }
+                elseif ($dvlp_kindtek_options_lin -ceq "r") {
                   restart_wsl_docker_new_win
                   $dvlp_input = 'display'
-                } elseif ($dvlp_kindtek_options_lin -ceq "R"){
+                }
+                elseif ($dvlp_kindtek_options_lin -ceq "R") {
                   hard_restart_wsl_docker_new_win
                   $dvlp_input = 'display'
                 }
@@ -2649,12 +2674,13 @@ continue or skip
             Write-Host "spawning daemon with $(get_default_wsl_distro)"
             return $(devel_daemon $true)
           }
-          elseif ($dvlp_input -ieq 'devel' ){
+          elseif ($dvlp_input -ieq 'devel' ) {
             $debug_mode = get_kindtek_debug_mode
-            if ($debug_mode -eq $true){
+            if ($debug_mode -eq $true) {
               set_kindtek_debug_mode $false
               $dvlp_input = 'display'
-            } else {
+            }
+            else {
               set_kindtek_debug_mode $true
             }
           }
@@ -2686,9 +2712,10 @@ continue or skip
               catch {
                 try {
                   $dvlp_output = wsl.exe -- $dvlp_input_orig | Out-String
-                } catch {
-                    # write-host "invalid command`r`n$dvlp_input_orig"
-                    $dvlp_input = $dvlp_input_orig
+                }
+                catch {
+                  # write-host "invalid command`r`n$dvlp_input_orig"
+                  $dvlp_input = $dvlp_input_orig
                 }
               }
               finally {
@@ -2702,17 +2729,18 @@ continue or skip
               write-host "`r`ncommand line mode activated`r`n`tenter 'x' to exit`r`n"
             }
             $dvlp_prompt_cursor = $dvlp_prompt_cursor2
-            if ($dvlp_input -eq 'screen' ){
+            if ($dvlp_input -eq 'screen' ) {
               write-host ("`n" * $Host.UI.RawUI.WindowSize.Height)
             }
           }
         } while ( $dvlp_input -eq 'display' -or $dvlp_input -eq 'nodisplay')
         if ($dvlp_input -ne 'exit') {
           Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
-        } else {
+        }
+        else {
           Set-PSDebug -Trace 0
         }
-      } while ($dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe'  -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
+      } while ($dvlp_input -ine 'daemon' -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'rollback' -And $dvlp_input -ine 'failsafe' -and $dvlp_input -ine 'revert' -And $dvlp_input -ine 'screen')
     }
     elseif (!([string]::isNullOrEmpty($confirmation)) -and ($confirmation.length -gt 1)) {
       try {
@@ -2766,9 +2794,9 @@ function gui_launch {
   param (
     $distro_name
   )
-    # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
-    wsl.exe --distribution "$distro_name".trim() -- cd `$HOME `&`& bash start-kex.sh $env:USERNAME
-    Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
+  # wsl.exe --distribution "$wsl_distro_selected_name".trim() -- cd `$HOME `&`& bash --login -c "nohup yes '' | bash start-kex.sh $env:USERNAME"
+  wsl.exe --distribution "$distro_name".trim() -- cd `$HOME `&`& bash start-kex.sh $env:USERNAME
+  Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\KEX-gui.rdp"  
 
 }
 function reload_envs {
@@ -2821,7 +2849,7 @@ function start_countdown_dynamic {
     Write-Host -NoNewline "." 
     Start-Sleep -Milliseconds 250
     Write-Host -NoNewline "`r"  
-    if ($i -eq $($countdown_msgs.length - 3)){
+    if ($i -eq $($countdown_msgs.length - 3)) {
       start_countdown_3210_liftoff "$countdown_msg " "$($countdown_msgs[$($i+1)])" "$($countdown_msgs[$($i+2)])" "$($countdown_msgs[$($i+3)])" "$liftoff_msg"
     }
   }
@@ -2835,16 +2863,16 @@ function start_countdown_3210_liftoff {
     $countdown_msg1,
     $countdown_liftoff
   )
-  if ([string]::IsNullOrEmpty(($countdown_msg3))){
+  if ([string]::IsNullOrEmpty(($countdown_msg3))) {
     $countdown_msg3 = '3'
   }
-  if ([string]::IsNullOrEmpty(($countdown_msg2))){
+  if ([string]::IsNullOrEmpty(($countdown_msg2))) {
     $countdown_msg2 = '2'
   }
-  if ([string]::IsNullOrEmpty(($countdown_msg1))){
+  if ([string]::IsNullOrEmpty(($countdown_msg1))) {
     $countdown_msg1 = '1'
   }
-  if ([string]::IsNullOrEmpty(($countdown_msg1))){
+  if ([string]::IsNullOrEmpty(($countdown_msg1))) {
     $countdown_liftoff = '0'
   }
   write-host ""
@@ -2896,13 +2924,13 @@ if ((!([string]::IsNullOrEmpty($args[0]))) -Or (!([string]::IsNullOrEmpty($args[
     Set-PSDebug -Trace 2
   }
 
-  if (($($args[0]) -eq 'safe') -or ($($args[1]) -eq 'safe') -or ($confirmation -eq 'safe') -or ($dvlp_input -eq 'safe')){
+  if (($($args[0]) -eq 'safe') -or ($($args[1]) -eq 'safe') -or ($confirmation -eq 'safe') -or ($dvlp_input -eq 'safe')) {
     $global:dvlp_safe_mode = $true
   }
   $global:dvlp_arg0 = "$($args[0])"
   $global:dvlp_arg1 = "$($args[1])"
   set_kindtek_envs $env:KINDTEK_DEBUG_MODE
-  if ($(get_kindtek_auto_boot) -eq $true){
+  if ($(get_kindtek_auto_boot) -eq $true) {
     set_kindtek_env ("KINDTEK_AUTO_BOOT", "$($args[0])")
   }
   $global:dvlw_commit = $(get_local_commit)
