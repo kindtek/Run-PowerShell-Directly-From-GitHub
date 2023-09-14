@@ -1879,7 +1879,7 @@ continue or skip
         }
         try {
           $wsl_distro_list = get_wsl_distro_list
-          $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
+          $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
           if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             #       write-host -nonewline ":)
             #   _ _ _ _:|_// e v e l 
@@ -1905,7 +1905,7 @@ continue or skip
     
               write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
             }
-            $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
+            $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
           }
           catch {
             if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
@@ -2502,7 +2502,7 @@ continue or skip
             }
             $dvlp_input = 'display'
           }
-          elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -like 't**') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {    
+          elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -like 't**') -and ($dvlp_input -NotLike 'i:*') -and ($dvlp_input -NotLike 'i!:')) {    
             if ($dvlp_input -ieq 't') {
               Write-Host "`r`n`t[l]inux or [w]indows"
               $dvlp_cli_options = Read-Host
@@ -2527,7 +2527,7 @@ continue or skip
             $dvlp_input = 'display'
 
           }
-          elseif (($dvlp_input.length -lt 4) -and ($dvlp_input[0] -eq 'm') -and ($dvlp_input -NotLike '*:*') -and ($dvlp_input -NotLike '*/*')) {
+          elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -like 't**') -and ($dvlp_input -NotLike 'i:*') -and ($dvlp_input -NotLike 'i!:')) {    
             if ($dvlp_input[0] -eq 'm') {
               $dvlp_kindtek_options = $dvlp_input[1]
               $dvlp_kindtek_options_win = $dvlp_input[2]
@@ -2699,59 +2699,67 @@ continue or skip
           }
           elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'nodisplay' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'gates') {
             # write-host "dvlp_input: $dvlp_input"
-            try {
-              # disguise unavoidable error message
-              $orig_foreground = [System.Console]::ForegroundColor
-              $temp_foreground = [System.Console]::BackgroundColor
-              $host.UI.RawUI.ForegroundColor = $temp_foreground
-              $is_docker_image = $(docker manifest inspect $dvlp_input) 2> $null
-              $host.UI.RawUI.ForegroundColor = $orig_foreground
-
-            }
-            catch {}
-            if ($null -ne $is_docker_image ) {
-              Write-Host "`r`n$dvlp_input is a valid docker hub official image"
-              docker_devel_spawn "$dvlp_input"
-              $dvlp_input = 'display'
-            }
-            else {
-              # set-psdebug -trace 2
-              try {
-                $ErrorActionPreference = "Stop"
-                $dvlp_input_orig = $dvlp_input
-                $dvlp_input = 'nodisplay'
-                Invoke-Expression "$dvlp_input_orig" -OutVariable dvlp_output
-                if (!($?) -or ($dvlp_output -match "$([Regex]::Escape("/bin/bash:"))*")){
-                  throw
-                }
+            if ($dvlp_input -like "i:*" -or $dvlp_input -like "i!:*"){
+              if ($dvlp_input -like "i!:*"){
+                $dvlp_input = $dvlp_input.substring(3) 
+              } elseif ($dvlp_input -like "i:*"){
+                $dvlp_input = $dvlp_input.substring(2) 
               }
-              catch {
+
+              try {
+                # disguise unavoidable error message
+                $orig_foreground = [System.Console]::ForegroundColor
+                $temp_foreground = [System.Console]::BackgroundColor
+                $host.UI.RawUI.ForegroundColor = $temp_foreground
+                $is_docker_image = $(docker manifest inspect $dvlp_input) 2> $null
+                $host.UI.RawUI.ForegroundColor = $orig_foreground
+
+              }
+              catch {}
+              if ($null -ne $is_docker_image ) {
+                Write-Host "`r`n$dvlp_input is a valid docker hub official image"
+                docker_devel_spawn "$dvlp_input"
+                $dvlp_input = 'display'
+              }
+              else {
+                # set-psdebug -trace 2
                 try {
-                  $dvlp_input_orig = $dvlp_input_orig.replace('|','`|')
-                  $dvlp_input_orig = $dvlp_input_orig.replace('\','`\')
-                  $dvlp_input_orig = $dvlp_input_orig.replace(':','`:')
-                  $dvlp_input_orig = $dvlp_input_orig.replace(';','`;')
-                  $dvlp_input_orig = $dvlp_input_orig.replace('>','`>')
-                  $dvlp_input_orig = $dvlp_input_orig.replace('<','`<')
-                  $dvlp_input_orig = $dvlp_input_orig.replace('?','`?')
-                  $dvlp_input_orig = $dvlp_input_orig.replace('&','`&')
-                  $dvlp_input_orig = $dvlp_input_orig.replace('!','`!')
-                  $dvlp_input_orig = $dvlp_input_orig.replace('$','`$')
-                  $dvlp_input_orig = $dvlp_input_orig.replace('*','`*')
-                  
-                  Invoke-Expression "wsl.exe -- $dvlp_input_orig" -OutVariable dvlp_output
+                  $ErrorActionPreference = "Stop"
+                  $dvlp_input_orig = $dvlp_input
+                  $dvlp_input = 'nodisplay'
+                  Invoke-Expression "$dvlp_input_orig" -OutVariable dvlp_output
                   if (!($?) -or ($dvlp_output -match "$([Regex]::Escape("/bin/bash:"))*")){
                     throw
                   }
                 }
                 catch {
-                  # write-host "invalid command`r`n$dvlp_input_orig"
-                  $dvlp_input = $dvlp_input_orig
+                  try {
+                    $dvlp_input_orig = $dvlp_input_orig.replace('|','`|')
+                    $dvlp_input_orig = $dvlp_input_orig.replace('\','`\')
+                    $dvlp_input_orig = $dvlp_input_orig.replace(':','`:')
+                    $dvlp_input_orig = $dvlp_input_orig.replace(';','`;')
+                    $dvlp_input_orig = $dvlp_input_orig.replace('>','`>')
+                    $dvlp_input_orig = $dvlp_input_orig.replace('<','`<')
+                    $dvlp_input_orig = $dvlp_input_orig.replace('?','`?')
+                    $dvlp_input_orig = $dvlp_input_orig.replace('&','`&')
+                    $dvlp_input_orig = $dvlp_input_orig.replace('!','`!')
+                    $dvlp_input_orig = $dvlp_input_orig.replace('$','`$')
+                    $dvlp_input_orig = $dvlp_input_orig.replace('*','`*')
+                    
+                    Invoke-Expression "wsl.exe -- $dvlp_input_orig" -OutVariable dvlp_output
+                    if (!($?) -or ($dvlp_output -match "$([Regex]::Escape("/bin/bash:"))*")){
+                      throw
+                    }
+                  }
+                  catch {
+                    # write-host "invalid command`r`n$dvlp_input_orig"
+                    $dvlp_input = $dvlp_input_orig
+                  }
                 }
-              }
-              finally {
-                Write-Host -nonewline $dvlp_output
-                $ErrorActionPreference = "Continue"
+                finally {
+                  Write-Host -nonewline $dvlp_output
+                  $ErrorActionPreference = "Continue"
+                }
               }
               # set-psdebug -trace 0
             }
