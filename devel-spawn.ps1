@@ -2502,7 +2502,7 @@ continue or skip
             }
             $dvlp_input = 'display'
           }
-          elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -like 't**') -and ($dvlp_input -NotLike 'i:*') -and ($dvlp_input -NotLike 'i!:')) {    
+          elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -like 't**') -and ($dvlp_input -NotLike 'i:*') -and ($dvlp_input -NotLike 'i!:*')) {    
             if ($dvlp_input -ieq 't') {
               Write-Host "`r`n`t[l]inux or [w]indows"
               $dvlp_cli_options = Read-Host
@@ -2527,7 +2527,7 @@ continue or skip
             $dvlp_input = 'display'
 
           }
-          elseif (($dvlp_input.length -lt 3) -and ($dvlp_input -like 'm**') -and ($dvlp_input -NotLike 'i:*') -and ($dvlp_input -NotLike 'i!:')) {    
+          elseif (($dvlp_input.length -lt 4) -and ($dvlp_input -like 'm**') -and ($dvlp_input -NotLike 'i:*') -and ($dvlp_input -NotLike 'i!:*')) {    
             if ($dvlp_input[0] -eq 'm') {
               $dvlp_kindtek_options = $dvlp_input[1]
               $dvlp_kindtek_options_win = $dvlp_input[2]
