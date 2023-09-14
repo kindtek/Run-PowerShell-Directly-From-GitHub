@@ -574,8 +574,8 @@ function set_kindtek_envs {
     }
     elseif (!([string]::IsNullOrEmpty($DEBUG_MODE)) -Or $DEBUG_MODE -ne '0' -Or $DEBUG_MODE -ne 0) {
       Set-PSDebug -Trace 2;
-      set_kindtek_env 'KINDTEK_DEBUG_MODE' '1' 'machine' 'both'
-      set_kindtek_env 'KINDTEK_DEBUG_MODE' '1' 
+      set_kindtek_env 'KINDTEK_DEBUG_MODE' '2' 'machine' 'both'
+      set_kindtek_env 'KINDTEK_DEBUG_MODE' '2' 
       $this_proc_style = [System.Diagnostics.ProcessWindowStyle]::Normal;
       set_kindtek_env 'KINDTEK_NEW_PROC_STYLE' "$this_proc_style" 'machine' 'both'
       set_kindtek_env 'KINDTEK_NEW_PROC_NOEXIT' "-noexit" 'machine' 'both'
@@ -2806,7 +2806,7 @@ continue or skip
 
 function get_kindtek_debug_mode {
   $debug_mode = get_kindtek_env 'KINDTEK_DEBUG_MODE'
-  if ($debug_mode -eq '1' -Or $debug_mode -eq 1) {
+  if ($debug_mode -eq '2' -Or $debug_mode -eq 2) {
     return $true
   }
   else {
@@ -2820,8 +2820,8 @@ function set_kindtek_debug_mode {
   )
   if ($debug_mode_on) {
     Set-PSDebug -Trace 2
-    set_kindtek_env 'KINDTEK_DEBUG_MODE' '1'
-    set_kindtek_env 'KINDTEK_DEBUG_MODE' '1' 'machine'
+    set_kindtek_env 'KINDTEK_DEBUG_MODE' '2'
+    set_kindtek_env 'KINDTEK_DEBUG_MODE' '2' 'machine'
   }
   else {
     Set-PSDebug -Trace 0
