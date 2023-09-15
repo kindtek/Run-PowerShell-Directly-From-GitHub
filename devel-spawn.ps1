@@ -1597,6 +1597,8 @@ function wsl_devel_spawn {
         write-host -nonewline "===-$dvlw_commit-===))====:}
        _ _ _ _:|_// e v e l 
     <+`"`````````|L|``````" -ForegroundColor DarkRed
+        write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
+
       }
     }
     if ($confirmation -eq '' -or $confirmation -eq 'skip' -or $confirmation -eq 'devel') {
