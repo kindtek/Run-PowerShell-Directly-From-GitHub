@@ -1893,7 +1893,7 @@ continue or skip
         }
         try {
           $wsl_distro_list = get_wsl_distro_list
-          $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
+          $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [v]s code .- [t]erminal`r`n`t- [m]aintenance"
           if (($DVL -eq 'screen') -or ($DVL -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             #       write-host -nonewline ":)
             #   _ _ _ _:|_//  e  v  e  l 
@@ -1919,7 +1919,7 @@ continue or skip
     
               write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
             }
-            $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
+            $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [v]s code .- [t]erminal`r`n`t- [m]aintenance"
           }
           catch {
             if (($DVL -eq 'screen') -or ($DVL -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
@@ -2246,7 +2246,7 @@ continue or skip
               $DVL = 'display'
             }
             else {
-              write-host "`r`n`r`n$wsl_distro_selected_name selected.`r`n`r`nEnter terminal, update, setup, gui, DEFAULT, DELETE, kernel, backup, rename, restore`r`n`t ... or press ENTER to open"
+              write-host "`r`n`r`n$wsl_distro_selected_name selected.`r`n`r`nEnter vscode, terminal, update, setup, gui, DEFAULT, DELETE, kernel, backup, rename, restore`r`n`t ... or press ENTER to open"
               $wsl_action_choice = read-host "
     (open $wsl_distro_selected_name)"
               if ($wsl_action_choice -ceq 'DELETE') {
@@ -2335,11 +2335,18 @@ continue or skip
                 write-host "`r`nsetting up $wsl_distro_selected_name ..."
                 wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME`; wget -P "`$HOME" https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/setup.sh`; bash setup.sh "$env:USERNAME" 'full'
               }
-              elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'TERMINAL' ) {
+              elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'terminal' ) {
                 write-host "use 'exit' to exit $wsl_distro_selected_name terminal"
                 wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME `&`& bash
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: next time use t$wsl_distro_selected_num to open the terminal for $wsl_distro_selected_name"
+                start-sleep -Milliseconds 300
+              }
+              elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'vscode' ) {
+                write-host "opening vscode for devels-workshop in $wsl_distro_selected_name"
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME/dvlw `&`& `. code
+                $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
+                write-host "`r`npro tip: next time use v$wsl_distro_selected_num to open the vscode for $wsl_distro_selected_name"
                 start-sleep -Milliseconds 300
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'GUI' ) {
@@ -2516,6 +2523,12 @@ continue or skip
             }
             $DVL = 'display'
           }
+          elseif (($DVL.length -lt 4) -and ($DVL -like 'v**') -and ($DVL -NotLike 'i:*') -and ($DVL -NotLike 'i!:*')) {    
+
+            wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME/dvlw `&`& `. code
+            $DVL = 'nodisplay'
+
+          }
           elseif (($DVL.length -lt 4) -and ($DVL -like 't**') -and ($DVL -NotLike 'i:*') -and ($DVL -NotLike 'i!:*')) {    
             if ($DVL -ieq 't') {
               Write-Host "`r`n`t[l]inux or [w]indows"
@@ -2678,8 +2691,9 @@ continue or skip
           elseif ($DVL -ceq 'reboot' -or $DVL -ceq 'reboot now' -or $DVL -ceq 'reboot continue') {
             reboot_prompt "$DVL"
             $DVL = 'display'
-            # elseif ($DVL -ieq 'v') {
-            #     wsl.exe sh -c "cd /hel;. code"
+            elseif ($DVL -ieq 'v') {
+                wsl.exe -- cd `$HOME/dvlw `&`& `. code
+            }
           }
           elseif ($DVL -ieq 'auto') {
             if ($(get_kindtek_auto_boot)) {
