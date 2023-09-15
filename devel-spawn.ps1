@@ -1857,7 +1857,7 @@ continue or skip
             write-host -nonewline "
     <+~_-[W|-_=_.
               :| \\  o c k e r
-   <+-~-=-|S|-=|-+=]+===-$dvlw_commit-===))====" -ForegroundColor DarkRed
+   <+-~-=-|S|-=|-+=]+" -ForegroundColor DarkRed
           }
           write-host -nonewline "===-$dvlw_commit-===))====:)
        _ _ _ _:|_// e v e l 
