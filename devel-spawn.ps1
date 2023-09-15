@@ -412,6 +412,8 @@ function set_kindtek_env {
       elseif (!([string]::IsNullOrEmpty($set_machine_env_flag)) -And ($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val)) {
         # check to avoid writing same thing repeatedly
         if ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val ) {
+          # temp disable machine envs
+          exit
           write-host "setting machine env $kindtek_env_var to $kindtek_env_val"
           Set-PSDebug -Trace 2
           [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine) 
@@ -420,6 +422,8 @@ function set_kindtek_env {
       elseif ((!([string]::IsNullOrEmpty($set_both_env_flag))) -And (($(get_kindtek_env "$kindtek_env_var" "machine") -ne $kindtek_env_val) -Or ($(get_kindtek_env "$kindtek_env_var") -ne $kindtek_env_val))) {
         # check to avoid writing same thing repeatedly
         if (([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val) -or ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val) ) {
+          # temp disable machine envs
+          exit
           write-host "setting local and machine env $kindtek_env_var to $kindtek_env_val"
           Set-PSDebug -Trace 2
           [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
