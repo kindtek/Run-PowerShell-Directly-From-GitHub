@@ -2699,7 +2699,7 @@ continue or skip
           }
           elseif (!([string]::isnullorempty($dvlp_input)) -And $dvlp_input -ine 'exit' -And $dvlp_input -ine 'screen' -And $dvlp_input -ine 'nodisplay' -And $dvlp_input -ine 'update' -And $dvlp_input -ine 'daemon' -And $dvlp_input -ine 'gates') {
             # write-host "dvlp_input: $dvlp_input"
-            if ($dvlp_input -like "i:*" -or $dvlp_input -like "i!:*"){
+            # if ($dvlp_input -like "i:*" -or $dvlp_input -like "i!:*" -and $dvlp_input.length -gt 2){
               if ($dvlp_input -like "i!:*"){
                 $dvlp_input = $dvlp_input.substring(3) 
               } elseif ($dvlp_input -like "i:*"){
@@ -2760,7 +2760,7 @@ continue or skip
                   Write-Host -nonewline $dvlp_output
                   $ErrorActionPreference = "Continue"
                 }
-              }
+              # }
               # set-psdebug -trace 0
             }
           } 
