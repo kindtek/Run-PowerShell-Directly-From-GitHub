@@ -1585,7 +1585,7 @@ function wsl_devel_spawn {
     
     }
     else {
-      if (((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display')) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or ((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and ($admin_bypass -eq $true)))) {
+      if (((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display')) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or ((($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and ($admin_bypass -eq $true)) -and (get_kindtek_debug_mode -eq $false))) {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         write-host "`r`n`r`n`r`n ------------------------------------------------------------------------------"
         write-host -nonewline "
@@ -1594,7 +1594,9 @@ function wsl_devel_spawn {
    <+-~-=-|S|-=|-+=]+" -ForegroundColor DarkRed
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-        write-host -nonewline "===-$dvlw_commit-===))====" -ForegroundColor DarkRed
+        write-host -nonewline "===-$dvlw_commit-===))====:}
+       _ _ _ _:|_// e v e l 
+    <+`"`````````|L|``````" -ForegroundColor DarkRed
       }
     }
     if ($confirmation -eq '' -or $confirmation -eq 'skip' -or $confirmation -eq 'devel') {
@@ -1849,11 +1851,17 @@ continue or skip
               return
             }
           }
+          if (get_kindtek_debug_mode -eq $true){
+            write-host -nonewline "
+    <+~_-[W|-_=_.
+              :| \\  o c k e r
+   <+-~-=-|S|-=|-+=]+===-$dvlw_commit-===))====" -ForegroundColor DarkRed
+          }
           write-host -nonewline "===-$dvlw_commit-===))====:)
        _ _ _ _:|_// e v e l 
     <+`"`````````|L|``````" -ForegroundColor DarkRed
           write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
-
+          
         }
       }
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # 
