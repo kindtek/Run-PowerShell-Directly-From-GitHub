@@ -1891,7 +1891,7 @@ continue or skip
         }
         try {
           $wsl_distro_list = get_wsl_distro_list
-          $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [v]s code .- [t]erminal`r`n`t- [m]aintenance"
+          $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [v]s code .`r`n`t- [t]erminal`r`n`t- [m]aintenance"
           if (($DVL -eq 'screen') -or ($DVL -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             #       write-host -nonewline ":)
             #   _ _ _ _:|_//  e  v  e  l 
