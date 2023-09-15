@@ -1590,12 +1590,12 @@ function wsl_devel_spawn {
         write-host "`r`n`r`n`r`n ------------------------------------------------------------------------------"
         write-host -nonewline "
     <+~_-[W|-_=_.
-              :| \\  o c k e r
+              :| \\  o  c  k  e  r
    <+-~-=-|S|-=|-+=]+" -ForegroundColor DarkRed
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         write-host -nonewline "===-$dvlw_commit-===))====:}
-       _ _ _ _:|_// e v e l 
+       _ _ _ _:|_//  e  v  e  l 
     <+`"`````````|L|``````" -ForegroundColor DarkRed
         write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
 
@@ -1731,7 +1731,7 @@ function wsl_devel_spawn {
             }
             write-host -nonewline "
     <+~_-[W|-_=_.
-              :| \\  o c k e r
+              :| \\  o  c  k  e  r
    <+-~-=-|S|-=|-+=]+===-$dvlw_commit-===))====" -ForegroundColor DarkRed
           }
           if (!([string]::IsNullOrEmpty($img_name_tag)) -and $img_name_tag -ne "skip") {
@@ -1857,11 +1857,11 @@ continue or skip
             Set-PSDebug -Trace 0
             write-host -nonewline "
     <+~_-[W|-_=_.
-              :| \\  o c k e r
+              :| \\  o  c  k  e  r
    <+-~-=-|S|-=|-+=]+" -ForegroundColor DarkRed
           }
           write-host -nonewline "===-$dvlw_commit-===))====:)
-       _ _ _ _:|_// e v e l 
+       _ _ _ _:|_//  e  v  e  l 
     <+`"`````````|L|``````" -ForegroundColor DarkRed
           write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"          
         }
@@ -1892,7 +1892,7 @@ continue or skip
           $dvlp_options = "`r`n`r`n`t- [powerhell command]`r`n`t- [distro #] wsl distro options`r`n`t- [i] or [i:repo/image:tag] import docker image into wsl${docker_devel_spawn_noninteractive}`r`n`t- [t]erminal`r`n`t- [m]aintenance"
           if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             #       write-host -nonewline ":)
-            #   _ _ _ _:|_// e v e l 
+            #   _ _ _ _:|_//  e  v  e  l 
             #  <+````````|L|``````" -ForegroundColor DarkRed
             #         write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
           }
@@ -1903,14 +1903,14 @@ continue or skip
             $wsl_distro_list = get_wsl_distro_list
             if ($global:dvlp_safe_mode -eq $true) {
               write-host -nonewline ":|
-       _ _ _ _:|_// e v e l 
+       _ _ _ _:|_//  e  v  e  l 
     +`"`````````|L|``````" -ForegroundColor DarkRed
               write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
             }
             # elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
             elseif (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') ) {
               write-host -nonewline ":(
-       _ _ _ _:|_// e v e l 
+       _ _ _ _:|_//  e  v  e  l 
     +`"`````````|L|``````" -ForegroundColor Red
     
               write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
@@ -1920,20 +1920,20 @@ continue or skip
           catch {
             if (($dvlp_input -eq 'screen') -or ($dvlp_input -eq 'display') -and [string]::IsNullOrEmpty(($global:dvlp_arg1))) {
               write-host -nonewline ":|
-       _ _ _ _:|_// e v e l 
+       _ _ _ _:|_//  e  v  e  l 
       +`"`````````|L|``````" -ForegroundColor DarkRed
               write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
               #       write-host -nonewline "
               #   <+~_-[W|-_=_.
-              #             :  \\ o c k e r
+              #             :  \\  o  c  k  e  r
               #  <+-~-=-|S|-=-+|=]+===-$dvlw_commit-===))====:)
-              #      _ _ _ _:|_// e v e l 
+              #      _ _ _ _:|_//  e  v  e  l 
               #   <+````````|L|``````" -ForegroundColor DarkRed
               # '
               #     <+~_-[W|-_=_.
               #               :  \\ o c k e r
               #    <+-~-=-|S|-=-+|=]+===-$dvlw_commit-===))====:)
-              #        _ _ _ _:|_// e v e l 
+              #        _ _ _ _:|_//  e  v  e  l 
               #     <+```|L|``````
               #                                                                                                                                                        `r`n
               # write-host 
