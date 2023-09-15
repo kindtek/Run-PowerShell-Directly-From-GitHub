@@ -1589,7 +1589,7 @@ function wsl_devel_spawn {
     
     }
     else {
-      if (((($DVL -eq 'screen') -or ($DVL -eq 'display')) -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or ((($DVL -eq 'screen') -or ($DVL -eq 'display') -and ($admin_bypass -eq $true)) -and (get_kindtek_debug_mode -eq $false))) {
+      if (((($DVL -eq 'screen') -or ($DVL -eq 'display')) -and (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent().IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) -or ($admin_bypass -eq $true)) -and (get_kindtek_debug_mode -eq $false))) {
         Write-Host "`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n`r`n"
         write-host "`r`n`r`n`r`n ------------------------------------------------------------------------------"
         write-host -nonewline "
