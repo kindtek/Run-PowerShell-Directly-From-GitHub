@@ -404,7 +404,7 @@ function set_kindtek_env {
         # check to avoid writing same thing repeatedly
         if ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val ) {
           write-host "setting local env $kindtek_env_var to $kindtek_env_val"
-          Set-PSDebug -Trace 2
+          # Set-PSDebug -Trace 2
           [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
         }
 
@@ -423,7 +423,7 @@ function set_kindtek_env {
         if (([System.Environment]::GetEnvironmentVariable("$kindtek_env_var", [System.EnvironmentVariableTarget]::Machine) -ne $kindtek_env_val) -or ([System.Environment]::GetEnvironmentVariable("$kindtek_env_var") -ne $kindtek_env_val) ) {
           # temp disable machine envs
           write-host "setting local and machine env $kindtek_env_var to $kindtek_env_val"
-          Set-PSDebug -Trace 2
+          # Set-PSDebug -Trace 2
           [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val")
           # [System.Environment]::SetEnvironmentVariable("$kindtek_env_var", "$kindtek_env_val", [System.EnvironmentVariableTarget]::Machine)  
         }                
@@ -434,14 +434,14 @@ function set_kindtek_env {
     }
   }
   catch {
-    Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
+    # Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
     if (!([string]::IsNullOrEmpty($DEBUG_MODE))) {
       Write-Host "error setting $kindtek_env_var"
       Write-Host "$cmd_str"
     }
 
   }
-  Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
+  # Set-PSDebug -Trace $env:KINDTEK_DEBUG_MODE
   return $null
 }
 
