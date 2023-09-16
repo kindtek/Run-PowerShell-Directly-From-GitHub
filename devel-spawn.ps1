@@ -2176,14 +2176,17 @@ continue or skip
             try { 
               $ErrorActionPreference = "Stop" 
               if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
-                $output = $(docker_devel_spawn)
+                docker_devel_spawn
               }
               else {
-                $output = $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' '')
+                docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
               }
-              $ErrorActionPreference = "Continue"
+              if (($?) -eq $false) {
+                throw
+              }
               do {
-                if ($output -eq $true -and $img_name_tag -like '*kernel' ) {
+                if (($output -eq $true) -and ($img_name_tag -like '*kernel')) {
+                  $ErrorActionPreference = "Continue"
                   start-sleep 3
                   wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
                 }
