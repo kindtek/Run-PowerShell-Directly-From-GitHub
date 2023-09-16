@@ -2369,7 +2369,7 @@ continue or skip
               }
               elseif ([string]::IsNullOrEmpty($wsl_action_choice) -Or $wsl_action_choice -ieq 'vscode' ) {
                 write-host "opening vscode for devels-workshop in $wsl_distro_selected_name"
-                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME/dvlw `&`& `. code
+                wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME/dvlw `&`& code `.
                 $wsl_distro_selected_num = $(select_wsl_distro_list_name $wsl_distro_list $wsl_distro_selected_name)
                 write-host "`r`npro tip: next time use v$wsl_distro_selected_num to open the vscode for $wsl_distro_selected_name"
                 start-sleep -Milliseconds 300
@@ -2550,7 +2550,7 @@ continue or skip
           }
           elseif (($DVL.length -lt 4) -and ($DVL -like 'v**') -and ($DVL -NotLike 'i:*') -and ($DVL -NotLike 'i!:*')) {    
 
-            wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME/dvlw `&`& `. code
+            wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME/dvlw `&`& code `.
             $DVL = 'nodisplay'
 
           }
@@ -2717,7 +2717,7 @@ continue or skip
             reboot_prompt "$DVL"
             $DVL = 'display'
             elseif ($DVL -ieq 'v') {
-              wsl.exe -- cd `$HOME/dvlw `&`& `. code
+              wsl.exe -- cd `$HOME/dvlw `&`& code `.
             }
           }
           elseif ($DVL -ieq 'auto') {
