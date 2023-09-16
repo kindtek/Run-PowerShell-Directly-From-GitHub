@@ -1799,7 +1799,7 @@ function wsl_devel_spawn {
               #               " 'wait'
             }
             if ($img_name_tag -like '*kernel' ) {
-              wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
+              wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
             }
             if ($img_name_tag -like '*gui*' ) {
               $start_gui = Read-Host "start gui?
@@ -2188,7 +2188,7 @@ continue or skip
                 if (($output -eq $true) -and ($img_name_tag -like '*kernel')) {
                   $ErrorActionPreference = "Continue"
                   start-sleep 3
-                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
+                  wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
                 }
               } while (!$($?))
             } catch {
@@ -2332,7 +2332,7 @@ continue or skip
                 $kernel_choice = read-host "
     (main menu)"
                 if ($kernel_choice = 'import') {
-                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" "import"                                
+                  wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME `&`& bash setup.sh "$env:USERNAME" "import"                                
                 }
                 if ($kernel_choice = 'install') {
                   push-location "$env:USERPROFILE/kache"
@@ -2432,7 +2432,7 @@ continue or skip
                   write-host "importing $new_distro_file_path as $new_distro_name ..."
                   if (wsl.exe --import "$new_distro_name-$base_distro_id" "$new_distro_root_path" "$new_distro_file_path") {
                     wsl.exe --unregister $wsl_distro_selected_name
-                    wsl.exe -- export WSL_DISTRO_NAME="$new_distro_name-$base_distro_id"
+                    wsl.exe -- IS_WSL_BASH=true `&`& export WSL_DISTRO_NAME="$new_distro_name-$base_distro_id"
                     $new_distro_diskman = "$($new_distro_root_path)\diskman.ps1"
                     $new_distro_diskshrink = "$($new_distro_root_path)\diskshrink.ps1"
                     New-Item -Path $new_distro_diskman -ItemType File -Force -Value "select vdisk file=$new_distro_diskman\ext4.vhdx 
@@ -2569,7 +2569,7 @@ continue or skip
               $DVL = $DVL + $dvlp_cli_options
             }
             if ($DVL -ieq 'tl' ) {
-              wsl.exe -- cd `$HOME `&`& bash
+              wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME `&`& bash
             }
             elseif ($DVL -ieq 'tdl' ) {
               # wsl.exe --distribution "devels-playground-kali-git".trim() -- cd `$HOME/.local/bin; alias cdir`=`'source cdir.sh; alias grep=`'grep --color=auto`'; ls -al; cdir_cli
@@ -2658,19 +2658,19 @@ continue or skip
                   $dvlp_kindtek_options_lin = Read-Host
                 }
                 if ($dvlp_kindtek_options_lin -ceq "u") {
-                  wsl.exe -- cd `$HOME`; -P "`$HOME" - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh`; bash reclone-gh.sh 
+                  wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME`; -P "`$HOME" - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh`; bash reclone-gh.sh 
                   $DVL = 'display'
                 }
                 elseif ($dvlp_kindtek_options_lin -ceq "U") {
-                  wsl.exe -- cd `$HOME `&`& wget -P "`$HOME" https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash k-home.sh
+                  wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME `&`& wget -P "`$HOME" https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh`; bash k-home.sh
                   $DVL = 'display'
                 }
                 elseif ($dvlp_kindtek_options_lin -ceq "s") {
-                  wsl.exe -- cd `$HOME`; wget -P "`$HOME" https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/setup.sh`; bash setup.sh "$env:USERNAME" 
+                  wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME`; wget -P "`$HOME" https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/setup.sh`; bash setup.sh "$env:USERNAME" 
                   $DVL = 'display'
                 }
                 elseif ($dvlp_kindtek_options_lin -ceq "S") {
-                  wsl.exe -- cd `$HOME`; wget -P "`$HOME" https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/setup.sh`; bash setup.sh "$env:USERNAME" 'full'
+                  wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME`; wget -P "`$HOME" https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/setup.sh`; bash setup.sh "$env:USERNAME" 'full'
                   $DVL = 'display'
                 }
                 elseif ($dvlp_kindtek_options_lin -ceq "r") {
@@ -2685,7 +2685,7 @@ continue or skip
             }                        
           }
           elseif ($DVL -ieq 'v') {
-              wsl.exe -- cd `$HOME/dvlw `&`& code `.
+              wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME/dvlw `&`& code `.
           }
           elseif ($DVL -ieq 'r') {
             if ($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO -ne "") {
@@ -2740,7 +2740,7 @@ continue or skip
             $DVL = 'display'
           }
           elseif ($DVL -ieq 't' ) {
-            wsl.exe -- cd `$HOME `&`& bash
+            wsl.exe -- IS_WSL_BASH=true `&`& cd `$HOME `&`& bash
           }
           elseif ($DVL -ieq 'daemon' ) {
             Write-Host "spawning daemon with $(get_default_wsl_distro)"
@@ -2794,6 +2794,7 @@ continue or skip
               }
               catch {
                 try {
+                  # prepare $DVL for DVL command prompt
                   $DVL_orig = $DVL_orig.replace('|', '`|')
                   $DVL_orig = $DVL_orig.replace('\', '`\')
                   $DVL_orig = $DVL_orig.replace(':', '`:')
@@ -2804,9 +2805,10 @@ continue or skip
                   $DVL_orig = $DVL_orig.replace('&', '`&')
                   $DVL_orig = $DVL_orig.replace('!', '`!')
                   $DVL_orig = $DVL_orig.replace('$', '`$')
-                  $DVL_orig = $DVL_orig.replace('*', '`*')
+                  $DVL_orig = $DVL_orig.replace('`', '``')
                     
-                  Invoke-Expression "wsl.exe -- $DVL_orig" -OutVariable dvlp_output
+                  # DVL command prompt
+                  Invoke-Expression "wsl.exe -- IS_WSL_BASH=true ```&```& $DVL_orig" -OutVariable dvlp_output
                   if (!($?) -or ($dvlp_output -match "$([Regex]::Escape("/bin/bash:"))*")) {
                     throw
                   }
