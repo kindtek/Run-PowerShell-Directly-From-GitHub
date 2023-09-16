@@ -2169,13 +2169,13 @@ continue or skip
             else {
               docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
             }
-            $DVL = 'screen'
-            if ($img_name_tag -like '*kernel' ) {
+            if ( ($?) -and $img_name_tag -like '*kernel' ) {
               do {
                 start-sleep 3
                 wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
               } while (!$($?))
             }
+            $DVL = 'screen'
 
           }
           elseif (($DVL.length -lt 4) -and ($DVL -imatch "d\d")) {
