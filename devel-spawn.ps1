@@ -1596,7 +1596,10 @@ function wsl_devel_spawn {
    <+-~-=-|S|-=|-+=]+" -ForegroundColor DarkRed
       }
       if (![string]::isnullorempty($global:dvlp_arg1) -and ($confirmation -ne "skip") -and ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-        write-host -nonewline "===-$dvlw_commit-===))====:}
+        write-host -nonewline "
+    <+~_-[W|-_=_.
+              :| \\  o  c  k  e  r
+   <+-~-=-|S|-=|-+=]+===-$dvlw_commit-===))====:}
        _ _ _ _:|_//  e  v  e  l 
     <+`"`````````|L|``````" -ForegroundColor DarkRed
         write-host "`r`n`r`n ------------------------------------------------------------------------------`r`n`r`n"
