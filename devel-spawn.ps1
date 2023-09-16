@@ -1159,14 +1159,23 @@ function docker_devel_spawn {
   start_docker_desktop | out-null
 
   if ($(is_docker_desktop_online) -eq $true) {
-    if ([string]::IsNullOrEmpty($img_name_tag)) {
-      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+    try { 
+      $ErrorActionPreference = "Stop" 
+        if ([string]::IsNullOrEmpty($img_name_tag)) {
+          powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+        }
+        elseif ($img_name_tag -eq "skip") {
+          powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+        }
+        else {
+          powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
+        }
+    } catch {
+      return $false
     }
-    elseif ($img_name_tag -eq "skip") {
-      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
-    }
-    else {
-      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
+    finally {
+      Write-Host -nonewline $dvlp_output
+      $ErrorActionPreference = "Continue"
     }
   }
   else {
@@ -1186,6 +1195,7 @@ function docker_devel_spawn {
       }
     } 
   }
+  return $true
 }
 
 function run_dvlp_latest_kernel_installer {
@@ -2166,14 +2176,14 @@ continue or skip
             try { 
               $ErrorActionPreference = "Stop" 
               if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
-                docker_devel_spawn
+                $output = $(docker_devel_spawn)
               }
               else {
-                docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
+                $output = $(docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' '')
               }
               $ErrorActionPreference = "Continue"
               do {
-                if ($img_name_tag -like '*kernel' ) {
+                if ($output -eq $true -and $img_name_tag -like '*kernel' ) {
                   start-sleep 3
                   wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
                 }
