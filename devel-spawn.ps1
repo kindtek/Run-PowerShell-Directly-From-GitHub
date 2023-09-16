@@ -2249,8 +2249,20 @@ continue or skip
             else {
               $DVL = 'display'
               write-host "no distro for ${wsl_choice} found"
+            }        
+          }
+          elseif (($DVL.length -lt 4) -and ($DVL -imatch "v\d")) {
+            [int]$wsl_choice = $("$DVL".Substring(1))
+            $DVL = 'display'
+            $wsl_distro_selected_name = select_wsl_distro_list_num $wsl_distro_list $wsl_choice
+            if ($wsl_distro_selected_name) {
+              wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME/dvlw `&`& code `.
+              $DVL = 'nodisplay'
             }
-                    
+            else {
+              $DVL = 'display'
+              write-host "no distro for ${wsl_choice} found"
+            }        
           }
           elseif (($DVL.length -lt 4) -and ($DVL -imatch "g\d")) {
             [int]$wsl_choice = $("$DVL".Substring(1))
@@ -2548,12 +2560,6 @@ continue or skip
             }
             $DVL = 'display'
           }
-          elseif (($DVL.length -lt 4) -and ($DVL -like 'v**') -and ($DVL -NotLike 'i:*') -and ($DVL -NotLike 'i!:*')) {    
-
-            wsl.exe --distribution $wsl_distro_selected_name -- cd `$HOME/dvlw `&`& code `.
-            $DVL = 'nodisplay'
-
-          }
           elseif (($DVL.length -lt 4) -and ($DVL -like 't**') -and ($DVL -NotLike 'i:*') -and ($DVL -NotLike 'i!:*')) {    
             if ($DVL -ieq 't') {
               Write-Host "`r`n`t[l]inux or [w]indows"
@@ -2678,6 +2684,9 @@ continue or skip
               }
             }                        
           }
+          elseif ($DVL -ieq 'v') {
+              wsl.exe -- cd `$HOME/dvlw `&`& code `.
+          }
           elseif ($DVL -ieq 'r') {
             if ($env:KINDTEK_OLD_DEFAULT_WSL_DISTRO -ne "") {
               # wsl.exe --set-default kalilinux-kali-rolling-latest
@@ -2716,9 +2725,6 @@ continue or skip
           elseif ($DVL -ceq 'reboot' -or $DVL -ceq 'reboot now' -or $DVL -ceq 'reboot continue') {
             reboot_prompt "$DVL"
             $DVL = 'display'
-            elseif ($DVL -ieq 'v') {
-              wsl.exe -- cd `$HOME/dvlw `&`& code `.
-            }
           }
           elseif ($DVL -ieq 'auto') {
             if ($(get_kindtek_auto_boot)) {
