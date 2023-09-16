@@ -2179,7 +2179,7 @@ continue or skip
                 docker_devel_spawn
               }
               else {
-                docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" '' ''
+                docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
               }
               if (($?) -eq $false) {
                 throw
