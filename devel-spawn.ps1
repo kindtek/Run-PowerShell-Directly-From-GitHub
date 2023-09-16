@@ -2163,18 +2163,28 @@ continue or skip
           }
           elseif ($DVL -ieq 'i!') {
             require_docker_desktop_online_new_win_no_wait
-            if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
-              docker_devel_spawn
-            }
-            else {
-              docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
-            }
-            if ( ($?) -and $img_name_tag -like '*kernel' ) {
+            try {  
+              if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
+                docker_devel_spawn
+              }
+              else {
+                docker_devel_spawn "kindtek/$($env:KINDTEK_WIN_DVLP_FULLNAME):$img_name_tag" "kindtek-$($env:KINDTEK_WIN_DVLP_FULLNAME)-$img_name_tag" 'default'
+              }
+              $ErrorActionPreference = "Continue"
               do {
-                start-sleep 3
-                wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
+                if ($img_name_tag -like '*kernel' ) {
+                  start-sleep 3
+                  wsl.exe -- cd `$HOME `&`& bash setup.sh "$env:USERNAME" 'full'
+                }
               } while (!$($?))
+            } catch {
+
             }
+            finally {
+              Write-Host -nonewline $dvlp_output
+              $ErrorActionPreference = "Continue"
+            }
+            
             $DVL = 'screen'
 
           }
