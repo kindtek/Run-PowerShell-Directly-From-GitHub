@@ -2163,7 +2163,8 @@ continue or skip
           }
           elseif ($DVL -ieq 'i!') {
             require_docker_desktop_online_new_win_no_wait
-            try {  
+            try { 
+              $ErrorActionPreference = "Stop" 
               if ([string]::IsNullOrEmpty($img_name_tag) -or ($img_name_tag -eq 'skip')) {
                 docker_devel_spawn
               }
