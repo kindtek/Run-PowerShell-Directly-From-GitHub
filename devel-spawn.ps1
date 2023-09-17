@@ -1157,7 +1157,7 @@ function docker_devel_spawn {
   )
   Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
   . include_devel_tools
-  start_docker_desktop | out-null
+  start_docker_desktop 2> $null  | out-null
   while (($(is_docker_desktop_online) -eq $false))  {
     Write-Host "
     
@@ -1170,10 +1170,10 @@ function docker_devel_spawn {
     (continue)
     "
     $start_docker = Read-Host 
-    start_docker_desktop | out-null
+    start_docker_desktop 2> $null | out-null
     reload_envs
     if ($start_docker -eq "quit"){
-      return $false
+      return
     }
   }
   try { 
@@ -1189,13 +1189,13 @@ function docker_devel_spawn {
     }
   }
   catch {
-    return $false
+    return
   }
   finally {
     Write-Host -nonewline $dvlp_output
     $ErrorActionPreference = "Continue"
   }
-  return $true
+  return
 }
 
 function run_dvlp_latest_kernel_installer {
