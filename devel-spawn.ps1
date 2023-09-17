@@ -1158,43 +1158,39 @@ function docker_devel_spawn {
   Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
   . include_devel_tools
   start_docker_desktop | out-null
+  while (($(is_docker_desktop_online) -eq $false) -and ($start_docker -ne "quit"))  {
+    Write-Host "
+    
+    docker desktop is taking a while to start...
 
-  if ($(is_docker_desktop_online) -eq $true) {
-    try { 
-      $ErrorActionPreference = "Stop" 
-        if ([string]::IsNullOrEmpty($img_name_tag)) {
-          powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
-        }
-        elseif ($img_name_tag -eq "skip") {
-          powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
-        }
-        else {
-          powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
-        }
-    } catch {
-      return $false
+    press ENTER to continue trying to start docker desktop normally
+      ... or enter 'quit' (not recommended)
+    
+      
+    (continue)
+    "
+    $start_docker = Read-Host 
+    start_docker_desktop | out-null
+    reload_envs
+  }
+  try { 
+    $ErrorActionPreference = "Stop" 
+    if ([string]::IsNullOrEmpty($img_name_tag)) {
+      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
     }
-    finally {
-      Write-Host -nonewline $dvlp_output
-      $ErrorActionPreference = "Continue"
+    elseif ($img_name_tag -eq "skip") {
+      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
+    }
+    else {
+      powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
     }
   }
-  else {
-    Write-Host "`r`docker desktop is taking a while to start..."
-    $start_docker = Read-Host "
-    press ENTER to keep trying normally
-      ... or enter 'quit' to quit (not recommended)"
-    if ($start_docker -ne "quit") {
-      if ([string]::IsNullOrEmpty($img_name_tag)) {
-        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
-      }
-      elseif ($img_name_tag -eq "skip") {
-        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd"
-      }
-      else {
-        powershell.exe -Command "$env:KINDTEK_WIN_DVLP_PATH/scripts/wsl-docker-import.cmd '$img_name_tag' '$non_interactive' '$default_distro'" 
-      }
-    } 
+  catch {
+    return $false
+  }
+  finally {
+    Write-Host -nonewline $dvlp_output
+    $ErrorActionPreference = "Continue"
   }
   return $true
 }
