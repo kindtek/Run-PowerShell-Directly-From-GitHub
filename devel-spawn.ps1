@@ -97,7 +97,7 @@ class kindtek_process {
           $this.proc_cmd = "write-host '$proc_cmd';Set-PSDebug -Trace 2;$proc_cmd;"
         }
         else {
-          $this.proc_cmd = "$proc_cmd"
+          $this.proc_cmd =  "$proc_cmd"
         }
       }
       elseif ((Test-Path -Path "$env:USERPROFILE/dvlp.ps1" -PathType Leaf) -and ($PSCommandPath -ne "$env:USERPROFILE/dvlp.ps1") -and ($PSCommandPath -ne "$env:KINDTEK_DEVEL_SPAWN")) {
@@ -120,6 +120,7 @@ class kindtek_process {
       $this.proc_wait = "wait"
       $this.proc_noexit = '-noexit'
     }
+    $this.proc_cmd = '$global:bg_process = $true;' + $this.proc_cmd
     # $this.start()
   }
   kindtek_process (
