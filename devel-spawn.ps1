@@ -1172,7 +1172,7 @@ function docker_devel_spawn {
     $start_docker = Read-Host 
     start_docker_desktop | out-null
     reload_envs
-    if ($start_docker = "quit"){
+    if ($start_docker -eq "quit"){
       return $false
     }
   }
