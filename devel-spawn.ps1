@@ -1158,7 +1158,7 @@ function docker_devel_spawn {
   Write-Host "`r`nIMPORTANT: keep docker desktop running or the import will fail`r`n" 
   . include_devel_tools
   start_docker_desktop | out-null
-  while (($(is_docker_desktop_online) -eq $false) -and ($start_docker -ne "quit"))  {
+  while (($(is_docker_desktop_online) -eq $false))  {
     Write-Host "
     
     docker desktop is taking a while to start...
@@ -1172,6 +1172,9 @@ function docker_devel_spawn {
     $start_docker = Read-Host 
     start_docker_desktop | out-null
     reload_envs
+    if ($start_docker = "quit"){
+      return $false
+    }
   }
   try { 
     $ErrorActionPreference = "Stop" 
