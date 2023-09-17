@@ -1166,7 +1166,7 @@ function docker_devel_spawn {
     press ENTER to continue trying to start docker desktop normally
       ... or enter 'quit' (not recommended)
     
-      
+
     (continue)
     "
     $start_docker = Read-Host 
@@ -2923,7 +2923,7 @@ function reload_envs {
       $network_err_msg = "."
     }
   }
-  .$reload_envs | Out-Null
+  .$reload_envs 2> $null | Out-Null
 
 }
 
