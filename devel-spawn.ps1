@@ -1317,7 +1317,7 @@ function unlock_theme {
 function safe_boot_devel {
   try {
     Set-PSDebug -Trace 2;
-    lock_gates
+    # lock_gates
 
     install_winget $true
     install_git $true    
@@ -1326,7 +1326,7 @@ function safe_boot_devel {
     install_dependencies $true
     start_docker_desktop_new_win
 
-    unlock_theme
+    # unlock_theme
     Set-PSDebug -Trace "$env:KINDTEK_DEBUG_MODE"
     return $true
   }
