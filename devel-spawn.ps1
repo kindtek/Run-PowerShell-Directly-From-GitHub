@@ -2094,6 +2094,7 @@ continue or skip
             display_wsl_distro_list $wsl_distro_list
             Write-Host -nonewline "$dvlp_options" -ForegroundColor Gray
             if ($(get_kindtek_auto_boot)) {
+              Write-Host "`r`n"
               set_kindtek_auto_boot $true
               write-host "`r`n`t- [auto] boot ON`r`n"
             }
